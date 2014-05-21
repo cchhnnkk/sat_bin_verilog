@@ -1,4 +1,4 @@
-module sat_engine#(
+module sat_engine #(
 	parameter ACTIVITY_BASE_ADDR = 0,
 	parameter MEM_DATA_WIDTH = 512,
 	parameter VAR_WIDTH = 15,

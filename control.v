@@ -1,4 +1,4 @@
-module control#(
+module control #(
 
 	parameter ADDR_WIDTH = 31,
 	parameter NUM_VARS_A_BIN = 18

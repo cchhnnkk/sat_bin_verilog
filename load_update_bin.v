@@ -1,4 +1,4 @@
-module load_update_bin#(
+module load_update_bin #(
 
 	parameter NUM_CLAUSES_A_BIN = 24,
 	parameter NUM_VARS_A_BIN = 24,
@@ -19,11 +19,11 @@ module load_update_bin#(
 	input start_load_update,
 	input first_load_update,
 	input [WIDTH_BIN_I-1 : 0] request_bin_num_i,
-	output reg [NUM_CLAUSES_A_BIN/2-1 : 0] get_clause_cells_o,
+	output reg [NUM_CLAUSES_A_BIN/2-1 : 0] get_lit_cells_o,
 	output reg load_update_done,
 
 	//load data to sat engine
-	output reg [NUM_CLAUSES_A_BIN-1 : 0] set_clause_cells_o,
+	output reg [NUM_CLAUSES_A_BIN-1 : 0] set_lit_cells_o,
 	output reg [WIDTH_BIN_CLAUSES-1 : 0] clauses_o,
 	output reg clauses_valid_o,
 	output [WIDTH_VAR_STATES*NUM_VARS_A_BIN-1 : 0] var_state_o,
@@ -224,11 +224,11 @@ module load_update_bin#(
 	always @(posedge clk)
 	begin
 		if(rst)
-			set_clause_cells_o <= 0;
+			set_lit_cells_o <= 0;
 		else if(wr_c_delay)
-			set_clause_cells_o <= {23'b0, 1'b1};
+			set_lit_cells_o <= {23'b0, 1'b1};
 		else
-			set_clause_cells_o <= set_clause_cells_o<<1;
+			set_lit_cells_o <= set_lit_cells_o<<1;
 	end
 
 	reg [1:0] load_update_done_r;
@@ -249,11 +249,11 @@ module load_update_bin#(
 	always @(posedge clk)
 	begin
 		if(rst)
-			get_clause_cells_o <= 0;
+			get_lit_cells_o <= 0;
 		else if(c_state == UPDATE_FIRST)
-			get_clause_cells_o <= {11'b0, 1'b1};
+			get_lit_cells_o <= {11'b0, 1'b1};
 		else
-			get_clause_cells_o <= get_clause_cells_o<<1;
+			get_lit_cells_o <= get_lit_cells_o<<1;
 	end
 
 	always @(posedge clk)

@@ -1,4 +1,4 @@
-module base#(
+module base #(
 	parameter NUM_CLAUSES_A_BIN = 24,
 	parameter WIDTH_VAR_STATES = 30
 (
@@ -273,7 +273,7 @@ module base#(
 	assign vars_states_o = vars_states_0;
 	assign vars_states_23 = vars_states_i;
 
-	base_cell base_cell0#(
+	base_cell base_cell0 #(
 		.NUM_CLAUSES_A_BIN(NUM_CLAUSES_A_BIN),
 		.WIDTH_VAR_STATES(WIDTH_VAR_STATES)
 	)
@@ -298,7 +298,7 @@ module base#(
 		.var_level_o(var_level_o_0)
 	)
 
-	base_cell base_cell1#(
+	base_cell base_cell1 #(
 		.NUM_CLAUSES_A_BIN(NUM_CLAUSES_A_BIN),
 		.WIDTH_VAR_STATES(WIDTH_VAR_STATES)
 	)
@@ -323,7 +323,7 @@ module base#(
 		.var_level_o(var_level_o_1)
 	)
 
-	base_cell base_cell2#(
+	base_cell base_cell2 #(
 		.NUM_CLAUSES_A_BIN(NUM_CLAUSES_A_BIN),
 		.WIDTH_VAR_STATES(WIDTH_VAR_STATES)
 	)
@@ -348,7 +348,7 @@ module base#(
 		.var_level_o(var_level_o_2)
 	)
 
-	base_cell base_cell3#(
+	base_cell base_cell3 #(
 		.NUM_CLAUSES_A_BIN(NUM_CLAUSES_A_BIN),
 		.WIDTH_VAR_STATES(WIDTH_VAR_STATES)
 	)
@@ -373,7 +373,7 @@ module base#(
 		.var_level_o(var_level_o_3)
 	)
 
-	base_cell base_cell4#(
+	base_cell base_cell4 #(
 		.NUM_CLAUSES_A_BIN(NUM_CLAUSES_A_BIN),
 		.WIDTH_VAR_STATES(WIDTH_VAR_STATES)
 	)
@@ -398,7 +398,7 @@ module base#(
 		.var_level_o(var_level_o_4)
 	)
 
-	base_cell base_cell5#(
+	base_cell base_cell5 #(
 		.NUM_CLAUSES_A_BIN(NUM_CLAUSES_A_BIN),
 		.WIDTH_VAR_STATES(WIDTH_VAR_STATES)
 	)
@@ -423,7 +423,7 @@ module base#(
 		.var_level_o(var_level_o_5)
 	)
 
-	base_cell base_cell6#(
+	base_cell base_cell6 #(
 		.NUM_CLAUSES_A_BIN(NUM_CLAUSES_A_BIN),
 		.WIDTH_VAR_STATES(WIDTH_VAR_STATES)
 	)
@@ -448,7 +448,7 @@ module base#(
 		.var_level_o(var_level_o_6)
 	)
 
-	base_cell base_cell7#(
+	base_cell base_cell7 #(
 		.NUM_CLAUSES_A_BIN(NUM_CLAUSES_A_BIN),
 		.WIDTH_VAR_STATES(WIDTH_VAR_STATES)
 	)
@@ -473,7 +473,7 @@ module base#(
 		.var_level_o(var_level_o_7)
 	)
 
-	base_cell base_cell8#(
+	base_cell base_cell8 #(
 		.NUM_CLAUSES_A_BIN(NUM_CLAUSES_A_BIN),
 		.WIDTH_VAR_STATES(WIDTH_VAR_STATES)
 	)
@@ -498,7 +498,7 @@ module base#(
 		.var_level_o(var_level_o_8)
 	)
 
-	base_cell base_cell9#(
+	base_cell base_cell9 #(
 		.NUM_CLAUSES_A_BIN(NUM_CLAUSES_A_BIN),
 		.WIDTH_VAR_STATES(WIDTH_VAR_STATES)
 	)
@@ -523,7 +523,7 @@ module base#(
 		.var_level_o(var_level_o_9)
 	)
 
-	base_cell base_cell10#(
+	base_cell base_cell10 #(
 		.NUM_CLAUSES_A_BIN(NUM_CLAUSES_A_BIN),
 		.WIDTH_VAR_STATES(WIDTH_VAR_STATES)
 	)
@@ -548,7 +548,7 @@ module base#(
 		.var_level_o(var_level_o_10)
 	)
 
-	base_cell base_cell11#(
+	base_cell base_cell11 #(
 		.NUM_CLAUSES_A_BIN(NUM_CLAUSES_A_BIN),
 		.WIDTH_VAR_STATES(WIDTH_VAR_STATES)
 	)
@@ -573,7 +573,7 @@ module base#(
 		.var_level_o(var_level_o_11)
 	)
 
-	base_cell base_cell12#(
+	base_cell base_cell12 #(
 		.NUM_CLAUSES_A_BIN(NUM_CLAUSES_A_BIN),
 		.WIDTH_VAR_STATES(WIDTH_VAR_STATES)
 	)
@@ -598,7 +598,7 @@ module base#(
 		.var_level_o(var_level_o_12)
 	)
 
-	base_cell base_cell13#(
+	base_cell base_cell13 #(
 		.NUM_CLAUSES_A_BIN(NUM_CLAUSES_A_BIN),
 		.WIDTH_VAR_STATES(WIDTH_VAR_STATES)
 	)
@@ -623,7 +623,7 @@ module base#(
 		.var_level_o(var_level_o_13)
 	)
 
-	base_cell base_cell14#(
+	base_cell base_cell14 #(
 		.NUM_CLAUSES_A_BIN(NUM_CLAUSES_A_BIN),
 		.WIDTH_VAR_STATES(WIDTH_VAR_STATES)
 	)
@@ -648,7 +648,7 @@ module base#(
 		.var_level_o(var_level_o_14)
 	)
 
-	base_cell base_cell15#(
+	base_cell base_cell15 #(
 		.NUM_CLAUSES_A_BIN(NUM_CLAUSES_A_BIN),
 		.WIDTH_VAR_STATES(WIDTH_VAR_STATES)
 	)
@@ -673,7 +673,7 @@ module base#(
 		.var_level_o(var_level_o_15)
 	)
 
-	base_cell base_cell16#(
+	base_cell base_cell16 #(
 		.NUM_CLAUSES_A_BIN(NUM_CLAUSES_A_BIN),
 		.WIDTH_VAR_STATES(WIDTH_VAR_STATES)
 	)
@@ -698,7 +698,7 @@ module base#(
 		.var_level_o(var_level_o_16)
 	)
 
-	base_cell base_cell17#(
+	base_cell base_cell17 #(
 		.NUM_CLAUSES_A_BIN(NUM_CLAUSES_A_BIN),
 		.WIDTH_VAR_STATES(WIDTH_VAR_STATES)
 	)
@@ -723,7 +723,7 @@ module base#(
 		.var_level_o(var_level_o_17)
 	)
 
-	base_cell base_cell18#(
+	base_cell base_cell18 #(
 		.NUM_CLAUSES_A_BIN(NUM_CLAUSES_A_BIN),
 		.WIDTH_VAR_STATES(WIDTH_VAR_STATES)
 	)
@@ -748,7 +748,7 @@ module base#(
 		.var_level_o(var_level_o_18)
 	)
 
-	base_cell base_cell19#(
+	base_cell base_cell19 #(
 		.NUM_CLAUSES_A_BIN(NUM_CLAUSES_A_BIN),
 		.WIDTH_VAR_STATES(WIDTH_VAR_STATES)
 	)
@@ -773,7 +773,7 @@ module base#(
 		.var_level_o(var_level_o_19)
 	)
 
-	base_cell base_cell20#(
+	base_cell base_cell20 #(
 		.NUM_CLAUSES_A_BIN(NUM_CLAUSES_A_BIN),
 		.WIDTH_VAR_STATES(WIDTH_VAR_STATES)
 	)
@@ -798,7 +798,7 @@ module base#(
 		.var_level_o(var_level_o_20)
 	)
 
-	base_cell base_cell21#(
+	base_cell base_cell21 #(
 		.NUM_CLAUSES_A_BIN(NUM_CLAUSES_A_BIN),
 		.WIDTH_VAR_STATES(WIDTH_VAR_STATES)
 	)
@@ -823,7 +823,7 @@ module base#(
 		.var_level_o(var_level_o_21)
 	)
 
-	base_cell base_cell22#(
+	base_cell base_cell22 #(
 		.NUM_CLAUSES_A_BIN(NUM_CLAUSES_A_BIN),
 		.WIDTH_VAR_STATES(WIDTH_VAR_STATES)
 	)
@@ -848,7 +848,7 @@ module base#(
 		.var_level_o(var_level_o_22)
 	)
 
-	base_cell base_cell23#(
+	base_cell base_cell23 #(
 		.NUM_CLAUSES_A_BIN(NUM_CLAUSES_A_BIN),
 		.WIDTH_VAR_STATES(WIDTH_VAR_STATES)
 	)

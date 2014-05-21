@@ -1,4 +1,4 @@
-module base_cell#(
+module var_cell #(
 	parameter NUM_CLAUSES_A_BIN = 24,
 	parameter WIDTH_VAR_STATES = 30
 )

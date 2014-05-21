@@ -1,4 +1,4 @@
-module terminal_cell#(
+module terminal_cell #(
 	NUM_VARS_A_BIN = 24
 )
 (

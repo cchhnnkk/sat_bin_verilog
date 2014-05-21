@@ -1,4 +1,4 @@
-module decision#(
+module decision #(
 
 	parameter NUM_BIN_VARS = 24,
 

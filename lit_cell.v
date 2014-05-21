@@ -1,14 +1,14 @@
-module clause_cell
+module lit_cell
 (
 	input  clk, 
 	input  rst, 
 
 	input wr_i,
 	input [2:0] var_value_frombase_i,
-	output [2:0] var_value_tobase_o,
+	output reg [2:0] var_value_tobase_o,
 
 	input [1:0] freelitcnt_pre,
-	output [1:0] freelitcnt_next,
+	output reg [1:0] freelitcnt_next,
 
 	input imp_drv_i,
 	
@@ -16,7 +16,7 @@ module clause_cell
 	input cclause_drv_i,
 
 	output clausesat_o
-)
+);
 
 	reg [1:0] lit_of_clause_r;
 	reg var_implied_r;
@@ -33,7 +33,7 @@ module clause_cell
 	always @(*) begin
 		if (participate && isfree) begin
 			if(freelitcnt_pre==2'b00)
-				freelitcnt_next = 2'b01
+				freelitcnt_next = 2'b01;
 			else
 				freelitcnt_next = 2'b11;
 		end
@@ -55,7 +55,9 @@ module clause_cell
 			var_value_tobase_o[2:1] = 2'b00;
 	end
 
-	assign var_value_tobase_o[0] = imp_drv_i;
+	always @(*) begin
+		var_value_tobase_o[0] = imp_drv_i;
+	end
 
 	always @(posedge clk) begin
 		if (~rst)
