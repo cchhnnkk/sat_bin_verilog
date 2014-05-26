@@ -1,7 +1,7 @@
 quit -sim
 
-vlog -quiet ../lit_cell.v
-vlog -quiet ../test_lit_cell.v
+vlog -quiet ../lit_cell.v -sv
+vlog -quiet test_lit_cell.sv
 
 vsim -quiet test_lit_cell
 
