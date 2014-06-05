@@ -1,16 +1,16 @@
-module base #(
+module var24 #(
 	parameter NUM_CLAUSES_A_BIN = 24,
 	parameter WIDTH_VAR_STATES = 30
 (
-	input  clk, 
-	input  rst, 
+	input  clk,
+	input  rst,
 
 	input [NUM_VARS_A_BIN*3-1:0] var_value_i,
 	output [NUM_VARS_A_BIN*3-1:0] var_value_o,
 
 	input [NUM_VARS_A_BIN-1:0] vars_decided_tobase_i,
 	input [NUM_VARS_A_BIN*15-1:0] decide_level_i,
-	
+
 	input apply_implication_i,
 	output reg done_imply_o,
 
@@ -24,7 +24,7 @@ module base #(
 	//load
 	input apply_load_i,
 	input [NUM_VARS_A_BIN*2-1 : 0] load_clauses_i,
-	
+
 	//update
 	input apply_update_i,
 	output [NUM_VARS_A_BIN*2-1 : 0] update_clause_o,
@@ -91,7 +91,7 @@ module base #(
 				ANALYZE_DONE = 4;
 
 	reg [1:0] c_analyze_state, n_analyze_state;
-	
+
 	always @(posedge clk)
 	begin
 		if(rst)
@@ -221,7 +221,7 @@ module base #(
 
 	wire [WIDTH_VAR_STATES-1 : 0] max_lvl_3_0 = max_lvl_2_1>max_lvl_2_0? max_lvl_2_1:max_lvl_2_0;
 	wire [WIDTH_VAR_STATES-1 : 0] bkt_lvl = max_lvl_3_0>max_lvl_2_2? max_lvl_3_0:max_lvl_2_2;
-	
+
 	wire [9:0] bkt_bin_num_o_0, bkt_bin_num_o_1, bkt_bin_num_o_2, bkt_bin_num_o_3, bkt_bin_num_o_4, bkt_bin_num_o_5, bkt_bin_num_o_6, bkt_bin_num_o_7, bkt_bin_num_o_8, bkt_bin_num_o_9, bkt_bin_num_o_10, bkt_bin_num_o_11, bkt_bin_num_o_12, bkt_bin_num_o_13, bkt_bin_num_o_14, bkt_bin_num_o_15, bkt_bin_num_o_16, bkt_bin_num_o_17, bkt_bin_num_o_18, bkt_bin_num_o_19, bkt_bin_num_o_20, bkt_bin_num_o_21, bkt_bin_num_o_22, bkt_bin_num_o_23;
 
 	always @(posedge clk)
@@ -278,8 +278,8 @@ module base #(
 		.WIDTH_VAR_STATES(WIDTH_VAR_STATES)
 	)
 	(
-		.clk(clk), 
-		.rst(rst), 
+		.clk(clk),
+		.rst(rst),
 		.var_value_i(var_value_i_0),
 		.var_value_o(var_value_o_0),
 		.vars_decided_tobase_i(vars_decided_tobase_i_0),
@@ -303,8 +303,8 @@ module base #(
 		.WIDTH_VAR_STATES(WIDTH_VAR_STATES)
 	)
 	(
-		.clk(clk), 
-		.rst(rst), 
+		.clk(clk),
+		.rst(rst),
 		.var_value_i(var_value_i_1),
 		.var_value_o(var_value_o_1),
 		.vars_decided_tobase_i(vars_decided_tobase_i_1),
@@ -328,8 +328,8 @@ module base #(
 		.WIDTH_VAR_STATES(WIDTH_VAR_STATES)
 	)
 	(
-		.clk(clk), 
-		.rst(rst), 
+		.clk(clk),
+		.rst(rst),
 		.var_value_i(var_value_i_2),
 		.var_value_o(var_value_o_2),
 		.vars_decided_tobase_i(vars_decided_tobase_i_2),
@@ -353,8 +353,8 @@ module base #(
 		.WIDTH_VAR_STATES(WIDTH_VAR_STATES)
 	)
 	(
-		.clk(clk), 
-		.rst(rst), 
+		.clk(clk),
+		.rst(rst),
 		.var_value_i(var_value_i_3),
 		.var_value_o(var_value_o_3),
 		.vars_decided_tobase_i(vars_decided_tobase_i_3),
@@ -378,8 +378,8 @@ module base #(
 		.WIDTH_VAR_STATES(WIDTH_VAR_STATES)
 	)
 	(
-		.clk(clk), 
-		.rst(rst), 
+		.clk(clk),
+		.rst(rst),
 		.var_value_i(var_value_i_4),
 		.var_value_o(var_value_o_4),
 		.vars_decided_tobase_i(vars_decided_tobase_i_4),
@@ -403,8 +403,8 @@ module base #(
 		.WIDTH_VAR_STATES(WIDTH_VAR_STATES)
 	)
 	(
-		.clk(clk), 
-		.rst(rst), 
+		.clk(clk),
+		.rst(rst),
 		.var_value_i(var_value_i_5),
 		.var_value_o(var_value_o_5),
 		.vars_decided_tobase_i(vars_decided_tobase_i_5),
@@ -428,8 +428,8 @@ module base #(
 		.WIDTH_VAR_STATES(WIDTH_VAR_STATES)
 	)
 	(
-		.clk(clk), 
-		.rst(rst), 
+		.clk(clk),
+		.rst(rst),
 		.var_value_i(var_value_i_6),
 		.var_value_o(var_value_o_6),
 		.vars_decided_tobase_i(vars_decided_tobase_i_6),
@@ -453,8 +453,8 @@ module base #(
 		.WIDTH_VAR_STATES(WIDTH_VAR_STATES)
 	)
 	(
-		.clk(clk), 
-		.rst(rst), 
+		.clk(clk),
+		.rst(rst),
 		.var_value_i(var_value_i_7),
 		.var_value_o(var_value_o_7),
 		.vars_decided_tobase_i(vars_decided_tobase_i_7),
@@ -478,8 +478,8 @@ module base #(
 		.WIDTH_VAR_STATES(WIDTH_VAR_STATES)
 	)
 	(
-		.clk(clk), 
-		.rst(rst), 
+		.clk(clk),
+		.rst(rst),
 		.var_value_i(var_value_i_8),
 		.var_value_o(var_value_o_8),
 		.vars_decided_tobase_i(vars_decided_tobase_i_8),
@@ -503,8 +503,8 @@ module base #(
 		.WIDTH_VAR_STATES(WIDTH_VAR_STATES)
 	)
 	(
-		.clk(clk), 
-		.rst(rst), 
+		.clk(clk),
+		.rst(rst),
 		.var_value_i(var_value_i_9),
 		.var_value_o(var_value_o_9),
 		.vars_decided_tobase_i(vars_decided_tobase_i_9),
@@ -528,8 +528,8 @@ module base #(
 		.WIDTH_VAR_STATES(WIDTH_VAR_STATES)
 	)
 	(
-		.clk(clk), 
-		.rst(rst), 
+		.clk(clk),
+		.rst(rst),
 		.var_value_i(var_value_i_10),
 		.var_value_o(var_value_o_10),
 		.vars_decided_tobase_i(vars_decided_tobase_i_10),
@@ -553,8 +553,8 @@ module base #(
 		.WIDTH_VAR_STATES(WIDTH_VAR_STATES)
 	)
 	(
-		.clk(clk), 
-		.rst(rst), 
+		.clk(clk),
+		.rst(rst),
 		.var_value_i(var_value_i_11),
 		.var_value_o(var_value_o_11),
 		.vars_decided_tobase_i(vars_decided_tobase_i_11),
@@ -578,8 +578,8 @@ module base #(
 		.WIDTH_VAR_STATES(WIDTH_VAR_STATES)
 	)
 	(
-		.clk(clk), 
-		.rst(rst), 
+		.clk(clk),
+		.rst(rst),
 		.var_value_i(var_value_i_12),
 		.var_value_o(var_value_o_12),
 		.vars_decided_tobase_i(vars_decided_tobase_i_12),
@@ -603,8 +603,8 @@ module base #(
 		.WIDTH_VAR_STATES(WIDTH_VAR_STATES)
 	)
 	(
-		.clk(clk), 
-		.rst(rst), 
+		.clk(clk),
+		.rst(rst),
 		.var_value_i(var_value_i_13),
 		.var_value_o(var_value_o_13),
 		.vars_decided_tobase_i(vars_decided_tobase_i_13),
@@ -628,8 +628,8 @@ module base #(
 		.WIDTH_VAR_STATES(WIDTH_VAR_STATES)
 	)
 	(
-		.clk(clk), 
-		.rst(rst), 
+		.clk(clk),
+		.rst(rst),
 		.var_value_i(var_value_i_14),
 		.var_value_o(var_value_o_14),
 		.vars_decided_tobase_i(vars_decided_tobase_i_14),
@@ -653,8 +653,8 @@ module base #(
 		.WIDTH_VAR_STATES(WIDTH_VAR_STATES)
 	)
 	(
-		.clk(clk), 
-		.rst(rst), 
+		.clk(clk),
+		.rst(rst),
 		.var_value_i(var_value_i_15),
 		.var_value_o(var_value_o_15),
 		.vars_decided_tobase_i(vars_decided_tobase_i_15),
@@ -678,8 +678,8 @@ module base #(
 		.WIDTH_VAR_STATES(WIDTH_VAR_STATES)
 	)
 	(
-		.clk(clk), 
-		.rst(rst), 
+		.clk(clk),
+		.rst(rst),
 		.var_value_i(var_value_i_16),
 		.var_value_o(var_value_o_16),
 		.vars_decided_tobase_i(vars_decided_tobase_i_16),
@@ -703,8 +703,8 @@ module base #(
 		.WIDTH_VAR_STATES(WIDTH_VAR_STATES)
 	)
 	(
-		.clk(clk), 
-		.rst(rst), 
+		.clk(clk),
+		.rst(rst),
 		.var_value_i(var_value_i_17),
 		.var_value_o(var_value_o_17),
 		.vars_decided_tobase_i(vars_decided_tobase_i_17),
@@ -728,8 +728,8 @@ module base #(
 		.WIDTH_VAR_STATES(WIDTH_VAR_STATES)
 	)
 	(
-		.clk(clk), 
-		.rst(rst), 
+		.clk(clk),
+		.rst(rst),
 		.var_value_i(var_value_i_18),
 		.var_value_o(var_value_o_18),
 		.vars_decided_tobase_i(vars_decided_tobase_i_18),
@@ -753,8 +753,8 @@ module base #(
 		.WIDTH_VAR_STATES(WIDTH_VAR_STATES)
 	)
 	(
-		.clk(clk), 
-		.rst(rst), 
+		.clk(clk),
+		.rst(rst),
 		.var_value_i(var_value_i_19),
 		.var_value_o(var_value_o_19),
 		.vars_decided_tobase_i(vars_decided_tobase_i_19),
@@ -778,8 +778,8 @@ module base #(
 		.WIDTH_VAR_STATES(WIDTH_VAR_STATES)
 	)
 	(
-		.clk(clk), 
-		.rst(rst), 
+		.clk(clk),
+		.rst(rst),
 		.var_value_i(var_value_i_20),
 		.var_value_o(var_value_o_20),
 		.vars_decided_tobase_i(vars_decided_tobase_i_20),
@@ -803,8 +803,8 @@ module base #(
 		.WIDTH_VAR_STATES(WIDTH_VAR_STATES)
 	)
 	(
-		.clk(clk), 
-		.rst(rst), 
+		.clk(clk),
+		.rst(rst),
 		.var_value_i(var_value_i_21),
 		.var_value_o(var_value_o_21),
 		.vars_decided_tobase_i(vars_decided_tobase_i_21),
@@ -828,8 +828,8 @@ module base #(
 		.WIDTH_VAR_STATES(WIDTH_VAR_STATES)
 	)
 	(
-		.clk(clk), 
-		.rst(rst), 
+		.clk(clk),
+		.rst(rst),
 		.var_value_i(var_value_i_22),
 		.var_value_o(var_value_o_22),
 		.vars_decided_tobase_i(vars_decided_tobase_i_22),
@@ -853,8 +853,8 @@ module base #(
 		.WIDTH_VAR_STATES(WIDTH_VAR_STATES)
 	)
 	(
-		.clk(clk), 
-		.rst(rst), 
+		.clk(clk),
+		.rst(rst),
 		.var_value_i(var_value_i_23),
 		.var_value_o(var_value_o_23),
 		.vars_decided_tobase_i(vars_decided_tobase_i_23),

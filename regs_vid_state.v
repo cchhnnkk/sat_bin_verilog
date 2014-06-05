@@ -1,3 +1,6 @@
+/**
+ vid和states的寄存器组，用于load和update时的缓存
+*/
 module regs_vid_state(
 	input  clk,
 	input  rst,
@@ -46,7 +49,7 @@ module regs_vid_state(
 	wire [29:0] var_state_update_0, var_state_update_1, var_state_update_2, var_state_update_3, var_state_update_4, var_state_update_5, var_state_update_6, var_state_update_7, var_state_update_8, var_state_update_9, var_state_update_10, var_state_update_11, var_state_update_12, var_state_update_13, var_state_update_14, var_state_update_15, var_state_update_16, var_state_update_17, var_state_update_18, var_state_update_19, var_state_update_20, var_state_update_21, var_state_update_22, var_state_update_23;
 
 	assign {var_state_update_0, var_state_update_1, var_state_update_2, var_state_update_3, var_state_update_4, var_state_update_5, var_state_update_6, var_state_update_7, var_state_update_8, var_state_update_9, var_state_update_10, var_state_update_11, var_state_update_12, var_state_update_13, var_state_update_14, var_state_update_15, var_state_update_16, var_state_update_17, var_state_update_18, var_state_update_19, var_state_update_20, var_state_update_21, var_state_update_22, var_state_update_23} = var_state_update_r;
-	
+
 	/*
 	*================================================================
 	*                            load

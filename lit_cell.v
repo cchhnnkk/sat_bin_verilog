@@ -27,7 +27,7 @@ module lit_cell
 	wire isfree;
 	assign isfree = var_value_frombase_i[2:1]==2'b00;
 
-	assign clausesat_o = participate && lit_of_clause_r==var_value_frombase_i[2:0];
+	assign clausesat_o = participate && lit_of_clause_r==var_value_frombase_i[2:1];
 
 	//free lit cnt
 	always @(*) begin: set_free_lit_cnt
@@ -68,7 +68,10 @@ module lit_cell
 	end
 
 	always @(*) begin: set_var_value_tobase_o_0
-		var_value_tobase_o[0] = imp_drv_i;
+		if (participate && isfree && imp_drv_i)
+			var_value_tobase_o[0] = 1;
+		else
+			var_value_tobase_o[0] = var_implied_r;
 	end
 
 

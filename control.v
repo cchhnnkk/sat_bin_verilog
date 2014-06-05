@@ -67,8 +67,7 @@ module control #(
 			c_state <= n_state;
 	end
 
-	always @(*)
-	begin
+	always @(*) begin: set_next_state
 		if(~rst)
 			n_state = 0;
 		else
