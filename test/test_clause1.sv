@@ -1,35 +1,12 @@
 `timescale 1ns/1ps
 
-module test_clause1();
-
-    reg  clk;
-    reg  rst;
-
-    always #5 clk<=~clk;
-
-    initial begin: init
-        clk = 0;
-        rst=0;
-    end
+module test_clause1(input clk, input rst);
 
     /* --- 测试free_lit_count --- */
     task run();
         begin
             @(posedge clk);
-                reset_state();
-            @(posedge clk);
                 test_clause1_task();
-        end
-    endtask
-
-    task reset_state();
-        begin
-            @(posedge clk);
-                rst=0;
-                clk=0;
-
-            @(posedge clk);
-                rst=1;
         end
     endtask
 
@@ -68,9 +45,8 @@ module test_clause1();
             cdata_i.reset();
 
             @ (posedge clk);
-                cdata_i.set_lit(1, 3'b010);
-                cdata_i.set_lit(3, 3'b100);
-                cdata_i.set_lit(5, 3'b100);
+                cdata_i.set_lits('{0, 1, 0, 2, 0, 2, 0, 0});
+                cdata_i.set_imps('{0, 0, 0, 0, 0, 0, 0, 0});
                 cdata_i.get(var_value_frombase_i);
                 // $display("%b", var_value_frombase_i);
                 wr_i = 1;
@@ -87,9 +63,8 @@ module test_clause1();
                 assert(clause1.freelitcnt_0 == 3);
 
             @ (posedge clk);
-                cdata_i.set_lit(1, 3'b100);
-                cdata_i.set_lit(3, 3'b000);
-                cdata_i.set_lit(5, 3'b010);
+                cdata_i.set_lits('{0, 2, 0, 0, 0, 1, 0, 0});
+                cdata_i.set_imps('{0, 0, 0, 0, 0, 0, 0, 0});
                 cdata_i.get(var_value_frombase_i);
                 #1
                 assert(clause1.freelitcnt_0 == 1);
@@ -98,7 +73,7 @@ module test_clause1();
                 cdata_o.assert_lit(3, 3'b101);
 
             @ (posedge clk);
-                cdata_i.set_lit(3, 3'b111);
+                cdata_i.set_value(3, 3'b111);
                 cdata_i.get(var_value_frombase_i);
                 #1
                 assert(clause1.cclause_drv_0 == 1);
@@ -114,9 +89,35 @@ endmodule
 
 
 module test_clause1_top;
-    test_clause1 test_clause1();
+    reg  clk;
+    reg  rst;
+
+    always #5 clk<=~clk;
+
+    initial begin: init
+        clk = 0;
+        rst=0;
+    end
+
+    task reset();
+        begin
+            @(posedge clk);
+                rst=0;
+                clk=0;
+
+            @(posedge clk);
+                rst=1;
+        end
+    endtask
+
+    test_clause1 test_clause1(
+        .clk(clk),
+        .rst(rst)
+    );
+
     initial begin
-        test_clause1.run;
+        reset();
+        test_clause1.run();
         $display("done");
     end
 endmodule

@@ -39,7 +39,6 @@ class ClauseData #(int size = 8);
 
 	function int get_len();
 		int len = 0;
-		return
 		for (int i = 0; i < size; ++i)
 		begin
 			if(data[i][2:1]!=0) begin
@@ -52,29 +51,28 @@ class ClauseData #(int size = 8);
 		get_len = len;
 	endfunction
 
-	function void set_lit(input int index, input [2:0] value);
-		data[index] = value;
-	endfunction
-
-	function void set_value(input int index, input [1:0] value);
+	function void set_lit(input int index, input [1:0] value);
 		data[index][1:0] = value;
 	endfunction
 
-	function void set_lits(output [1:0] value[size]);
-		reset();
-		foreach (data[i])
-			data[i][2:1] = value[i]
+	function void set_value(input int index, input [2:0] value);
+		data[index] = value;
 	endfunction
 
-	function void set_clause(int cl[size]);
-		reset();
+	function void set_lits(int cl[size]);
 		foreach (cl[i]) begin
-			data[i][2:1] = c[i];
+			data[i][2:1] = cl[i];
 		end
 	endfunction
 
-	function void get_lit(input int index, output [2:0] value);
-		value = data[index];
+	function void set_imps(int d[size]);
+		foreach (d[i]) begin
+			data[i][0] = d[i];
+		end
+	endfunction
+
+	function void get_lit(input int index, output [1:0] value);
+		value = data[index][1:0];
 	endfunction
 
 	function void assert_lit(int index, bit [2:0] value);

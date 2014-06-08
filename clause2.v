@@ -1,5 +1,5 @@
-module clause8 #(
-	parameter NUM_CLAUSES_A_BIN = 8,
+module clause2 #(
+	parameter NUM_CLAUSES_A_BIN = 2,
 	parameter NUM_VARS_A_BIN = 8,
 	parameter WIDTH_VAR_STATES = 30,
 	parameter WIDTH_C_LEN = 5
@@ -19,6 +19,7 @@ module clause8 #(
 );
 
 	wire wr_0, wr_1;
+	assign {wr_i_0, wr_i_1} = wr_i;
 
 	wire [3*NUM_VARS_A_BIN-1:0] var_value_tobase_0, var_value_tobase_1;
 
@@ -29,11 +30,11 @@ module clause8 #(
 	assign {clause_len_i_0, clause_len_i_1} = clause_len_i;
 	assign clause_len_o = {clause_len_o_0, clause_len_o_1};
 
-	clause4 #(
+	clause1 #(
 		.NUM_VARS_A_BIN(NUM_VARS_A_BIN),
 		.WIDTH_C_LEN(WIDTH_C_LEN)
 	)
-	clause4_0 (
+	clause1_0 (
 		.clk(clk),
 		.rst(rst), 
 		.wr_i(wr_0),
@@ -45,11 +46,11 @@ module clause8 #(
 		.apply_backtrack_i(apply_backtrack_i)
 	);
 
-	clause4 #(
+	clause1 #(
 		.NUM_VARS_A_BIN(NUM_VARS_A_BIN),
 		.WIDTH_C_LEN(WIDTH_C_LEN)
 	)
-	clause4_1 (
+	clause1_1 (
 		.clk(clk), 
 		.rst(rst), 
 		.wr_i(wr_1),
@@ -60,4 +61,5 @@ module clause8 #(
 		.clause_len_o(clause_len_o_1),
 		.apply_backtrack_i(apply_backtrack_i)
 	);
+
 endmodule

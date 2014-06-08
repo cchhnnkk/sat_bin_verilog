@@ -1,6 +1,15 @@
+`include "../test/ClauseData.sv";
+
 class ClauseArray #(int nc = 8, int nv = 8);
 
-	ClauseData #(nv) cdatas[nc] = new;
+	ClauseData #(nv) cdatas[nc];
+
+	function new();
+		for (int i = 0; i < nc; ++i)
+		begin
+			cdatas[i] = new();
+		end
+	endfunction
 
 	function void reset();
 		for (int i = 0; i < nc; ++i)
@@ -9,18 +18,23 @@ class ClauseArray #(int nc = 8, int nv = 8);
 		end
 	endfunction
 
+	function int get_len(int index);
+		get_len = cdatas[index].get_len();
+	endfunction
+
 	function void get(int index, output [3*nc-1:0]  data);
-		cdatas[index].get(data)
+		cdatas[index].get(data);
 	endfunction
 
 	function void set(int index, input [3*nc-1:0] value);
-		cdatas[index].set_c(var_value_tobase_o);
+		cdatas[index].set_c(value);
 	endfunction
 
 	function void set_array(int bin1[nc][nv]);
 		for (int i = 0; i < nc; ++i)
 		begin
-			cdatas[i].set_clause(bin1[i]);
+			cdatas[i].reset();
+			cdatas[i].set_lits(bin1[i]);
 		end
 	endfunction
 
