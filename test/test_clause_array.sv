@@ -7,17 +7,20 @@ module test_clause_array(input clk, input rst);
 		begin
 			@(posedge clk);
 				test_clause_array_task();
+			@(posedge clk);
+				$stop();
 		end
 	endtask
 
 	parameter NUM_CLAUSES_A_BIN = 8;
 	parameter NUM_VARS_A_BIN = 8;
 	parameter WIDTH_VAR_STATES = 30;
-	parameter WIDTH_C_LEN = 5;
+	parameter WIDTH_C_LEN = 4;
 
 	reg [4:0] clause_len_i;
 	wire [4:0] clause_len_o;
-	reg apply_backtrack_i;
+	reg apply_impl_i;
+	reg apply_bkt_i;
 
 	reg [NUM_CLAUSES_A_BIN-1:0] wr_i;
 	reg [NUM_VARS_A_BIN*3-1:0] var_value_frombase_i;
@@ -37,7 +40,9 @@ module test_clause_array(input clk, input rst);
 		.clause_len_i(clause_len_i),
 		.var_value_frombase_i(var_value_frombase_i),
 		.var_value_tobase_o(var_value_tobase_o),
-		.learntc_insert_index_o(learntc_insert_index_o)
+		.learntc_insert_index_o(learntc_insert_index_o),
+		.apply_impl_i(apply_impl_i),
+		.apply_bkt_i(apply_bkt_i)
 	);
 
 	`include "../test/ClauseArray.sv";
@@ -81,18 +86,24 @@ module test_clause_array(input clk, input rst);
 					carray_data.get(i, var_value_frombase_i);
 			end
 			@ (posedge clk);
-			wr_i = 0;
+				wr_i = 0;
+			@ (posedge clk);
 		end
 	endtask
 
-	wire [NUM_CLAUSES_A_BIN-1:0] inserti;
+	bit [NUM_CLAUSES_A_BIN-1:0] inserti;
 	task test_inserti(input int bin_data[8][8]);
 		begin
-            $display("test_inserti");
-            apply_backtrack_i = 0;
-			wr_clause_array(bin_data);
-			carray_data.get_learntc_inserti(inserti);
-			assert(inserti == learntc_insert_index_o);
+			@ (posedge clk);
+				$display("test_inserti");
+				apply_bkt_i = 0;
+				apply_impl_i = 0;
+			@ (posedge clk);
+				wr_clause_array(bin_data);
+				inserti = 0;
+				carray_data.get_learntc_inserti(inserti);
+				$display("inserti=%b\tlearntc_insert_index_o=%b", inserti, learntc_insert_index_o);
+				assert(inserti == learntc_insert_index_o);
 		end
 	endtask
 
@@ -117,6 +128,11 @@ module test_clause_array_top;
 		clk = 0;
 		rst=0;
 	end
+
+	// initial begin
+	// 	$fsdbDumpfile("wave_test_clause_array.fsdb");
+	// 	$fsdbDumpvars;
+	// end
 
 	task reset();
 		begin

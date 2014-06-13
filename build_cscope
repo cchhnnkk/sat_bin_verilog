@@ -1,2 +1,0 @@
-find *.v *.c *.cpp *.h *.py >> cscope.files
-cscope -b

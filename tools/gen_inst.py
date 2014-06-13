@@ -9,6 +9,7 @@ def gen_inst(filename):
     exittag = 0
     str_inst = ''
     str_stmt = ''
+    first = False
     for l in file(filename):
         liststrip = l.strip(' |\t|,|\n').split()
         stmt = l.strip(' |\t|,|\n')
@@ -20,8 +21,6 @@ def gen_inst(filename):
             if l == '':
                 del liststrip[i]
 
-        first = False
-
         # module name
         if liststrip[0] == 'module':
             name = liststrip[1]
@@ -29,7 +28,7 @@ def gen_inst(filename):
             exittag = 1
             if '#' in l:
                 exittag = 2
-                str_inst += ' #'
+                str_inst += '#'
                 first = True
             str_inst += '('
 
@@ -37,9 +36,11 @@ def gen_inst(filename):
         elif exittag == 2:
             if l[0] == ')':
                 str_inst += '\n)\n%s(' % name
+                first = True
                 exittag = 1
             elif first:
                 str_inst += '\n\t.%s(%s)' % (liststrip[1], liststrip[1])
+                first = False
             else:
                 str_inst += ',\n\t.%s(%s)' % (liststrip[1], liststrip[1])
 

@@ -1,4 +1,4 @@
-cscope 16 F:\sat\github\sat_bin_verilog               0000133149
+cscope 16 f:\sat\github\sat_bin_verilog               0000130688
 	@bram_w40.v
 
 37 `
@@ -656,106 +656,112 @@ WIDTH_C_LEN
 16 
 šput
  
-	g­¶y_backŒack_i
+	g­¶y_im¶_i
+,
+
+17 
+šput
+ 
+	g­¶y_bkt_i
 
 
-19 
+20 
 	gwœe
  [1:0] 
 ä“l™út_0
 ;
 
-20 
+21 
 wœe
  
 	gimp_drv_0
 ;
 
-21 
+22 
 wœe
  
 	gcşau£_0
 ;
 
-22 
+23 
 wœe
  
 	gcşau£_drv_0
 ;
 
-23 
+24 
 wœe
  
 	gşau£§t_0
 ;
 
-25 
+26 
 l™8
  
 l™8_0
 (
 
-26 .
+27 .
 şk
 (clk),
 
-27 .
+28 .
 r¡
 (rst),
 
-29 .
+30 .
 wr_i
 (wr_i),
 
-30 .
+31 .
 v¬_v®ue_äomba£_i
 (var_value_frombase_i),
 
-31 .
+32 .
 v¬_v®ue_toba£_o
 (var_value_tobase_o),
 
-33 .
+34 .
 ä“l™út_´e
 (0),
 
-34 .
+35 .
 ä“l™út_Ãxt
 (
 ä“l™út_0
 ),
 
-36 .
+37 .
 imp_drv_i
 (
 imp_drv_0
 ),
 
-38 .
+39 .
 cşau£_o
 (
 cşau£_0
 ),
 
-39 .
+40 .
 cşau£_drv_i
 (
 cşau£_drv_0
 ),
 
-41 .
+42 .
 şau£§t_o
 (
 şau£§t_0
 )
 
-45 
+46 
 wœe
  
 	gcşau£_drv_o
 ;
 
-46 
+47 
 assign
  
 	gcşau£_drv_0
@@ -763,59 +769,59 @@ assign
 cşau£_drv_o
 ;
 
-48 
+49 
 ‹rmš®_ûÎ
 erminal_cell(
 
-49 .
+50 .
 şk
 (clk),
 
-50 .
+51 .
 r¡
 (rst),
 
-51 .
+52 .
 şau£§t_i
 (
 şau£§t_0
 ),
 
-52 .
+53 .
 ä“l™út_i
 (
 ä“l™út_0
 ),
 
-53 .
+54 .
 imp_drv_o
 (
 imp_drv_0
 ),
 
-54 .
+55 .
 cşau£_i
 (
 cşau£_0
 ),
 
-55 .
+56 .
 cşau£_drv_o
 (cclause_drv_o)
 
-58 
+59 
 »g
  
 	gÃed_ş—r
 ;
 
-59 
+60 
 »g
  
 	gis_»asÚ_r
 ;
 
-61 
+62 
 	g®ways
  @(
 po£dge
@@ -827,43 +833,43 @@ po£dge
 £t_Ãed_ş—r
 
 
-62 if(
+63 if(~
 r¡
 )
 
-63 
+64 
 Ãed_ş—r
  <= 0;
 
-64 if(
+65 if(
 	gis_»asÚ_r
  && 
 	gcşau£_drv_o
 )
 
-65 
+66 
 	gÃed_ş—r
  <= 1;
 
-66 if(~
+67 if(~
 	gis_»asÚ_r
 )
 
-67 
+68 
 	gÃed_ş—r
  <= 0;
 
-69 
+70 
 	gÃed_ş—r
  <ğ
 Ãed_ş—r
 ;
 
-70 
+71 
 ’d
 
 
-72 
+73 
 	g®ways
  @(
 po£dge
@@ -875,43 +881,45 @@ po£dge
 £t_is_»asÚ_r
 
 
-73 if(
+74 if(~
 r¡
 )
 
-74 
+75 
 is_»asÚ_r
  <= 0;
 
-75 if(
+76 if(
+	g­¶y_im¶_i
+ && 
 	gimp_drv_0
 )
 
-76 
+77 
 	gis_»asÚ_r
  <= 1;
 
-77 if(
-	g­¶y_backŒack_i
+78 if(
+	g­¶y_bkt_i
  && 
 	gÃed_ş—r
 )
 
-78 
+79 
 	gis_»asÚ_r
  <= 0;
 
-80 
+81 
 	gis_»asÚ_r
  <ğ
 is_»asÚ_r
 ;
 
-81 
+82 
 ’d
 
 
-83 
+84 
 	g»g
  [
 WIDTH_C_LEN
@@ -919,7 +927,7 @@ WIDTH_C_LEN
 şau£_Ën_r
 ;
 
-84 
+85 
 	g®ways
  @(
 po£dge
@@ -931,35 +939,35 @@ po£dge
 £t_şau£_Ën_r
 
 
-85 if(
+86 if(~
 r¡
 )
 
-86 
+87 
 şau£_Ën_r
  <= 0;
 
-87 if(
+88 if(
 	gwr_i
 )
 
-88 
+89 
 	gşau£_Ën_r
  <ğ
 şau£_Ën_i
 ;
 
-90 
+91 
 	gşau£_Ën_r
  <ğ
 şau£_Ën_r
 ;
 
-91 
+92 
 ’d
 
 
-93 
+94 
 assign
  
 	gşau£_Ën_o
@@ -969,7 +977,7 @@ is_»asÚ_r
 şau£_Ën_r
 ;
 
-95 
+96 
 	g’dmoduË
 
 
@@ -1039,14 +1047,12 @@ v¬_v®ue_äomba£_i
 NUM_VARS_A_BIN
 *3-1:0] 
 v¬_v®ue_toba£_o
-
+,
 
 16 
-šput
+	gšput
  [
 WIDTH_C_LEN
-*
-NUM_CLAUSES_A_BIN
 -1 : 0] 
 şau£_Ën_i
 ,
@@ -1064,28 +1070,36 @@ NUM_CLAUSES_A_BIN
 18 
 šput
  
-	g­¶y_backŒack_i
+	g­¶y_im¶_i
+,
 
-
-21 
-wœe
+19 
+šput
  
-	gwr_0
+	g­¶y_bkt_i
+
+
+22 
+	gwœe
+[
+NUM_CLAUSES_A_BIN
+/2-1:0] 
+wr_0
 , 
 	gwr_1
 ;
 
-22 
+23 
 	gassign
  {
-	gwr_i_0
+	gwr_1
 , 
-	gwr_i_1
+	gwr_0
 } = 
 wr_i
 ;
 
-24 
+25 
 	gwœe
  [3*
 NUM_VARS_A_BIN
@@ -1095,7 +1109,7 @@ v¬_v®ue_toba£_0
 	gv¬_v®ue_toba£_1
 ;
 
-26 
+27 
 assign
  
 	gv¬_v®ue_toba£_o
@@ -1105,114 +1119,98 @@ v¬_v®ue_toba£_0
 v¬_v®ue_toba£_1
 ;
 
-28 
-	gwœe
- [
-WIDTH_C_LEN
-*
-NUM_CLAUSES_A_BIN
--1 : 0] 
-şau£_Ën_i_0
-, 
-	gşau£_Ën_i_1
-;
-
 29 
 	gwœe
  [
 WIDTH_C_LEN
 *
 NUM_CLAUSES_A_BIN
--1 : 0] 
+/2-1 : 0] 
 şau£_Ën_o_0
 , 
 	gşau£_Ën_o_1
 ;
 
 30 
-	gassign
- {
-	gşau£_Ën_i_0
-, 
-	gşau£_Ën_i_1
-} = 
-şau£_Ën_i
-;
-
-31 
 assign
  
 	gşau£_Ën_o
  = {
-şau£_Ën_o_0
-, 
 şau£_Ën_o_1
+, 
+şau£_Ën_o_0
 };
 
-33 
+32 
 	gşau£1
  #(
 
-34 .
+33 .
 NUM_VARS_A_BIN
 (NUM_VARS_A_BIN),
 
-35 .
+34 .
 	$WIDTH_C_LEN
 (
 WIDTH_C_LEN
 )
 
-37 
+36 
 	`şau£1_0
  (
 
-38 .
+37 .
 	`şk
 (
 şk
 ),
 
-39 .
+38 .
 	`r¡
 (
 r¡
 ),
 
-40 .
+39 .
 	`wr_i
 (
 wr_0
 ),
 
-41 .
+40 .
 	`v¬_v®ue_äomba£_i
 (
-v¬_v®ue_äomba£
+v¬_v®ue_äomba£_i
 ),
 
-42 .
+41 .
 	`v¬_v®ue_toba£_o
 (
 v¬_v®ue_toba£_0
 ),
 
-44 .
+43 .
 	`şau£_Ën_i
 (
-şau£_Ën_i_0
+şau£_Ën_i
 ),
 
-45 .
+44 .
 	`şau£_Ën_o
 (
 şau£_Ën_o_0
 ),
 
-46 .
-	$­¶y_backŒack_i
+45 .
+	`­¶y_im¶_i
 (
-­¶y_backŒack_i
+­¶y_im¶_i
+),
+
+46 .
+	`­¶y_bkt_i
+(
+­¶y_bkt_i
 )
 
 49 
@@ -1256,7 +1254,7 @@ wr_1
 57 .
 	`v¬_v®ue_äomba£_i
 (
-v¬_v®ue_äomba£
+v¬_v®ue_äomba£_i
 ),
 
 58 .
@@ -1268,7 +1266,7 @@ v¬_v®ue_toba£_1
 60 .
 	`şau£_Ën_i
 (
-şau£_Ën_i_1
+şau£_Ën_i
 ),
 
 61 .
@@ -1278,12 +1276,18 @@ v¬_v®ue_toba£_1
 ),
 
 62 .
-	$­¶y_backŒack_i
+	`­¶y_im¶_i
 (
-­¶y_backŒack_i
+­¶y_im¶_i
+),
+
+63 .
+	`­¶y_bkt_i
+(
+­¶y_bkt_i
 )
 
-65 
+66 
 ’dmoduË
 
 
@@ -1353,14 +1357,12 @@ v¬_v®ue_äomba£_i
 NUM_VARS_A_BIN
 *3-1:0] 
 v¬_v®ue_toba£_o
-
+,
 
 16 
-šput
+	gšput
  [
 WIDTH_C_LEN
-*
-NUM_CLAUSES_A_BIN
 -1 : 0] 
 şau£_Ën_i
 ,
@@ -1378,18 +1380,36 @@ NUM_CLAUSES_A_BIN
 18 
 šput
  
-	g­¶y_backŒack_i
+	g­¶y_im¶_i
+,
 
-
-21 
-wœe
+19 
+šput
  
-	gwr_0
+	g­¶y_bkt_i
+
+
+22 
+	gwœe
+ [
+NUM_CLAUSES_A_BIN
+/2-1:0] 
+wr_0
 , 
 	gwr_1
 ;
 
 23 
+	gassign
+ {
+	gwr_1
+, 
+	gwr_0
+} = 
+wr_i
+;
+
+25 
 	gwœe
  [3*
 NUM_VARS_A_BIN
@@ -1399,7 +1419,7 @@ v¬_v®ue_toba£_0
 	gv¬_v®ue_toba£_1
 ;
 
-25 
+27 
 assign
  
 	gv¬_v®ue_toba£_o
@@ -1409,38 +1429,16 @@ v¬_v®ue_toba£_0
 v¬_v®ue_toba£_1
 ;
 
-27 
+29 
 	gwœe
  [
 WIDTH_C_LEN
 *
 NUM_CLAUSES_A_BIN
--1 : 0] 
-şau£_Ën_i_0
-, 
-	gşau£_Ën_i_1
-;
-
-28 
-	gwœe
- [
-WIDTH_C_LEN
-*
-NUM_CLAUSES_A_BIN
--1 : 0] 
+/2-1 : 0] 
 şau£_Ën_o_0
 , 
 	gşau£_Ën_o_1
-;
-
-29 
-	gassign
- {
-	gşau£_Ën_i_0
-, 
-	gşau£_Ën_i_1
-} = 
-şau£_Ën_i
 ;
 
 30 
@@ -1448,9 +1446,9 @@ assign
  
 	gşau£_Ën_o
  = {
-şau£_Ën_o_0
-, 
 şau£_Ën_o_1
+, 
+şau£_Ën_o_0
 };
 
 32 
@@ -1492,7 +1490,7 @@ wr_0
 40 .
 	`v¬_v®ue_äomba£_i
 (
-v¬_v®ue_äomba£
+v¬_v®ue_äomba£_i
 ),
 
 41 .
@@ -1504,7 +1502,7 @@ v¬_v®ue_toba£_0
 43 .
 	`şau£_Ën_i
 (
-şau£_Ën_i_0
+şau£_Ën_i
 ),
 
 44 .
@@ -1514,80 +1512,92 @@ v¬_v®ue_toba£_0
 ),
 
 45 .
-	$­¶y_backŒack_i
+	`­¶y_im¶_i
 (
-­¶y_backŒack_i
+­¶y_im¶_i
+),
+
+46 .
+	`­¶y_bkt_i
+(
+­¶y_bkt_i
 )
 
-48 
+49 
 şau£2
  #(
 
-49 .
+50 .
 	`NUM_VARS_A_BIN
 (
 NUM_VARS_A_BIN
 ),
 
-50 .
+51 .
 	$WIDTH_C_LEN
 (
 WIDTH_C_LEN
 )
 
-52 
+53 
 	`şau£2_1
  (
 
-53 .
+54 .
 	`şk
 (
 şk
 ),
 
-54 .
+55 .
 	`r¡
 (
 r¡
 ),
 
-55 .
+56 .
 	`wr_i
 (
 wr_1
 ),
 
-56 .
+57 .
 	`v¬_v®ue_äomba£_i
 (
-v¬_v®ue_äomba£
+v¬_v®ue_äomba£_i
 ),
 
-57 .
+58 .
 	`v¬_v®ue_toba£_o
 (
 v¬_v®ue_toba£_1
 ),
 
-59 .
+60 .
 	`şau£_Ën_i
 (
-şau£_Ën_i_1
+şau£_Ën_i
 ),
 
-60 .
+61 .
 	`şau£_Ën_o
 (
 şau£_Ën_o_1
 ),
 
-61 .
-	$­¶y_backŒack_i
+62 .
+	`­¶y_im¶_i
 (
-­¶y_backŒack_i
+­¶y_im¶_i
+),
+
+63 .
+	`­¶y_bkt_i
+(
+­¶y_bkt_i
 )
 
-64 
+66 
 ’dmoduË
 
 
@@ -1621,7 +1631,7 @@ moduË
 ·¿m‘”
  
 	gWIDTH_C_LEN
- = 5
+ = 4
 
 8 
 šput
@@ -1657,14 +1667,12 @@ v¬_v®ue_äomba£_i
 NUM_VARS_A_BIN
 *3-1:0] 
 v¬_v®ue_toba£_o
-
+,
 
 16 
-šput
+	gšput
  [
 WIDTH_C_LEN
-*
-NUM_CLAUSES_A_BIN
 -1 : 0] 
 şau£_Ën_i
 ,
@@ -1682,18 +1690,36 @@ NUM_CLAUSES_A_BIN
 18 
 šput
  
-	g­¶y_backŒack_i
+	g­¶y_im¶_i
+,
 
-
-21 
-wœe
+19 
+šput
  
-	gwr_0
+	g­¶y_bkt_i
+
+
+22 
+	gwœe
+ [
+NUM_CLAUSES_A_BIN
+/2-1:0] 
+wr_0
 , 
 	gwr_1
 ;
 
 23 
+	gassign
+ {
+	gwr_1
+, 
+	gwr_0
+} = 
+wr_i
+;
+
+25 
 	gwœe
  [3*
 NUM_VARS_A_BIN
@@ -1703,7 +1729,7 @@ v¬_v®ue_toba£_0
 	gv¬_v®ue_toba£_1
 ;
 
-25 
+27 
 assign
  
 	gv¬_v®ue_toba£_o
@@ -1713,38 +1739,16 @@ v¬_v®ue_toba£_0
 v¬_v®ue_toba£_1
 ;
 
-27 
+29 
 	gwœe
  [
 WIDTH_C_LEN
 *
 NUM_CLAUSES_A_BIN
--1 : 0] 
-şau£_Ën_i_0
-, 
-	gşau£_Ën_i_1
-;
-
-28 
-	gwœe
- [
-WIDTH_C_LEN
-*
-NUM_CLAUSES_A_BIN
--1 : 0] 
+/2-1 : 0] 
 şau£_Ën_o_0
 , 
 	gşau£_Ën_o_1
-;
-
-29 
-	gassign
- {
-	gşau£_Ën_i_0
-, 
-	gşau£_Ën_i_1
-} = 
-şau£_Ën_i
 ;
 
 30 
@@ -1752,9 +1756,9 @@ assign
  
 	gşau£_Ën_o
  = {
-şau£_Ën_o_0
-, 
 şau£_Ën_o_1
+, 
+şau£_Ën_o_0
 };
 
 32 
@@ -1796,7 +1800,7 @@ wr_0
 40 .
 	`v¬_v®ue_äomba£_i
 (
-v¬_v®ue_äomba£
+v¬_v®ue_äomba£_i
 ),
 
 41 .
@@ -1808,7 +1812,7 @@ v¬_v®ue_toba£_0
 43 .
 	`şau£_Ën_i
 (
-şau£_Ën_i_0
+şau£_Ën_i
 ),
 
 44 .
@@ -1818,80 +1822,92 @@ v¬_v®ue_toba£_0
 ),
 
 45 .
-	`­¶y_backŒack_i
+	`­¶y_im¶_i
 (
-­¶y_backŒack_i
+­¶y_im¶_i
+),
+
+46 .
+	`­¶y_bkt_i
+(
+­¶y_bkt_i
 )
 
-48 
+49 
 şau£4
  #(
 
-49 .
+50 .
 	`NUM_VARS_A_BIN
 (
 NUM_VARS_A_BIN
 ),
 
-50 .
+51 .
 	$WIDTH_C_LEN
 (
 WIDTH_C_LEN
 )
 
-52 
+53 
 	`şau£4_1
  (
 
-53 .
+54 .
 	`şk
 (
 şk
 ),
 
-54 .
+55 .
 	`r¡
 (
 r¡
 ),
 
-55 .
+56 .
 	`wr_i
 (
 wr_1
 ),
 
-56 .
+57 .
 	`v¬_v®ue_äomba£_i
 (
-v¬_v®ue_äomba£
+v¬_v®ue_äomba£_i
 ),
 
-57 .
+58 .
 	`v¬_v®ue_toba£_o
 (
 v¬_v®ue_toba£_1
 ),
 
-59 .
+60 .
 	`şau£_Ën_i
 (
-şau£_Ën_i_1
+şau£_Ën_i
 ),
 
-60 .
+61 .
 	`şau£_Ën_o
 (
 şau£_Ën_o_1
 ),
 
-61 .
-	`­¶y_backŒack_i
+62 .
+	`­¶y_im¶_i
 (
-­¶y_backŒack_i
+­¶y_im¶_i
+),
+
+63 .
+	`­¶y_bkt_i
+(
+­¶y_bkt_i
 )
 
-63 
+65 
 ’dmoduË
 
 
@@ -1907,7 +1923,7 @@ moduË
 ·¿m‘”
  
 	gNUM_CLAUSES_A_BIN
- = 4,
+ = 8,
 
 7 
 ·¿m‘”
@@ -1925,7 +1941,7 @@ moduË
 ·¿m‘”
  
 	gWIDTH_C_LEN
- = 5
+ = 4
 
 12 
 šput
@@ -1951,8 +1967,6 @@ wr_i
 	gšput
  [
 WIDTH_C_LEN
-*
-NUM_CLAUSES_A_BIN
 -1 : 0] 
 şau£_Ën_i
 ,
@@ -1979,9 +1993,21 @@ v¬_v®ue_toba£_o
 NUM_CLAUSES_A_BIN
 -1:0] 
 Ë¬Ác_š£¹_šdex_o
+,
 
+22 
+šput
+ 
+	g­¶y_im¶_i
+,
 
 23 
+šput
+ 
+	g­¶y_bkt_i
+
+
+26 
 	gwœe
  [
 WIDTH_C_LEN
@@ -1991,7 +2017,7 @@ NUM_CLAUSES_A_BIN
 şau£_Ën_o
 ;
 
-24 
+27 
 	gwœe
  [
 WIDTH_C_LEN
@@ -2003,93 +2029,85 @@ NUM_CLAUSES_A_BIN
 	gË¬Ác_Ëns
 ;
 
-25 
+28 
 	gassign
  {
-	gÜigšc_Ëns
-, 
 	gË¬Ác_Ëns
+, 
+	gÜigšc_Ëns
 } = 
 şau£_Ën_o
 ;
 
-27 
-wœe
- 
-	g­¶y_backŒack_i
-;
-
-29 
+30 
 	gşau£8
  #(
 
-30 .
-NUM_CLAUSES_A_BIN
-(NUM_CLAUSES_A_BIN),
-
 31 .
-NUM_VARS_A_BIN
-(NUM_VARS_A_BIN),
-
-32 .
-	$WIDTH_VAR_STATES
+	$WIDTH_C_LEN
 (
-WIDTH_VAR_STATES
+WIDTH_C_LEN
 )
 
-34 
-şau£8
+33 
+	`şau£8
+(
 
-
-36 .
+34 .
 	`şk
 (
 şk
 ),
 
-37 .
+35 .
 	`r¡
 (
 r¡
 ),
 
-38 .
+36 .
 	`wr_i
 (
 wr_i
 ),
 
-39 .
+37 .
 	`v¬_v®ue_äomba£_i
 (
 v¬_v®ue_äomba£_i
 ),
 
-40 .
+38 .
 	`v¬_v®ue_toba£_o
 (
 v¬_v®ue_toba£_o
 ),
 
-42 .
+40 .
 	`şau£_Ën_i
 (
 şau£_Ën_i
 ),
 
-43 .
+41 .
 	`şau£_Ën_o
 (
 şau£_Ën_o
 ),
 
-44 .
-	`­¶y_backŒack_i
+42 .
+	`­¶y_im¶_i
 (
-­¶y_backŒack_i
+­¶y_im¶_i
+),
+
+43 .
+	`­¶y_bkt_i
+(
+­¶y_bkt_i
 )
 
-47 
+46 
 wœe
  [
 WIDTH_C_LEN
@@ -2097,43 +2115,53 @@ WIDTH_C_LEN
 max_Ën
 ;
 
+47 
+wœe
+ [
+NUM_CLAUSES_A_BIN
+/2-1:0] 
+š£¹_šdex
+;
+
 48 
-max_š_8_d©as
+max_š_4_d©as
  #(
 
 49 .
-	`NUM
-(
-NUM_VARS_A_BIN
-/2),
-
-50 .
 	$WIDTH
 (
 WIDTH_C_LEN
 )
 
-52 
-	`max_š_8_d©as_š¡0
+51 
+	`max_š_4_d©as_š¡0
  (
 
-53 .
+52 .
 	`d©a_i
 (
 Ë¬Ác_Ëns
 ),
 
-54 .
+53 .
 	`d©a_o
 (
 max_Ën
 ),
 
-55 .
+54 .
 	`šdex_o
 (
-Ë¬Ác_š£¹_šdex_o
+š£¹_šdex
 )
+
+56 
+assign
+ 
+Ë¬Ác_š£¹_šdex_o
+ = {
+š£¹_šdex
+, 4'd0};
 
 58 
 ’dmoduË
@@ -5573,348 +5601,6 @@ begš
 	g’dmoduË
 
 
-	@gen_inst.py
-
-1 #-*- 
-codšg
-: 
-utf
--8 -*-
-
-3 
-impÜt
- 
-sys
-
-
-6 
-def
- 
-	$g’_š¡
-(
-f’ame
-):
-
-7 
-Çme
- = ''
-
-8 
-ex™g
- = 0
-
-9 
-¡r_š¡
- = ''
-
-10 
-¡r_¡mt
- = ''
-
-11 
-l
- 
-š
- 
-	$fe
-(
-f’ame
-):
-
-12 
-li¡¡r
- = 
-l
-.
-	`¡r
-(' |\t|,|\n').
-	$¥l™
-()
-
-13 
-¡mt
- = 
-l
-.
-	`¡r
-(' |\t|,|\n')
-
-14 #´šˆ
-li¡¡r
-
-
-15 
-	`Ën
-(
-li¡¡r
-è=ğ0 
-Ü
- '//' 
-š
-†iststrip[0]:
-
-18 
-i
-, 
-l
- 
-š
- 
-	$’um”©e
-(
-li¡¡r
-):
-
-19 
-l
- == '':
-
-20 
-d–
- 
-li¡¡r
-[
-i
-]
-
-22 
-fœ¡
- = 
-F®£
-
-
-24 #moduË 
-Çme
-
-
-25 
-li¡¡r
-[0] == 'module':
-
-26 
-Çme
- = 
-li¡¡r
-[1]
-
-27 
-¡r_š¡
- +ğ'% ' % (
-Çme
-)
-
-28 
-ex™g
- = 1
-
-29 '#' 
-š
- 
-l
-:
-
-30 
-ex™g
- = 2
-
-31 
-¡r_š¡
- += ' #'
-
-32 
-fœ¡
- = 
-True
-
-
-33 
-¡r_š¡
- += '('
-
-36 
-–if
- 
-ex™g
- == 2:
-
-37 
-l
-[0] == ')':
-
-38 
-¡r_š¡
- +ğ'\n)\n%s(' % 
-Çme
-
-
-39 
-ex™g
- = 1
-
-40 
-–if
- 
-fœ¡
-:
-
-41 
-¡r_š¡
- +ğ'\n\t.%s(%s)' % (
-li¡¡r
-[1],†iststrip[1])
-
-43 
-¡r_š¡
- +ğ',\n\t.%s(%s)' % (
-li¡¡r
-[1],†iststrip[1])
-
-46 
-–if
- 
-ex™g
- == 1:
-
-47 
-l
-[0] == ')':
-
-48 
-¡r_š¡
- += '\n);\n'
-
-49 
-ex™g
- = 0
-
-51 
-–if
- 
-l
-[0] !ğ'(' 
-ªd
- 
-fœ¡
-:
-
-52 
-¡r_š¡
- +ğ'\n\t.%s(%s)' % (
-li¡¡r
-[-1],†iststrip[-1])
-
-53 
-¡mt
- = stmt.
-	`»¶aû
-('reg ', '')
-
-54 
-¡mt
- = stmt.
-	`»¶aû
-('input', 'reg')
-
-55 
-¡mt
- = stmt.
-	`»¶aû
-('output', 'wire')
-
-56 
-¡r_¡mt
- +ğ
-¡mt
- + ';\n'
-
-57 
-–if
- 
-l
-[0] != '(':
-
-58 
-¡r_š¡
- +ğ',\n\t.%s(%s)' % (
-li¡¡r
-[-1],†iststrip[-1])
-
-59 
-¡mt
- = stmt.
-	`»¶aû
-('reg ', '')
-
-60 
-¡mt
- = stmt.
-	`»¶aû
-('input', 'reg')
-
-61 
-¡mt
- = stmt.
-	`»¶aû
-('output', 'wire')
-
-62 
-¡r_¡mt
- +ğ
-¡mt
- + ';\n'
-
-64  
-¡r_š¡
-, 
-¡r_¡mt
-
-
-66 
-__Çme__
- == '__main__':
-
-67 
-	`Ën
-(
-sys
-.
-¬gv
-) == 2:
-
-68 
-f’ame
- = 
-sys
-.
-¬gv
-[1]
-
-70 
-f’ame
- = 'var_cell.v'
-
-72 
-¡r_š¡
-, 
-¡r_¡mt
- = 
-	$g’_š¡
-(
-f’ame
-)
-
-73 
-´št
- 
-¡r_¡mt
-
-
-74 
-´št
- 
-¡r_š¡
-
-
 	@lit2.v
 
 1 
@@ -9336,9 +9022,9 @@ d©a_i_0
 17 
 	gassign
  {
-	gd©a_i_0
-, 
 	gd©a_i_1
+, 
+	gd©a_i_0
 } = 
 d©a_i
 ;
@@ -9359,7 +9045,7 @@ assign
 	gd©a_o
  = 
 d©a_o_0
- > 
+ >ğ
 d©a_o_1
  ? data_o_0 : data_o_1;
 
@@ -9367,7 +9053,7 @@ d©a_o_1
 	gwœe
  [
 NUM
--1 : 0] 
+/2-1 : 0] 
 šdex_o_0
 , 
 	gšdex_o_1
@@ -9379,7 +9065,7 @@ assign
 	gšdex_o
  = 
 d©a_o_0
- > 
+ >ğ
 d©a_o_1
  ? {4'd0, index_o_0} : {šdex_o_1, 4'
 d0
@@ -9390,100 +9076,88 @@ d0
  #(
 
 26 .
-NUM
-(
-NUM_SUB
-),
-
-27 .
 	$WIDTH
 (
 WIDTH
 )
 
-29 
+28 
 	`max_š_4_d©as_š¡0
  (
 
-30 .
+29 .
 	`d©a_i
 (
 d©a_i_0
 ),
 
-31 .
+30 .
 	`d©a_o
 (
 d©a_o_0
 ),
 
-32 .
+31 .
 	`šdex_o
 (
 šdex_o_0
 )
 
-35 
+34 
 max_š_4_d©as
  #(
 
-36 .
-	`NUM
-(
-NUM_SUB
-),
-
-37 .
+35 .
 	$WIDTH
 (
 WIDTH
 )
 
-39 
+37 
 	`max_š_4_d©as_š¡1
  (
 
-40 .
+38 .
 	`d©a_i
 (
 d©a_i_1
 ),
 
-41 .
+39 .
 	`d©a_o
 (
 d©a_o_1
 ),
 
-42 .
+40 .
 	`šdex_o
 (
 šdex_o_1
 )
 
-45 
+43 
 ’dmoduË
 
 
-48 
+45 
 moduË
  
 max_š_4_d©as
  #(
 
-49 
+46 
 ·¿m‘”
  
 NUM
  = 4,
 
-50 
+47 
 ·¿m‘”
  
 WIDTH
  = 5
 
-53 
+50 
 šput
  [
 NUM
@@ -9493,7 +9167,7 @@ WIDTH
 d©a_i
 ,
 
-54 
+51 
 ouut
  [
 WIDTH
@@ -9501,7 +9175,7 @@ WIDTH
 d©a_o
 ,
 
-55 
+52 
 ouut
  [
 NUM
@@ -9509,7 +9183,7 @@ NUM
 šdex_o
 
 
-57 
+54 
 ·¿m‘”
  
 NUM_SUB
@@ -9517,7 +9191,7 @@ NUM_SUB
 NUM
 /2;
 
-59 
+56 
 wœe
  [
 NUM_SUB
@@ -9529,15 +9203,15 @@ d©a_i_0
 d©a_i_1
 ;
 
-60 
+57 
 assign
  {
-d©a_i_0
-, 
 d©a_i_1
+, 
+d©a_i_0
 } = d©a_i;
 
-62 
+59 
 	gwœe
  [
 WIDTH
@@ -9547,137 +9221,125 @@ d©a_o_0
 	gd©a_o_1
 ;
 
-63 
+60 
 assign
  
 	gd©a_o
  = 
 d©a_o_0
- > 
+ >ğ
 d©a_o_1
  ? data_o_0 : data_o_1;
 
-66 
+63 
 	gwœe
  [
 NUM
--1 : 0] 
+/2-1 : 0] 
 šdex_o_0
 , 
 	gšdex_o_1
 ;
 
-67 
+64 
 assign
  
 	gšdex_o
  = 
 d©a_o_0
- > 
+ >ğ
 d©a_o_1
  ? {2'd0, index_o_0} : {šdex_o_1, 2'
 d0
 };
 
-69 
+66 
 	gmax_š_2_d©as
  #(
 
-70 .
-NUM
-(
-NUM_SUB
-),
-
-71 .
+67 .
 	$WIDTH
 (
 WIDTH
 )
 
-73 
+69 
 	`max_š_2_d©as_š¡0
  (
 
-74 .
+70 .
 	`d©a_i
 (
 d©a_i_0
 ),
 
-75 .
+71 .
 	`d©a_o
 (
 d©a_o_0
 ),
 
-76 .
+72 .
 	`šdex_o
 (
 šdex_o_0
 )
 
-79 
+75 
 max_š_2_d©as
  #(
 
-80 .
-	`NUM
-(
-NUM_SUB
-),
-
-81 .
+76 .
 	$WIDTH
 (
 WIDTH
 )
 
-83 
+78 
 	`max_š_2_d©as_š¡1
  (
 
-84 .
+79 .
 	`d©a_i
 (
 d©a_i_1
 ),
 
-85 .
+80 .
 	`d©a_o
 (
 d©a_o_1
 ),
 
-86 .
+81 .
 	`šdex_o
 (
 šdex_o_1
 )
 
-89 
+84 
 ’dmoduË
 
 
-92 
+87 
 moduË
  
 max_š_2_d©as
  #(
 
-93 
+88 
 ·¿m‘”
  
 NUM
  = 2,
 
-94 
+89 
 ·¿m‘”
  
 WIDTH
  = 5
 
-97 
+92 
 šput
  [
 NUM
@@ -9687,7 +9349,7 @@ WIDTH
 d©a_i
 ,
 
-98 
+93 
 ouut
  [
 WIDTH
@@ -9695,7 +9357,7 @@ WIDTH
 d©a_o
 ,
 
-99 
+94 
 ouut
  [
 NUM
@@ -9703,7 +9365,7 @@ NUM
 šdex_o
 
 
-101 
+96 
 ·¿m‘”
  
 NUM_SUB
@@ -9711,49 +9373,49 @@ NUM_SUB
 NUM
 ;
 
-103 
+98 
 wœe
  [
 NUM_SUB
 *
 WIDTH
--1 : 0] 
+/2-1 : 0] 
 d©a_i_0
 , 
 d©a_i_1
 ;
 
-104 
+99 
 assign
  {
-d©a_i_0
-, 
 d©a_i_1
+, 
+d©a_i_0
 } = d©a_i;
 
-106 
+101 
 assign
  
 	gd©a_o
  = 
 d©a_i_0
- > 
+ >ğ
 d©a_i_1
  ? data_i_0 : data_i_1;
 
-107 
+102 
 assign
  
 	gšdex_o
  = 
 d©a_i_0
- > 
+ >ğ
 d©a_i_1
  ? 2'b01 : 2'
 b10
 ;
 
-109 
+104 
 	g’dmoduË
 
 
@@ -20451,160 +20113,12 @@ v¬_»asÚ_bš_r
 	g’dmoduË
 
 
-	@wc.py
-
-1 
-impÜt
- 
-os
-
-
-3 
-def
- 
-	$fe_lše_couÁ
-(
-thef•©h
-):
-
-4 
-couÁ
- = -1
-
-5 
-couÁ
-, 
-lše
- 
-š
- 
-	`’um”©e
-(
-	`İ’
-(
-thef•©h
-, 'rU')):
-
-6 
-·ss
-
-
-7 
-couÁ
- += 1
-
-8  
-couÁ
-
-
-10 
-def
- 
-	$´št_Œ“
-(
-dœ_·th
-):
-
-11 
-suml
- = 0
-
-12 
-Çme
- 
-š
- 
-os
-.
-	$li¡dœ
-(
-dœ_·th
-):
-
-13 
-fuÎ_·th
- = 
-os
-.
-·th
-.
-	$još
-(
-dœ_·th
-, 
-Çme
-)
-
-14 if(
-Çme
-.
-	`’dsw™h
-('.v')):
-
-15 
-¡r1
- = 
-fuÎ_·th
-
-
-16 
-lše_út
- = 
-	`fe_lše_couÁ
-(
-¡r1
-);
-
-17 
-´št
- 
-	`¡r
-(
-lše_út
- )+'\t:\t'+
-¡r1
-
-
-18 
-suml
- +ğ
-lše_út
-
-
-19 #ià
-os
-.
-·th
-.
-	`isdœ
-(
-fuÎ_·th
-):
-
-20 #´št_Œ“(
-fuÎ_·th
-, 
-fe
-)
-
-21 
-´št
- 
-	`¡r
-(
-suml
-)+'\t:\ttotal†ine count'
-
-23 
-	`´št_Œ“
-('.')
-
 	@
 1
 .
 0
-23
-260
+21
+242
 bram_w40.v
 clause1.v
 clause2.v
@@ -20614,7 +20128,6 @@ clause_array.v
 control.v
 data_dispatch.v
 decision.v
-gen_inst.py
 lit2.v
 lit4.v
 lit8.v
@@ -20627,4 +20140,3 @@ sat_engine.v
 terminal_cell.v
 var24.v
 var_cell.v
-wc.py

@@ -44,7 +44,8 @@ class ClauseArray #(int nc = 8, int nv = 8);
 		for (int i = nc/2; i < nc; ++i)
 		begin
 			int len = cdatas[i].get_len();
-			if(len < max) begin
+			$display("i=%d\tlen=%d", i, len);
+			if(len > max) begin
 				max = len;
 				index = i;
 			end
@@ -57,6 +58,7 @@ class ClauseArray #(int nc = 8, int nv = 8);
 			else
 				inserti[i] = 0;
 		end
+		$display("index=%d\t%b", index, inserti);
 	endfunction
 
 

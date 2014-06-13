@@ -18,29 +18,29 @@ def gen_clause():
 
     for i in xrange(24):
         print """
-	lit_cell lit_cell_%d
-	(
-		.clk(clk), 
-		.rst(rst),
+    lit_cell lit_cell_%d
+    (
+        .clk(clk),
+        .rst(rst),
 
-		.wr_i(wr_i),
-		.var_value_frombase_i(var_value_frombase_%d),
-		.var_value_tobase_o(var_value_tobase_%d),
+        .wr_i(wr_i),
+        .var_value_frombase_i(var_value_frombase_%d),
+        .var_value_tobase_o(var_value_tobase_%d),
 
-		.freelitcnt_pre(freelitcnt_%d),
-		.freelitcnt_next(freelitcnt_%d),
+        .freelitcnt_pre(freelitcnt_%d),
+        .freelitcnt_next(freelitcnt_%d),
 
-		.imp_drv_i(imp_drv_%d),
-		
-		.cclause_o(cclause_%d),
-		.cclause_drv_i(cclause_drv_%d),
+        .imp_drv_i(imp_drv_%d),
 
-		.clausesat_o(clausesat_%d)
-	)""" % (i, i, i, i - 1, i, i, i, i, i)
+        .cclause_o(cclause_%d),
+        .cclause_drv_i(cclause_drv_%d),
+
+        .clausesat_o(clausesat_%d)
+    )""" % (i, i, i, i - 1, i, i, i, i, i)
 
 # for i in xrange(24):
 # print "assign lock_cnt%d = lock_cnt%d!=2'b00?2'b11:(vars_value_frombase_i[3*%d+2:3*%d+1]==00? 2'b01:2'b00);"%(i,i-1,i,i)
-# 	print "vars_selected_tobase_o[%d] <= lock_cnt%d!=2'b01;"%(i,i)
+#   print "vars_selected_tobase_o[%d] <= lock_cnt%d!=2'b01;"%(i,i)
 
 
 def gen_clause_array():
@@ -49,15 +49,15 @@ def gen_clause_array():
 
     for i in xrange(24):
         print """
-	clause clause%d #(
-		.NUM_VARS_A_BIN(NUM_VARS_A_BIN)
-	(
-		.clk(clk), 
-		.rst(rst), 
-		.wr_i(wr_%d),
-		.var_value_frombase_i(var_value_frombase),
-		.var_value_tobase_o(var_value_tobase_%d)
-	)""" % (i, i, i)
+    clause clause%d #(
+        .NUM_VARS_A_BIN(NUM_VARS_A_BIN)
+    (
+        .clk(clk), 
+        .rst(rst), 
+        .wr_i(wr_%d),
+        .var_value_frombase_i(var_value_frombase),
+        .var_value_tobase_o(var_value_tobase_%d)
+    )""" % (i, i, i)
 
 
 def gen_base():
@@ -78,45 +78,45 @@ def gen_base():
 
     for i in xrange(24):
         print """
-	base_cell base_cell%d #(
-		.NUM_CLAUSES_A_BIN(NUM_CLAUSES_A_BIN),
-		.WIDTH_VAR_STATES(WIDTH_VAR_STATES)
-	)
-	(
-		.clk(clk), 
-		.rst(rst), 
-		.var_value_i(var_value_i_%d),
-		.var_value_o(var_value_o_%d),
-		.vars_decided_tobase_i(vars_decided_tobase_i_%d),
-		.decide_level_i(decide_level_i_%d),
-		.cur_bin_num_i(cur_bin_num_i)
-		.find_conflict_o(find_conflict_o_%d),
-		.find_imply_o(find_imply_o_%d),
-		.is_independent_bin_o(is_independent_bin_%d)
-		.apply_analyze_i(apply_analyze_i),
-		.bkt_lvl_i(bkt_lvl),
-		.bkt_bin_num_o(bkt_bin_num_o_%d),
-		.apply_backtrack_i(apply_backtrack_r),
-		.apply_load_i(apply_load_i),
-		.load_clauses_i(load_clauses_i_%d),
-		.apply_update_i(apply_update_i),
-		.update_clause_o(update_clause_o_%d),
-		.wr_states(wr_states_%d),
-		.vars_states_i(vars_states_i_%d),
-		.vars_states_o(vars_states_o_%d),
-		.var_level_o(var_level_o_%d)
-	)""" % (i, i, i, i, i, i, i, i, i, i, i, i, i, i, i)
+    base_cell base_cell%d #(
+        .NUM_CLAUSES_A_BIN(NUM_CLAUSES_A_BIN),
+        .WIDTH_VAR_STATES(WIDTH_VAR_STATES)
+    )
+    (
+        .clk(clk), 
+        .rst(rst), 
+        .var_value_i(var_value_i_%d),
+        .var_value_o(var_value_o_%d),
+        .vars_decided_tobase_i(vars_decided_tobase_i_%d),
+        .decide_level_i(decide_level_i_%d),
+        .cur_bin_num_i(cur_bin_num_i)
+        .find_conflict_o(find_conflict_o_%d),
+        .find_imply_o(find_imply_o_%d),
+        .is_independent_bin_o(is_independent_bin_%d)
+        .apply_analyze_i(apply_analyze_i),
+        .bkt_lvl_i(bkt_lvl),
+        .bkt_bin_num_o(bkt_bin_num_o_%d),
+        .apply_backtrack_i(apply_backtrack_r),
+        .apply_load_i(apply_load_i),
+        .load_clauses_i(load_clauses_i_%d),
+        .apply_update_i(apply_update_i),
+        .update_clause_o(update_clause_o_%d),
+        .wr_states(wr_states_%d),
+        .vars_states_i(vars_states_i_%d),
+        .vars_states_o(vars_states_o_%d),
+        .var_level_o(var_level_o_%d)
+    )""" % (i, i, i, i, i, i, i, i, i, i, i, i, i, i, i)
 
 
 def gen_regs_vid_state():
     # for i in xrange(24):
-    # 	print 'assign {value_%d, level_%d, reason_bin_%d, isbktlvl_%d} = var_state_%d;'%(i,i,i,i,i)
+    #   print 'assign {value_%d, level_%d, reason_bin_%d, isbktlvl_%d} = var_state_%d;'%(i,i,i,i,i)
     # for i in xrange(24):
-    # 	print "wire level_0_%d = need_update[%d]? level_%d | ~16'b0;;"%(i,i,i)
+    #   print "wire level_0_%d = need_update[%d]? level_%d | ~16'b0;;"%(i,i,i)
     # for i in xrange(24):
-    # 	print "assign ptr_update[%d] = ~ptr_update[%d] && need_update && min_level==level_%d;"%(i,i-1,i)
+    #   print "assign ptr_update[%d] = ~ptr_update[%d] && need_update && min_level==level_%d;"%(i,i-1,i)
     # for i in xrange(24):
-    # 	print "assign need_shift[%d] = ptr_update[%d] | need_shift[%d];"%(i,i,i)
+    #   print "assign need_shift[%d] = ptr_update[%d] | need_shift[%d];"%(i,i,i)
     # for i in xrange(24):
     # print "need_update[%d] <= need_shift[%d]?
     # need_update[%d]:need_update[%d];"%(i,i,i+1,i)

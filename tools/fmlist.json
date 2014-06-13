@@ -1,7 +1,62 @@
+[]
+['clause1']
+clause1
+['clause2']
+clause2
+['clause4']
+clause4
+['clause8']
+clause8
+[]
+['control']
+control
+['load_update_bin']
+load_update_bin
+['decision']
+decision
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+['lit2']
+lit2
+['lit4']
+lit4
+['lit8']
+lit8
+['lit_cell']
+lit_cell
+['load_update_bin']
+load_update_bin
+[]
+[]
+['sat_engine']
+sat_engine
+['terminal_cell']
+terminal_cell
+[]
+[]
+['var24']
+var24
+['var_cell']
+var_cell
+[]
+[]
+[]
+[]
+[]
 {
-  "control": [], 
+  "control": [
+    "../control.v"
+  ], 
   "test_all": [], 
   "load_update_bin": [
+    "../load_update_bin.v", 
+    "../data_dispatch.v", 
     [
       "regs_vid_state", 
       "regs_vid_state"
@@ -25,12 +80,6 @@
       "inst"
     ]
   ], 
-  "test_clause_array": [
-    [
-      "clause_array", 
-      "clause_array"
-    ]
-  ], 
   "regs_vid_state": [], 
   "test_clause1": [
     [
@@ -38,8 +87,20 @@
       "clause1"
     ]
   ], 
+  "max_in_4_datas": [
+    [
+      "max_in_2_datas", 
+      "max_in_2_datas_inst0"
+    ], 
+    [
+      "max_in_2_datas", 
+      "max_in_2_datas_inst1"
+    ]
+  ], 
   "max_in_2_datas": [], 
-  "sat_engine": [], 
+  "sat_engine": [
+    "../sat_engine.v"
+  ], 
   "bram_w36_d1204": [
     [
       "BLK_MEM_GEN_V7_3", 
@@ -52,7 +113,9 @@
       "test_clause_array"
     ]
   ], 
-  "decision": [], 
+  "decision": [
+    "../decision.v"
+  ], 
   "test_lit_cell_top": [], 
   "bram_w18_1024": [
     [
@@ -72,17 +135,26 @@
       "inst"
     ]
   ], 
-  "var24": [], 
-  "terminal_cell": [], 
+  "var24": [
+    "../var24.v"
+  ], 
+  "terminal_cell": [
+    "../terminal_cell.v"
+  ], 
   "blk_mem_gen_v7_3": [
     [
       "BLK_MEM_GEN_V7_3", 
       "inst"
     ]
   ], 
-  "var_cell": [], 
-  "lit_cell": [], 
+  "var_cell": [
+    "../var_cell.v"
+  ], 
+  "lit_cell": [
+    "../lit_cell.v"
+  ], 
   "clause8": [
+    "../clause8.v", 
     [
       "clause4", 
       "clause4_0"
@@ -92,17 +164,14 @@
       "clause4_1"
     ]
   ], 
-  "clause_array": [
+  "test_clause_array": [
     [
-      "clause8", 
-      "clause8"
-    ], 
-    [
-      "max_in_4_datas", 
-      "max_in_4_datas_inst0"
+      "clause_array", 
+      "clause_array"
     ]
   ], 
   "clause2": [
+    "../clause2.v", 
     [
       "clause1", 
       "clause1_0"
@@ -113,6 +182,7 @@
     ]
   ], 
   "clause1": [
+    "../clause1.v", 
     [
       "lit8", 
       "lit8_0"
@@ -123,6 +193,7 @@
     ]
   ], 
   "clause4": [
+    "../clause4.v", 
     [
       "clause2", 
       "clause2_0"
@@ -139,6 +210,7 @@
     ]
   ], 
   "lit8": [
+    "../lit8.v", 
     [
       "lit4", 
       "lit4_0"
@@ -149,6 +221,7 @@
     ]
   ], 
   "lit4": [
+    "../lit4.v", 
     [
       "lit2", 
       "lit2_0"
@@ -171,6 +244,7 @@
     ]
   ], 
   "lit2": [
+    "../lit2.v", 
     [
       "lit_cell", 
       "lit_cell_0"
@@ -190,14 +264,14 @@
       "max_in_4_datas_inst1"
     ]
   ], 
-  "max_in_4_datas": [
+  "clause_array": [
     [
-      "max_in_2_datas", 
-      "max_in_2_datas_inst0"
+      "clause8", 
+      "clause8"
     ], 
     [
-      "max_in_2_datas", 
-      "max_in_2_datas_inst1"
+      "max_in_8_datas", 
+      "max_in_8_datas_inst0"
     ]
   ], 
   "bram_w12_d1024": [

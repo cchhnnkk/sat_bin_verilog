@@ -1,4 +1,5 @@
 quit -sim
+rm wlf*
 vlib work
 vmap work work
 
@@ -11,7 +12,7 @@ vlog -quiet ../clause1.v
 vlog -quiet ../test/ClauseData.sv -sv
 vlog -quiet ../test/test_clause1.sv
 
-vsim -quiet test_clause1_top
+vsim -quiet test_clause1_top -wlf test_clause1_top.wlf
 
 add wave -noupdate -divider {TEST}
 add wave -noupdate sim:/test_clause1_top/test_clause1/*
@@ -24,6 +25,7 @@ add wave -noupdate -expand -group {lit3} sim:/test_clause1_top/test_clause1/clau
 
 add wave -noupdate -expand -group {terminal_cell} sim:/test_clause1_top/test_clause1/clause1/terminal_cell/*
 
+# add wave -r sim:/test_clause1_top/*
 
 TreeUpdate [SetDefaultTree]
 WaveRestoreCursors {{Cursor 1} {0 ns} 0}

@@ -17,12 +17,17 @@ vlog -quiet ../test/ClauseData.sv
 vlog -quiet ../test/ClauseArray.sv
 vlog -quiet ../test/test_clause_array.sv
 
+# vsim -quiet test_clause_array_top -pli D:/Novas/Debussy/share/PLI/modelsim_fli53/WINNT/novas_fli.dll
+
 vsim -quiet test_clause_array_top
 
-add wave -noupdate -divider {TEST}
-add wave -noupdate sim:/test_clause_array_top/test_clause_array/*
-add wave -noupdate -divider {DUT}
-add wave -noupdate sim:/test_clause_array_top/test_clause_array/clause_array/*
+# add wave -noupdate -divider {TEST}
+# add wave -noupdate sim:/test_clause_array_top/test_clause_array/*
+# add wave -noupdate -divider {DUT}
+# add wave -noupdate sim:/test_clause_array_top/test_clause_array/clause_array/*
+
+do ../tools/wave_test_clause_array_top.do
+# do wave.do
 
 TreeUpdate [SetDefaultTree]
 WaveRestoreCursors {{Cursor 1} {0 ns} 0}
@@ -42,4 +47,4 @@ configure wave -timelineunits ns
 update
 WaveRestoreZoom {0 ns} {200 ns}
 
-run 200 ns
+run -all
