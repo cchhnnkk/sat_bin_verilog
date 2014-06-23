@@ -1,0 +1,112 @@
+# //  ModelSim SE 10.1c Jul 27 2012 
+# //
+# //  Copyright 1991-2012 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  THIS WORK CONTAINS TRADE SECRET AND PROPRIETARY INFORMATION
+# //  WHICH IS THE PROPERTY OF MENTOR GRAPHICS CORPORATION OR ITS
+# //  LICENSORS AND IS SUBJECT TO LICENSE TERMS.
+# //
+cd sim
+dataset open F:/sat/github/sat_bin_verilog/sim/vsim_r.wlf vsim_r
+# F:/sat/github/sat_bin_verilog/sim/vsim_r.wlf opened as dataset "vsim_r"
+dataset open F:/sat/github/sat_bin_verilog/sim/vsim_t.wlf vsim_t
+# F:/sat/github/sat_bin_verilog/sim/vsim_t.wlf opened as dataset "vsim_t"
+compare start vsim_r vsim_t
+compare end
+dataset open F:/sat/github/sat_bin_verilog/sim/vsim_r.wlf vsim_r
+# F:/sat/github/sat_bin_verilog/sim/vsim_r.wlf opened as dataset "vsim_r"
+dataset open F:/sat/github/sat_bin_verilog/sim/vsim_t.wlf vsim_t
+# F:/sat/github/sat_bin_verilog/sim/vsim_t.wlf opened as dataset "vsim_t"
+compare start vsim_r vsim_t
+compare add -recursive -all -wave *
+# Created 93 comparisons. 
+compare end
+do test_clause1.do
+# ** Warning: (vlib-34) Library already exists at "work".
+# 
+# Modifying d:\modeltech_10.1c\win32/../modelsim.ini
+# vsim -quiet test_clause1_top 
+# ** Warning: (vsim-3015) ../clause1.v(42): [PCDPC] - Port size (2 or 2) does not match connection size (32) for port 'freelitcnt_pre'. The port definition is at: ../lit8.v(12).
+# 
+#         Region: /test_clause1_top/test_clause1/clause1/lit8_0
+# ** Warning: (vsim-WLF-5000) WLF file currently in use: vsim.wlf
+# 
+#           File in use by: Kaen Chan  Hostname: KAENCHAN-PC  ProcessID: 57292
+# 
+#           Attempting to use alternate WLF file "./wlftmimx6f".
+# ** Warning: (vsim-WLF-5001) Could not open WLF file: vsim.wlf
+# 
+#           Using alternate file: ./wlftmimx6f
+# 
+# test_clause1_task
+# done
+do test_clause1.do
+# ** Warning: (vlib-34) Library already exists at "work".
+# 
+# Modifying d:\modeltech_10.1c\win32/../modelsim.ini
+# vsim -quiet test_clause1_top 
+# ** Warning: (vsim-3015) ../clause1.v(42): [PCDPC] - Port size (2 or 2) does not match connection size (32) for port 'freelitcnt_pre'. The port definition is at: ../lit8.v(12).
+# 
+#         Region: /test_clause1_top/test_clause1/clause1/lit8_0
+# ** Warning: (vsim-WLF-5000) WLF file currently in use: vsim.wlf
+# 
+#           File in use by: Kaen Chan  Hostname: KAENCHAN-PC  ProcessID: 57292
+# 
+#           Attempting to use alternate WLF file "./wlft8565nv".
+# ** Warning: (vsim-WLF-5001) Could not open WLF file: vsim.wlf
+# 
+#           Using alternate file: ./wlft8565nv
+# 
+# test_clause1_task
+# ** Error: Assertion error.
+#    Time: 26 ns  Scope: test_clause1_top.test_clause1.test_clause1_task File: ../test/test_clause1.sv Line: 57
+# ** Error: Assertion error.
+#    Time: 36 ns  Scope: test_clause1_top.test_clause1.test_clause1_task File: ../test/test_clause1.sv Line: 63
+# ** Error: Assertion error.
+#    Time: 46 ns  Scope: test_clause1_top.test_clause1.test_clause1_task File: ../test/test_clause1.sv Line: 70
+# ** Error: Assertion error.
+#    Time: 46 ns  Scope: test_clause1_top.test_clause1.test_clause1_task File: ../test/test_clause1.sv Line: 71
+# ** Error: Assertion error.
+#    Time: 46 ns  Scope: test_clause1_top.test_clause1.ClauseData.ClauseData__1.assert_lit File: ../test/ClauseData.sv Line: 79
+# ** Error: Assertion error.
+#    Time: 56 ns  Scope: test_clause1_top.test_clause1.test_clause1_task File: ../test/test_clause1.sv Line: 79
+# ** Error: Assertion error.
+#    Time: 56 ns  Scope: test_clause1_top.test_clause1.ClauseData.ClauseData__1.assert_lit File: ../test/ClauseData.sv Line: 79
+# ** Error: Assertion error.
+#    Time: 56 ns  Scope: test_clause1_top.test_clause1.ClauseData.ClauseData__1.assert_lit File: ../test/ClauseData.sv Line: 79
+# ** Error: Assertion error.
+#    Time: 56 ns  Scope: test_clause1_top.test_clause1.ClauseData.ClauseData__1.assert_lit File: ../test/ClauseData.sv Line: 79
+# done
+dataset open F:/sat/github/sat_bin_verilog/sim/vsim_r.wlf vsim_r
+# F:/sat/github/sat_bin_verilog/sim/vsim_r.wlf opened as dataset "vsim_r"
+compare start vsim_r sim
+compare options -track
+compare add -recursive -all -wave *
+# Created 93 comparisons. 
+view -new wave
+# .main_pane.wave1.interior.cs.body.pw.wf
+add wave -position insertpoint compare:/test_clause1_top/test_clause1/*
+add wave -position insertpoint compare:/test_clause1_top/test_clause1/clause1/*
+compare end
+do test_clause1.do
+# ** Warning: (vlib-34) Library already exists at "work".
+# 
+# Modifying d:\modeltech_10.1c\win32/../modelsim.ini
+# vsim -quiet test_clause1_top 
+# ** Warning: (vsim-3015) ../clause1.v(42): [PCDPC] - Port size (2 or 2) does not match connection size (32) for port 'freelitcnt_pre'. The port definition is at: ../lit8.v(12).
+# 
+#         Region: /test_clause1_top/test_clause1/clause1/lit8_0
+# ** Warning: (vsim-WLF-5000) WLF file currently in use: vsim.wlf
+# 
+#           File in use by: Kaen Chan  Hostname: KAENCHAN-PC  ProcessID: 57292
+# 
+#           Attempting to use alternate WLF file "./wlftmb2rz7".
+# ** Warning: (vsim-WLF-5001) Could not open WLF file: vsim.wlf
+# 
+#           Using alternate file: ./wlftmb2rz7
+# 
+# test_clause1_task
+# done
+quit -sim
+quit

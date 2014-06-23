@@ -56,6 +56,7 @@ def gen_inst(filename):
                 stmt = stmt.replace('input', 'reg')
                 stmt = stmt.replace('output', 'wire')
                 str_stmt += stmt + ';\n'
+                first = False
             elif l[0] != '(':
                 str_inst += ',\n\t.%s(%s)' % (liststrip[-1], liststrip[-1])
                 stmt = stmt.replace('reg ', '')

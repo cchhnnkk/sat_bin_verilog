@@ -24,7 +24,7 @@ add wave -noupdate -expand -group test_clause_array_top -expand -group test_clau
 add wave -noupdate -expand -group test_clause_array_top -expand -group test_clause_array -expand -group clause_array /test_clause_array_top/test_clause_array/clause_array/apply_bkt_i
 add wave -noupdate -expand -group test_clause_array_top -expand -group test_clause_array -expand -group clause_array -radix hexadecimal /test_clause_array_top/test_clause_array/clause_array/clause_len_o
 add wave -noupdate -expand -group test_clause_array_top -expand -group test_clause_array -expand -group clause_array -radix hexadecimal /test_clause_array_top/test_clause_array/clause_array/originc_lens
-add wave -noupdate -expand -group test_clause_array_top -expand -group test_clause_array -expand -group clause_array -radix hexadecimal /test_clause_array_top/test_clause_array/clause_array/learntc_lens
+add wave -noupdate -expand -group test_clause_array_top -expand -group test_clause_array -expand -group clause_array -radix hexadecimal /test_clause_array_top/test_clause_array/clause_array/clause_lens
 add wave -noupdate -expand -group test_clause_array_top -expand -group test_clause_array -expand -group clause_array -radix hexadecimal /test_clause_array_top/test_clause_array/clause_array/max_len
 add wave -noupdate -expand -group test_clause_array_top -expand -group test_clause_array -expand -group clause_array /test_clause_array_top/test_clause_array/clause_array/insert_index
 add wave -noupdate -expand -group test_clause_array_top -expand -group test_clause_array -expand -group clause_array -group clause8 /test_clause_array_top/test_clause_array/clause_array/clause8/clk

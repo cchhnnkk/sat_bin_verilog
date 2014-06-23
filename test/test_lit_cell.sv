@@ -34,8 +34,8 @@ module test_lit_cell();
     endtask
 
     reg wr_i;
-    reg [2:0] var_value_frombase_i;
-    wire [2:0] var_value_tobase_o;
+    reg [2:0] var_value_i;
+    wire [2:0] var_value_o;
     reg [1:0] freelitcnt_pre;
     wire [1:0] freelitcnt_next;
     reg imp_drv_i;
@@ -47,8 +47,8 @@ module test_lit_cell();
         .clk(clk),
         .rst(rst),
         .wr_i(wr_i),
-        .var_value_frombase_i(var_value_frombase_i),
-        .var_value_tobase_o(var_value_tobase_o),
+        .var_value_i(var_value_i),
+        .var_value_o(var_value_o),
         .freelitcnt_pre(freelitcnt_pre),
         .freelitcnt_next(freelitcnt_next),
         .imp_drv_i(imp_drv_i),
@@ -63,8 +63,8 @@ module test_lit_cell();
     task test_free_lit_count();
         begin
             $display("test_free_lit_count");
-            var_value_frombase_i[2:1] = 0;
-            var_value_frombase_i[0] = 0;
+            var_value_i[2:1] = 0;
+            var_value_i[0] = 0;
             cnt_fail = 0;
             @ (posedge clk);
                 freelitcnt_pre = 0;
@@ -72,17 +72,17 @@ module test_lit_cell();
 
             @ (posedge clk)
                 assert(freelitcnt_next == 1);
-                var_value_frombase_i[2:1] = 1;
+                var_value_i[2:1] = 1;
                 freelitcnt_pre = 1;
 
             @ (posedge clk)
                 assert(freelitcnt_next == 1);
-                var_value_frombase_i[2:1] = 0;
+                var_value_i[2:1] = 0;
                 freelitcnt_pre = 1;
 
             @ (posedge clk)
                 assert(freelitcnt_next == 3);
-                var_value_frombase_i[2:1] = 0;
+                var_value_i[2:1] = 0;
                 freelitcnt_pre = 1;
 
             @ (posedge clk)
@@ -96,10 +96,10 @@ module test_lit_cell();
         begin
             @ (posedge clk);
                 wr_i = 1;
-                var_value_frombase_i[2:1] = value;
+                var_value_i[2:1] = value;
             @ (posedge clk)
                 wr_i = 0;
-                var_value_frombase_i[2:1] = 0;
+                var_value_i[2:1] = 0;
         end
     endtask
 

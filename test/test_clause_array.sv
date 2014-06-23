@@ -12,8 +12,8 @@ module test_clause_array(input clk, input rst);
 		end
 	endtask
 
-	parameter NUM_CLAUSES_A_BIN = 8;
-	parameter NUM_VARS_A_BIN = 8;
+	parameter NUM_CLAUSES = 8;
+	parameter NUM_VARS = 8;
 	parameter WIDTH_VAR_STATES = 30;
 	parameter WIDTH_C_LEN = 4;
 
@@ -22,14 +22,14 @@ module test_clause_array(input clk, input rst);
 	reg apply_impl_i;
 	reg apply_bkt_i;
 
-	reg [NUM_CLAUSES_A_BIN-1:0] wr_i;
-	reg [NUM_VARS_A_BIN*3-1:0] var_value_frombase_i;
-	wire [NUM_VARS_A_BIN*3-1:0] var_value_tobase_o;
-	wire [NUM_CLAUSES_A_BIN-1:0] learntc_insert_index_o;
+	reg [NUM_CLAUSES-1:0] wr_i;
+	reg [NUM_VARS*3-1:0] var_value_i;
+	wire [NUM_VARS*3-1:0] var_value_o;
+	wire [NUM_CLAUSES-1:0] learntc_insert_index_o;
 
 	clause_array #(
-		.NUM_CLAUSES_A_BIN(NUM_CLAUSES_A_BIN),
-		.NUM_VARS_A_BIN(NUM_VARS_A_BIN),
+		.NUM_CLAUSES(NUM_CLAUSES),
+		.NUM_VARS(NUM_VARS),
 		.WIDTH_VAR_STATES(WIDTH_VAR_STATES),
 		.WIDTH_C_LEN(WIDTH_C_LEN)
 	)
@@ -38,8 +38,8 @@ module test_clause_array(input clk, input rst);
 		.rst(rst),
 		.wr_i(wr_i),
 		.clause_len_i(clause_len_i),
-		.var_value_frombase_i(var_value_frombase_i),
-		.var_value_tobase_o(var_value_tobase_o),
+		.var_value_i(var_value_i),
+		.var_value_o(var_value_o),
 		.learntc_insert_index_o(learntc_insert_index_o),
 		.apply_impl_i(apply_impl_i),
 		.apply_bkt_i(apply_bkt_i)
@@ -83,7 +83,7 @@ module test_clause_array(input clk, input rst);
 					wr_i = 0;
 					wr_i[i] = 1;
 					clause_len_i = carray_data.get_len(i);
-					carray_data.get(i, var_value_frombase_i);
+					carray_data.get(i, var_value_i);
 			end
 			@ (posedge clk);
 				wr_i = 0;
@@ -91,7 +91,7 @@ module test_clause_array(input clk, input rst);
 		end
 	endtask
 
-	bit [NUM_CLAUSES_A_BIN-1:0] inserti;
+	bit [NUM_CLAUSES-1:0] inserti;
 	task test_inserti(input int bin_data[8][8]);
 		begin
 			@ (posedge clk);
