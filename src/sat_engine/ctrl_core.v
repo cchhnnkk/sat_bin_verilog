@@ -3,7 +3,7 @@
     返回bin的sat或unsat
   */
 
-`define DEBUG_ctrl_core
+`include "../src/debug_define.v"
 
 module ctrl_core #(
         parameter WIDTH_LVL = 16

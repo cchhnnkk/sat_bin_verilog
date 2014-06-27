@@ -68,15 +68,15 @@ do test_clause1.do
 # ** Error: Assertion error.
 #    Time: 46 ns  Scope: test_clause1_top.test_clause1.test_clause1_task File: ../test/test_clause1.sv Line: 71
 # ** Error: Assertion error.
-#    Time: 46 ns  Scope: test_clause1_top.test_clause1.ClauseData.ClauseData__1.assert_lit File: ../test/ClauseData.sv Line: 79
+#    Time: 46 ns  Scope: test_clause1_top.test_clause1.class_clause_data.class_clause_data__1.assert_lit File: ../test/class_clause_data.sv Line: 79
 # ** Error: Assertion error.
 #    Time: 56 ns  Scope: test_clause1_top.test_clause1.test_clause1_task File: ../test/test_clause1.sv Line: 79
 # ** Error: Assertion error.
-#    Time: 56 ns  Scope: test_clause1_top.test_clause1.ClauseData.ClauseData__1.assert_lit File: ../test/ClauseData.sv Line: 79
+#    Time: 56 ns  Scope: test_clause1_top.test_clause1.class_clause_data.class_clause_data__1.assert_lit File: ../test/class_clause_data.sv Line: 79
 # ** Error: Assertion error.
-#    Time: 56 ns  Scope: test_clause1_top.test_clause1.ClauseData.ClauseData__1.assert_lit File: ../test/ClauseData.sv Line: 79
+#    Time: 56 ns  Scope: test_clause1_top.test_clause1.class_clause_data.class_clause_data__1.assert_lit File: ../test/class_clause_data.sv Line: 79
 # ** Error: Assertion error.
-#    Time: 56 ns  Scope: test_clause1_top.test_clause1.ClauseData.ClauseData__1.assert_lit File: ../test/ClauseData.sv Line: 79
+#    Time: 56 ns  Scope: test_clause1_top.test_clause1.class_clause_data.class_clause_data__1.assert_lit File: ../test/class_clause_data.sv Line: 79
 # done
 dataset open F:/sat/github/sat_bin_verilog/sim/vsim_r.wlf vsim_r
 # F:/sat/github/sat_bin_verilog/sim/vsim_r.wlf opened as dataset "vsim_r"

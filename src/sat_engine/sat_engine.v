@@ -2,6 +2,8 @@
 *   求解bin的可满足性
 */
 
+`include "../src/debug_define.v"
+
 module sat_engine #(
         parameter NUM_CLAUSES      = 8,
         parameter NUM_VARS         = 8,
@@ -203,7 +205,7 @@ module sat_engine #(
             end
         end
     `endif
-    
+
     /**
     *  输出update的信息
     */
@@ -221,6 +223,8 @@ module sat_engine #(
                     @(posedge clk);
                     
                 $display("start_core_i");
+                $display("cur_bin_num_i = %d", cur_bin_num_i);
+
 
                 while(done_core_i)
                     @(posedge clk);

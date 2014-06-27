@@ -1,12 +1,9 @@
 #!python
-# import os
-
-# os.system("vlog ../src/sat_engine/lit1.v")
 
 import os
 import sys
 import json
-# import re
+import re
 import subprocess
 import gen_num_verilog as gn
 
@@ -22,6 +19,7 @@ else:
 
 # pattern_v = re.compile(r'\.v$|\.sv$')
 # pattern_g = re.compile(r'\.gen$')
+pattern_error = re.compile(r'\((\d+)\)')
 
 for i in xrange(1, len(sys.argv)):
     filename = sys.argv[i]
@@ -39,11 +37,20 @@ for i in xrange(1, len(sys.argv)):
         # subp = subprocess.Popen("vlog -sv %s" % filename)
         subp = subprocess.Popen("vlog -sv %s" % filename,
                                 stdout=subprocess.PIPE)
-        subp.wait()
+        # str_all = ""
+        # while subp.poll() is None:
+        #     vlog_info = subp.stdout.read()
+        #     print vlog_info
+        #     str_all += vlog_info
         vlog_info = subp.stdout.read()
         print vlog_info
         if "Error" in vlog_info:
+            # subprocess.Popen("start gvim %s" % filename)
+            match = pattern_error.search(vlog_info)
+            print match.group(1)
+            subprocess.Popen(["gvim", filename, "+%s" % match.group(1)])
             break
+        subp.wait()
     elif filename.endswith('.gen'):
         # subp = subprocess.Popen(["../tools/gen_num_verilog.py",
         #                         filename,

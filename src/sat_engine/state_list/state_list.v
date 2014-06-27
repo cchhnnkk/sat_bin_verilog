@@ -4,7 +4,7 @@
       lvl_state[]
 
     协助find_bkt_lvl, 计算bkt_lvl计算:
-      ：根据lvl_state[]得到的findindex和以及该bin的base_lvl，
+      根据lvl_state[]得到的findindex和以及该bin的base_lvl，
       得出需要返回的层级;
   */
 
@@ -75,8 +75,8 @@ module state_list #(
     wire [NUM_VARS-1:0]       find_imply_cur, find_conflict_cur;
 
     var_state8 #(
-        .NUM_VARS        (NUM_VARS),
-        .WIDTH_VAR_STATES(WIDTH_VAR_STATES)
+        .WIDTH_VAR_STATES(WIDTH_VAR_STATES),
+        .WIDTH_C_LEN     (WIDTH_C_LEN)
     )
     var_state8(
         .clk            (clk),
@@ -129,8 +129,7 @@ module state_list #(
     * 决策
     */
     wire [NUM_VARS*3-1:0] vars_value_i;
-    wire [NUM_VARS-1:0]   index_decided;
-    wire [WIDTH_LVL-1:0]      cur_local_lvl;
+    wire [WIDTH_LVL-1:0]  cur_local_lvl;
 
     decision #(
             .NUM_VARS(NUM_VARS)
@@ -155,13 +154,13 @@ module state_list #(
         `include "../tb/class_vs_list.sv";
         class_vs_list #(8, WIDTH_LVL) vs_list = new();
 
-        always @(posedge clk) begin: display_sim_info
+        always @(posedge clk) begin
             if(start_decision_i) begin
                 vs_list.set(vars_states_o);
                 vs_list.display();
             end
             if(decision_done) begin
-                display("index_decided_o = %b", index_decided_o);
+                display("index_decided_o = %b", index_decided);
             end
         end
     `endif
@@ -183,20 +182,17 @@ module state_list #(
     always @(posedge clk) begin: set_done_imply_o 
         if(rst)
             done_imply_o <= 0;
-        else if(apply_implication_i && find_imply_cur==find_imply_pre)
+        else if(apply_imply_i && find_imply_cur==find_imply_pre)
             done_imply_o <= 1;
         else
             done_imply_o <= 0;
     end
 
     `ifdef DEBUG_state_list
-        `include "../tb/class_vs_list.sv";
-        class_vs_list #(8, WIDTH_LVL) vs_list = new();
-
-        always @(posedge clk) begin: display_sim_info
-            if(apply_implication_i && find_imply_cur!=find_imply_pre) begin
+        always @(posedge clk) begin 
+            if(apply_imply_i && find_imply_cur!=find_imply_pre) begin
                 display("bcp");
-                vs_list.set(vars_value_o);
+                vs_list.set(vars_states_o);
                 vs_list.display_index(find_imply_cur^find_imply_pre);
             end
         end
@@ -244,7 +240,7 @@ module state_list #(
             endcase
     end
 
-    always @(posedge clk) begin: set_done_analyze_o 
+    always @(posedge clk) begin
         if(rst)
             add_learntc_en_o <= 0;
         else if(c_analyze_state==ADD_LEARNTC)
@@ -265,7 +261,7 @@ module state_list #(
     /**
     * 计算bkt_lvl
     */
-    encode_8to3(.data_i(findindex), .data_o(local_bkt_lvl));
+    encode_8to3 encode_8to3(.data_i(findindex), .data_o(local_bkt_lvl));
 
     always @(posedge clk)
     begin
@@ -298,10 +294,10 @@ module state_list #(
             "ANALYZE_DONE"};
             
         always @(posedge clk) begin
-            if(c_state!=n_state && n_state!=ANALYZE_IDLE)
+            if(c_analyze_state!=n_analyze_state && n_analyze_state!=ANALYZE_IDLE)
             begin
                 @(posedge clk)
-                $display("analysis_control c_state = %s", s[c_state]);
+                $display("analysis_control c_analyze_state = %s", s[c_analyze_state]);
             end
         end
 
@@ -310,7 +306,7 @@ module state_list #(
 
         always @(posedge clk)
         begin
-            if(c_state==FIND_LEARNTC)
+            if(c_analyze_state==FIND_LEARNTC)
             begin
                 cdata_learntc.reset();
                 cdata_learntc.set(var_value_o);
@@ -330,7 +326,7 @@ module state_list #(
     * 回退的控制
     */
 
-    always @(posedge clk) begin: set_done_analyze_o 
+    always @(posedge clk) begin: set_done_bkt_cur_bin_o 
         if(rst)
             done_bkt_cur_bin_o    <= 0;
         else if(apply_bkt_cur_bin_i)
@@ -343,7 +339,7 @@ module state_list #(
         `include "../tb/class_ls_list.sv";
         class_ls_list #(8, WIDTH_LVL) ls_list = new();
 
-        always @(posedge clk) begin: display_sim_info
+        always @(posedge clk) begin
             if(apply_bkt_cur_bin_i) begin
                 ls_list.set(lvl_states_o);
                 display("apply_bkt_cur_bin_i");

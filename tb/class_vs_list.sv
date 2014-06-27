@@ -12,17 +12,8 @@ class class_vs_list #(int nv = 8, int width_lvl = 16, int width_vs = width_lvl+3
 		reset();
 	endfunction
 
-	function new(int value1[nv], int implied1[nv], int level1[nv]);
-		for (int i = 0; i < nv; ++i)
-		begin
-			value[i] = value1[i];
-			implied[i] = implied1[i];
-			level[i] = level1[i];
-		end
-	endfunction
-
 	function void reset();
-		for (int i = 0; i < nc; ++i)
+		for (int i = 0; i < nv; ++i)
 		begin
 			value[i] = 0;
 			implied[i] = 0;
@@ -32,7 +23,7 @@ class class_vs_list #(int nv = 8, int width_lvl = 16, int width_vs = width_lvl+3
 
 	function int get_len();
 		int len = 0;
-		for (int i = 0; i < size; ++i)
+		for (int i = 0; i < nv; ++i)
 		begin
 			if(value[i]!=0) begin
 				len += 1;
@@ -44,28 +35,32 @@ class class_vs_list #(int nv = 8, int width_lvl = 16, int width_vs = width_lvl+3
 	function void get(output [nv*width_vs-1:0]  data);
 		bit [2:0] v;
 		bit [width_lvl-1:0] l;
+        bit [nv-1:0][width_vs-1:0] data2; //合并数据
 		for (int i = 0; i < nv; ++i)
 		begin
 			v[2:1] = value[i];
 			v[0] = implied[i];
 			l = level[i];
-			data[width_vs*(i+1)-1 : width_vs*i] = {v, l};
+			data[i] = {v, l};
 		end
+        data = data2;
 	endfunction
 
 	function void set(input [nv*width_vs-1:0] data);
 		bit [2:0] v;
 		bit [width_lvl-1:0] l;
+        bit [nv-1:0][width_vs-1:0] data2; //合并数据
+        data2 = data;
 		for (int i = 0; i < nv; ++i)
 		begin
-			{v, l} = data[width_vs*(i+1)-1 : width_vs*i];
+			{v, l} = data2[i];
 			value[i] = v[2:1];
 			implied[i] = v[0];
 			level[i] = l;
 		end
 	endfunction
 
-	function set_separate(int value1[nv], int implied1[nv], int level1[nv]);
+	function void set_separate(int value1[nv], int implied1[nv], int level1[nv]);
 		for (int i = 0; i < nv; ++i)
 		begin
 			value[i] = value1[i];
@@ -108,7 +103,7 @@ class class_vs_list #(int nv = 8, int width_lvl = 16, int width_vs = width_lvl+3
 		begin
 			if(index[i]!=0) begin
 				$display("var id=%d, value=%d, implied=%d, level=%d",
-					i, value[i], implied[i], level[i])
+					i, value[i], implied[i], level[i]);
 			end
 		end
 	endfunction

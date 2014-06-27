@@ -1,13 +1,10 @@
 {
-  "control": [], 
-  "test_all": [], 
   "test_lit1": [
     [
       "lit1", 
       "lit1"
     ]
   ], 
-  "control_analysis": [], 
   "bram_w30_d1024": [
     [
       "BLK_MEM_GEN_V7_3", 
@@ -111,21 +108,24 @@
       "var_state4_1"
     ]
   ], 
-  "dcd_in_1_vars": [], 
+  "sat_engine": [
+    [
+      "ctrl_core", 
+      "ctrl_core"
+    ], 
+    [
+      "state_list", 
+      "state_list"
+    ], 
+    [
+      "clause_array", 
+      "clause_array"
+    ]
+  ], 
   "bram_w36_d1204": [
     [
       "BLK_MEM_GEN_V7_3", 
       "inst"
-    ]
-  ], 
-  "dcd_in_2_vars": [
-    [
-      "dcd_in_1_vars", 
-      "dcd_in_1_vars_0"
-    ], 
-    [
-      "dcd_in_1_vars", 
-      "dcd_in_1_vars_1"
     ]
   ], 
   "test_lit1_top": [], 
@@ -143,16 +143,6 @@
     [
       "test_clause_array", 
       "test_clause_array"
-    ]
-  ], 
-  "dcd_in_4_vars": [
-    [
-      "dcd_in_2_vars", 
-      "dcd_in_2_vars_0"
-    ], 
-    [
-      "dcd_in_2_vars", 
-      "dcd_in_2_vars_1"
     ]
   ], 
   "lvl_state2": [
@@ -195,20 +185,6 @@
     ]
   ], 
   "terminal_cell": [], 
-  "sat_engine": [
-    [
-      "ctrl_core", 
-      "ctrl_core"
-    ], 
-    [
-      "state_list", 
-      "state_list"
-    ], 
-    [
-      "clause_array", 
-      "clause_array"
-    ]
-  ], 
   "blk_mem_gen_v7_3": [
     [
       "BLK_MEM_GEN_V7_3", 
@@ -228,6 +204,16 @@
     ]
   ], 
   "reduce_in_2_datas": [], 
+  "dcd_in_var8": [
+    [
+      "dcd_in_var4", 
+      "dcd_in_var4_0"
+    ], 
+    [
+      "dcd_in_var4", 
+      "dcd_in_var4_1"
+    ]
+  ], 
   "update_bin": [
     [
       "reduce_in_8_datas", 
@@ -238,6 +224,26 @@
       "reduce_in_8_datas_vs_inst"
     ]
   ], 
+  "dcd_in_var4": [
+    [
+      "dcd_in_var2", 
+      "dcd_in_var2_0"
+    ], 
+    [
+      "dcd_in_var2", 
+      "dcd_in_var2_1"
+    ]
+  ], 
+  "dcd_in_var2": [
+    [
+      "dcd_in_var1", 
+      "dcd_in_var1_0"
+    ], 
+    [
+      "dcd_in_var1", 
+      "dcd_in_var1_1"
+    ]
+  ], 
   "test_sat_engine_top": [
     [
       "test_sat_engine", 
@@ -245,6 +251,7 @@
     ]
   ], 
   "load_bin": [], 
+  "dcd_in_var1": [], 
   "clause8": [
     [
       "clause4", 
@@ -253,16 +260,6 @@
     [
       "clause4", 
       "clause4_1"
-    ]
-  ], 
-  "dcd_in_8_vars": [
-    [
-      "dcd_in_4_vars", 
-      "dcd_in_4_vars_0"
-    ], 
-    [
-      "dcd_in_4_vars", 
-      "dcd_in_4_vars_1"
     ]
   ], 
   "lvl_state8": [
@@ -394,8 +391,8 @@
   "rd_bin_info": [], 
   "decision": [
     [
-      "dcd_in_8_vars", 
-      "dcd_in_8_vars"
+      "dcd_in_var8", 
+      "dcd_in_var8"
     ]
   ], 
   "bram_w12_d1024": [

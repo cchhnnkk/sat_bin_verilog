@@ -38,7 +38,7 @@ module lvl_state1 #(
         input                           wr_states,
         input [WIDTH_LVL_STATES-1 : 0]  lvl_states_i,
         output [WIDTH_LVL_STATES-1 : 0] lvl_states_o
-    )
+    );
 
     //加载和更新数据
     reg [WIDTH_BIN_ID-1:0]  dcd_bin_r;
@@ -76,9 +76,9 @@ module lvl_state1 #(
             has_bkt_r <= 0;
         else if(wr_states)
             has_bkt_r <= has_bkt_i;
-        else if(apply_bkt_i && findflag==0)
+        else if(apply_bkt_i && findflag_o==0)
             has_bkt_r <= 0;
-        else if(apply_bkt_i && findflag==1) //翻转
+        else if(apply_bkt_i && findflag_o==1) //翻转
             has_bkt_r <= 1;
         else
             has_bkt_r <= has_bkt_r;
@@ -87,8 +87,8 @@ module lvl_state1 #(
     always @(posedge clk) begin: set_bkt_bin_o
         if(~rst)
             bkt_bin_o <= 0;
-        else if(find_conflict_o && findflag==1)
-            bkt_bin_o <= var_reason_bin_r;
+        else if(findflag_o==1)
+            bkt_bin_o <= dcd_bin_r;
         else
             bkt_bin_o <= 0;
     end

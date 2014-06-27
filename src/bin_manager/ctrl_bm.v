@@ -2,6 +2,8 @@
     控制Bin_Manager的执行
   */
 
+`define DEBUG_ctrl_bm
+
 module ctrl_bm #(
         parameter WIDTH_BIN_ID  = 10,
         parameter WIDTH_CLAUSES = 8*2,
@@ -279,5 +281,26 @@ module ctrl_bm #(
         else
             cur_lvl_o <= cur_lvl_o;
     end
+
+`ifdef DEBUG_ctrl_bm
+    string s[] = '{
+        "IDLE",
+        "RD_BIN_INFO",
+        "LOAD_BIN",
+        "RUN_CORE",
+        "FIND_BKT_LVL",
+        "BKT_ACROSS_BIN",
+        "UPDATE_BIN",
+        "GLOBAL_SAT",
+        "GLOBAL_UNSAT"};
+        
+    always @(posedge clk) begin
+        if(c_state!=n_state && n_state!=IDLE)
+        begin
+            @(posedge clk)
+            $display("ctrl_core c_state = %s", s[c_state]);
+        end
+    end
+`endif
 
 endmodule
