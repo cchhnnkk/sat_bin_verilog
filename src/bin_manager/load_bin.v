@@ -5,6 +5,9 @@
 *       根据vars加载var_states[]
 *       根据base_lvl加载lvl_states[]
 */
+
+`include "../src/debug_define.v"
+
 module load_bin #(
         parameter NUM_CLAUSES_A_BIN      = 8,
         parameter NUM_VARS_A_BIN         = 8,
@@ -338,5 +341,38 @@ module load_bin #(
         else
             apply_load_o <= 0;
     end
+
+    /**
+    *  输出load的信息
+    */
+    `ifdef DEBUG_load_bin
+        `include "../tb/class_clause_data.sv";
+        `include "../tb/class_vs_list.sv";
+        `include "../tb/class_ls_list.sv";
+        class_clause_data #(8) cdata = new;
+        class_vs_list #(8, WIDTH_LVL) vs_list = new();
+        class_ls_list #(8, WIDTH_LVL) ls_list = new();
+
+        always @(posedge clk) begin: display_load_info 
+            if(wr_carray_i!=0) begin
+                cdata.set(clause_i);
+                $display("wr clause array");
+                $display("%b", wr_carray_i);
+                cdata.display_lits();
+            end
+            if(wr_var_states!=0) begin
+                vs_list.set(lvl_states_i);
+                $display("wr var state list");
+                $display("%b", wr_var_states);
+                vs_list.display_lits();
+            end
+            if(wr_lvl_states!=0) begin
+                ls_list.set(lvl_states_i);
+                $display("wr lvl state list");
+                $display("%b", wr_lvl_states);
+                ls_list.display_lits();
+            end
+        end
+    `endif
 
 endmodule

@@ -15,11 +15,12 @@
      findflag: 2 ... 2 1 0 ... 0
  */
 module lvl_state8 #(
-                    parameter NUM_LVLS         = 8,
-                    parameter WIDTH_LVL_STATES = 11,
-                    parameter WIDTH_LVL        = 16,
-                    parameter WIDTH_BIN_ID     = 10
-                    )
+        parameter NUM_LVLS         = 8,
+        parameter NUM_VARS         = 8,
+        parameter WIDTH_LVL_STATES = 11,
+        parameter WIDTH_LVL        = 16,
+        parameter WIDTH_BIN_ID     = 10
+    )
     (
         input                                     clk, 
         input                                     rst, 
@@ -45,17 +46,17 @@ module lvl_state8 #(
         output [WIDTH_LVL_STATES*NUM_LVLS -1 : 0] lvl_states_o
     );
 
-    wire [NUM_LITS/2-1:0]                      valid_from_decision_0, valid_from_decision_1;
-    wire [WIDTH_BIN_ID-1:0]                       bkt_bin_o_0, bkt_bin_o_1;
-    wire [NUM_LITS/2-1:0]                      findindex_o_0, findindex_o_1;
+    wire [NUM_VARS/2-1:0]                      valid_from_decision_0, valid_from_decision_1;
+    wire [WIDTH_BIN_ID-1:0]                    bkt_bin_o_0, bkt_bin_o_1;
+    wire [NUM_VARS/2-1:0]                      findindex_o_0, findindex_o_1;
 
     assign {valid_from_decision_0, valid_from_decision_1} = valid_from_decision_i;
     assign bkt_bin_o = bkt_bin_o_0 | bkt_bin_o_1;
     assign findindex_o = {findindex_o_1, findindex_o_0};
 
     wire [NUM_VARS/2-1:0]                      wr_states_0, wr_states_1;
-    wire [WIDTH_LVL_STATES*NUM_LITS/2-1:0]     lvl_states_i_0, lvl_states_i_1;
-    wire [WIDTH_LVL_STATES*NUM_LITS/2-1:0]     lvl_states_o_0, lvl_states_o_1;
+    wire [WIDTH_LVL_STATES*NUM_VARS/2-1:0]     lvl_states_i_0, lvl_states_i_1;
+    wire [WIDTH_LVL_STATES*NUM_VARS/2-1:0]     lvl_states_o_0, lvl_states_o_1;
     assign {wr_states_0, wr_states_1} = wr_states;
     assign lvl_states_o = {lvl_states_o_0, lvl_states_o_1};
     assign findindex_o = {findindex_o_1, findindex_o_0};
@@ -116,11 +117,12 @@ endmodule
      findflag: 2 ... 2 1 0 ... 0
  */
 module lvl_state4 #(
-                    parameter NUM_LVLS         = 4,
-                    parameter WIDTH_LVL_STATES = 11,
-                    parameter WIDTH_LVL        = 16,
-                    parameter WIDTH_BIN_ID     = 10
-                    )
+        parameter NUM_LVLS         = 4,
+        parameter NUM_VARS         = 8,
+        parameter WIDTH_LVL_STATES = 11,
+        parameter WIDTH_LVL        = 16,
+        parameter WIDTH_BIN_ID     = 10
+    )
     (
         input                                     clk, 
         input                                     rst, 
@@ -146,17 +148,17 @@ module lvl_state4 #(
         output [WIDTH_LVL_STATES*NUM_LVLS -1 : 0] lvl_states_o
     );
 
-    wire [NUM_LITS/2-1:0]                      valid_from_decision_0, valid_from_decision_1;
-    wire [WIDTH_BIN_ID-1:0]                       bkt_bin_o_0, bkt_bin_o_1;
-    wire [NUM_LITS/2-1:0]                      findindex_o_0, findindex_o_1;
+    wire [NUM_VARS/2-1:0]                      valid_from_decision_0, valid_from_decision_1;
+    wire [WIDTH_BIN_ID-1:0]                    bkt_bin_o_0, bkt_bin_o_1;
+    wire [NUM_VARS/2-1:0]                      findindex_o_0, findindex_o_1;
 
     assign {valid_from_decision_0, valid_from_decision_1} = valid_from_decision_i;
     assign bkt_bin_o = bkt_bin_o_0 | bkt_bin_o_1;
     assign findindex_o = {findindex_o_1, findindex_o_0};
 
     wire [NUM_VARS/2-1:0]                      wr_states_0, wr_states_1;
-    wire [WIDTH_LVL_STATES*NUM_LITS/2-1:0]     lvl_states_i_0, lvl_states_i_1;
-    wire [WIDTH_LVL_STATES*NUM_LITS/2-1:0]     lvl_states_o_0, lvl_states_o_1;
+    wire [WIDTH_LVL_STATES*NUM_VARS/2-1:0]     lvl_states_i_0, lvl_states_i_1;
+    wire [WIDTH_LVL_STATES*NUM_VARS/2-1:0]     lvl_states_o_0, lvl_states_o_1;
     assign {wr_states_0, wr_states_1} = wr_states;
     assign lvl_states_o = {lvl_states_o_0, lvl_states_o_1};
     assign findindex_o = {findindex_o_1, findindex_o_0};
@@ -217,11 +219,12 @@ endmodule
      findflag: 2 ... 2 1 0 ... 0
  */
 module lvl_state2 #(
-                    parameter NUM_LVLS         = 2,
-                    parameter WIDTH_LVL_STATES = 11,
-                    parameter WIDTH_LVL        = 16,
-                    parameter WIDTH_BIN_ID     = 10
-                    )
+        parameter NUM_LVLS         = 2,
+        parameter NUM_VARS         = 8,
+        parameter WIDTH_LVL_STATES = 11,
+        parameter WIDTH_LVL        = 16,
+        parameter WIDTH_BIN_ID     = 10
+    )
     (
         input                                     clk, 
         input                                     rst, 
@@ -247,17 +250,17 @@ module lvl_state2 #(
         output [WIDTH_LVL_STATES*NUM_LVLS -1 : 0] lvl_states_o
     );
 
-    wire [NUM_LITS/2-1:0]                      valid_from_decision_0, valid_from_decision_1;
-    wire [WIDTH_BIN_ID-1:0]                       bkt_bin_o_0, bkt_bin_o_1;
-    wire [NUM_LITS/2-1:0]                      findindex_o_0, findindex_o_1;
+    wire [NUM_VARS/2-1:0]                      valid_from_decision_0, valid_from_decision_1;
+    wire [WIDTH_BIN_ID-1:0]                    bkt_bin_o_0, bkt_bin_o_1;
+    wire [NUM_VARS/2-1:0]                      findindex_o_0, findindex_o_1;
 
     assign {valid_from_decision_0, valid_from_decision_1} = valid_from_decision_i;
     assign bkt_bin_o = bkt_bin_o_0 | bkt_bin_o_1;
     assign findindex_o = {findindex_o_1, findindex_o_0};
 
     wire [NUM_VARS/2-1:0]                      wr_states_0, wr_states_1;
-    wire [WIDTH_LVL_STATES*NUM_LITS/2-1:0]     lvl_states_i_0, lvl_states_i_1;
-    wire [WIDTH_LVL_STATES*NUM_LITS/2-1:0]     lvl_states_o_0, lvl_states_o_1;
+    wire [WIDTH_LVL_STATES*NUM_VARS/2-1:0]     lvl_states_i_0, lvl_states_i_1;
+    wire [WIDTH_LVL_STATES*NUM_VARS/2-1:0]     lvl_states_o_0, lvl_states_o_1;
     assign {wr_states_0, wr_states_1} = wr_states;
     assign lvl_states_o = {lvl_states_o_0, lvl_states_o_1};
     assign findindex_o = {findindex_o_1, findindex_o_0};

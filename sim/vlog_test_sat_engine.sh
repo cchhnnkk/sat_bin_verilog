@@ -21,4 +21,17 @@ echo "vlog verilog"
 svfile=`find $tb -name "*.sv"`
 echo "vlog systemverilog"
 
-myvlog $vfile $svfile
+# for i in $vfile
+# do
+# 	echo $i
+# 	myvlog $i
+# done ; 
+
+# echo $vfile $svfile
+
+if [[ ! -x "work" ]]; then
+	vlib work
+	vmap work work
+fi
+
+myvlog $svfile $vfile

@@ -57,13 +57,15 @@ module var_state1 #(
 
     //wr_states
     assign vars_states_o = {var_value_r, var_lvl_r};
-    wire [2:0] var_value_i;
+    wire [2:0] load_value_i;
     wire [15:0] load_lvl_i;
-    assign {var_value_i, load_lvl_i} = vars_states_i;
+    assign {load_value_i, load_lvl_i} = vars_states_i;
 
     always @(posedge clk) begin: set_vars_value_r
         if(~rst)
             var_value_r <= -1;
+        else if(wr_states)              //加载
+            var_value_r <= load_value_i;
         else if(valid_from_decision_i)  //决策
             var_value_r <= 3'b010;
         else if(apply_imply_i && var_value_i[0]) //推理

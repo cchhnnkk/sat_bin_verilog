@@ -14,6 +14,7 @@ module test_sat_engine(input clk, input rst);
 
     parameter NUM_CLAUSES      = 8;
     parameter NUM_VARS         = 8;
+    parameter NUM_LVLS         = 8;
     parameter WIDTH_BIN_ID     = 10;
     parameter WIDTH_C_LEN      = 4;
     parameter WIDTH_LVL        = 16;
@@ -42,8 +43,8 @@ module test_sat_engine(input clk, input rst);
 	reg [WIDTH_LVL-1:0]                     base_lvl_i;
 
 
-	`include "../tb/class_sat_engine.sv";
-	class_sat_engine #(8, 8) carray_data = new();
+	`include "../tb/class_clause_array.sv";
+	class_clause_array #(8, 8) carray_data = new();
 
 	task wr_clause_array(input int bin_data[8][8]);
 		begin
@@ -53,13 +54,12 @@ module test_sat_engine(input clk, input rst);
 			for (int i = 0; i < 8; ++i)
 			begin
 				@ (posedge clk);
-					wr_i = 0;
-					wr_i[i] = 1;
-					clause_len_i = carray_data.get_len(i);
-					carray_data.get(i, var_value_i);
+					wr_carray_i = 0;
+					wr_carray_i[i] = 1;
+					carray_data.get(i, clause_i);
 			end
 			@ (posedge clk);
-				wr_i = 0;
+                wr_carray_i = 0;
 			@ (posedge clk);
 		end
 	endtask
@@ -102,7 +102,7 @@ module test_sat_engine(input clk, input rst);
 			wr_ls_list(dcd_bin, has_bkt);
 
 			start_core_i = 0;
-			base_lvl_en = 1
+			base_lvl_en = 1;
 
 			//start
 			@ (posedge clk);
@@ -116,26 +116,11 @@ module test_sat_engine(input clk, input rst);
 
 		end
 	endtask
-
-	bit [NUM_CLAUSES-1:0] inserti;
-	task test_inserti(input int bin_data[8][8]);
-		begin
-			@ (posedge clk);
-				$display("test_inserti");
-				apply_bkt_i = 0;
-				apply_impl_i = 0;
-			@ (posedge clk);
-				wr_sat_engine(bin_data);
-				inserti = 0;
-				carray_data.get_learntc_inserti(inserti);
-				$display("inserti=%b\tlearntc_insert_index_o=%b", inserti, sat_engine.learntc_insert_index_o);
-				assert(inserti == sat_engine.learntc_insert_index_o);
-		end
-	endtask
-
+    
+    
 	/* --- 测试free_lit_count --- */
 
-	int bin1[8][8] = '{
+	int bin[8][8] = '{
 		'{2, 0, 1, 0, 0, 0, 0, 0},
 		'{0, 2, 0, 1, 0, 0, 0, 0},
 		'{0, 0, 2, 0, 2, 0, 0, 0},
@@ -170,8 +155,7 @@ module test_sat_engine(input clk, input rst);
 	task test_sat_engine_task();
 		begin
 			$display("test_sat_engine_task");
-			test_inserti(bin1);
-			test_inserti(bin2);
+			test_core(bin, value, implied, level, dcd_bin, has_bkt);
 		end
 	endtask
 

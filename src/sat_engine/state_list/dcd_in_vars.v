@@ -23,7 +23,7 @@ module dcd_in_var8 #(
     wire [NUM_SUB*WIDTH/2-1 : 0] value_i_0, value_i_1;
     wire [NUM/2-1 : 0]           index_o_0, index_o_1;
     assign {value_i_1, value_i_0} = value_i;
-    assign index_o = {index_1, index_0};
+    assign index_o = {index_o_1, index_o_0};
 
     dcd_in_var4 #(
         .WIDTH(WIDTH)
@@ -67,7 +67,7 @@ module dcd_in_var4 #(
     wire [NUM_SUB*WIDTH/2-1 : 0] value_i_0, value_i_1;
     wire [NUM/2-1 : 0]           index_o_0, index_o_1;
     assign {value_i_1, value_i_0} = value_i;
-    assign index_o = {index_1, index_0};
+    assign index_o = {index_o_1, index_o_0};
 
     dcd_in_var2 #(
         .WIDTH(WIDTH)
@@ -111,7 +111,7 @@ module dcd_in_var2 #(
     wire [NUM_SUB*WIDTH/2-1 : 0] value_i_0, value_i_1;
     wire [NUM/2-1 : 0]           index_o_0, index_o_1;
     assign {value_i_1, value_i_0} = value_i;
-    assign index_o = {index_1, index_0};
+    assign index_o = {index_o_1, index_o_0};
 
     dcd_in_var1 #(
         .WIDTH(WIDTH)
