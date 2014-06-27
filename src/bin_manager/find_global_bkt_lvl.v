@@ -27,7 +27,7 @@ module find_global_bkt_lvl #(
         output reg [ADDR_WIDTH_LVLS_STATES-1:0]       ram_addr_l_state_o
     )
 
-    wire [WIDTH_BIN-1:0]   dcd_bin;
+    wire [WIDTH_BIN_ID-1:0]   dcd_bin;
     wire                   has_bkt;
 
     parameter   IDLE = 0,

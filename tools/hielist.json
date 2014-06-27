@@ -1,14 +1,73 @@
 {
   "control": [], 
   "test_all": [], 
-  "load_update_bin": [
+  "test_lit1": [
     [
-      "regs_vid_state", 
-      "regs_vid_state"
+      "lit1", 
+      "lit1"
+    ]
+  ], 
+  "control_analysis": [], 
+  "bram_w30_d1024": [
+    [
+      "BLK_MEM_GEN_V7_3", 
+      "inst"
+    ]
+  ], 
+  "ctrl_bm": [], 
+  "test_clause_array": [
+    [
+      "clause_array", 
+      "clause_array"
+    ]
+  ], 
+  "encode_8to3": [], 
+  "var_state4": [
+    [
+      "var_state2", 
+      "var_state2_0"
     ], 
     [
-      "bram_w30_d1024", 
-      "bram_global_var_state_inst"
+      "var_state2", 
+      "var_state2_1"
+    ]
+  ], 
+  "var_state1": [], 
+  "ctrl_core": [], 
+  "var_state2": [
+    [
+      "var_state1", 
+      "var_state1_0"
+    ], 
+    [
+      "var_state1", 
+      "var_state1_1"
+    ]
+  ], 
+  "bin_manager": [
+    [
+      "ctrl_bm", 
+      "ctrl_bm"
+    ], 
+    [
+      "rd_bin_info", 
+      "rd_bin_info"
+    ], 
+    [
+      "load_bin", 
+      "load_bin"
+    ], 
+    [
+      "find_global_bkt_lvl", 
+      "find_global_bkt_lvl"
+    ], 
+    [
+      "bkt_across_bin", 
+      "bkt_across_bin"
+    ], 
+    [
+      "update_bin", 
+      "update_bin"
     ], 
     [
       "bram_w12_d1024", 
@@ -17,33 +76,67 @@
     [
       "bram_w48_d1024", 
       "bram_clauses_bins_inst"
+    ], 
+    [
+      "bram_w30_d1024", 
+      "bram_global_var_state_inst"
+    ], 
+    [
+      "bram_w30_d1024", 
+      "bram_global_lvl_state_inst"
     ]
   ], 
-  "bram_w30_d1024": [
+  "state_list": [
     [
-      "BLK_MEM_GEN_V7_3", 
-      "inst"
-    ]
-  ], 
-  "test_clause_array": [
+      "var_state8", 
+      "var_state8"
+    ], 
     [
-      "clause_array", 
-      "clause_array"
-    ]
-  ], 
-  "regs_vid_state": [], 
-  "test_clause1": [
+      "lvl_state8", 
+      "lvl_state8"
+    ], 
     [
-      "clause1", 
-      "clause1"
+      "decision", 
+      "decision"
     ]
   ], 
   "max_in_2_datas": [], 
-  "sat_engine": [], 
+  "var_state8": [
+    [
+      "var_state4", 
+      "var_state4_0"
+    ], 
+    [
+      "var_state4", 
+      "var_state4_1"
+    ]
+  ], 
+  "dcd_in_1_vars": [], 
   "bram_w36_d1204": [
     [
       "BLK_MEM_GEN_V7_3", 
       "inst"
+    ]
+  ], 
+  "dcd_in_2_vars": [
+    [
+      "dcd_in_1_vars", 
+      "dcd_in_1_vars_0"
+    ], 
+    [
+      "dcd_in_1_vars", 
+      "dcd_in_1_vars_1"
+    ]
+  ], 
+  "test_lit1_top": [], 
+  "reduce_in_4_datas": [
+    [
+      "reduce_in_2_datas", 
+      "reduce_in_2_datas_inst0"
+    ], 
+    [
+      "reduce_in_2_datas", 
+      "reduce_in_2_datas_inst1"
     ]
   ], 
   "test_clause_array_top": [
@@ -52,8 +145,37 @@
       "test_clause_array"
     ]
   ], 
-  "decision": [], 
-  "test_lit_cell_top": [], 
+  "dcd_in_4_vars": [
+    [
+      "dcd_in_2_vars", 
+      "dcd_in_2_vars_0"
+    ], 
+    [
+      "dcd_in_2_vars", 
+      "dcd_in_2_vars_1"
+    ]
+  ], 
+  "lvl_state2": [
+    [
+      "lvl_state1", 
+      "lvl_state1_0"
+    ], 
+    [
+      "lvl_state1", 
+      "lvl_state1_1"
+    ]
+  ], 
+  "reduce_in_8_datas": [
+    [
+      "reduce_in_4_datas", 
+      "reduce_in_4_datas_inst0"
+    ], 
+    [
+      "reduce_in_4_datas", 
+      "reduce_in_4_datas_inst1"
+    ]
+  ], 
+  "bkt_across_bin": [], 
   "bram_w18_1024": [
     [
       "BLK_MEM_GEN_V7_3", 
@@ -72,16 +194,57 @@
       "inst"
     ]
   ], 
-  "var24": [], 
   "terminal_cell": [], 
+  "sat_engine": [
+    [
+      "ctrl_core", 
+      "ctrl_core"
+    ], 
+    [
+      "state_list", 
+      "state_list"
+    ], 
+    [
+      "clause_array", 
+      "clause_array"
+    ]
+  ], 
   "blk_mem_gen_v7_3": [
     [
       "BLK_MEM_GEN_V7_3", 
       "inst"
     ]
   ], 
-  "var_cell": [], 
-  "lit_cell": [], 
+  "test_sat_engine": [
+    [
+      "sat_engine", 
+      "sat_engine"
+    ]
+  ], 
+  "test_clause1": [
+    [
+      "clause1", 
+      "clause1"
+    ]
+  ], 
+  "reduce_in_2_datas": [], 
+  "update_bin": [
+    [
+      "reduce_in_8_datas", 
+      "reduce_in_8_datas_vs_inst"
+    ], 
+    [
+      "reduce_in_8_datas", 
+      "reduce_in_8_datas_vs_inst"
+    ]
+  ], 
+  "test_sat_engine_top": [
+    [
+      "test_sat_engine", 
+      "test_sat_engine"
+    ]
+  ], 
+  "load_bin": [], 
   "clause8": [
     [
       "clause4", 
@@ -92,14 +255,34 @@
       "clause4_1"
     ]
   ], 
-  "clause_array": [
+  "dcd_in_8_vars": [
     [
-      "clause8", 
-      "clause8"
+      "dcd_in_4_vars", 
+      "dcd_in_4_vars_0"
     ], 
     [
-      "max_in_4_datas", 
-      "max_in_4_datas_inst0"
+      "dcd_in_4_vars", 
+      "dcd_in_4_vars_1"
+    ]
+  ], 
+  "lvl_state8": [
+    [
+      "lvl_state4", 
+      "lvl_state4_0"
+    ], 
+    [
+      "lvl_state4", 
+      "lvl_state4_1"
+    ]
+  ], 
+  "max_in_4_datas": [
+    [
+      "max_in_2_datas", 
+      "max_in_2_datas_inst0"
+    ], 
+    [
+      "max_in_2_datas", 
+      "max_in_2_datas_inst1"
     ]
   ], 
   "clause2": [
@@ -112,16 +295,27 @@
       "clause1_1"
     ]
   ], 
+  "lvl_state4": [
+    [
+      "lvl_state2", 
+      "lvl_state2_0"
+    ], 
+    [
+      "lvl_state2", 
+      "lvl_state2_1"
+    ]
+  ], 
   "clause1": [
     [
       "lit8", 
-      "lit8_0"
+      "lit8"
     ], 
     [
       "terminal_cell", 
       "terminal_cell"
     ]
   ], 
+  "buffer_state": [], 
   "clause4": [
     [
       "clause2", 
@@ -132,6 +326,7 @@
       "clause2_1"
     ]
   ], 
+  "lvl_state1": [], 
   "test_clause1_top": [
     [
       "test_clause1", 
@@ -148,6 +343,7 @@
       "lit4_1"
     ]
   ], 
+  "find_global_bkt_lvl": [], 
   "lit4": [
     [
       "lit2", 
@@ -158,12 +354,7 @@
       "lit2_1"
     ]
   ], 
-  "test_lit_cell": [
-    [
-      "lit_cell", 
-      "lit1"
-    ]
-  ], 
+  "lit1": [], 
   "bram_w18_d1024": [
     [
       "BLK_MEM_GEN_V7_3", 
@@ -172,12 +363,12 @@
   ], 
   "lit2": [
     [
-      "lit_cell", 
-      "lit_cell_0"
+      "lit1", 
+      "lit1_0"
     ], 
     [
-      "lit_cell", 
-      "lit_cell_1"
+      "lit1", 
+      "lit1_1"
     ]
   ], 
   "max_in_8_datas": [
@@ -190,14 +381,21 @@
       "max_in_4_datas_inst1"
     ]
   ], 
-  "max_in_4_datas": [
+  "clause_array": [
     [
-      "max_in_2_datas", 
-      "max_in_2_datas_inst0"
+      "clause8", 
+      "clause8"
     ], 
     [
-      "max_in_2_datas", 
-      "max_in_2_datas_inst1"
+      "max_in_4_datas", 
+      "max_in_4_datas_inst0"
+    ]
+  ], 
+  "rd_bin_info": [], 
+  "decision": [
+    [
+      "dcd_in_8_vars", 
+      "dcd_in_8_vars"
     ]
   ], 
   "bram_w12_d1024": [

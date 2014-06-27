@@ -1,0 +1,62 @@
+# //  ModelSim SE 10.1c Jul 27 2012 
+# //
+# //  Copyright 1991-2012 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  THIS WORK CONTAINS TRADE SECRET AND PROPRIETARY INFORMATION
+# //  WHICH IS THE PROPERTY OF MENTOR GRAPHICS CORPORATION OR ITS
+# //  LICENSORS AND IS SUBJECT TO LICENSE TERMS.
+# //
+cd ../sim
+do test_clause_array.do
+# ** Warning: (vlib-34) Library already exists at "work".
+# 
+# Modifying d:\modeltech_10.1c\win32/../modelsim.ini
+# vsim -quiet test_clause_array_top 
+# ** Warning: (vsim-3015) ../test/test_clause_array.sv(46): [PCDPC] - Port size (4 or 4) does not match connection size (5) for port 'clause_len_i'. The port definition is at: ../clause_array.v(16).
+# 
+#         Region: /test_clause_array_top/test_clause_array/clause_array
+# ** Warning: (vsim-3015) ../clause1.v(43): [PCDPC] - Port size (2 or 2) does not match connection size (32) for port 'freelitcnt_pre'. The port definition is at: ../lit8.v(12).
+# 
+#         Region: /test_clause_array_top/test_clause_array/clause_array/clause8/clause4_0/clause2_0/clause1_0/lit8_0
+# ** Warning: (vsim-3015) ../clause1.v(43): [PCDPC] - Port size (2 or 2) does not match connection size (32) for port 'freelitcnt_pre'. The port definition is at: ../lit8.v(12).
+# 
+#         Region: /test_clause_array_top/test_clause_array/clause_array/clause8/clause4_0/clause2_0/clause1_1/lit8_0
+# ** Warning: (vsim-3015) ../clause1.v(43): [PCDPC] - Port size (2 or 2) does not match connection size (32) for port 'freelitcnt_pre'. The port definition is at: ../lit8.v(12).
+# 
+#         Region: /test_clause_array_top/test_clause_array/clause_array/clause8/clause4_0/clause2_1/clause1_0/lit8_0
+# ** Warning: (vsim-3015) ../clause1.v(43): [PCDPC] - Port size (2 or 2) does not match connection size (32) for port 'freelitcnt_pre'. The port definition is at: ../lit8.v(12).
+# 
+#         Region: /test_clause_array_top/test_clause_array/clause_array/clause8/clause4_0/clause2_1/clause1_1/lit8_0
+# ** Warning: (vsim-3015) ../clause1.v(43): [PCDPC] - Port size (2 or 2) does not match connection size (32) for port 'freelitcnt_pre'. The port definition is at: ../lit8.v(12).
+# 
+#         Region: /test_clause_array_top/test_clause_array/clause_array/clause8/clause4_1/clause2_0/clause1_0/lit8_0
+# ** Warning: (vsim-3015) ../clause1.v(43): [PCDPC] - Port size (2 or 2) does not match connection size (32) for port 'freelitcnt_pre'. The port definition is at: ../lit8.v(12).
+# 
+#         Region: /test_clause_array_top/test_clause_array/clause_array/clause8/clause4_1/clause2_0/clause1_1/lit8_0
+# ** Warning: (vsim-3015) ../clause1.v(43): [PCDPC] - Port size (2 or 2) does not match connection size (32) for port 'freelitcnt_pre'. The port definition is at: ../lit8.v(12).
+# 
+#         Region: /test_clause_array_top/test_clause_array/clause_array/clause8/clause4_1/clause2_1/clause1_0/lit8_0
+# ** Warning: (vsim-3015) ../clause1.v(43): [PCDPC] - Port size (2 or 2) does not match connection size (32) for port 'freelitcnt_pre'. The port definition is at: ../lit8.v(12).
+# 
+#         Region: /test_clause_array_top/test_clause_array/clause_array/clause8/clause4_1/clause2_1/clause1_1/lit8_0
+# test_clause_array_task
+# test_inserti
+# i=          4	len=          3
+# i=          5	len=          9
+# i=          6	len=          9
+# i=          7	len=          9
+# index=          5	00100000
+# inserti=00100000	learntc_insert_index_o=00100000
+# test_inserti
+# i=          4	len=          3
+# i=          5	len=          2
+# i=          6	len=          4
+# i=          7	len=          4
+# index=          6	01000000
+# inserti=01000000	learntc_insert_index_o=01000000
+# Break in Task run at ../test/test_clause_array.sv line 11
+# Simulation Breakpoint: Break in Task run at ../test/test_clause_array.sv line 11
+# MACRO ./test_clause_array.do PAUSED at line 50
+quit -sim
+quit -f

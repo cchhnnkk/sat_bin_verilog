@@ -70,7 +70,7 @@ if __name__ == '__main__':
     if len(sys.argv) == 2:
         filename = sys.argv[1]
     else:
-        filename = 'var_cell.v'
+        filename = 'var1.v'
 
     str_inst, str_stmt = gen_inst(filename)
     print str_stmt

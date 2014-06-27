@@ -3,6 +3,8 @@
     返回bin的sat或unsat
   */
 
+`define DEBUG_ctrl_core
+
 module ctrl_core #(
         parameter WIDTH_LVL = 16
     )
@@ -39,13 +41,13 @@ module ctrl_core #(
      output reg			   unsat_o
     );
 
-    parameter       IDLE            =   0,
-                    BCP             =   2,
-                    DECISION        =   3,
-                    ANALYSIS        =   4,
-                    BKT_CUR_BIN     =   5,
-                    SAT             =   6,
-                    UNSAT           =   7;
+parameter           IDLE          =   0,
+                    BCP           =   1,
+                    DECISION      =   2,
+                    ANALYSIS      =   3,
+                    BKT_CUR_BIN   =   4,
+                    PARTIAL_SAT   =   5,
+                    PARTIAL_UNSAT =   6;
 
     reg [3:0] 			   c_state, n_state;
     reg [31:0] 			   wait_cnt, w_cnt, r_cnt;
@@ -65,28 +67,28 @@ module ctrl_core #(
         else
             case(c_state)
                 IDLE:
-                    if(start)
+                    if(start_core_i)
                         n_state = BCP;
                     else
                         n_state = IDLE;
                 BCP:
-                    if(done_bcp_i && conflict)
+                    if(done_imply_i && conflict_i)
                         n_state = ANALYSIS;
-                    else if(done_bcp_i && ~conflict)
+                    else if(done_imply_i && ~conflict_i)
                         n_state = DECISION;
                     else
                         n_state = BCP;
                 DECISION:
                     if(done_decision_i && all_c_is_sat_i)
-                        n_state = SAT;
+                        n_state = PARTIAL_SAT;
                     else if(done_decision_i)
                         n_state = BCP;
                     else
                         n_state = DECISION;
                 ANALYSIS:
-                    if(done_analysis_i && bkt_bin_num_i!=cur_bin_num_i)
-                        n_state = UNSAT
-                    else if(done_analysis_i && bkt_bin_num_i==cur_bin_num_i)
+                    if(done_analyze_i && bkt_bin_num_i!=cur_bin_num_i)
+                        n_state = PARTIAL_UNSAT;
+                    else if(done_analyze_i && bkt_bin_num_i==cur_bin_num_i)
                         n_state = BKT_CUR_BIN;
                     else
                         n_state = ANALYSIS;
@@ -96,15 +98,9 @@ module ctrl_core #(
                     else
                         n_state = BKT_CUR_BIN;
                 PARTIAL_SAT:
-                    if(done_update_i)
-                        n_state = LOAD_BIN;
-                    else
-                        n_state = PARTIAL_SAT;
+                    n_state = IDLE;
                 PARTIAL_UNSAT:
-                    if(done_update_i)
-                        n_state = LOAD_BIN;
-                    else
-                        n_state = PARTIAL_UNSAT;
+                    n_state = IDLE;
 
                 default:
                     n_state = IDLE;
@@ -134,15 +130,15 @@ module ctrl_core #(
     always @(posedge clk)
     begin
         if(~rst)
-            done <= 0;
-        else if(done_update_i && (c_state==GLOBAL_SAT || c_state==GLOBAL_UNSAT))
-            done <= 1;
+            done_core_o <= 0;
+        else if(c_state==PARTIAL_SAT || c_state==PARTIAL_UNSAT)
+            done_core_o <= 1;
         else
-            done <= done;
+            done_core_o <= done_core_o;
     end
 
     // 保证start_decision_o信号是一个周期的脉冲信号
-    reg impulse_cnt[1:0];
+    reg [1:0] impulse_cnt;
     always @(posedge clk)
     begin
         if(~rst)
@@ -158,7 +154,7 @@ module ctrl_core #(
         else
             impulse_cnt <= 0;
     end
-    
+
     always @(posedge clk)
     begin
         if(~rst)
@@ -208,5 +204,24 @@ module ctrl_core #(
         else
             apply_bkt_cur_bin_o <= 0;
     end
-    
+
+`ifdef DEBUG_ctrl_core
+    string s[] = '{
+        "IDLE",
+        "BCP",
+        "DECISION",
+        "ANALYSIS",
+        "BKT_CUR_BIN",
+        "PARTIAL_SAT",
+        "PARTIAL_UNSAT"};
+        
+    always @(posedge clk) begin
+        if(c_state!=n_state && n_state!=IDLE)
+        begin
+            @(posedge clk)
+            $display("ctrl_core c_state = %s", s[c_state]);
+        end
+    end
+`endif
+
 endmodule

@@ -2,20 +2,17 @@ quit -sim
 vlib work
 vmap work work
 
-vlog -quiet ../lit_cell.v -sv
-vlog -quiet ../lit2.v
-vlog -quiet ../lit4.v
-vlog -quiet ../lit8.v
-vlog -quiet ../terminal_cell.v
-vlog -quiet ../clause1.v
-vlog -quiet ../clause2.v
-vlog -quiet ../clause4.v
-vlog -quiet ../clause8.v
-vlog -quiet ../clause_array.v
-vlog -quiet ../max_in_datas.v
-vlog -quiet ../test/ClauseData.sv
-vlog -quiet ../test/ClauseArray.sv
-vlog -quiet ../test/test_clause_array.sv
+# vlog -quiet ../src/sat_engine/lit1.v -sv
+# vlog -quiet ../src/sat_engine/lits.v
+# vlog -quiet ../src/sat_engine/terminal_cell.v
+# vlog -quiet ../src/sat_engine/clause1.v
+# vlog -quiet ../src/sat_engine/clauses.v
+# vlog -quiet ../src/sat_engine/clause_array.v
+# vlog -quiet ../src/sat_engine/max_in_datas.v
+# vlog -quiet ../tb/class_clause_data.sv
+# vlog -quiet ../tb/class_clause_array.sv
+# vlog -quiet ../tb/test_clause_array.sv
+
 
 # vsim -quiet test_clause_array_top -pli D:/Novas/Debussy/share/PLI/modelsim_fli53/WINNT/novas_fli.dll
 

@@ -21,14 +21,14 @@ module load_bin #(
         parameter ADDR_WIDTH_LVLS_STATES = 9
     )
     (
-        input                                      clk,
-        input                                      rst,
+        input                                        clk,
+        input                                        rst,
 
         //load control
-        input                                      start_load,
-        input [WIDTH_BIN_ID-1 : 0]                 request_bin_num_i,
-        output reg                                 apply_load_o,
-        output reg                                 done_load,
+        input                                        start_load,
+        input [WIDTH_BIN_ID-1 : 0]                   request_bin_num_i,
+        output reg                                   apply_load_o,
+        output reg                                   done_load,
 
         //load clause to sat engine
         output [NUM_CLAUSES_A_BIN-1:0]               wr_carray_o,
@@ -42,25 +42,25 @@ module load_bin #(
         output reg [NUM_LVLS_A_BIN-1:0]              wr_lvl_states_o,
         output [WIDTH_LVL_STATES*NUM_LVLS_A_BIN-1:0] lvl_states_o,
 
-        input [WIDTH_LVL-1:0]                      cur_lvl_i,
-        output [WIDTH_LVL-1:0]                     base_lvl_o,
-        output reg                                 base_lvl_en,
+        input [WIDTH_LVL-1:0]                        cur_lvl_i,
+        output [WIDTH_LVL-1:0]                       base_lvl_o,
+        output reg                                   base_lvl_en,
 
         //clauses bins
-        input [WIDTH_CLAUSES-1 : 0]                ram_data_c_i,
-        output reg [ADDR_WIDTH_CLAUSES-1:0]        ram_addr_c_o,
+        input [WIDTH_CLAUSES-1 : 0]                  ram_data_c_i,
+        output reg [ADDR_WIDTH_CLAUSES-1:0]          ram_addr_c_o,
 
         //vars bins
-        input [WIDTH_VARS-1 : 0]                   ram_data_v_i,
-        output reg [ADDR_WIDTH_VARS-1:0]           ram_addr_v_o,
+        input [WIDTH_VARS-1 : 0]                     ram_data_v_i,
+        output reg [ADDR_WIDTH_VARS-1:0]             ram_addr_v_o,
 
         //vars states
-        input [WIDTH_VAR_STATES-1 : 0]             ram_data_v_state_i,
-        output reg [ADDR_WIDTH_VARS_STATES-1:0]    ram_addr_v_state_o,
+        input [WIDTH_VAR_STATES-1 : 0]               ram_data_v_state_i,
+        output reg [ADDR_WIDTH_VARS_STATES-1:0]      ram_addr_v_state_o,
 
         //lvls states
-        input [WIDTH_LVL_STATES-1 : 0]             ram_data_l_state_i,
-        output reg [ADDR_WIDTH_LVLS_STATES-1:0]    ram_addr_l_state_o
+        input [WIDTH_LVL_STATES-1 : 0]               ram_data_l_state_i,
+        output reg [ADDR_WIDTH_LVLS_STATES-1:0]      ram_addr_l_state_o
     );
 
     //子句bin的基址，加载NUM_C个子句
@@ -262,7 +262,7 @@ module load_bin #(
     reg [WIDTH_LVL-1:0]        base_lvl_o;
     reg                        base_lvl_en;
 
-    wire [WIDTH_BIN-1:0]   dcd_bin;
+    wire [WIDTH_BIN_ID-1:0]   dcd_bin;
     wire                   has_bkt;
 
     assign {dcd_bin, has_bkt} = ram_data_l_state_i;

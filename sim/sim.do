@@ -1,14 +1,14 @@
 quit -sim
 vlib work
 vmap work work
-vlog -quiet ../lit_cell.v -sv
+vlog -quiet ../lit1.v -sv
 vlog -quiet LitCell.sv -sv
-vlog -quiet test_lit_cell.sv
+vlog -quiet test_lit1.sv
 
-vsim -quiet test_lit_cell_top
+vsim -quiet test_lit1_top
 
-add wave -position insertpoint sim:/test_lit_cell_top/test_lit_cell_inst/*
-add wave -position insertpoint sim:/test_lit_cell_top/test_lit_cell_inst/lit1/*
+add wave -position insertpoint sim:/test_lit1_top/test_lit1_inst/*
+add wave -position insertpoint sim:/test_lit1_top/test_lit1_inst/lit1/*
 
 TreeUpdate [SetDefaultTree]
 WaveRestoreCursors {{Cursor 1} {0 ns} 0}

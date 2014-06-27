@@ -5,11 +5,12 @@
 module sat_engine #(
         parameter NUM_CLAUSES      = 8,
         parameter NUM_VARS         = 8,
-        parameter WIDTH_VAR_STATES = 30,
+        parameter NUM_LVLS         = 8,
+        parameter WIDTH_BIN_ID     = 10,
         parameter WIDTH_C_LEN      = 4,
-        parameter WIDTH_LVL        = 16
+        parameter WIDTH_LVL        = 16,
         parameter WIDTH_LVL_STATES = 11,
-        parameter WIDTH_BIN        = 10
+        parameter WIDTH_VAR_STATES = 19
     )
     (
         input                                     clk,
@@ -28,9 +29,9 @@ module sat_engine #(
         input [WIDTH_LVL-1:0]                     load_lvl_i,
                                                   
         //load update clause                      
-        input [NUM_CLAUSES-1:0]                   rd_carray_i;
+        input [NUM_CLAUSES-1:0]                   rd_carray_i,
         output [NUM_VARS*3-1 : 0]                 clause_o,
-        input [NUM_CLAUSES-1:0]                   wr_carray_i;
+        input [NUM_CLAUSES-1:0]                   wr_carray_i,
         input [NUM_VARS*3-1 : 0]                  clause_i,
 
         //load update var states   
@@ -89,8 +90,6 @@ module sat_engine #(
 
     wire [NUM_VARS*3-1:0]       var_value_from_stlist;
     wire [NUM_VARS*3-1:0]       var_value_from_carray;
-    wire                        start_decision;
-    wire                        done_imply;
     wire                        add_learntc_en;
     wire [WIDTH_C_LEN-1 : 0]    clause_len;
 
@@ -100,7 +99,7 @@ module sat_engine #(
         .WIDTH_LVL_STATES(WIDTH_LVL_STATES),
         .WIDTH_C_LEN     (WIDTH_C_LEN),
         .WIDTH_LVL       (WIDTH_LVL),
-        .WIDTH_BIN       (WIDTH_BIN)
+        .WIDTH_BIN_ID    (WIDTH_BIN_ID)
     )
     state_list(
         .clk                (clk),
@@ -145,7 +144,7 @@ module sat_engine #(
     wire                              apply_bkt_i;
     wire [NUM_VARS*3-1:0]             var_value_to_carray;
 
-    assign var_value_to_carray = wr_carray_i!=0? clauses_i:var_value_from_stlist;
+    assign var_value_to_carray = wr_carray_i!=0? clause_i:var_value_from_stlist;
     assign clause_o = var_value_from_carray;
 
     clause_array #(
@@ -172,4 +171,95 @@ module sat_engine #(
         .apply_bkt_i     (apply_bkt_i)
     );
 
+    /**
+    *  输出load的信息
+    */
+    `ifdef DEBUG_sat_engine
+        `include "../tb/class_clause_data.sv";
+        `include "../tb/class_vs_list.sv";
+        `include "../tb/class_ls_list.sv";
+        class_clause_data #(8) cdata = new;
+        class_vs_list #(8, WIDTH_LVL) vs_list = new();
+        class_ls_list #(8, WIDTH_LVL) ls_list = new();
+
+        always @(posedge clk) begin: display_load_info 
+            if(wr_carray_i!=0) begin
+                cdata.set(clause_i);
+                $display("wr clause array");
+                $display("%b", wr_carray_i);
+                cdata.display_lits();
+            end
+            if(wr_var_states!=0) begin
+                vs_list.set(lvl_states_i);
+                $display("wr var state list");
+                $display("%b", wr_var_states);
+                vs_list.display_lits();
+            end
+            if(wr_lvl_states!=0) begin
+                ls_list.set(lvl_states_i);
+                $display("wr lvl state list");
+                $display("%b", wr_lvl_states);
+                ls_list.display_lits();
+            end
+        end
+    `endif
+    
+    /**
+    *  输出update的信息
+    */
+    `ifdef DEBUG_sat_engine
+        `include "../tb/class_clause_data.sv";
+        `include "../tb/class_vs_list.sv";
+        `include "../tb/class_ls_list.sv";
+        class_clause_data #(8) cdata = new;
+        class_vs_list #(8, WIDTH_LVL) vs_list = new();
+        class_ls_list #(8, WIDTH_LVL) ls_list = new();
+
+        initial begin
+            while(1) begin
+                while(start_core_i)
+                    @(posedge clk);
+                    
+                $display("start_core_i");
+
+                while(done_core_i)
+                    @(posedge clk);
+                    
+                $display("done_core_i");
+
+                cdata.set(clause_i);
+                $display("clause array");
+                cdata.display_lits();
+
+                vs_list.set(lvl_states_i);
+                $display("var state list");
+                vs_list.display_lits();
+
+                ls_list.set(lvl_states_i);
+                $display("lvl state list");
+                ls_list.display_lits();
+            end
+        end
+
+        always @(posedge clk) begin: display_load_info 
+            if(wr_carray_i!=0) begin
+                cdata.set(clause_i);
+                $display("wr clause array");
+                $display("%b", wr_carray_i);
+                cdata.display_lits();
+            end
+            if(wr_var_states!=0) begin
+                vs_list.set(lvl_states_i);
+                $display("wr var state list");
+                $display("%b", wr_var_states);
+                vs_list.display_lits();
+            end
+            if(wr_lvl_states!=0) begin
+                ls_list.set(lvl_states_i);
+                $display("wr lvl state list");
+                $display("%b", wr_lvl_states);
+                ls_list.display_lits();
+            end
+        end
+    `endif
 endmodule

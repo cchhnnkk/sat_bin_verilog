@@ -1,6 +1,7 @@
 #!/bin/bash 
 
 # gen_wave.sh test_clause_array_top 3
+# 3表示展开显示的层数
 
 if [[ $# == 0 ]]; then
 	echo 'please input the module_name'
