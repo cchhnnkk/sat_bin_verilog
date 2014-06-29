@@ -69,7 +69,7 @@ module test_clause1(input clk, input rst);
                 #1
                 assert(clause1.freelitcnt_0 == 1);
                 assert(clause1.imp_drv_0 == 1);
-                cdata_o.set_c(var_value_o);
+                cdata_o.set(var_value_o);
                 cdata_o.assert_lit(3, 3'b101);
 
             @ (posedge clk);
@@ -77,7 +77,7 @@ module test_clause1(input clk, input rst);
                 cdata_i.get(var_value_i);
                 #1
                 assert(clause1.cclause_drv_0 == 1);
-                cdata_o.set_c(var_value_o);
+                cdata_o.set(var_value_o);
                 cdata_o.assert_lit(1, 3'b110);
                 cdata_o.assert_lit(3, 3'b111);
                 cdata_o.assert_lit(5, 3'b110);

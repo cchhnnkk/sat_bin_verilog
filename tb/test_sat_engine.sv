@@ -30,9 +30,9 @@ module test_sat_engine(input clk, input rst);
 	wire [WIDTH_LVL-1:0]                    bkt_lvl_o;
 	reg [WIDTH_LVL-1:0]                     load_lvl_i;
 	reg [NUM_CLAUSES-1:0]                   rd_carray_i;
-	wire [NUM_VARS*3-1 : 0]                 clause_o;
+	wire [NUM_VARS*2-1 : 0]                 clause_o;
 	reg [NUM_CLAUSES-1:0]                   wr_carray_i;
-	reg [NUM_VARS*3-1 : 0]                  clause_i;
+	reg [NUM_VARS*2-1 : 0]                  clause_i;
 	reg [NUM_VARS-1:0]                      wr_var_states;
 	reg [WIDTH_VAR_STATES*NUM_VARS-1 : 0]   vars_states_i;
 	wire [WIDTH_VAR_STATES*NUM_VARS-1 : 0]  vars_states_o;
@@ -72,7 +72,7 @@ module test_sat_engine(input clk, input rst);
 			vs_list.reset();
 			vs_list.set_separate(value, implied, level);
 			wr_var_states = 8'hff;
-			carray_data.get(vars_states_i);
+			vs_list.get(vars_states_i);
 			@ (posedge clk);
 				wr_var_states = 8'h0;
 			@ (posedge clk);
@@ -87,7 +87,7 @@ module test_sat_engine(input clk, input rst);
 			ls_list.reset();
 			ls_list.set_separate(dcd_bin, has_bkt);
 			wr_lvl_states = 8'hff;
-			carray_data.get(lvl_states_i);
+			ls_list.get(lvl_states_i);
 			@ (posedge clk);
 				wr_lvl_states = 8'h0;
 			@ (posedge clk);
@@ -116,8 +116,8 @@ module test_sat_engine(input clk, input rst);
 
 		end
 	endtask
-    
-    
+
+
 	/* --- 测试free_lit_count --- */
 
 	int bin[8][8] = '{

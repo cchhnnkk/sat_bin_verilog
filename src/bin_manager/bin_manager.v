@@ -48,8 +48,8 @@ module bin_manager #(
         //load update clause to sat engine
         output [NUM_CLAUSES_A_BIN-1:0]                  wr_carray_o,
         output [NUM_CLAUSES_A_BIN-1:0]                  rd_carray_o,
-        output [NUM_VARS_A_BIN*3-1 : 0]                 clause_o,
-        input [NUM_VARS_A_BIN*3-1 : 0]                  clause_i,
+        output [NUM_VARS_A_BIN*2-1 : 0]                 clause_o,
+        input [NUM_VARS_A_BIN*2-1 : 0]                  clause_i,
 
         //load update var states  to sat engine
         output [NUM_VARS_A_BIN-1:0]                     wr_var_states_o,

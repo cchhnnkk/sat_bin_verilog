@@ -70,31 +70,33 @@ class class_vs_list #(int nv = 8, int width_lvl = 16, int width_vs = width_lvl+3
 	endfunction
 
 	function void display();
-        string str_all;
+        string str_all = "";
         string str;
 		for (int i = 0; i < nv; ++i)
 		begin
-			sprintf(str, "%d", value[i]);
+			$sformat(str, "%d", value[i]);
 			// str.itoa(value[i]);
             str_all = {str_all, str, " "};
 		end
-        $display("value = %s", str_all);
+        $display("\tvalue = %s", str_all);
 
+        str_all = "";
 		for (int i = 0; i < nv; ++i)
 		begin
-			sprintf(str, "%d", implied[i]);
+			$sformat(str, "%d", implied[i]);
 			// str.itoa(implied[i]);
             str_all = {str_all, str, " "};
 		end
-        $display("implied = %s", str_all);
+        $display("\timply = %s", str_all);
 
+        str_all = "";
 		for (int i = 0; i < nv; ++i)
 		begin
-			sprintf(str, "%d", level[i]);
+			$sformat(str, "%d", level[i]);
 			// str.itoa(level[i]);
             str_all = {str_all, str, " "};
 		end
-        $display("level = %s", str_all);
+        $display("\tlevel = %s", str_all);
 
 	endfunction
 

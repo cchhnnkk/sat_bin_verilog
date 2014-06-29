@@ -16,7 +16,7 @@ vmap work work
 
 # vsim -quiet test_clause_array_top -pli D:/Novas/Debussy/share/PLI/modelsim_fli53/WINNT/novas_fli.dll
 
-vsim -quiet test_clause_array_top
+vsim -quiet -novopt test_clause_array_top
 
 # add wave -noupdate -divider {TEST}
 # add wave -noupdate sim:/test_clause_array_top/test_clause_array/*

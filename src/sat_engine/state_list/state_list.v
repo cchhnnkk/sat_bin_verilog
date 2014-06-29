@@ -23,12 +23,12 @@ module state_list #(
         input                                     clk,
         input                                     rst,
 
-        // var value I/O   
+        // var value I/O
         input [NUM_VARS*3-1:0]                    var_value_i,
         output [NUM_VARS*3-1:0]                   var_value_o,
         output [WIDTH_C_LEN-1 : 0]                clause_len_o,
 
-        //decide   
+        //decide
         input                                     load_lvl_en,
         input [WIDTH_LVL-1:0]                     load_lvl_i,
         input                                     start_decision_i,
@@ -36,7 +36,7 @@ module state_list #(
         output [WIDTH_LVL-1:0]                    cur_lvl_o,
         output                                    done_decision_o,
 
-        //imply    
+        //imply
         input                                     apply_imply_i,
         output reg                                done_imply_o,
 
@@ -48,16 +48,16 @@ module state_list #(
         output [WIDTH_BIN_ID-1:0]                 bkt_bin_o,
         output [WIDTH_LVL-1:0]                    bkt_lvl_o,
 
-        //backtrack cur bin    
+        //backtrack cur bin
         input                                     apply_bkt_cur_bin_i,
         output reg                                done_bkt_cur_bin_o,
 
-        //load update var states   
+        //load update var states
         input [NUM_VARS-1:0]                      wr_var_states,
         input [WIDTH_VAR_STATES*NUM_VARS-1 : 0]   vars_states_i,
         output [WIDTH_VAR_STATES*NUM_VARS-1 : 0]  vars_states_o,
 
-        //load update lvl states   
+        //load update lvl states
         input [NUM_LVLS-1:0]                      wr_lvl_states,
         input [WIDTH_LVL_STATES*NUM_LVLS -1 : 0]  lvl_states_i,
         output [WIDTH_LVL_STATES*NUM_LVLS -1 : 0] lvl_states_o,
@@ -79,23 +79,23 @@ module state_list #(
         .WIDTH_C_LEN     (WIDTH_C_LEN)
     )
     var_state8(
-        .clk            (clk),
-        .rst            (rst),
-        .var_value_i    (var_value_i),
-        .var_value_o    (var_value_o),
-        .index_decided_i(index_decided),
-        .cur_lvl_i      (cur_lvl_o),
-        .apply_imply_i  (apply_imply_i),
-        .find_imply_o   (find_imply_cur),
-        .find_conflict_o(find_conflict_cur),
-        .apply_analyze_i(apply_analyze_i),
-        .max_lvl_o      (max_lvl),
-        .clause_len_o   (clause_len_o),
-        .apply_bkt_i    (apply_bkt_o),
-        .bkt_lvl_i      (bkt_lvl_i),
-        .wr_states      (wr_var_states),
-        .vars_states_i  (vars_states_i),
-        .vars_states_o  (vars_states_o)
+        .clk                  (clk),
+        .rst                  (rst),
+        .var_value_i          (var_value_i),
+        .var_value_o          (var_value_o),
+        .valid_from_decision_i(valid_from_decision_i),
+        .cur_lvl_i            (cur_lvl_o),
+        .apply_imply_i        (apply_imply_i),
+        .find_imply_o         (find_imply_cur),
+        .find_conflict_o      (find_conflict_cur),
+        .apply_analyze_i      (apply_analyze_i),
+        .max_lvl_o            (max_lvl),
+        .clause_len_o         (clause_len_o),
+        .apply_bkt_i          (apply_bkt_o),
+        .bkt_lvl_i            (bkt_lvl_i),
+        .wr_states            (wr_var_states),
+        .vars_states_i        (vars_states_i),
+        .vars_states_o        (vars_states_o)
     );
 
     /**
@@ -124,7 +124,7 @@ module state_list #(
         .lvl_states_i         (lvl_states_i),
         .lvl_states_o         (lvl_states_o)
         );
-    
+
     /**
     * 决策
     */
@@ -141,7 +141,7 @@ module state_list #(
             .load_lvl_i     (load_lvl_i),
             .decision_pulse (start_decision_i),
             .vars_value_i   (var_value_o),
-            .index_decided_o(index_decided),
+            .index_decided_o(valid_from_decision_i),
             .decision_done  (decision_done),
             .apply_bkt_i    (apply_bkt_i),
             .local_bkt_lvl_i(local_bkt_lvl),
@@ -160,7 +160,7 @@ module state_list #(
                 vs_list.display();
             end
             if(decision_done) begin
-                display("index_decided_o = %b", index_decided);
+                $display("index_decided_o = %b", valid_from_decision_i);
             end
         end
     `endif
@@ -179,7 +179,7 @@ module state_list #(
             find_imply_pre <= find_imply_cur;
     end
 
-    always @(posedge clk) begin: set_done_imply_o 
+    always @(posedge clk) begin: set_done_imply_o
         if(rst)
             done_imply_o <= 0;
         else if(apply_imply_i && find_imply_cur==find_imply_pre)
@@ -189,9 +189,9 @@ module state_list #(
     end
 
     `ifdef DEBUG_state_list
-        always @(posedge clk) begin 
+        always @(posedge clk) begin
             if(apply_imply_i && find_imply_cur!=find_imply_pre) begin
-                display("bcp");
+                $display("bcp");
                 vs_list.set(vars_states_o);
                 vs_list.display_index(find_imply_cur^find_imply_pre);
             end
@@ -228,10 +228,10 @@ module state_list #(
                         n_analyze_state = ANALYZE_IDLE;
                 FIND_LEARNTC:
                     if(find_conflict_cur!=find_conflict_pre)
-                        n_analyze_state = ADD_LEARNTC;    
+                        n_analyze_state = ADD_LEARNTC;
                     else
                         n_analyze_state = FIND_LEARNTC;
-                ADD_LEARNTC:      
+                ADD_LEARNTC:
                     n_analyze_state = ANALYZE_DONE;
                 ANALYZE_DONE:
                     n_analyze_state = ANALYZE_IDLE;
@@ -249,7 +249,7 @@ module state_list #(
             add_learntc_en_o <= 0;
     end
 
-    always @(posedge clk) begin: set_done_analyze_o 
+    always @(posedge clk) begin: set_done_analyze_o
         if(rst)
             done_analyze_o <= 0;
         else if(c_analyze_state==ANALYZE_DONE)
@@ -271,9 +271,9 @@ module state_list #(
             base_lvl_r <= base_lvl_i;
         else
             base_lvl_r <= base_lvl_r;
-    end                              
-    
-    reg [WIDTH_LVL-1:0] bkt_lvl_r; 
+    end
+
+    reg [WIDTH_LVL-1:0] bkt_lvl_r;
 
     always @(posedge clk) begin: set_bkt_lvl_r
         if(rst)
@@ -292,7 +292,7 @@ module state_list #(
             "FIND_LEARNTC",
             "ADD_LEARNTC",
             "ANALYZE_DONE"};
-            
+
         always @(posedge clk) begin
             if(c_analyze_state!=n_analyze_state && n_analyze_state!=ANALYZE_IDLE)
             begin
@@ -326,7 +326,7 @@ module state_list #(
     * 回退的控制
     */
 
-    always @(posedge clk) begin: set_done_bkt_cur_bin_o 
+    always @(posedge clk) begin: set_done_bkt_cur_bin_o
         if(rst)
             done_bkt_cur_bin_o    <= 0;
         else if(apply_bkt_cur_bin_i)
@@ -342,12 +342,12 @@ module state_list #(
         always @(posedge clk) begin
             if(apply_bkt_cur_bin_i) begin
                 ls_list.set(lvl_states_o);
-                display("apply_bkt_cur_bin_i");
+                $display("apply_bkt_cur_bin_i");
                 ls_list.display();
             end
             if(done_bkt_cur_bin_o) begin
                 ls_list.set(lvl_states_o);
-                display("done_bkt_cur_bin_o");
+                $display("done_bkt_cur_bin_o");
                 ls_list.display();
             end
         end

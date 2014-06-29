@@ -2,14 +2,14 @@ quit -sim
 vlib work
 vmap work work
 
-vsim -quiet test_sat_engine_top
+vsim -quiet -novopt test_sat_engine_top
 
 # add wave -noupdate -divider {TEST}
 # add wave -noupdate sim:/test_clause_array_top/test_clause_array/*
 # add wave -noupdate -divider {DUT}
 # add wave -noupdate sim:/test_clause_array_top/test_clause_array/clause_array/*
 
-do ../tools/test_sat_engine_top.do
+do ../tools/wave_test_sat_engine_top.do
 # do wave.do
 
 TreeUpdate [SetDefaultTree]
@@ -30,4 +30,5 @@ configure wave -timelineunits ns
 update
 WaveRestoreZoom {0 ns} {200 ns}
 
-run -all
+# run -all
+run 1us

@@ -62,46 +62,44 @@ module lvl_state8 #(
     assign findindex_o = {findindex_o_1, findindex_o_0};
 
     lvl_state4 #(
-                    .WIDTH_LVL_STATES(WIDTH_LVL_STATES)
-                )
+        .WIDTH_LVL_STATES(WIDTH_LVL_STATES)
+    )
     lvl_state4_0(
-                    .clk(clk),
-                    .rst(rst),
-                    .valid_from_decision_i(valid_from_decision_i_0),
-                    .cur_bin_num_i(cur_bin_num_i),
-                    .cur_lvl_i(cur_lvl_i),
-                    .findflag_i(findflag_i),
-                    .findflag_o(findflag_o),
-                    .findindex_o(findindex_o_0),
-                    .max_lvl_i(max_lvl_i),
-                    .bkt_bin_o(bkt_bin_o_0),
-                    .apply_bkt_i(apply_bkt_i),
-                    .bkt_lvl_i(bkt_lvl_i),
-                    .wr_states(wr_states_0),
-                    .lvl_states_i(lvl_states_i_0),
-                    .lvl_states_o(lvl_states_o_0)
-                );
+        .clk(clk),
+        .rst(rst),
+        .valid_from_decision_i(valid_from_decision_i_0),
+        .cur_bin_num_i(cur_bin_num_i),
+        .cur_lvl_i(cur_lvl_i),
+        .findflag_i(findflag_i),
+        .findflag_o(findflag_o),
+        .findindex_o(findindex_o_0),
+        .max_lvl_i(max_lvl_i),
+        .bkt_bin_o(bkt_bin_o_0),
+        .apply_bkt_i(apply_bkt_i),
+        .wr_states(wr_states_0),
+        .lvl_states_i(lvl_states_i_0),
+        .lvl_states_o(lvl_states_o_0)
+    );
 
     lvl_state4 #(
-                 .WIDTH_LVL_STATES(WIDTH_LVL_STATES)
-                 )
+        .WIDTH_LVL_STATES(WIDTH_LVL_STATES)
+    )
     lvl_state4_1(
-                    .clk(clk),
-                    .rst(rst),
-                    .valid_from_decision_i(valid_from_decision_i_1),
-                    .cur_bin_num_i(cur_bin_num_i),
-                    .cur_lvl_i(cur_lvl_i),
-                    .findflag_i(findflag_i),
-                    .findflag_o(findflag_o),
-                    .findindex_o(findindex_o_1),
-                    .max_lvl_i(max_lvl_i),
-                    .bkt_bin_o(bkt_bin_o_1),
-                    .apply_bkt_i(apply_bkt_i),
-                    .bkt_lvl_i(bkt_lvl_i),
-                    .wr_states(wr_states_1),
-                    .lvl_states_i(lvl_states_i_1),
-                    .lvl_states_o(lvl_states_o_1)
-                );
+        .clk(clk),
+        .rst(rst),
+        .valid_from_decision_i(valid_from_decision_i_1),
+        .cur_bin_num_i(cur_bin_num_i),
+        .cur_lvl_i(cur_lvl_i),
+        .findflag_i(findflag_i),
+        .findflag_o(findflag_o),
+        .findindex_o(findindex_o_1),
+        .max_lvl_i(max_lvl_i),
+        .bkt_bin_o(bkt_bin_o_1),
+        .apply_bkt_i(apply_bkt_i),
+        .wr_states(wr_states_1),
+        .lvl_states_i(lvl_states_i_1),
+        .lvl_states_o(lvl_states_o_1)
+    );
 
 endmodule
 
@@ -164,46 +162,44 @@ module lvl_state4 #(
     assign findindex_o = {findindex_o_1, findindex_o_0};
 
     lvl_state2 #(
-                    .WIDTH_LVL_STATES(WIDTH_LVL_STATES)
-                )
+        .WIDTH_LVL_STATES(WIDTH_LVL_STATES)
+    )
     lvl_state2_0(
-                    .clk(clk),
-                    .rst(rst),
-                    .valid_from_decision_i(valid_from_decision_i_0),
-                    .cur_bin_num_i(cur_bin_num_i),
-                    .cur_lvl_i(cur_lvl_i),
-                    .findflag_i(findflag_i),
-                    .findflag_o(findflag_o),
-                    .findindex_o(findindex_o_0),
-                    .max_lvl_i(max_lvl_i),
-                    .bkt_bin_o(bkt_bin_o_0),
-                    .apply_bkt_i(apply_bkt_i),
-                    .bkt_lvl_i(bkt_lvl_i),
-                    .wr_states(wr_states_0),
-                    .lvl_states_i(lvl_states_i_0),
-                    .lvl_states_o(lvl_states_o_0)
-                );
+        .clk(clk),
+        .rst(rst),
+        .valid_from_decision_i(valid_from_decision_i_0),
+        .cur_bin_num_i(cur_bin_num_i),
+        .cur_lvl_i(cur_lvl_i),
+        .findflag_i(findflag_i),
+        .findflag_o(findflag_o),
+        .findindex_o(findindex_o_0),
+        .max_lvl_i(max_lvl_i),
+        .bkt_bin_o(bkt_bin_o_0),
+        .apply_bkt_i(apply_bkt_i),
+        .wr_states(wr_states_0),
+        .lvl_states_i(lvl_states_i_0),
+        .lvl_states_o(lvl_states_o_0)
+    );
 
     lvl_state2 #(
-                 .WIDTH_LVL_STATES(WIDTH_LVL_STATES)
-                 )
+        .WIDTH_LVL_STATES(WIDTH_LVL_STATES)
+    )
     lvl_state2_1(
-                    .clk(clk),
-                    .rst(rst),
-                    .valid_from_decision_i(valid_from_decision_i_1),
-                    .cur_bin_num_i(cur_bin_num_i),
-                    .cur_lvl_i(cur_lvl_i),
-                    .findflag_i(findflag_i),
-                    .findflag_o(findflag_o),
-                    .findindex_o(findindex_o_1),
-                    .max_lvl_i(max_lvl_i),
-                    .bkt_bin_o(bkt_bin_o_1),
-                    .apply_bkt_i(apply_bkt_i),
-                    .bkt_lvl_i(bkt_lvl_i),
-                    .wr_states(wr_states_1),
-                    .lvl_states_i(lvl_states_i_1),
-                    .lvl_states_o(lvl_states_o_1)
-                );
+        .clk(clk),
+        .rst(rst),
+        .valid_from_decision_i(valid_from_decision_i_1),
+        .cur_bin_num_i(cur_bin_num_i),
+        .cur_lvl_i(cur_lvl_i),
+        .findflag_i(findflag_i),
+        .findflag_o(findflag_o),
+        .findindex_o(findindex_o_1),
+        .max_lvl_i(max_lvl_i),
+        .bkt_bin_o(bkt_bin_o_1),
+        .apply_bkt_i(apply_bkt_i),
+        .wr_states(wr_states_1),
+        .lvl_states_i(lvl_states_i_1),
+        .lvl_states_o(lvl_states_o_1)
+    );
 
 endmodule
 
@@ -266,46 +262,44 @@ module lvl_state2 #(
     assign findindex_o = {findindex_o_1, findindex_o_0};
 
     lvl_state1 #(
-                    .WIDTH_LVL_STATES(WIDTH_LVL_STATES)
-                )
+        .WIDTH_LVL_STATES(WIDTH_LVL_STATES)
+    )
     lvl_state1_0(
-                    .clk(clk),
-                    .rst(rst),
-                    .valid_from_decision_i(valid_from_decision_i_0),
-                    .cur_bin_num_i(cur_bin_num_i),
-                    .cur_lvl_i(cur_lvl_i),
-                    .findflag_i(findflag_i),
-                    .findflag_o(findflag_o),
-                    .findindex_o(findindex_o_0),
-                    .max_lvl_i(max_lvl_i),
-                    .bkt_bin_o(bkt_bin_o_0),
-                    .apply_bkt_i(apply_bkt_i),
-                    .bkt_lvl_i(bkt_lvl_i),
-                    .wr_states(wr_states_0),
-                    .lvl_states_i(lvl_states_i_0),
-                    .lvl_states_o(lvl_states_o_0)
-                );
+        .clk(clk),
+        .rst(rst),
+        .valid_from_decision_i(valid_from_decision_i_0),
+        .cur_bin_num_i(cur_bin_num_i),
+        .cur_lvl_i(cur_lvl_i),
+        .findflag_i(findflag_i),
+        .findflag_o(findflag_o),
+        .findindex_o(findindex_o_0),
+        .max_lvl_i(max_lvl_i),
+        .bkt_bin_o(bkt_bin_o_0),
+        .apply_bkt_i(apply_bkt_i),
+        .wr_states(wr_states_0),
+        .lvl_states_i(lvl_states_i_0),
+        .lvl_states_o(lvl_states_o_0)
+    );
 
     lvl_state1 #(
-                 .WIDTH_LVL_STATES(WIDTH_LVL_STATES)
-                 )
+        .WIDTH_LVL_STATES(WIDTH_LVL_STATES)
+    )
     lvl_state1_1(
-                    .clk(clk),
-                    .rst(rst),
-                    .valid_from_decision_i(valid_from_decision_i_1),
-                    .cur_bin_num_i(cur_bin_num_i),
-                    .cur_lvl_i(cur_lvl_i),
-                    .findflag_i(findflag_i),
-                    .findflag_o(findflag_o),
-                    .findindex_o(findindex_o_1),
-                    .max_lvl_i(max_lvl_i),
-                    .bkt_bin_o(bkt_bin_o_1),
-                    .apply_bkt_i(apply_bkt_i),
-                    .bkt_lvl_i(bkt_lvl_i),
-                    .wr_states(wr_states_1),
-                    .lvl_states_i(lvl_states_i_1),
-                    .lvl_states_o(lvl_states_o_1)
-                );
+        .clk(clk),
+        .rst(rst),
+        .valid_from_decision_i(valid_from_decision_i_1),
+        .cur_bin_num_i(cur_bin_num_i),
+        .cur_lvl_i(cur_lvl_i),
+        .findflag_i(findflag_i),
+        .findflag_o(findflag_o),
+        .findindex_o(findindex_o_1),
+        .max_lvl_i(max_lvl_i),
+        .bkt_bin_o(bkt_bin_o_1),
+        .apply_bkt_i(apply_bkt_i),
+        .wr_states(wr_states_1),
+        .lvl_states_i(lvl_states_i_1),
+        .lvl_states_o(lvl_states_o_1)
+    );
 
 endmodule
 

@@ -54,23 +54,24 @@ class class_ls_list #(int nv = 8, int width_bini = 16, int width_ls = width_bini
 	endfunction
 
 	function void display();
-        string str_all;
+        string str_all = "";
         string str;
 		for (int i = 0; i < nv; ++i)
 		begin
-			sprintf(str, "%d", dcd_bin[i]);
+			$sformat(str, "%d", dcd_bin[i]);
 			// str.itoa(dcd_bin[i]);
             str_all = {str_all, str, " "};
 		end
-        $display("dcd_bin = %s", str_all);
+        $display("\tdcd_bin = %s", str_all);
 
+        str_all = "";
 		for (int i = 0; i < nv; ++i)
 		begin
-			sprintf(str, "%d", has_bkt[i]);
+			$sformat(str, "%d", has_bkt[i]);
 			// str.itoa(has_bkt[i]);
             str_all = {str_all, str, " "};
 		end
-        $display("has_bkt = %s", str_all);
+        $display("\thas_bkt = %s", str_all);
 	endfunction
 
 endclass

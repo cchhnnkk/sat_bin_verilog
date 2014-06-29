@@ -2,7 +2,7 @@ class class_clause_data #(int size = 8);
 
 	parameter MAX = 9;
 
-	reg [2:0] data[size];
+	bit [2:0] data[size];
 
 	function void reset();
 		for (int i = 0; i < size; ++i)
@@ -24,7 +24,7 @@ class class_clause_data #(int size = 8);
 		end
 	endfunction
 
-	function void set_c(input [3*size-1:0] value);
+	function void set(input [3*size-1:0] value);
 		int index;
 		for (int i = 0; i < size; ++i)
 		begin
@@ -33,6 +33,32 @@ class class_clause_data #(int size = 8);
 				index = size - 1 - i;
 				index = index*3+j;
 				data[i][j] = value[index];
+			end
+		end
+	endfunction
+
+	function void set_clause(input [2*size-1:0] value);
+		int index;
+		for (int i = 0; i < size; ++i)
+		begin
+			for (int j = 0; j < 2; ++j)
+			begin
+				index = size - 1 - i;
+				index = index*2+j;
+				data[i][j+1] = value[index];
+			end
+		end
+	endfunction
+
+	function void get_clause(output [2*size-1:0] value);
+		int index;
+		for (int i = 0; i < size; ++i)
+		begin
+			for (int j = 0; j < 2; ++j)
+			begin
+				index = size - 1 - i;
+				index = index*2+j;
+				value[index] = data[i][j+1];
 			end
 		end
 	endfunction
@@ -51,18 +77,18 @@ class class_clause_data #(int size = 8);
 		get_len = len;
 	endfunction
 
+	function void set_lits(int cl[size]);
+		foreach (cl[i]) begin
+			data[i][2:1] = cl[i];
+		end
+	endfunction
+
 	function void set_lit(input int index, input [1:0] value);
 		data[index][1:0] = value;
 	endfunction
 
 	function void set_value(input int index, input [2:0] value);
 		data[index] = value;
-	endfunction
-
-	function void set_lits(int cl[size]);
-		foreach (cl[i]) begin
-			data[i][2:1] = cl[i];
-		end
 	endfunction
 
 	function void set_imps(int d[size]);
@@ -85,27 +111,30 @@ class class_clause_data #(int size = 8);
 	endfunction
 
 	function void display_lits();
-        string str_all;
+        string str_all = "";
         string str;
+        bit [1:0] d;
 		for (int i = 0; i < size; ++i)
 		begin
-			sprintf(str, "%d", data[i*3+2:i*3+1]);
-			// str.itoa(data[i*3+2:i*3+1]);
+			d = data[i][2:1];
+			$sformat(str, "%d", d);
             str_all = {str_all, str, " "};
 		end
-        $display("value = %s", str_all);
+        $display("\tvalue = %s", str_all);
 	endfunction
 
 	function void display_implied();
-        string str_all;
+        string str_all = "\t";
         string str;
+        bit [1:0] d;
 		for (int i = 0; i < size; ++i)
 		begin
-			sprintf(str, "%d", data[i*3]);
+			d = data[i][0];
+			$sformat(str, "%d", d);
 			// str.itoa(data[i*3]);
             str_all = {str_all, str, " "};
 		end
-        $display("implied = %s", str_all);
+        $display("\timplied = %s", str_all);
 	endfunction
 
 endclass

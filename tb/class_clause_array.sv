@@ -27,7 +27,15 @@ class class_clause_array #(int nc = 8, int nv = 8);
 	endfunction
 
 	function void set(int index, input [3*nc-1:0] value);
-		cdatas[index].set_c(value);
+		cdatas[index].set(value);
+	endfunction
+
+	function void get_clause(int index, output [2*nc-1:0]  data);
+		cdatas[index].get_clause(data);
+	endfunction
+
+	function void set_clause(int index, input [2*nc-1:0] value);
+		cdatas[index].set_clause(value);
 	endfunction
 
 	function void set_array(int bin1[nc][nv]);

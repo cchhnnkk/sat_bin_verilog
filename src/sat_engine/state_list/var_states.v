@@ -24,7 +24,7 @@ module var_state8 #(
         output [WIDTH_C_LEN-1 : 0]               clause_len_o,
 
         //decide
-        input [NUM_VARS-1:0]                     index_decided_i,
+        input [NUM_VARS-1:0]                     valid_from_decision_i,
         input [9:0]                              cur_lvl_i,
 
         //imply
@@ -48,7 +48,7 @@ module var_state8 #(
 
     wire [NUM_VARS*3/2-1 : 0]   var_value_i_0, var_value_i_1;
     wire [NUM_VARS*3/2-1 : 0]   var_value_o_0, var_value_o_1;
-    wire [NUM_VARS/2-1:0]       index_decided_i_0, index_decided_i_1;
+    wire [NUM_VARS/2-1:0]       valid_from_decision_i_0, valid_from_decision_i_1;
     wire                        find_imply_o_0, find_imply_o_1;
     wire                        find_conflict_o_0, find_conflict_o_1;
     wire [WIDTH_VAR_STATES-1:0] max_lvl_o_0, max_lvl_o_1;
@@ -56,7 +56,7 @@ module var_state8 #(
 
     assign {var_value_i_0, var_value_i_1} = var_value_i;
     assign var_value_o = {var_value_o_0, var_value_o_1};
-    assign {index_decided_i_0, index_decided_i_1} = index_decided_i;
+    assign {valid_from_decision_i_0, valid_from_decision_i_1} = valid_from_decision_i;
 
     assign find_imply_o = {find_imply_o_0, find_imply_o_1};
     assign find_conflict_o = find_conflict_o_0 | find_conflict_o_1;
@@ -81,7 +81,7 @@ module var_state8 #(
         .rst                  (rst),
         .var_value_i          (var_value_i_0),
         .var_value_o          (var_value_o_0),
-        .valid_from_decision_i(index_decided_i_0),
+        .valid_from_decision_i(valid_from_decision_i_0),
         .cur_lvl_i            (cur_lvl_i),
         .apply_imply_i        (apply_imply_i),
         .find_imply_o         (find_imply_o_0),
@@ -105,7 +105,7 @@ module var_state8 #(
         .rst                  (rst),
         .var_value_i          (var_value_i_1),
         .var_value_o          (var_value_o_1),
-        .valid_from_decision_i(index_decided_i_1),
+        .valid_from_decision_i(valid_from_decision_i_1),
         .cur_lvl_i            (cur_lvl_i),
         .apply_imply_i        (apply_imply_i),
         .find_imply_o         (find_imply_o_1),
@@ -143,7 +143,7 @@ module var_state4 #(
         output [WIDTH_C_LEN-1 : 0]               clause_len_o,
 
         //decide
-        input [NUM_VARS-1:0]                     index_decided_i,
+        input [NUM_VARS-1:0]                     valid_from_decision_i,
         input [9:0]                              cur_lvl_i,
 
         //imply
@@ -167,7 +167,7 @@ module var_state4 #(
 
     wire [NUM_VARS*3/2-1 : 0]   var_value_i_0, var_value_i_1;
     wire [NUM_VARS*3/2-1 : 0]   var_value_o_0, var_value_o_1;
-    wire [NUM_VARS/2-1:0]       index_decided_i_0, index_decided_i_1;
+    wire [NUM_VARS/2-1:0]       valid_from_decision_i_0, valid_from_decision_i_1;
     wire                        find_imply_o_0, find_imply_o_1;
     wire                        find_conflict_o_0, find_conflict_o_1;
     wire [WIDTH_VAR_STATES-1:0] max_lvl_o_0, max_lvl_o_1;
@@ -175,7 +175,7 @@ module var_state4 #(
 
     assign {var_value_i_0, var_value_i_1} = var_value_i;
     assign var_value_o = {var_value_o_0, var_value_o_1};
-    assign {index_decided_i_0, index_decided_i_1} = index_decided_i;
+    assign {valid_from_decision_i_0, valid_from_decision_i_1} = valid_from_decision_i;
 
     assign find_imply_o = {find_imply_o_0, find_imply_o_1};
     assign find_conflict_o = find_conflict_o_0 | find_conflict_o_1;
@@ -200,7 +200,7 @@ module var_state4 #(
         .rst                  (rst),
         .var_value_i          (var_value_i_0),
         .var_value_o          (var_value_o_0),
-        .valid_from_decision_i(index_decided_i_0),
+        .valid_from_decision_i(valid_from_decision_i_0),
         .cur_lvl_i            (cur_lvl_i),
         .apply_imply_i        (apply_imply_i),
         .find_imply_o         (find_imply_o_0),
@@ -224,7 +224,7 @@ module var_state4 #(
         .rst                  (rst),
         .var_value_i          (var_value_i_1),
         .var_value_o          (var_value_o_1),
-        .valid_from_decision_i(index_decided_i_1),
+        .valid_from_decision_i(valid_from_decision_i_1),
         .cur_lvl_i            (cur_lvl_i),
         .apply_imply_i        (apply_imply_i),
         .find_imply_o         (find_imply_o_1),
@@ -262,7 +262,7 @@ module var_state2 #(
         output [WIDTH_C_LEN-1 : 0]               clause_len_o,
 
         //decide
-        input [NUM_VARS-1:0]                     index_decided_i,
+        input [NUM_VARS-1:0]                     valid_from_decision_i,
         input [9:0]                              cur_lvl_i,
 
         //imply
@@ -286,7 +286,7 @@ module var_state2 #(
 
     wire [NUM_VARS*3/2-1 : 0]   var_value_i_0, var_value_i_1;
     wire [NUM_VARS*3/2-1 : 0]   var_value_o_0, var_value_o_1;
-    wire [NUM_VARS/2-1:0]       index_decided_i_0, index_decided_i_1;
+    wire [NUM_VARS/2-1:0]       valid_from_decision_i_0, valid_from_decision_i_1;
     wire                        find_imply_o_0, find_imply_o_1;
     wire                        find_conflict_o_0, find_conflict_o_1;
     wire [WIDTH_VAR_STATES-1:0] max_lvl_o_0, max_lvl_o_1;
@@ -294,7 +294,7 @@ module var_state2 #(
 
     assign {var_value_i_0, var_value_i_1} = var_value_i;
     assign var_value_o = {var_value_o_0, var_value_o_1};
-    assign {index_decided_i_0, index_decided_i_1} = index_decided_i;
+    assign {valid_from_decision_i_0, valid_from_decision_i_1} = valid_from_decision_i;
 
     assign find_imply_o = {find_imply_o_0, find_imply_o_1};
     assign find_conflict_o = find_conflict_o_0 | find_conflict_o_1;
@@ -319,7 +319,7 @@ module var_state2 #(
         .rst                  (rst),
         .var_value_i          (var_value_i_0),
         .var_value_o          (var_value_o_0),
-        .valid_from_decision_i(index_decided_i_0),
+        .valid_from_decision_i(valid_from_decision_i_0),
         .cur_lvl_i            (cur_lvl_i),
         .apply_imply_i        (apply_imply_i),
         .find_imply_o         (find_imply_o_0),
@@ -343,7 +343,7 @@ module var_state2 #(
         .rst                  (rst),
         .var_value_i          (var_value_i_1),
         .var_value_o          (var_value_o_1),
-        .valid_from_decision_i(index_decided_i_1),
+        .valid_from_decision_i(valid_from_decision_i_1),
         .cur_lvl_i            (cur_lvl_i),
         .apply_imply_i        (apply_imply_i),
         .find_imply_o         (find_imply_o_1),

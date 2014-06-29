@@ -93,8 +93,8 @@ module lvl_state1 #(
             bkt_bin_o <= 0;
     end
 
-    assign findflag_o = findflag_i != 0 ? 2 : \
-                        (max_lvl_i >= var_lvl_r && has_bkt_r == 0) ? 1:0;
+    assign findflag_o = findflag_i != 0 ? 2 : 
+        (max_lvl_i >= var_lvl_r && has_bkt_r == 0) ? 1:0;
 
     assign findindex_o = findflag_o == 1;
 
