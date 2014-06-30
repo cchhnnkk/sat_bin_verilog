@@ -1,6 +1,6 @@
 module clause1 #(
         parameter NUM_VARS = 8,
-        parameter NUM_CLAUSES = 8,
+        parameter NUM_CLAUSES = 1,
         parameter WIDTH_C_LEN = 4
     )
     (

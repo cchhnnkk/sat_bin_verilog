@@ -39,6 +39,7 @@ module state_list #(
         //imply
         input                                     apply_imply_i,
         output reg                                done_imply_o,
+        output                                    find_conflict_o,
 
         //conflict
         input                                     apply_analyze_i,
@@ -73,9 +74,11 @@ module state_list #(
     wire [NUM_VARS-1:0]       findindex;
     wire [WIDTH_LVL-1:0]      local_bkt_lvl;
     wire [NUM_VARS-1:0]       find_imply_cur, find_conflict_cur;
+    wire [NUM_VARS-1:0]       valid_from_decision;
 
     var_state8 #(
         .WIDTH_VAR_STATES(WIDTH_VAR_STATES),
+        .WIDTH_LVL       (WIDTH_LVL),
         .WIDTH_C_LEN     (WIDTH_C_LEN)
     )
     var_state8(
@@ -83,7 +86,7 @@ module state_list #(
         .rst                  (rst),
         .var_value_i          (var_value_i),
         .var_value_o          (var_value_o),
-        .valid_from_decision_i(valid_from_decision_i),
+        .valid_from_decision_i(valid_from_decision),
         .cur_lvl_i            (cur_lvl_o),
         .apply_imply_i        (apply_imply_i),
         .find_imply_o         (find_imply_cur),
@@ -91,27 +94,29 @@ module state_list #(
         .apply_analyze_i      (apply_analyze_i),
         .max_lvl_o            (max_lvl),
         .clause_len_o         (clause_len_o),
-        .apply_bkt_i          (apply_bkt_o),
-        .bkt_lvl_i            (bkt_lvl_i),
+        .apply_bkt_i          (apply_bkt_cur_bin_i),
+        .bkt_lvl_i            (bkt_lvl_o),
         .wr_states            (wr_var_states),
         .vars_states_i        (vars_states_i),
         .vars_states_o        (vars_states_o)
     );
 
+    assign find_conflict_o = |find_conflict_cur;
     /**
     * 层级状态
     */
     wire [1:0] findflag_i;
-    assign findlag_i = 0;
+    assign findflag_i = 0;
 
     lvl_state8 #(
-        .NUM_LVLS        (NUM_LVLS),
-        .WIDTH_LVL_STATES(WIDTH_LVL_STATES)
+        .WIDTH_LVL_STATES(WIDTH_LVL_STATES),
+        .WIDTH_LVL       (WIDTH_LVL),
+        .WIDTH_BIN_ID    (WIDTH_BIN_ID)
     )
     lvl_state8(
         .clk                  (clk),
         .rst                  (rst),
-        .valid_from_decision_i(valid_from_decision_i),
+        .valid_from_decision_i(valid_from_decision),
         .cur_bin_num_i        (cur_bin_num_i),
         .cur_lvl_i            (cur_lvl_o),
         .findflag_i           (findflag_i),
@@ -120,32 +125,31 @@ module state_list #(
         .max_lvl_i            (max_lvl),
         .bkt_bin_o            (bkt_bin_o),
         .apply_bkt_i          (apply_bkt_cur_bin_i),
-        .wr_states            (wr_states),
+        .wr_states            (wr_lvl_states),
         .lvl_states_i         (lvl_states_i),
         .lvl_states_o         (lvl_states_o)
-        );
+    );
 
     /**
     * 决策
     */
-    wire [NUM_VARS*3-1:0] vars_value_i;
     wire [WIDTH_LVL-1:0]  cur_local_lvl;
 
     decision #(
-            .NUM_VARS(NUM_VARS)
+        .NUM_VARS(NUM_VARS)
     )
     decision(
-            .clk            (clk),
-            .rst            (rst),
-            .load_lvl_en    (load_lvl_en),
-            .load_lvl_i     (load_lvl_i),
-            .decision_pulse (start_decision_i),
-            .vars_value_i   (var_value_o),
-            .index_decided_o(valid_from_decision_i),
-            .decision_done  (decision_done),
-            .apply_bkt_i    (apply_bkt_i),
-            .local_bkt_lvl_i(local_bkt_lvl),
-            .cur_local_lvl_o(cur_local_lvl)
+        .clk            (clk),
+        .rst            (rst),
+        .load_lvl_en    (load_lvl_en),
+        .load_lvl_i     (load_lvl_i),
+        .decision_pulse (start_decision_i),
+        .vars_value_i   (var_value_o),
+        .index_decided_o(valid_from_decision),
+        .decision_done  (done_decision_o),
+        .apply_bkt_i    (apply_bkt_cur_bin_i),
+        .local_bkt_lvl_i(local_bkt_lvl),
+        .cur_local_lvl_o(cur_local_lvl)
     );
 
     assign cur_lvl_o = base_lvl_r + cur_local_lvl;
@@ -159,8 +163,8 @@ module state_list #(
                 vs_list.set(vars_states_o);
                 vs_list.display();
             end
-            if(decision_done) begin
-                $display("index_decided_o = %b", valid_from_decision_i);
+            if(done_decision_o) begin
+                $display("index_decided_o = %b", valid_from_decision);
             end
         end
     `endif

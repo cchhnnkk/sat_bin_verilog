@@ -27,6 +27,7 @@ module sat_engine #(
         output [WIDTH_LVL-1:0]                    cur_lvl_o,
         output                                    unsat_o,
         output [WIDTH_LVL-1:0]                    bkt_lvl_o,
+        output [WIDTH_BIN_ID-1:0]                 bkt_bin_o,
 
         input [WIDTH_LVL-1:0]                     load_lvl_i,
 
@@ -119,6 +120,7 @@ module sat_engine #(
         //imply
         .apply_imply_i      (apply_imply),
         .done_imply_o       (done_imply),
+        .find_conflict_o    (find_conflict),
         //conflict
         .apply_analyze_i    (apply_analyze),
         .add_learntc_en_o   (add_learntc_en),
@@ -140,14 +142,6 @@ module sat_engine #(
         .base_lvl_i         (base_lvl_i)
     );
 
-    wire [NUM_CLAUSES-1:0]            learntc_insert_index_o;
-    wire                              all_c_sat_o;
-    wire                              apply_impl_i;
-    wire                              apply_bkt_i;
-    wire [NUM_VARS*3-1:0]             var_value_to_carray;
-
-    assign var_value_to_carray = wr_carray_i!=0? clause_i:var_value_from_stlist;
-    assign clause_o = var_value_from_carray;
 
     clause_array #(
         .NUM_CLAUSES     (NUM_CLAUSES),
@@ -158,19 +152,19 @@ module sat_engine #(
         .clk             (clk),
         .rst             (rst),
 
-        .var_value_i     (var_value_to_carray),
+        .var_value_i     (var_value_from_stlist),
         .var_value_o     (var_value_from_carray),
 
         .wr_i            (wr_carray_i),
         .rd_i            (rd_carray_i),
         .clause_i        (clause_i),
         .clause_o        (clause_o),
-        .clause_len_i    (clause_len_i),
+        .clause_len_i    (clause_len),
 
         .add_learntc_en_i(add_learntc_en),
         .all_c_sat_o     (all_c_is_sat),
-        .apply_impl_i    (apply_impl_i),
-        .apply_bkt_i     (apply_bkt_i)
+        .apply_impl_i   (apply_imply),
+        .apply_bkt_i     (apply_bkt_cur_bin)
     );
 
     /**

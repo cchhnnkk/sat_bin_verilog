@@ -30,11 +30,11 @@ module clause_array #(
         input                          apply_bkt_i
     );
 
-    wire [WIDTH_C_LEN*NUM_CLAUSES-1 : 0]    clause_len_o;
+    wire [WIDTH_C_LEN*NUM_CLAUSES-1 : 0]    clause_len;
     wire [WIDTH_C_LEN*NUM_CLAUSES/2-1 : 0]  originc_lens, clause_lens;
     wire [NUM_CLAUSES-1:0]                  wr_clause;
 
-    assign {clause_lens, originc_lens} = clause_len_o;
+    assign {clause_lens, originc_lens} = clause_len;
     
     clause8 #(
             .WIDTH_C_LEN(WIDTH_C_LEN)
@@ -51,14 +51,14 @@ module clause_array #(
             .clause_i(clause_i),
             .clause_o(clause_o),
             .clause_len_i(clause_len_i),
-            .clause_len_o(clause_len_o),
+            .clause_len_o(clause_len),
 
             .all_c_sat_o(all_c_sat_o),
             .apply_impl_i(apply_impl_i),
             .apply_bkt_i(apply_bkt_i)
         );
 
-    wire [WIDTH_C_LEN-1 : 0]          max_len;
+    wire [WIDTH_C_LEN-1 : 0]    max_len;
     wire [NUM_CLAUSES/2-1:0]    insert_index;
     wire [NUM_CLAUSES-1:0]      learntc_insert_index;
 
@@ -72,4 +72,5 @@ module clause_array #(
         );
     assign learntc_insert_index = {insert_index, 4'd0};
     assign wr_clause = add_learntc_en_i? learntc_insert_index : wr_i;
+
 endmodule

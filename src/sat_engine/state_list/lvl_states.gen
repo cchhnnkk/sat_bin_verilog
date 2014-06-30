@@ -11,7 +11,6 @@
  */
 module lvl_state{$NUM} #(
         parameter NUM_LVLS         = {$NUM},
-        parameter NUM_VARS         = 8,
         parameter WIDTH_LVL_STATES = 11,
         parameter WIDTH_LVL        = 16,
         parameter WIDTH_BIN_ID     = 10
@@ -41,59 +40,64 @@ module lvl_state{$NUM} #(
         output [WIDTH_LVL_STATES*NUM_LVLS -1 : 0] lvl_states_o
     );
 
-    wire [NUM_VARS/2-1:0]                      valid_from_decision_0, valid_from_decision_1;
+    wire [NUM_LVLS/2-1:0]                      valid_from_decision_0, valid_from_decision_1;
     wire [WIDTH_BIN_ID-1:0]                    bkt_bin_o_0, bkt_bin_o_1;
-    wire [NUM_VARS/2-1:0]                      findindex_o_0, findindex_o_1;
+    wire [NUM_LVLS/2-1:0]                      findindex_o_0, findindex_o_1;
 
     assign {valid_from_decision_0, valid_from_decision_1} = valid_from_decision_i;
     assign bkt_bin_o = bkt_bin_o_0 | bkt_bin_o_1;
     assign findindex_o = {findindex_o_1, findindex_o_0};
 
-    wire [NUM_VARS/2-1:0]                      wr_states_0, wr_states_1;
-    wire [WIDTH_LVL_STATES*NUM_VARS/2-1:0]     lvl_states_i_0, lvl_states_i_1;
-    wire [WIDTH_LVL_STATES*NUM_VARS/2-1:0]     lvl_states_o_0, lvl_states_o_1;
+    wire [NUM_LVLS/2-1:0]                      wr_states_0, wr_states_1;
+    wire [WIDTH_LVL_STATES*NUM_LVLS/2-1:0]     lvl_states_i_0, lvl_states_i_1;
+    wire [WIDTH_LVL_STATES*NUM_LVLS/2-1:0]     lvl_states_o_0, lvl_states_o_1;
     assign {wr_states_0, wr_states_1} = wr_states;
+    assign {lvl_states_i_0, lvl_states_i_1} = lvl_states_i;
     assign lvl_states_o = {lvl_states_o_0, lvl_states_o_1};
     assign findindex_o = {findindex_o_1, findindex_o_0};
 
     lvl_state{$NUM/2} #(
-        .WIDTH_LVL_STATES(WIDTH_LVL_STATES)
+        .WIDTH_LVL_STATES(WIDTH_LVL_STATES),
+        .WIDTH_LVL       (WIDTH_LVL),
+        .WIDTH_BIN_ID    (WIDTH_BIN_ID)
     )
     lvl_state{$NUM/2}_0(
-        .clk(clk),
-        .rst(rst),
+        .clk                  (clk),
+        .rst                  (rst),
         .valid_from_decision_i(valid_from_decision_i_0),
-        .cur_bin_num_i(cur_bin_num_i),
-        .cur_lvl_i(cur_lvl_i),
-        .findflag_i(findflag_i),
-        .findflag_o(findflag_o),
-        .findindex_o(findindex_o_0),
-        .max_lvl_i(max_lvl_i),
-        .bkt_bin_o(bkt_bin_o_0),
-        .apply_bkt_i(apply_bkt_i),
-        .wr_states(wr_states_0),
-        .lvl_states_i(lvl_states_i_0),
-        .lvl_states_o(lvl_states_o_0)
+        .cur_bin_num_i        (cur_bin_num_i),
+        .cur_lvl_i            (cur_lvl_i),
+        .findflag_i           (findflag_i),
+        .findflag_o           (findflag_o),
+        .findindex_o          (findindex_o_0),
+        .max_lvl_i            (max_lvl_i),
+        .bkt_bin_o            (bkt_bin_o_0),
+        .apply_bkt_i          (apply_bkt_i),
+        .wr_states            (wr_states_0),
+        .lvl_states_i         (lvl_states_i_0),
+        .lvl_states_o         (lvl_states_o_0)
     );
 
     lvl_state{$NUM/2} #(
-        .WIDTH_LVL_STATES(WIDTH_LVL_STATES)
+        .WIDTH_LVL_STATES(WIDTH_LVL_STATES),
+        .WIDTH_LVL       (WIDTH_LVL),
+        .WIDTH_BIN_ID    (WIDTH_BIN_ID)
     )
     lvl_state{$NUM/2}_1(
-        .clk(clk),
-        .rst(rst),
+        .clk                  (clk),
+        .rst                  (rst),
         .valid_from_decision_i(valid_from_decision_i_1),
-        .cur_bin_num_i(cur_bin_num_i),
-        .cur_lvl_i(cur_lvl_i),
-        .findflag_i(findflag_i),
-        .findflag_o(findflag_o),
-        .findindex_o(findindex_o_1),
-        .max_lvl_i(max_lvl_i),
-        .bkt_bin_o(bkt_bin_o_1),
-        .apply_bkt_i(apply_bkt_i),
-        .wr_states(wr_states_1),
-        .lvl_states_i(lvl_states_i_1),
-        .lvl_states_o(lvl_states_o_1)
+        .cur_bin_num_i        (cur_bin_num_i),
+        .cur_lvl_i            (cur_lvl_i),
+        .findflag_i           (findflag_i),
+        .findflag_o           (findflag_o),
+        .findindex_o          (findindex_o_1),
+        .max_lvl_i            (max_lvl_i),
+        .bkt_bin_o            (bkt_bin_o_1),
+        .apply_bkt_i          (apply_bkt_i),
+        .wr_states            (wr_states_1),
+        .lvl_states_i         (lvl_states_i_1),
+        .lvl_states_o         (lvl_states_o_1)
     );
 
 endmodule

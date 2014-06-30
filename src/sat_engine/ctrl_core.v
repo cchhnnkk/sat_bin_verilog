@@ -6,39 +6,40 @@
 `include "../src/debug_define.v"
 
 module ctrl_core #(
-        parameter WIDTH_LVL = 16
+        parameter WIDTH_BIN_ID = 10,
+        parameter WIDTH_LVL    = 16
     )
     (
-     input 				   clk,
-     input 				   rst,
+     input                    clk,
+     input                    rst,
 
-     input 				   start_core_i,
-     output reg 		   done_core_o,
+     input                    start_core_i,
+     output reg               done_core_o,
 
      //推理
-     output reg 		   apply_imply_o,
-     input 				   done_imply_i,
-     input 				   conflict_i,
+     output reg               apply_imply_o,
+     input                    done_imply_i,
+     input                    conflict_i,
 
      //决策
-     output reg 		   start_decision_o,
-     input 				   done_decision_i,
-     input [WIDTH_LVL-1:0] cur_lvl_i,
-     input 				   all_c_is_sat_i,
+     output reg               start_decision_o,
+     input                    done_decision_i,
+     input [WIDTH_LVL-1:0]    cur_lvl_i,
+     input                    all_c_is_sat_i,
 
      //冲突分析
-     output reg 		   apply_analyze_o,
-     input 				   done_analyze_i,
-     input [WIDTH_LVL-1:0] bkt_bin_num_i,
+     output reg               apply_analyze_o,
+     input                    done_analyze_i,
+     input [WIDTH_BIN_ID-1:0] bkt_bin_num_i,
 
      //回退
-     output reg 		   apply_bkt_cur_bin_o,
-     input 				   done_bkt_cur_bin_i,
+     output reg               apply_bkt_cur_bin_o,
+     input                    done_bkt_cur_bin_i,
 
      //其他信号
-     wire [WIDTH_LVL-1:0]  cur_bin_num_i,
-     output reg			   sat_o,
-     output reg			   unsat_o
+     wire [WIDTH_LVL-1:0]     cur_bin_num_i,
+     output reg               sat_o,
+     output reg			      unsat_o
     );
 
 parameter           IDLE          =   0,

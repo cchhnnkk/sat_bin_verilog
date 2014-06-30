@@ -12,6 +12,7 @@
 module var_state8 #(
         parameter NUM_VARS         = 8,
         parameter WIDTH_C_LEN      = 4,
+        parameter WIDTH_LVL        = 16,
         parameter WIDTH_VAR_STATES = 19
     )
     (
@@ -29,16 +30,16 @@ module var_state8 #(
 
         //imply
         input                                    apply_imply_i,
-        output                                   find_imply_o,
-        output                                   find_conflict_o,
+        output [NUM_VARS-1:0]                    find_imply_o,
+        output [NUM_VARS-1:0]                    find_conflict_o,
 
         //conflict
         input                                    apply_analyze_i,
-        output [9:0]                             max_lvl_o,
+        output [WIDTH_LVL-1:0]                   max_lvl_o,
 
         //backtrack
         input                                    apply_bkt_i,
-        input [9:0]                              bkt_lvl_i,
+        input [WIDTH_LVL-1:0]                    bkt_lvl_i,
 
         //load update var states
         input [NUM_VARS-1:0]                     wr_states,
@@ -49,9 +50,9 @@ module var_state8 #(
     wire [NUM_VARS*3/2-1 : 0]   var_value_i_0, var_value_i_1;
     wire [NUM_VARS*3/2-1 : 0]   var_value_o_0, var_value_o_1;
     wire [NUM_VARS/2-1:0]       valid_from_decision_i_0, valid_from_decision_i_1;
-    wire                        find_imply_o_0, find_imply_o_1;
-    wire                        find_conflict_o_0, find_conflict_o_1;
-    wire [WIDTH_VAR_STATES-1:0] max_lvl_o_0, max_lvl_o_1;
+    wire [NUM_VARS/2-1:0]       find_imply_o_0, find_imply_o_1;
+    wire [NUM_VARS/2-1:0]       find_conflict_o_0, find_conflict_o_1;
+    wire [WIDTH_LVL-1:0]        max_lvl_o_0, max_lvl_o_1;
     wire [WIDTH_C_LEN-1:0]      clause_len_o_0, clause_len_o_1;
 
     assign {var_value_i_0, var_value_i_1} = var_value_i;
@@ -59,7 +60,7 @@ module var_state8 #(
     assign {valid_from_decision_i_0, valid_from_decision_i_1} = valid_from_decision_i;
 
     assign find_imply_o = {find_imply_o_0, find_imply_o_1};
-    assign find_conflict_o = find_conflict_o_0 | find_conflict_o_1;
+    assign find_conflict_o = {find_conflict_o_0, find_conflict_o_1};
 
     assign max_lvl_o = max_lvl_o_0 > max_lvl_o_1 ? max_lvl_o_0 : max_lvl_o_1;
     assign clause_len_o = clause_len_o_0 + clause_len_o_1;
@@ -131,6 +132,7 @@ endmodule
 module var_state4 #(
         parameter NUM_VARS         = 4,
         parameter WIDTH_C_LEN      = 4,
+        parameter WIDTH_LVL        = 16,
         parameter WIDTH_VAR_STATES = 19
     )
     (
@@ -148,16 +150,16 @@ module var_state4 #(
 
         //imply
         input                                    apply_imply_i,
-        output                                   find_imply_o,
-        output                                   find_conflict_o,
+        output [NUM_VARS-1:0]                    find_imply_o,
+        output [NUM_VARS-1:0]                    find_conflict_o,
 
         //conflict
         input                                    apply_analyze_i,
-        output [9:0]                             max_lvl_o,
+        output [WIDTH_LVL-1:0]                   max_lvl_o,
 
         //backtrack
         input                                    apply_bkt_i,
-        input [9:0]                              bkt_lvl_i,
+        input [WIDTH_LVL-1:0]                    bkt_lvl_i,
 
         //load update var states
         input [NUM_VARS-1:0]                     wr_states,
@@ -168,9 +170,9 @@ module var_state4 #(
     wire [NUM_VARS*3/2-1 : 0]   var_value_i_0, var_value_i_1;
     wire [NUM_VARS*3/2-1 : 0]   var_value_o_0, var_value_o_1;
     wire [NUM_VARS/2-1:0]       valid_from_decision_i_0, valid_from_decision_i_1;
-    wire                        find_imply_o_0, find_imply_o_1;
-    wire                        find_conflict_o_0, find_conflict_o_1;
-    wire [WIDTH_VAR_STATES-1:0] max_lvl_o_0, max_lvl_o_1;
+    wire [NUM_VARS/2-1:0]       find_imply_o_0, find_imply_o_1;
+    wire [NUM_VARS/2-1:0]       find_conflict_o_0, find_conflict_o_1;
+    wire [WIDTH_LVL-1:0]        max_lvl_o_0, max_lvl_o_1;
     wire [WIDTH_C_LEN-1:0]      clause_len_o_0, clause_len_o_1;
 
     assign {var_value_i_0, var_value_i_1} = var_value_i;
@@ -178,7 +180,7 @@ module var_state4 #(
     assign {valid_from_decision_i_0, valid_from_decision_i_1} = valid_from_decision_i;
 
     assign find_imply_o = {find_imply_o_0, find_imply_o_1};
-    assign find_conflict_o = find_conflict_o_0 | find_conflict_o_1;
+    assign find_conflict_o = {find_conflict_o_0, find_conflict_o_1};
 
     assign max_lvl_o = max_lvl_o_0 > max_lvl_o_1 ? max_lvl_o_0 : max_lvl_o_1;
     assign clause_len_o = clause_len_o_0 + clause_len_o_1;
@@ -250,6 +252,7 @@ endmodule
 module var_state2 #(
         parameter NUM_VARS         = 2,
         parameter WIDTH_C_LEN      = 4,
+        parameter WIDTH_LVL        = 16,
         parameter WIDTH_VAR_STATES = 19
     )
     (
@@ -267,16 +270,16 @@ module var_state2 #(
 
         //imply
         input                                    apply_imply_i,
-        output                                   find_imply_o,
-        output                                   find_conflict_o,
+        output [NUM_VARS-1:0]                    find_imply_o,
+        output [NUM_VARS-1:0]                    find_conflict_o,
 
         //conflict
         input                                    apply_analyze_i,
-        output [9:0]                             max_lvl_o,
+        output [WIDTH_LVL-1:0]                   max_lvl_o,
 
         //backtrack
         input                                    apply_bkt_i,
-        input [9:0]                              bkt_lvl_i,
+        input [WIDTH_LVL-1:0]                    bkt_lvl_i,
 
         //load update var states
         input [NUM_VARS-1:0]                     wr_states,
@@ -287,9 +290,9 @@ module var_state2 #(
     wire [NUM_VARS*3/2-1 : 0]   var_value_i_0, var_value_i_1;
     wire [NUM_VARS*3/2-1 : 0]   var_value_o_0, var_value_o_1;
     wire [NUM_VARS/2-1:0]       valid_from_decision_i_0, valid_from_decision_i_1;
-    wire                        find_imply_o_0, find_imply_o_1;
-    wire                        find_conflict_o_0, find_conflict_o_1;
-    wire [WIDTH_VAR_STATES-1:0] max_lvl_o_0, max_lvl_o_1;
+    wire [NUM_VARS/2-1:0]       find_imply_o_0, find_imply_o_1;
+    wire [NUM_VARS/2-1:0]       find_conflict_o_0, find_conflict_o_1;
+    wire [WIDTH_LVL-1:0]        max_lvl_o_0, max_lvl_o_1;
     wire [WIDTH_C_LEN-1:0]      clause_len_o_0, clause_len_o_1;
 
     assign {var_value_i_0, var_value_i_1} = var_value_i;
@@ -297,7 +300,7 @@ module var_state2 #(
     assign {valid_from_decision_i_0, valid_from_decision_i_1} = valid_from_decision_i;
 
     assign find_imply_o = {find_imply_o_0, find_imply_o_1};
-    assign find_conflict_o = find_conflict_o_0 | find_conflict_o_1;
+    assign find_conflict_o = {find_conflict_o_0, find_conflict_o_1};
 
     assign max_lvl_o = max_lvl_o_0 > max_lvl_o_1 ? max_lvl_o_0 : max_lvl_o_1;
     assign clause_len_o = clause_len_o_0 + clause_len_o_1;

@@ -95,6 +95,10 @@
     [
       "decision", 
       "decision"
+    ], 
+    [
+      "encode_8to3", 
+      "encode_8to3"
     ]
   ], 
   "max_in_2_datas": [], 
