@@ -3,71 +3,65 @@ class class_clause_data #(int size = 8);
 	parameter MAX = 9;
 
 	bit [2:0] data[size];
+	int value[size];
+	int implied[size];
 
 	function void reset();
 		for (int i = 0; i < size; ++i)
 		begin
 			data[i] = 0;
+			value[i] = 0;
+			implied[i] = 0;
 		end
 	endfunction
 
-	function void get(output [3*size-1:0]  _data);
-		int index;
+	function void get(output [3*size-1:0]  data);
+		bit [2:0] v;
+        bit [size-1:0][2:0] data2; //合并数据
 		for (int i = 0; i < size; ++i)
 		begin
-			for (int j = 0; j < 3; ++j)
-			begin
-				index = size - 1 - i;
-				index = index*3+j;
-				_data[index] = data[i][j];
-			end
+			v[2:1] = value[i];
+			v[0] = implied[i];
+			data2[i] = v;
+		end
+        data = data2;
+	endfunction
+
+	function void set(input [3*size-1:0] data);
+		bit [2:0] v;
+        bit [size-1:0][2:0] data2; //合并数据
+        data2 = data;
+		for (int i = 0; i < size; ++i)
+		begin
+			v = data2[i];
+			value[i] = v[2:1];
+			implied[i] = v[0];
 		end
 	endfunction
 
-	function void set(input [3*size-1:0] value);
-		int index;
+	function void set_clause(input [2*size-1:0] data);
+        bit [size-1:0][1:0] data2; //合并数据
+        data2 = data;
 		for (int i = 0; i < size; ++i)
 		begin
-			for (int j = 0; j < 3; ++j)
-			begin
-				index = size - 1 - i;
-				index = index*3+j;
-				data[i][j] = value[index];
-			end
+			value[i] = data2[i];
 		end
 	endfunction
 
-	function void set_clause(input [2*size-1:0] value);
-		int index;
+	function void get_clause(output [2*size-1:0] data);
+        bit [size-1:0][1:0] data2; //合并数据
 		for (int i = 0; i < size; ++i)
 		begin
-			for (int j = 0; j < 2; ++j)
-			begin
-				index = size - 1 - i;
-				index = index*2+j;
-				data[i][j+1] = value[index];
-			end
+			data2[i] = value[i];
 		end
-	endfunction
-
-	function void get_clause(output [2*size-1:0] value);
-		int index;
-		for (int i = 0; i < size; ++i)
-		begin
-			for (int j = 0; j < 2; ++j)
-			begin
-				index = size - 1 - i;
-				index = index*2+j;
-				value[index] = data[i][j+1];
-			end
-		end
+        data = data2;
 	endfunction
 
 	function int get_len();
 		int len = 0;
 		for (int i = 0; i < size; ++i)
 		begin
-			if(data[i][2:1]!=0) begin
+			if(value[i]!=0) begin
 				len += 1;
 			end
 		end
@@ -79,30 +73,34 @@ class class_clause_data #(int size = 8);
 
 	function void set_lits(int cl[size]);
 		foreach (cl[i]) begin
-			data[i][2:1] = cl[i];
+			value[i] = cl[i];
 		end
 	endfunction
 
-	function void set_lit(input int index, input [1:0] value);
-		data[index][1:0] = value;
+	function void set_lit(input int index, input [1:0] data);
+		value[index] = data;
 	endfunction
 
-	function void set_value(input int index, input [2:0] value);
-		data[index] = value;
+	function void set_index(input int index, input [2:0] data);
+		value[index] = data[2:1];
+		implied[index] = data[0];
 	endfunction
 
 	function void set_imps(int d[size]);
 		foreach (d[i]) begin
-			data[i][0] = d[i];
+			implied[i] = d[i];
 		end
 	endfunction
 
-	function void get_lit(input int index, output [1:0] value);
-		value = data[index][1:0];
+	function void get_lit(input int index, output [1:0] data);
+		data = value[index];
 	endfunction
 
-	function void assert_lit(int index, bit [2:0] value);
-		assert(value == data[index]);
+	function void assert_index(int index, bit [2:0] data);
+		bit [2:0] d;
+		d[2:1] = value[index];
+		d[0] = implied[index];
+		assert(data == d);
 	endfunction
 
 	function void display();
@@ -111,12 +109,12 @@ class class_clause_data #(int size = 8);
 	endfunction
 
 	function void display_lits();
-        string str_all = "";
         string str;
         bit [1:0] d;
+        string str_all = "";
 		for (int i = 0; i < size; ++i)
 		begin
-			d = data[i][2:1];
+			d = value[i];
 			$sformat(str, "%d", d);
             str_all = {str_all, str, " "};
 		end
@@ -124,17 +122,17 @@ class class_clause_data #(int size = 8);
 	endfunction
 
 	function void display_implied();
-        string str_all = "\t";
         string str;
-        bit [1:0] d;
+        bit d;
+        string str_all = "";
 		for (int i = 0; i < size; ++i)
 		begin
-			d = data[i][0];
+			d = implied[i];
 			$sformat(str, "%d", d);
 			// str.itoa(data[i*3]);
             str_all = {str_all, str, " "};
 		end
-        $display("\timplied = %s", str_all);
+        $display("\timply = %s", str_all);
 	endfunction
 
 endclass

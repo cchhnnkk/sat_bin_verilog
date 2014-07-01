@@ -1,31 +1,32 @@
 quit -sim
-rm wlf*
+# rm wlf*
 vlib work
 vmap work work
 
-vlog -quiet ../lit1.v -sv
-vlog -quiet ../lit2.v
-vlog -quiet ../lit4.v
-vlog -quiet ../lit8.v
-vlog -quiet ../terminal_cell.v
-vlog -quiet ../clause1.v
-vlog -quiet ../test/class_clause_data.sv -sv
-vlog -quiet ../test/test_clause1.sv
+vlog -sv ../src/sat_engine/clause_array/lit1.v
+vlog -sv ../src/sat_engine/clause_array/lits.v
+vlog -sv ../src/sat_engine/clause_array/terminal_cell.v
+vlog -sv ../src/sat_engine/clause_array/clause1.v
+vlog -sv ../tb/class_clause_data.sv -sv
+vlog -sv ../tb/test_clause1.sv
 
-vsim -quiet test_clause1_top -wlf test_clause1_top.wlf
+vsim -quiet -novopt test_clause1_top -wlf test_clause1_top.wlf
 
-add wave -noupdate -divider {TEST}
-add wave -noupdate sim:/test_clause1_top/test_clause1/*
-add wave -noupdate -divider {DUT}
-add wave -noupdate sim:/test_clause1_top/test_clause1/clause1/*
-add wave -noupdate -expand -group {lit0} sim:/test_clause1_top/test_clause1/clause1/lit8_0/lit4_0/lit2_0/lit1_0/*
-add wave -noupdate -expand -group {lit1} sim:/test_clause1_top/test_clause1/clause1/lit8_0/lit4_0/lit2_0/lit1_1/*
-add wave -noupdate -expand -group {lit2} sim:/test_clause1_top/test_clause1/clause1/lit8_0/lit4_0/lit2_1/lit1_0/*
-add wave -noupdate -expand -group {lit3} sim:/test_clause1_top/test_clause1/clause1/lit8_0/lit4_0/lit2_1/lit1_1/*
+do ../tools/wave_test_clause1_top.do
 
-add wave -noupdate -expand -group {terminal_cell} sim:/test_clause1_top/test_clause1/clause1/terminal_cell/*
+# add wave -noupdate -divider {TEST}
+# add wave -noupdate sim:/test_clause1_top/test_clause1/*
+# add wave -noupdate -divider {DUT}
+# add wave -noupdate sim:/test_clause1_top/test_clause1/clause1/*
+# add wave -noupdate -expand -group {lit0} sim:/test_clause1_top/test_clause1/clause1/lit8/lit4_0/lit2_0/lit1_0/*
+# add wave -noupdate -expand -group {lit1} sim:/test_clause1_top/test_clause1/clause1/lit8/lit4_0/lit2_0/lit1_1/*
+# add wave -noupdate -expand -group {lit2} sim:/test_clause1_top/test_clause1/clause1/lit8/lit4_0/lit2_1/lit1_0/*
+# add wave -noupdate -expand -group {lit3} sim:/test_clause1_top/test_clause1/clause1/lit8/lit4_0/lit2_1/lit1_1/*
+
+# add wave -noupdate -expand -group {terminal_cell} sim:/test_clause1_top/test_clause1/clause1/terminal_cell/*
 
 # add wave -r sim:/test_clause1_top/*
+
 
 TreeUpdate [SetDefaultTree]
 WaveRestoreCursors {{Cursor 1} {0 ns} 0}

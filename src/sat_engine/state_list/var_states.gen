@@ -70,6 +70,7 @@ module var_state{$NUM} #(
 
     var_state{$NUM/2} #(
         .WIDTH_VAR_STATES(WIDTH_VAR_STATES),
+        .WIDTH_LVL       (WIDTH_LVL),
         .WIDTH_C_LEN     (WIDTH_C_LEN)
     )
     var_state{$NUM/2}_0(
@@ -94,6 +95,7 @@ module var_state{$NUM} #(
 
     var_state{$NUM/2} #(
         .WIDTH_VAR_STATES(WIDTH_VAR_STATES),
+        .WIDTH_LVL       (WIDTH_LVL),
         .WIDTH_C_LEN     (WIDTH_C_LEN)
     )
     var_state{$NUM/2}_1(

@@ -7,8 +7,6 @@ module test_sat_engine(input clk, input rst);
 		begin
 			@(posedge clk);
 				test_sat_engine_task();
-			@(posedge clk);
-				$stop();
 		end
 	endtask
 
@@ -56,7 +54,9 @@ module test_sat_engine(input clk, input rst);
 				@ (posedge clk);
 					wr_carray_i = 0;
 					wr_carray_i[i] = 1;
-					carray_data.get(i, clause_i);
+					carray_data.get_clause(i, clause_i);
+	                //$display("kkkk sim time %4tps", $time);
+					//carray_data.cdatas[i].display();
 			end
 			@ (posedge clk);
                 wr_carray_i = 0;
@@ -94,8 +94,28 @@ module test_sat_engine(input clk, input rst);
 		end
 	endtask
 
+	task reset_all_signal();
+		begin
+			lvl_states_i  = 0;
+			start_core_i  = 0;
+			cur_bin_num_i = 0;
+			load_lvl_i    = 0;
+			rd_carray_i   = 0;
+			wr_carray_i   = 0;
+			clause_i      = 0;
+			wr_var_states = 0;
+			vars_states_i = 0;
+			wr_lvl_states = 0;
+			lvl_states_i  = 0;
+			base_lvl_en   = 0;
+			base_lvl_i    = 0;
+		end
+	endtask
+
 	task test_core(input int bin_data[8][8], value[8], implied[8], level[8], dcd_bin[8], has_bkt[8]);
 		begin
+			reset_all_signal();
+
 			//load bin
 			wr_clause_array(bin_data);
 			wr_vs_list(value, implied, level);
@@ -114,6 +134,10 @@ module test_sat_engine(input clk, input rst);
 			@ (posedge clk);
 				start_core_i = 0;
 
+			while(done_core_o!=1)
+				@ (posedge clk);
+
+			repeat (100) @(posedge clk);
 		end
 	endtask
 
@@ -152,8 +176,17 @@ module test_sat_engine(input clk, input rst);
 		'{1, 0, 1, 0, 0, 1, 2, 0}
 	};
 
+    `ifdef DEBUG_state_list
+        always @(posedge clk) begin
+            if(done_decision_o) begin
+                $display("index_decided_o = %b", valid_from_decision);
+            end
+        end
+    `endif
+
 	task test_sat_engine_task();
 		begin
+			reset_all_signal();
 			$display("test_sat_engine_task");
 			test_core(bin, value, implied, level, dcd_bin, has_bkt);
 		end
@@ -229,7 +262,9 @@ module test_sat_engine_top;
 
 	initial begin
 		reset();
+		$display("start sim");
 		test_sat_engine.run();
-		$display("done");
+		$display("done sim");
+		$stop();
 	end
 endmodule

@@ -74,6 +74,7 @@ module state_list #(
     wire [NUM_VARS-1:0]       findindex;
     wire [WIDTH_LVL-1:0]      local_bkt_lvl;
     wire [NUM_VARS-1:0]       find_imply_cur, find_conflict_cur;
+    reg [NUM_VARS-1:0]        find_imply_pre, find_conflict_pre;
     wire [NUM_VARS-1:0]       valid_from_decision;
 
     var_state8 #(
@@ -136,7 +137,8 @@ module state_list #(
     wire [WIDTH_LVL-1:0]  cur_local_lvl;
 
     decision #(
-        .NUM_VARS(NUM_VARS)
+        .WIDTH_LVL(WIDTH_LVL),
+        .NUM_VARS (NUM_VARS)
     )
     decision(
         .clk            (clk),
@@ -161,30 +163,28 @@ module state_list #(
         always @(posedge clk) begin
             if(start_decision_i) begin
                 vs_list.set(vars_states_o);
+                $display("%1tsn start_decision", $time/1000, start_decision_i);
                 vs_list.display();
             end
             if(done_decision_o) begin
-                $display("index_decided_o = %b", valid_from_decision);
+                $display("%1tsn index_decided_o = %b", $time/1000, valid_from_decision);
             end
         end
     `endif
 
 
-    /**
-    * 推理的控制
-    */
-    reg [NUM_VARS-1:0] find_imply_pre, find_conflict_pre;
+    /*** 推理的控制 ***/
 
     always @(posedge clk)
     begin
-        if(rst)
+        if(~rst)
             find_imply_pre <= 0;
         else
             find_imply_pre <= find_imply_cur;
     end
 
     always @(posedge clk) begin: set_done_imply_o
-        if(rst)
+        if(~rst)
             done_imply_o <= 0;
         else if(apply_imply_i && find_imply_cur==find_imply_pre)
             done_imply_o <= 1;
@@ -195,16 +195,17 @@ module state_list #(
     `ifdef DEBUG_state_list
         always @(posedge clk) begin
             if(apply_imply_i && find_imply_cur!=find_imply_pre) begin
-                $display("bcp");
+                //$display("sim time %4tns", $time/1000);
+                $display("%1tns bcp", $time/1000);
                 vs_list.set(vars_states_o);
                 vs_list.display_index(find_imply_cur^find_imply_pre);
             end
         end
     `endif
 
-    /**
-    * 冲突分析的控制，冲突学习子句的查找与添加
-    */
+
+    /*** 冲突分析的控制，冲突学习子句的查找与添加 ***/
+
     parameter   ANALYZE_IDLE          =  0,
                 FIND_LEARNTC          =  1,
                 ADD_LEARNTC           =  2,
@@ -214,14 +215,14 @@ module state_list #(
 
     always @(posedge clk)
     begin
-        if(rst)
+        if(~rst)
             c_analyze_state <= 0;
         else
             c_analyze_state <= n_analyze_state;
     end
 
     always @(*) begin: set_n_analyze_state
-        if(rst)
+        if(~rst)
             n_analyze_state = 0;
         else
             case(c_analyze_state)
@@ -244,8 +245,16 @@ module state_list #(
             endcase
     end
 
+    always @(posedge clk)
+    begin
+        if(~rst)
+            find_conflict_pre <= 0;
+        else
+            find_conflict_pre <= find_conflict_cur;
+    end
+
     always @(posedge clk) begin
-        if(rst)
+        if(~rst)
             add_learntc_en_o <= 0;
         else if(c_analyze_state==ADD_LEARNTC)
             add_learntc_en_o <= 1;
@@ -254,7 +263,7 @@ module state_list #(
     end
 
     always @(posedge clk) begin: set_done_analyze_o
-        if(rst)
+        if(~rst)
             done_analyze_o <= 0;
         else if(c_analyze_state==ANALYZE_DONE)
             done_analyze_o <= 1;
@@ -262,14 +271,17 @@ module state_list #(
             done_analyze_o <= 0;
     end
 
-    /**
-    * 计算bkt_lvl
-    */
-    encode_8to3 encode_8to3(.data_i(findindex), .data_o(local_bkt_lvl));
+    wire [2:0] data_from_encode;
+
+
+    /*** 计算bkt_lvl ***/
+
+    encode_8to3 encode_8to3(.data_i(findindex), .data_o(data_from_encode));
+    assign local_bkt_lvl = data_from_encode;
 
     always @(posedge clk)
     begin
-        if(rst)
+        if(~rst)
             base_lvl_r <= 0;
         else if(base_lvl_en)
             base_lvl_r <= base_lvl_i;
@@ -280,7 +292,7 @@ module state_list #(
     reg [WIDTH_LVL-1:0] bkt_lvl_r;
 
     always @(posedge clk) begin: set_bkt_lvl_r
-        if(rst)
+        if(~rst)
             bkt_lvl_r <= 0;
         else if(findindex==0) // 需要bin间回退
             bkt_lvl_r <= max_lvl;
@@ -301,7 +313,8 @@ module state_list #(
             if(c_analyze_state!=n_analyze_state && n_analyze_state!=ANALYZE_IDLE)
             begin
                 @(posedge clk)
-                $display("analysis_control c_analyze_state = %s", s[c_analyze_state]);
+                //$display("sim time %4tns", $time/1000);
+                $display("%1tns analysis_control c_analyze_state = %s", $time/1000, s[c_analyze_state]);
             end
         end
 
@@ -319,19 +332,18 @@ module state_list #(
             end
             else if(done_analyze_o)
             begin
-                $display("done analysis bkt_bin %d bkt_lvl %d", bkt_bin_o, bkt_lvl_o);
+                //$display("sim time %4tns", $time/1000);
+                $display("%1tns done analysis bkt_bin %d bkt_lvl %d", $time/1000, bkt_bin_o, bkt_lvl_o);
             end
 
         end
 
     `endif
 
-    /**
-    * 回退的控制
-    */
+    /*** 回退的控制 ***/
 
     always @(posedge clk) begin: set_done_bkt_cur_bin_o
-        if(rst)
+        if(~rst)
             done_bkt_cur_bin_o    <= 0;
         else if(apply_bkt_cur_bin_i)
             done_bkt_cur_bin_o    <= 1;
@@ -346,12 +358,14 @@ module state_list #(
         always @(posedge clk) begin
             if(apply_bkt_cur_bin_i) begin
                 ls_list.set(lvl_states_o);
-                $display("apply_bkt_cur_bin_i");
+                //$display("sim time %4tns", $time/1000);
+                $display("%1tns apply_bkt_cur_bin_i", $time/1000);
                 ls_list.display();
             end
             if(done_bkt_cur_bin_o) begin
                 ls_list.set(lvl_states_o);
-                $display("done_bkt_cur_bin_o");
+                //$display("sim time %4tns", $time/1000);
+                $display("%1tns done_bkt_cur_bin_o", $time/1000);
                 ls_list.display();
             end
         end

@@ -48,7 +48,7 @@ module bkt_across_bin #(
 
     always @(posedge clk)
     begin
-        if(rst)
+        if(~rst)
             c_state <= 0;
         else
             c_state <= n_state;
@@ -56,7 +56,7 @@ module bkt_across_bin #(
 
     always @(*)
     begin
-        if(rst)
+        if(~rst)
             n_state = 0;
         else
             case(c_state)
@@ -105,7 +105,7 @@ module bkt_across_bin #(
     //wr
     always @(posedge clk)
     begin
-        if(rst) begin
+        if(~rst) begin
             ram_we_v_state_o <= 0;
             ram_wdata_v_state_o <= 0;
             ram_waddr_v_state_o <= 0;
@@ -127,7 +127,7 @@ module bkt_across_bin #(
     //持续信号，用于bram的mux
     always @(posedge clk)
     begin
-        if(rst)
+        if(~rst)
             apply_bkt_o <= 0;
         else if(c_state==BKT)
             apply_bkt_o <= 1;

@@ -24,6 +24,7 @@ module encode_8to3 #(
             1<<5: data_r = 5;
             1<<6: data_r = 6;
             1<<7: data_r = 7;
+            default: data_r = 0;
         endcase
     end
 

@@ -8,6 +8,7 @@
  */
 module var_state1 #(
         parameter WIDTH_VAR_STATES = 19,
+        parameter WIDTH_LVL        = 16,
         parameter WIDTH_C_LEN      = 4
     )
     (
@@ -21,7 +22,7 @@ module var_state1 #(
  
      //decide
      input                           valid_from_decision_i,
-     input [9:0]                     cur_lvl_i,
+     input [WIDTH_LVL-1:0]           cur_lvl_i,
  
      //imply
      input                           apply_imply_i,
@@ -30,11 +31,11 @@ module var_state1 #(
  
      //conflict
      input                           apply_analyze_i,
-     output [9:0]                    max_lvl_o,
+     output [WIDTH_LVL-1:0]          max_lvl_o,
  
      //backtrack
      input                           apply_bkt_i,
-     input [9:0]                     bkt_lvl_i,
+     input [WIDTH_LVL-1:0]           bkt_lvl_i,
  
      //load update var states
      input                           wr_states,
@@ -44,7 +45,7 @@ module var_state1 #(
 
     //var state
     reg [2:0] var_value_r;
-    reg [15:0] var_lvl_r;
+    reg [WIDTH_LVL-1:0] var_lvl_r;
 
     //use to generate learnt clause
     reg [1:0]  learnt_lit_r;
@@ -58,7 +59,7 @@ module var_state1 #(
     //wr_states
     assign vars_states_o = {var_value_r, var_lvl_r};
     wire [2:0] load_value_i;
-    wire [15:0] load_lvl_i;
+    wire [WIDTH_LVL-1:0] load_lvl_i;
     assign {load_value_i, load_lvl_i} = vars_states_i;
 
     always @(posedge clk) begin: set_vars_value_r

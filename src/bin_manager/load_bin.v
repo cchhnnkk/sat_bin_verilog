@@ -92,7 +92,7 @@ module load_bin #(
 
     always @(posedge clk)
     begin
-        if(rst)
+        if(~rst)
             c_state <= 0;
         else
             c_state <= n_state;
@@ -100,7 +100,7 @@ module load_bin #(
 
     always @(*)
     begin
-        if(rst)
+        if(~rst)
             n_state = 0;
         else
             case(c_state)
@@ -166,7 +166,7 @@ module load_bin #(
     reg c_valid_delay;
     always @(posedge clk)
     begin
-        if(rst)
+        if(~rst)
             c_valid_delay <= 0;
         else if(c_state==LOAD)
             c_valid_delay <= 1;
@@ -177,7 +177,7 @@ module load_bin #(
     //输出到sat engine的子句信号
     always @(posedge clk)
     begin
-        if(rst)
+        if(~rst)
             clause_o <= 0;
         else if(c_state==LOAD)
             clause_o <= ram_data_c_i;
@@ -188,7 +188,7 @@ module load_bin #(
     //子句的写入信号，需要移位
     always @(posedge clk)
     begin
-        if(rst)
+        if(~rst)
             wr_carray_o <= 0;
         else if(wr_carray_o!=0) //移位
             wr_carray_o <= wr_carray_o<<1;
@@ -218,7 +218,7 @@ module load_bin #(
     reg vs_valid_delay;
     always @(posedge clk)
     begin
-        if(rst)
+        if(~rst)
             vs_valid_delay <= 0;
         else if(c_valid_delay)
             vs_valid_delay <= 1;
@@ -232,7 +232,7 @@ module load_bin #(
     //var state的写入信号，需要移位
     always @(posedge clk)
     begin
-        if(rst)
+        if(~rst)
             wr_var_states_o <= 0;
         else if(wr_var_states_o!=0) //移位
             wr_var_states_o <= wr_var_states_o<<1;
@@ -272,7 +272,7 @@ module load_bin #(
 
     always @(posedge clk)
     begin
-        if(rst) begin
+        if(~rst) begin
             base_lvl_en <= 0;
             base_lvl_o <= 0;
         end else if(c_state==LOAD && request_bin_num_i==dcd_bin) begin
@@ -307,7 +307,7 @@ module load_bin #(
     //lvl state的写入信号，需要移位
     always @(posedge clk)
     begin
-        if(rst)
+        if(~rst)
             wr_lvl_states_o <= 0;
         else if(wr_lvl_states_o!=0) //移位
             wr_lvl_states_o <= wr_lvl_states_o<<1;
@@ -323,7 +323,7 @@ module load_bin #(
 
     always @(posedge clk)
     begin
-        if(rst)
+        if(~rst)
             done_load_r <= 0;
         else if(c_state==DONE)
             done_load_r <= {1'b1, done_load_r[1]};
@@ -334,7 +334,7 @@ module load_bin #(
     //持续信号，用于bram的mux
     always @(posedge clk)
     begin
-        if(rst)
+        if(~rst)
             apply_load_o <= 0;
         else if(c_state==LOAD)
             apply_load_o <= 1;

@@ -163,7 +163,7 @@ module sat_engine #(
 
         .add_learntc_en_i(add_learntc_en),
         .all_c_sat_o     (all_c_is_sat),
-        .apply_impl_i   (apply_imply),
+        .apply_impl_i    (apply_imply),
         .apply_bkt_i     (apply_bkt_cur_bin)
     );
 
@@ -180,20 +180,23 @@ module sat_engine #(
 
         always @(posedge clk) begin: display_load_info
             if(wr_carray_i!=0) begin
-                cdata.set(clause_i);
-                $display("wr clause array");
+                cdata.set_clause(clause_i);
+                //$display("sim time %4tns", $time/1000);
+                $display("%1tns wr clause array", $time/1000);
                 $display("\twr_carray_i = %b", wr_carray_i);
+                //$display("\tclause_i = %b", clause_i);
                 cdata.display_lits();
             end
             if(wr_var_states!=0) begin
                 vs_list.set(lvl_states_i);
-                $display("\nwr var state list");
+                //$display("sim time %4tns", $time/1000);
+                $display("%1tns wr var state list", $time/1000);
                 $display("\twr_var_states = %b", wr_var_states);
                 vs_list.display();
             end
             if(wr_lvl_states!=0) begin
                 ls_list.set(lvl_states_i);
-                $display("wr lvl state list");
+                $display("%1tns wr lvl state list", $time/1000);
                 $display("\twr_lvl_states = %b", wr_lvl_states);
                 ls_list.display();
             end
@@ -213,15 +216,18 @@ module sat_engine #(
                 while(start_core_i!=1)
                     @(posedge clk);
 
-                $display("start_core_i");
-                $display("cur_bin_num_i = %d", cur_bin_num_i);
+                @(posedge clk);
+                //$display("sim time %4tns", $time/1000);
+                $display("%1tns start_core_i", $time/1000);
+                $display("\tcur_bin_num_i = %d", cur_bin_num_i);
 
                 while(done_core_o!=1)
                     @(posedge clk);
 
-                $display("done_core_i");
+                //$display("sim time %4tns", $time/1000);
+                $display("%1tns done_core_i", $time/1000);
 
-                cdata.set(clause_i);
+                cdata.set_clause(clause_o);
                 $display("clause array");
                 cdata.display_lits();
 

@@ -14,6 +14,7 @@ import gen_num_verilog as gn
 vlog_exe = "vlog.exe"
 vlog_db_mtime = 'vlog_mtime.db'
 vlog_db_ref = 'vlog_include_ref.db'
+editer = '"D:/Program Files/Sublime Text 3/sublime_text.exe" '
 
 
 def init_vlog():
@@ -58,8 +59,11 @@ def find_vlog_list(mtime_list, ref_list):
                 continue
             for f in ref_list[filename]:
                 if f not in need_vlog_flist:
-                    need_vlog_flist += [filename]
+                    need_vlog_flist += [f]
 
+    print "need_vlog_flist"
+    for f in need_vlog_flist:
+        print f
     return need_vlog_flist
 
 
@@ -84,7 +88,7 @@ def vlog_file(need_vlog_flist, mtime_list):
                 # match = pattern_error.search(vlog_info)
                 # print match.group(1)
                 # subprocess.Popen(["gvim", filename, "+%s" % match.group(1)])
-                subprocess.Popen(["sublime_text", filename])
+                subprocess.Popen(editer + filename)
                 break
             subp.wait()
         elif filename.endswith('.gen'):

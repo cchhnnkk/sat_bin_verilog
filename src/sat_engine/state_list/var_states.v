@@ -75,6 +75,7 @@ module var_state8 #(
 
     var_state4 #(
         .WIDTH_VAR_STATES(WIDTH_VAR_STATES),
+        .WIDTH_LVL       (WIDTH_LVL),
         .WIDTH_C_LEN     (WIDTH_C_LEN)
     )
     var_state4_0(
@@ -99,6 +100,7 @@ module var_state8 #(
 
     var_state4 #(
         .WIDTH_VAR_STATES(WIDTH_VAR_STATES),
+        .WIDTH_LVL       (WIDTH_LVL),
         .WIDTH_C_LEN     (WIDTH_C_LEN)
     )
     var_state4_1(
@@ -195,6 +197,7 @@ module var_state4 #(
 
     var_state2 #(
         .WIDTH_VAR_STATES(WIDTH_VAR_STATES),
+        .WIDTH_LVL       (WIDTH_LVL),
         .WIDTH_C_LEN     (WIDTH_C_LEN)
     )
     var_state2_0(
@@ -219,6 +222,7 @@ module var_state4 #(
 
     var_state2 #(
         .WIDTH_VAR_STATES(WIDTH_VAR_STATES),
+        .WIDTH_LVL       (WIDTH_LVL),
         .WIDTH_C_LEN     (WIDTH_C_LEN)
     )
     var_state2_1(
@@ -315,6 +319,7 @@ module var_state2 #(
 
     var_state1 #(
         .WIDTH_VAR_STATES(WIDTH_VAR_STATES),
+        .WIDTH_LVL       (WIDTH_LVL),
         .WIDTH_C_LEN     (WIDTH_C_LEN)
     )
     var_state1_0(
@@ -339,6 +344,7 @@ module var_state2 #(
 
     var_state1 #(
         .WIDTH_VAR_STATES(WIDTH_VAR_STATES),
+        .WIDTH_LVL       (WIDTH_LVL),
         .WIDTH_C_LEN     (WIDTH_C_LEN)
     )
     var_state1_1(

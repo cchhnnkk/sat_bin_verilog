@@ -30,7 +30,7 @@ module clause1 #(
     wire                           cclause;
     wire                           cclause_drv;
     wire                           clausesat;
-    wire [NUM_VARS*3-1 : 0]        clause_lits;
+    wire [NUM_VARS*2-1 : 0]        clause_lits;
 
     lit8 lit8(
         .clk(clk),

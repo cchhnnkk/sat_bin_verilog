@@ -22,6 +22,7 @@ module dcd_in_var8 #(
 
     wire [NUM_SUB*WIDTH/2-1 : 0] value_i_0, value_i_1;
     wire [NUM/2-1 : 0]           index_o_0, index_o_1;
+    wire [1:0]                   lock_cnt_o_0;
     assign {value_i_1, value_i_0} = value_i;
     assign index_o = {index_o_1, index_o_0};
 
@@ -30,7 +31,7 @@ module dcd_in_var8 #(
     )
     dcd_in_var4_0(
         .value_i(value_i_0),
-        .lock_cnt_i(lock_cnt_i_0),
+        .lock_cnt_i(lock_cnt_i),
         .lock_cnt_o(lock_cnt_o_0),
         .index_o(index_o_0)
     );
@@ -40,8 +41,8 @@ module dcd_in_var8 #(
     )
     dcd_in_var4_1(
         .value_i(value_i_1),
-        .lock_cnt_i(lock_cnt_i_1),
-        .lock_cnt_o(lock_cnt_o_1),
+        .lock_cnt_i(lock_cnt_o_0),
+        .lock_cnt_o(lock_cnt_o),
         .index_o(index_o_1)
     );
 
@@ -66,6 +67,7 @@ module dcd_in_var4 #(
 
     wire [NUM_SUB*WIDTH/2-1 : 0] value_i_0, value_i_1;
     wire [NUM/2-1 : 0]           index_o_0, index_o_1;
+    wire [1:0]                   lock_cnt_o_0;
     assign {value_i_1, value_i_0} = value_i;
     assign index_o = {index_o_1, index_o_0};
 
@@ -74,7 +76,7 @@ module dcd_in_var4 #(
     )
     dcd_in_var2_0(
         .value_i(value_i_0),
-        .lock_cnt_i(lock_cnt_i_0),
+        .lock_cnt_i(lock_cnt_i),
         .lock_cnt_o(lock_cnt_o_0),
         .index_o(index_o_0)
     );
@@ -84,8 +86,8 @@ module dcd_in_var4 #(
     )
     dcd_in_var2_1(
         .value_i(value_i_1),
-        .lock_cnt_i(lock_cnt_i_1),
-        .lock_cnt_o(lock_cnt_o_1),
+        .lock_cnt_i(lock_cnt_o_0),
+        .lock_cnt_o(lock_cnt_o),
         .index_o(index_o_1)
     );
 
@@ -110,6 +112,7 @@ module dcd_in_var2 #(
 
     wire [NUM_SUB*WIDTH/2-1 : 0] value_i_0, value_i_1;
     wire [NUM/2-1 : 0]           index_o_0, index_o_1;
+    wire [1:0]                   lock_cnt_o_0;
     assign {value_i_1, value_i_0} = value_i;
     assign index_o = {index_o_1, index_o_0};
 
@@ -118,7 +121,7 @@ module dcd_in_var2 #(
     )
     dcd_in_var1_0(
         .value_i(value_i_0),
-        .lock_cnt_i(lock_cnt_i_0),
+        .lock_cnt_i(lock_cnt_i),
         .lock_cnt_o(lock_cnt_o_0),
         .index_o(index_o_0)
     );
@@ -128,8 +131,8 @@ module dcd_in_var2 #(
     )
     dcd_in_var1_1(
         .value_i(value_i_1),
-        .lock_cnt_i(lock_cnt_i_1),
-        .lock_cnt_o(lock_cnt_o_1),
+        .lock_cnt_i(lock_cnt_o_0),
+        .lock_cnt_o(lock_cnt_o),
         .index_o(index_o_1)
     );
 

@@ -19,11 +19,10 @@ alias myvlog='../tools/vlog.py'
 
 gfile=$(find ../src/sat_engine/clause_array -name "*.gen")
 # echo $gfile
-myvlog $gfile
 
 vfile=$(find ../src/sat_engine/clause_array -name "*.v")
 # echo $vfile
-myvlog $vfile
+myvlog $gfile $vfile
 
 myvlog ../tb/class_clause_data.sv
 myvlog ../tb/class_clause_array.sv

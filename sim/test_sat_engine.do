@@ -9,6 +9,7 @@ vsim -quiet -novopt test_sat_engine_top
 # add wave -noupdate -divider {DUT}
 # add wave -noupdate sim:/test_clause_array_top/test_clause_array/clause_array/*
 
+# todo：添加if/else的判断，进行输入的选择
 do ../tools/wave_test_sat_engine_top.do
 # do wave.do
 
@@ -31,4 +32,4 @@ update
 WaveRestoreZoom {0 ns} {200 ns}
 
 # run -all
-run 1us
+run 4us

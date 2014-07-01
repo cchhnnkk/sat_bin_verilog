@@ -32,7 +32,7 @@ module lvl_state8 #(
         //find bkt lvl
         input [1:0]                               findflag_i,
         output [1:0]                              findflag_o,
-        output [3:0]                              findindex_o,
+        output [NUM_LVLS-1:0]                     findindex_o,
         input [WIDTH_LVL-1:0]                     max_lvl_i,
         output [WIDTH_BIN_ID-1:0]                 bkt_bin_o,
 
@@ -136,7 +136,7 @@ module lvl_state4 #(
         //find bkt lvl
         input [1:0]                               findflag_i,
         output [1:0]                              findflag_o,
-        output [3:0]                              findindex_o,
+        output [NUM_LVLS-1:0]                     findindex_o,
         input [WIDTH_LVL-1:0]                     max_lvl_i,
         output [WIDTH_BIN_ID-1:0]                 bkt_bin_o,
 
@@ -240,7 +240,7 @@ module lvl_state2 #(
         //find bkt lvl
         input [1:0]                               findflag_i,
         output [1:0]                              findflag_o,
-        output [3:0]                              findindex_o,
+        output [NUM_LVLS-1:0]                     findindex_o,
         input [WIDTH_LVL-1:0]                     max_lvl_i,
         output [WIDTH_BIN_ID-1:0]                 bkt_bin_o,
 

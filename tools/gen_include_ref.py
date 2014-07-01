@@ -1,18 +1,27 @@
 #!python
 # -*- coding: utf-8 -*-
 
-# gen_include_ref.py > include_ref.json
+# gen_include_ref.py > include_ref.json ..
 
 import os
 import json
 import re
+import sys
+
+files = ""
+for i in xrange(1, len(sys.argv)):
+    src_dir = sys.argv[i]
+    files1 = os.popen('find %s -name "*.v"' % src_dir).read()
+    files2 = os.popen('find %s -name "*.sv"' % src_dir).read()
+    files += files1 + files2
+
+# files1 = os.popen('find .. -name "*.v"').read()
+# files2 = os.popen('find .. -name "*.sv"').read()
+# files = files1 + files2
+# print files
+
 
 include_flist = {}
-
-files1 = os.popen('find .. -name "*.v"').read()
-files2 = os.popen('find .. -name "*.sv"').read()
-files = files1 + files2
-# print files
 
 filelist = files.strip().split('\n')
 

@@ -31,6 +31,7 @@ module clause8 #(
     );
 
     wire [NUM_CLAUSES/2-1:0]                wr_0, wr_1;
+    wire [NUM_CLAUSES/2-1:0]                rd_0, rd_1;
     wire [3*NUM_VARS-1:0]                   var_value_0, var_value_1;
     wire [NUM_VARS*2-1 : 0]                 clause_o_0, clause_o_1;
     wire [WIDTH_C_LEN*NUM_CLAUSES/2-1 : 0]  clause_len_o_0, clause_len_o_1;
@@ -119,6 +120,7 @@ module clause4 #(
     );
 
     wire [NUM_CLAUSES/2-1:0]                wr_0, wr_1;
+    wire [NUM_CLAUSES/2-1:0]                rd_0, rd_1;
     wire [3*NUM_VARS-1:0]                   var_value_0, var_value_1;
     wire [NUM_VARS*2-1 : 0]                 clause_o_0, clause_o_1;
     wire [WIDTH_C_LEN*NUM_CLAUSES/2-1 : 0]  clause_len_o_0, clause_len_o_1;
@@ -207,6 +209,7 @@ module clause2 #(
     );
 
     wire [NUM_CLAUSES/2-1:0]                wr_0, wr_1;
+    wire [NUM_CLAUSES/2-1:0]                rd_0, rd_1;
     wire [3*NUM_VARS-1:0]                   var_value_0, var_value_1;
     wire [NUM_VARS*2-1 : 0]                 clause_o_0, clause_o_1;
     wire [WIDTH_C_LEN*NUM_CLAUSES/2-1 : 0]  clause_len_o_0, clause_len_o_1;

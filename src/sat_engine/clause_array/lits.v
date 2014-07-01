@@ -39,14 +39,14 @@ module lit8 #(
     wire                       cclause_0, cclause_1;
     wire                       clausesat_0, clausesat_1;
     
-    assign {var_value_i_0, var_value_i_1} = var_value_i;
-    assign var_value_o = {var_value_o_0, var_value_o_1};
+    assign {var_value_i_1, var_value_i_0} = var_value_i;
+    assign var_value_o = {var_value_o_1, var_value_o_0};
     
-    assign {lit_i_0, lit_i_1} = lit_i;
-    assign lit_o = {lit_o_0, lit_o_1};
+    assign {lit_i_1, lit_i_0} = lit_i;
+    assign lit_o = {lit_o_1, lit_o_0};
 
-    assign clausesat_o = clausesat_0 | clausesat_1;
-    assign cclause_o = cclause_0 | cclause_1;
+    assign clausesat_o = clausesat_1 | clausesat_0;
+    assign cclause_o = cclause_1 | cclause_0;
     
     assign imp_drv_0 = imp_drv_i;
     assign imp_drv_1 = imp_drv_i;
@@ -133,14 +133,14 @@ module lit4 #(
     wire                       cclause_0, cclause_1;
     wire                       clausesat_0, clausesat_1;
     
-    assign {var_value_i_0, var_value_i_1} = var_value_i;
-    assign var_value_o = {var_value_o_0, var_value_o_1};
+    assign {var_value_i_1, var_value_i_0} = var_value_i;
+    assign var_value_o = {var_value_o_1, var_value_o_0};
     
-    assign {lit_i_0, lit_i_1} = lit_i;
-    assign lit_o = {lit_o_0, lit_o_1};
+    assign {lit_i_1, lit_i_0} = lit_i;
+    assign lit_o = {lit_o_1, lit_o_0};
 
-    assign clausesat_o = clausesat_0 | clausesat_1;
-    assign cclause_o = cclause_0 | cclause_1;
+    assign clausesat_o = clausesat_1 | clausesat_0;
+    assign cclause_o = cclause_1 | cclause_0;
     
     assign imp_drv_0 = imp_drv_i;
     assign imp_drv_1 = imp_drv_i;
@@ -227,14 +227,14 @@ module lit2 #(
     wire                       cclause_0, cclause_1;
     wire                       clausesat_0, clausesat_1;
     
-    assign {var_value_i_0, var_value_i_1} = var_value_i;
-    assign var_value_o = {var_value_o_0, var_value_o_1};
+    assign {var_value_i_1, var_value_i_0} = var_value_i;
+    assign var_value_o = {var_value_o_1, var_value_o_0};
     
-    assign {lit_i_0, lit_i_1} = lit_i;
-    assign lit_o = {lit_o_0, lit_o_1};
+    assign {lit_i_1, lit_i_0} = lit_i;
+    assign lit_o = {lit_o_1, lit_o_0};
 
-    assign clausesat_o = clausesat_0 | clausesat_1;
-    assign cclause_o = cclause_0 | cclause_1;
+    assign clausesat_o = clausesat_1 | clausesat_0;
+    assign cclause_o = cclause_1 | cclause_0;
     
     assign imp_drv_0 = imp_drv_i;
     assign imp_drv_1 = imp_drv_i;

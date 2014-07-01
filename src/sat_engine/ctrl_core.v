@@ -220,7 +220,8 @@ parameter           IDLE          =   0,
         if(c_state!=n_state && n_state!=IDLE)
         begin
             @(posedge clk)
-            $display("ctrl_core c_state = %s", s[c_state]);
+            //$display("sim time %4tns", $time/1000);
+            $display("%1tns ctrl_core c_state = %s", $time/1000, s[c_state]);
         end
     end
 `endif

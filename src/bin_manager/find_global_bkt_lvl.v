@@ -40,7 +40,7 @@ module find_global_bkt_lvl #(
 
     always @(posedge clk)
     begin
-        if(rst)
+        if(~rst)
             c_state <= 0;
         else
             c_state <= n_state;
@@ -48,7 +48,7 @@ module find_global_bkt_lvl #(
 
     always @(*)
     begin
-        if(rst)
+        if(~rst)
             n_state = 0;
         else
             case(c_state)
@@ -119,7 +119,7 @@ module find_global_bkt_lvl #(
     //持续信号，用于bram的mux
     always @(posedge clk)
     begin
-        if(rst)
+        if(~rst)
             apply_find_o <= 0;
         else if(c_state==FIND_BKT_LVL || c_state == SET_HAS_BKT)
             apply_find_o <= 1;
@@ -132,7 +132,7 @@ module find_global_bkt_lvl #(
     */
     always @(posedge clk)
     begin
-        if(rst) begin
+        if(~rst) begin
             ram_we_l_state_o <= 0;
             ram_data_l_state_o <= 0;
         end else if(c_state == SET_HAS_BKT) begin

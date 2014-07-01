@@ -28,7 +28,7 @@ module decision #(
     reg [WIDTH_LVL-1:0]                   cur_local_lvl_r;
 
     always @(posedge clk) begin: set_cur_local_lvl_r
-        if(rst)
+        if(~rst)
             cur_local_lvl_r <= -1;
         else if(load_lvl_en)                      //load
             cur_local_lvl_r <= load_lvl_i;
@@ -53,7 +53,7 @@ module decision #(
 
     always @(posedge clk)
     begin
-        if(rst)
+        if(~rst)
             index_decided_o <= 0;
         else if(decision_pulse)
             index_decided_o <= index_o;
@@ -63,7 +63,7 @@ module decision #(
 
     always @(posedge clk)
     begin
-        if(rst)
+        if(~rst)
             decision_done <= 0;
         else if(decision_pulse)
             decision_done <= 1;

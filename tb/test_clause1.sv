@@ -14,9 +14,11 @@ module test_clause1(input clk, input rst);
     reg wr_i;
     reg [NUM_VARS*3-1:0] var_value_i;
     wire [NUM_VARS*3-1:0] var_value_o;
+    reg [NUM_VARS*2-1:0] clause_i;
+    wire [NUM_VARS*2-1:0] clause_o;
     reg [4:0] clause_len_i;
     wire [4:0] clause_len_o;
-    reg apply_backtrack_i;
+    reg apply_bkt_i;
 
     clause1 #(
         .NUM_VARS(NUM_VARS)
@@ -25,12 +27,16 @@ module test_clause1(input clk, input rst);
     (
         .clk(clk),
         .rst(rst),
-        .wr_i(wr_i),
         .var_value_i(var_value_i),
         .var_value_o(var_value_o),
+
+        .wr_i(wr_i),
+        .clause_i(clause_i),
+        .clause_o(clause_o),
         .clause_len_i(clause_len_i),
         .clause_len_o(clause_len_o),
-        .apply_backtrack_i(apply_backtrack_i)
+
+        .apply_bkt_i(apply_bkt_i)
     );
 
     `include "../tb/class_clause_data.sv";
@@ -47,40 +53,49 @@ module test_clause1(input clk, input rst);
             @ (posedge clk);
                 cdata_i.set_lits('{0, 1, 0, 2, 0, 2, 0, 0});
                 cdata_i.set_imps('{0, 0, 0, 0, 0, 0, 0, 0});
+                cdata_i.display();
                 cdata_i.get(var_value_i);
-                // $display("%b", var_value_i);
+                cdata_i.get_clause(clause_i);
+                $display("var_value_i = %b", var_value_i);
+                $display("clause_i    = %b", clause_i);
                 wr_i = 1;
 
             @ (posedge clk);
                 wr_i = 0;
                 #1
-                assert(clause1.clausesat_0 == 1);
+                assert(clause1.all_c_sat_o == 1);
 
             @ (posedge clk);
                 cdata_i.reset();
                 cdata_i.get(var_value_i);
                 #1
-                assert(clause1.freelitcnt_0 == 3);
+                assert(clause1.freelitcnt == 3);
 
             @ (posedge clk);
                 cdata_i.set_lits('{0, 2, 0, 0, 0, 1, 0, 0});
                 cdata_i.set_imps('{0, 0, 0, 0, 0, 0, 0, 0});
+                cdata_i.display();
                 cdata_i.get(var_value_i);
+                cdata_i.get_clause(clause_i);
+                $display("var_value_i = %b", var_value_i);
+                $display("clause_i    = %b", clause_i);
                 #1
-                assert(clause1.freelitcnt_0 == 1);
-                assert(clause1.imp_drv_0 == 1);
+                assert(clause1.freelitcnt == 1);
+                assert(clause1.imp_drv == 1);
                 cdata_o.set(var_value_o);
-                cdata_o.assert_lit(3, 3'b101);
+                cdata_o.assert_index(3, 3'b101);
 
             @ (posedge clk);
-                cdata_i.set_value(3, 3'b111);
+                cdata_i.set_index(3, 3'b111);
                 cdata_i.get(var_value_i);
+                cdata_i.display();
                 #1
-                assert(clause1.cclause_drv_0 == 1);
+                assert(clause1.cclause_drv == 1);
                 cdata_o.set(var_value_o);
-                cdata_o.assert_lit(1, 3'b110);
-                cdata_o.assert_lit(3, 3'b111);
-                cdata_o.assert_lit(5, 3'b110);
+                cdata_o.display();
+                cdata_o.assert_index(1, 3'b110);
+                cdata_o.assert_index(3, 3'b111);
+                cdata_o.assert_index(5, 3'b110);
         end
     endtask
 
