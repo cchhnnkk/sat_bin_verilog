@@ -4,5 +4,8 @@ ipcore/*
 *.swp
 *.mti
 *.mpf
+*.todo
+*.ini
 temp
 transcript
+wlf*
