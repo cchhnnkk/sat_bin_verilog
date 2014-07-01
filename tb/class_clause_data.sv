@@ -118,7 +118,7 @@ class class_clause_data #(int size = 8);
 			$sformat(str, "%d", d);
             str_all = {str_all, str, " "};
 		end
-        $display("\tvalue = %s", str_all);
+        $display("--\tvalue = %s", str_all);
 	endfunction
 
 	function void display_implied();
@@ -132,7 +132,7 @@ class class_clause_data #(int size = 8);
 			// str.itoa(data[i*3]);
             str_all = {str_all, str, " "};
 		end
-        $display("\timply = %s", str_all);
+        $display("--\timply = %s", str_all);
 	endfunction
 
 endclass

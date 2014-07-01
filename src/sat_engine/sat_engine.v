@@ -167,9 +167,7 @@ module sat_engine #(
         .apply_bkt_i     (apply_bkt_cur_bin)
     );
 
-    /**
-    *  输出load的信息
-    */
+    /***  输出load的信息 ***/
     `ifdef DEBUG_sat_engine
         `include "../tb/class_clause_data.sv";
         `include "../tb/class_vs_list.sv";
@@ -203,9 +201,7 @@ module sat_engine #(
         end
     `endif
 
-    /**
-    *  输出update的信息
-    */
+    /***  输出update的信息 ***/
     `ifdef DEBUG_sat_engine
         initial begin
             @(posedge clk);

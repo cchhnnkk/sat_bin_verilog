@@ -40,7 +40,7 @@ module decision #(
             cur_local_lvl_r <= cur_local_lvl_r;
     end
 
-    assign cur_local_lvl_o = cur_local_lvl_r;
+    assign cur_local_lvl_o = cur_local_lvl_r-1;
 
     wire [NUM_VARS-1:0] index_o;
 

@@ -1,7 +1,20 @@
 
+
+vlog: vlog_sat_engine
+
+sim: sim_sat_engine
+
+view:
+	start vsim -view vsim.wlf
+
 # sat engine
 vlog_sat_engine:
 	vlog_test_sat_engine.sh
+
+sim_sat_engine:
+	vsim -c -do test_se_console.do
+	python transcript_info.py
+	sublime_text transcript.todo
 
 wave_sat_engine: hielist
 	cd ../tools && ../tools/gen_wave.sh test_sat_engine_top 3

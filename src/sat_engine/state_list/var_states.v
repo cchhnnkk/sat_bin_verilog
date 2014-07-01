@@ -26,7 +26,7 @@ module var_state8 #(
 
         //decide
         input [NUM_VARS-1:0]                     valid_from_decision_i,
-        input [9:0]                              cur_lvl_i,
+        input [WIDTH_LVL-1:0]                    cur_lvl_i,
 
         //imply
         input                                    apply_imply_i,
@@ -148,7 +148,7 @@ module var_state4 #(
 
         //decide
         input [NUM_VARS-1:0]                     valid_from_decision_i,
-        input [9:0]                              cur_lvl_i,
+        input [WIDTH_LVL-1:0]                    cur_lvl_i,
 
         //imply
         input                                    apply_imply_i,
@@ -270,7 +270,7 @@ module var_state2 #(
 
         //decide
         input [NUM_VARS-1:0]                     valid_from_decision_i,
-        input [9:0]                              cur_lvl_i,
+        input [WIDTH_LVL-1:0]                    cur_lvl_i,
 
         //imply
         input                                    apply_imply_i,

@@ -162,12 +162,20 @@ module state_list #(
 
         always @(posedge clk) begin
             if(start_decision_i) begin
+                $display("%1tns start_decision", $time/1000);
                 vs_list.set(vars_states_o);
-                $display("%1tsn start_decision", $time/1000, start_decision_i);
                 vs_list.display();
             end
             if(done_decision_o) begin
-                $display("%1tsn index_decided_o = %b", $time/1000, valid_from_decision);
+                $display("%1tns done_decision", $time/1000);
+                $display("\tindex_decided_o = %b", valid_from_decision);
+                $display("\tcur_local_lvl   = %4d", cur_local_lvl);
+                $display("\tbase_lvl_r      = %4d", base_lvl_r);
+                $display("\tcur_lvl_o       = %4d", cur_lvl_o);
+                @(posedge clk)
+                $display("%1tns var states", $time/1000);
+                vs_list.set(vars_states_o);
+                vs_list.display();
             end
         end
     `endif
@@ -199,6 +207,9 @@ module state_list #(
                 $display("%1tns bcp", $time/1000);
                 vs_list.set(vars_states_o);
                 vs_list.display_index(find_imply_cur^find_imply_pre);
+                $display("%1tns var states", $time/1000);
+                vs_list.set(vars_states_o);
+                vs_list.display();
             end
         end
     `endif
