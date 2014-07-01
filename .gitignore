@@ -1,0 +1,8 @@
+sim/work/*
+ipcore/*
+*.wlf
+*.swp
+*.mti
+*.mpf
+temp
+transcript
