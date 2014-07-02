@@ -112,7 +112,14 @@ module test_sat_engine(input clk, input rst);
 		end
 	endtask
 
-	task test_core(input int bin_data[8][8], value[8], implied[8], level[8], dcd_bin[8], has_bkt[8]);
+	typedef struct {
+		string name;
+		int var_id;
+		int value;
+		int level;
+	} struct_process;
+
+	task init_core(input int bin_data[8][8], value[8], implied[8], level[8], dcd_bin[8], has_bkt[8]);
 		begin
 			reset_all_signal();
 
@@ -133,6 +140,46 @@ module test_sat_engine(input clk, input rst);
 				base_lvl_i = 1;
 			@ (posedge clk);
 				start_core_i = 0;
+		end
+	endtask
+
+	task test_core(input struct_process process_data[], input int process_len);
+		begin
+			int valid_from_decision_1;
+			int valid_from_decision_2;
+			int i=0;
+			while(i<process_len)
+			begin
+				if(sat_engine.state_list.done_decision_o && sat_engine.state_list.valid_from_decision)
+				begin
+					assert(process_data[i].name=="decision")
+					valid_from_decision_1 = sat_engine.state_list.valid_from_decision;
+					valid_from_decision_2 = 1<<process_data[i].var_id;
+					assert(valid_from_decision_1 == valid_from_decision_2)
+					i++;
+				end
+				if(sat_engine.state_list.debug_imply_valid)
+				begin
+					assert(process_data[i].name=="bcp")
+                	vs_list.set(sat_engine.state_list.debug_var_state_o);
+
+					for (int j = 0; j < NUM_VARS; ++j)
+					begin
+						if(sat_engine.state_list.debug_imply_index[j]!=0) begin
+							assert(process_data[i].name  == "bcp")
+							assert(process_data[i].value == vs_list.value[j]);
+							assert(process_data[i].level == vs_list.level[j]);
+							i++;
+						end
+					end
+				end
+				if(sat_engine.all_c_is_sat)
+				begin
+					assert(process_data[i].name=="psat")
+					i++;
+				end
+				@ (posedge clk);
+			end
 
 			while(done_core_o!=1)
 				@ (posedge clk);
@@ -142,9 +189,9 @@ module test_sat_engine(input clk, input rst);
 	endtask
 
 
-	/* --- 测试free_lit_count --- */
+	/*** 测试数据1 ***/
 
-	int bin[8][8] = '{
+	int bin1[8][8] = '{
 		'{2, 0, 1, 0, 0, 0, 0, 0},
 		'{0, 2, 0, 1, 0, 0, 0, 0},
 		'{0, 0, 2, 0, 2, 0, 0, 0},
@@ -156,39 +203,32 @@ module test_sat_engine(input clk, input rst);
 	};
 
 	//var state list:
-	int value[]   = '{0, 0, 0, 0, 0, 0, 0, 0};
-	int implied[] = '{0, 0, 0, 0, 0, 0, 0, 0};
-	int level[]   = '{0, 0, 0, 0, 0, 0, 0, 0};
+	int value1[]   = '{0, 0, 0, 0, 0, 0, 0, 0};
+	int implied1[] = '{0, 0, 0, 0, 0, 0, 0, 0};
+	int level1[]   = '{0, 0, 0, 0, 0, 0, 0, 0};
 
 	//lvl state list:
-	int dcd_bin[] = '{0, 0, 0, 0, 0, 0, 0, 0};
-	int has_bkt[] = '{0, 0, 0, 0, 0, 0, 0, 0};
+	int dcd_bin1[] = '{0, 0, 0, 0, 0, 0, 0, 0};
+	int has_bkt1[] = '{0, 0, 0, 0, 0, 0, 0, 0};
 
-	int bin2[8][8] = '{
-		'{2, 0, 1, 0, 0, 0, 0, 0},
-		'{0, 2, 0, 1, 0, 2, 0, 0},
-		'{2, 0, 0, 1, 2, 0, 0, 0},
-		'{1, 1, 0, 0, 1, 0, 0, 0},
-
-		'{0, 1, 2, 0, 2, 0, 0, 0},
-		'{0, 0, 0, 1, 0, 0, 2, 0},
-		'{2, 0, 0, 1, 0, 1, 0, 1},
-		'{1, 0, 1, 0, 0, 1, 2, 0}
+	//运算过程数据
+	struct_process process_data1[] = '{
+		'{"decision", 0, 1, 2},
+		'{"bcp", 	  2, 1, 2},
+		'{"bcp",      4, 2, 2},
+		'{"decision", 1, 1, 3},
+		'{"bcp",      3, 1, 2},
+		'{"psat",     1, 1, 1}
 	};
+	int process_len1 = 6;
 
-    `ifdef DEBUG_state_list
-        always @(posedge clk) begin
-            if(done_decision_o) begin
-                $display("index_decided_o = %b", valid_from_decision);
-            end
-        end
-    `endif
 
 	task test_sat_engine_task();
 		begin
 			reset_all_signal();
 			$display("test_sat_engine_task");
-			test_core(bin, value, implied, level, dcd_bin, has_bkt);
+			init_core(bin1, value1, implied1, level1, dcd_bin1, has_bkt1);
+			test_core(process_data1, process_len1);
 		end
 	endtask
 

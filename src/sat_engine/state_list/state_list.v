@@ -131,9 +131,7 @@ module state_list #(
         .lvl_states_o         (lvl_states_o)
     );
 
-    /**
-    * 决策
-    */
+    /*** 决策 ***/
     wire [WIDTH_LVL-1:0]  cur_local_lvl;
 
     decision #(
@@ -201,6 +199,10 @@ module state_list #(
     end
 
     `ifdef DEBUG_state_list
+        reg                                 debug_imply_valid;
+        reg [NUM_VARS-1:0]                  debug_imply_index;
+        reg [WIDTH_VAR_STATES*NUM_VARS-1:0] debug_var_state_o;
+
         always @(posedge clk) begin
             if(apply_imply_i && find_imply_cur!=find_imply_pre) begin
                 //$display("sim time %4tns", $time/1000);
@@ -210,6 +212,11 @@ module state_list #(
                 $display("%1tns var states", $time/1000);
                 vs_list.set(vars_states_o);
                 vs_list.display();
+
+                //用于testbench中的assert
+                debug_imply_valid <= 1;
+                debug_imply_index <= find_imply_cur^find_imply_pre;
+                debug_var_state_o <= vars_states_o;
             end
         end
     `endif
