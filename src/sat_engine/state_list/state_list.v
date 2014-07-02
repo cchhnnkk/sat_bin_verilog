@@ -171,7 +171,7 @@ module state_list #(
                 $display("\tbase_lvl_r      = %4d", base_lvl_r);
                 $display("\tcur_lvl_o       = %4d", cur_lvl_o);
                 @(posedge clk)
-                $display("%1tns var states", $time/1000);
+                $display("\t%1tns var states", $time/1000);
                 vs_list.set(vars_states_o);
                 vs_list.display();
             end
@@ -199,26 +199,27 @@ module state_list #(
     end
 
     `ifdef DEBUG_state_list
-        reg                                 debug_imply_valid;
-        reg [NUM_VARS-1:0]                  debug_imply_index;
-        reg [WIDTH_VAR_STATES*NUM_VARS-1:0] debug_var_state_o;
-
         always @(posedge clk) begin
             if(apply_imply_i && find_imply_cur!=find_imply_pre) begin
                 //$display("sim time %4tns", $time/1000);
                 $display("%1tns bcp", $time/1000);
                 vs_list.set(vars_states_o);
                 vs_list.display_index(find_imply_cur^find_imply_pre);
-                $display("%1tns var states", $time/1000);
+                $display("\t%1tns var states", $time/1000);
                 vs_list.set(vars_states_o);
                 vs_list.display();
 
-                //用于testbench中的assert
-                debug_imply_valid <= 1;
-                debug_imply_index <= find_imply_cur^find_imply_pre;
-                debug_var_state_o <= vars_states_o;
             end
         end
+
+        //用于testbench中的assert
+        wire                                 debug_imply_valid;
+        wire [NUM_VARS-1:0]                  debug_imply_index;
+        wire [WIDTH_VAR_STATES*NUM_VARS-1:0] debug_var_state_o;
+        assign debug_imply_valid = apply_imply_i && find_imply_cur!=find_imply_pre;
+        assign debug_imply_index = find_imply_cur^find_imply_pre;
+        assign debug_var_state_o = vars_states_o;
+
     `endif
 
 

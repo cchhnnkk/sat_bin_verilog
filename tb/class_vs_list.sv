@@ -74,7 +74,7 @@ class class_vs_list #(int nv = 8, int width_lvl = 16, int width_vs = width_lvl+3
         string str;
 		for (int i = 0; i < nv; ++i)
 		begin
-			$sformat(str, "%4d", value[i]);
+			$sformat(str, "%1d", value[i]);
 			// str.itoa(value[i]);
             str_all = {str_all, str, " "};
 		end
@@ -83,7 +83,7 @@ class class_vs_list #(int nv = 8, int width_lvl = 16, int width_vs = width_lvl+3
         str_all = "";
 		for (int i = 0; i < nv; ++i)
 		begin
-			$sformat(str, "%4d", implied[i]);
+			$sformat(str, "%1d", implied[i]);
 			// str.itoa(implied[i]);
             str_all = {str_all, str, " "};
 		end
@@ -92,7 +92,7 @@ class class_vs_list #(int nv = 8, int width_lvl = 16, int width_vs = width_lvl+3
         str_all = "";
 		for (int i = 0; i < nv; ++i)
 		begin
-			$sformat(str, "%4d", level[i]);
+			$sformat(str, "%1d", level[i]);
 			// str.itoa(level[i]);
             str_all = {str_all, str, " "};
 		end
@@ -104,7 +104,7 @@ class class_vs_list #(int nv = 8, int width_lvl = 16, int width_vs = width_lvl+3
 		for (int i = 0; i < nv; ++i)
 		begin
 			if(index[i]!=0) begin
-				$display("\tvar id=%4d, value=%4d, implied=%4d, level=%4d",
+				$display("\tvar id=%1d, value=%1d, implied=%1d, level=%1d",
 					i, value[i], implied[i], level[i]);
 			end
 		end

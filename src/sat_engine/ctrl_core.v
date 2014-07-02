@@ -4,7 +4,6 @@
   */
 
 `include "../src/debug_define.v"
-
 module ctrl_core #(
         parameter WIDTH_BIN_ID = 10,
         parameter WIDTH_LVL    = 16
@@ -75,6 +74,8 @@ parameter           IDLE          =   0,
                 BCP:
                     if(done_imply_i && conflict_i)
                         n_state = ANALYSIS;
+                    else if(done_imply_i && ~conflict_i && all_c_is_sat_i)
+                        n_state = PARTIAL_SAT;
                     else if(done_imply_i && ~conflict_i)
                         n_state = DECISION;
                     else

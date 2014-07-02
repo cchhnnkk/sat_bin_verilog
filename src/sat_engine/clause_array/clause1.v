@@ -106,5 +106,5 @@ module clause1 #(
     //当该子句不是原因子句时，才将其长度输出
     assign clause_len_o = is_reason_r? 0:clause_len_r;
 
-    assign all_c_sat_o = clausesat;
+    assign all_c_sat_o = clausesat || clause_lits==0;
 endmodule

@@ -1,8 +1,6 @@
 #!python
 # -*- coding: utf-8 -*-
 
-# todo: 添加include引用文件的编译功能
-
 import os
 import sys
 import json

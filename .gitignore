@@ -9,3 +9,4 @@ ipcore/*
 temp
 transcript
 wlf*
+*.pyc

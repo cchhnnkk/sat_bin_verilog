@@ -74,7 +74,7 @@ module lit1
         if (participate && isfree && imp_drv_i)
             var_value_o[0] = 1;
         else
-            var_value_o[0] = var_implied_r;
+            var_value_o[0] = 0;
     end
 
 
@@ -96,6 +96,6 @@ module lit1
             lit_of_clause_r <= lit_of_clause_r;
     end
 
-    assign lit_o = var_value_o[2:1];
+    assign lit_o = lit_of_clause_r;
 
 endmodule

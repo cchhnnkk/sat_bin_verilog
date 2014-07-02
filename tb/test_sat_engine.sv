@@ -143,39 +143,80 @@ module test_sat_engine(input clk, input rst);
 		end
 	endtask
 
+	task dis_process(struct_process process_data[], int i);
+		$display("%1tns process_data: name=%s, var_id=%1d, value=%1d, level=%1d",
+			$time/1000.0,
+			process_data[i].name,
+			process_data[i].var_id,
+			process_data[i].value,
+			process_data[i].level);
+		// $finish();
+	endtask
+
 	task test_core(input struct_process process_data[], input int process_len);
 		begin
 			int valid_from_decision_1;
 			int valid_from_decision_2;
-			int i=0;
+			int i;
+			i = 0;
 			while(i<process_len)
 			begin
 				if(sat_engine.state_list.done_decision_o && sat_engine.state_list.valid_from_decision)
 				begin
+					dis_process(process_data, i);
 					assert(process_data[i].name=="decision")
+					else begin
+						$display("Error: decision");
+						$finish();
+					end
 					valid_from_decision_1 = sat_engine.state_list.valid_from_decision;
 					valid_from_decision_2 = 1<<process_data[i].var_id;
-					assert(valid_from_decision_1 == valid_from_decision_2)
+					assert(valid_from_decision_1 == valid_from_decision_2) else dis_process(process_data, i);
 					i++;
 				end
 				if(sat_engine.state_list.debug_imply_valid)
 				begin
 					assert(process_data[i].name=="bcp")
+					else begin
+						$display("Error: bcp");
+						dis_process(process_data, i);
+						$finish();
+					end
                 	vs_list.set(sat_engine.state_list.debug_var_state_o);
 
 					for (int j = 0; j < NUM_VARS; ++j)
 					begin
 						if(sat_engine.state_list.debug_imply_index[j]!=0) begin
+							dis_process(process_data, i);
 							assert(process_data[i].name  == "bcp")
-							assert(process_data[i].value == vs_list.value[j]);
-							assert(process_data[i].level == vs_list.level[j]);
+							else begin
+								$display("Error: bcp");
+								$finish();
+							end
+
+							assert(process_data[i].value == vs_list.value[j])
+							else
+								$display("Error: i=%1d, j=%1d, expect value=%1d, value=%1d",
+									i, j, process_data[i].value, vs_list.value[j]);
+
+							assert(process_data[i].level == vs_list.level[j])
+							else
+								$display("Error: i=%1d, j=%1d, expect level=%1d, level=%1d",
+									i, j, process_data[i].level, vs_list.level[j]);
+
 							i++;
 						end
 					end
 				end
 				if(sat_engine.all_c_is_sat)
 				begin
+					dis_process(process_data, i);
 					assert(process_data[i].name=="psat")
+					else begin
+						$display("Error: psat");
+						$finish();
+					end
+
 					i++;
 				end
 				@ (posedge clk);
@@ -217,7 +258,7 @@ module test_sat_engine(input clk, input rst);
 		'{"bcp", 	  2, 1, 2},
 		'{"bcp",      4, 2, 2},
 		'{"decision", 1, 1, 3},
-		'{"bcp",      3, 1, 2},
+		'{"bcp",      3, 1, 3},
 		'{"psat",     1, 1, 1}
 	};
 	int process_len1 = 6;
@@ -305,6 +346,6 @@ module test_sat_engine_top;
 		$display("start sim");
 		test_sat_engine.run();
 		$display("done sim");
-		$stop();
+		$finish();
 	end
 endmodule

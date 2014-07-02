@@ -58,7 +58,7 @@ class class_ls_list #(int nv = 8, int width_bini = 16, int width_ls = width_bini
         string str;
 		for (int i = 0; i < nv; ++i)
 		begin
-			$sformat(str, "%4d", dcd_bin[i]);
+			$sformat(str, "%1d", dcd_bin[i]);
 			// str.itoa(dcd_bin[i]);
             str_all = {str_all, str, " "};
 		end
@@ -67,7 +67,7 @@ class class_ls_list #(int nv = 8, int width_bini = 16, int width_ls = width_bini
         str_all = "";
 		for (int i = 0; i < nv; ++i)
 		begin
-			$sformat(str, "%4d", has_bkt[i]);
+			$sformat(str, "%1d", has_bkt[i]);
 			// str.itoa(has_bkt[i]);
             str_all = {str_all, str, " "};
 		end

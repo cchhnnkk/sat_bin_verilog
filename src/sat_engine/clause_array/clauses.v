@@ -32,17 +32,17 @@ module clause8 #(
 
     wire [NUM_CLAUSES/2-1:0]                wr_0, wr_1;
     wire [NUM_CLAUSES/2-1:0]                rd_0, rd_1;
-    wire [3*NUM_VARS-1:0]                   var_value_0, var_value_1;
+    wire [3*NUM_VARS-1:0]                   var_value_o_0, var_value_o_1;
     wire [NUM_VARS*2-1 : 0]                 clause_o_0, clause_o_1;
     wire [WIDTH_C_LEN*NUM_CLAUSES/2-1 : 0]  clause_len_o_0, clause_len_o_1;
     wire                                    all_c_sat_o_0, all_c_sat_o_1;
 
     assign {wr_1, wr_0} = wr_i;
     assign {rd_1, rd_0} = rd_i;
-    assign var_value_o = var_value_0 | var_value_1;
+    assign var_value_o = var_value_o_0 | var_value_o_1;
     assign clause_o = clause_o_0 | clause_o_1;
     assign clause_len_o = {clause_len_o_1, clause_len_o_0};
-    assign all_c_sat_o = all_c_sat_o_0 | all_c_sat_o_1;
+    assign all_c_sat_o = all_c_sat_o_0 & all_c_sat_o_1;
 
     clause4 #(
         .NUM_VARS(NUM_VARS),
@@ -53,7 +53,7 @@ module clause8 #(
         .rst(rst),
 
         .var_value_i(var_value_i),
-        .var_value_o(var_value_0),
+        .var_value_o(var_value_o_0),
 
         .wr_i(wr_0),
         .rd_i(rd_0),
@@ -76,7 +76,7 @@ module clause8 #(
         .rst(rst), 
         
         .var_value_i(var_value_i),
-        .var_value_o(var_value_1),
+        .var_value_o(var_value_o_1),
 
         .wr_i(wr_1),
         .rd_i(rd_1),
@@ -121,17 +121,17 @@ module clause4 #(
 
     wire [NUM_CLAUSES/2-1:0]                wr_0, wr_1;
     wire [NUM_CLAUSES/2-1:0]                rd_0, rd_1;
-    wire [3*NUM_VARS-1:0]                   var_value_0, var_value_1;
+    wire [3*NUM_VARS-1:0]                   var_value_o_0, var_value_o_1;
     wire [NUM_VARS*2-1 : 0]                 clause_o_0, clause_o_1;
     wire [WIDTH_C_LEN*NUM_CLAUSES/2-1 : 0]  clause_len_o_0, clause_len_o_1;
     wire                                    all_c_sat_o_0, all_c_sat_o_1;
 
     assign {wr_1, wr_0} = wr_i;
     assign {rd_1, rd_0} = rd_i;
-    assign var_value_o = var_value_0 | var_value_1;
+    assign var_value_o = var_value_o_0 | var_value_o_1;
     assign clause_o = clause_o_0 | clause_o_1;
     assign clause_len_o = {clause_len_o_1, clause_len_o_0};
-    assign all_c_sat_o = all_c_sat_o_0 | all_c_sat_o_1;
+    assign all_c_sat_o = all_c_sat_o_0 & all_c_sat_o_1;
 
     clause2 #(
         .NUM_VARS(NUM_VARS),
@@ -142,7 +142,7 @@ module clause4 #(
         .rst(rst),
 
         .var_value_i(var_value_i),
-        .var_value_o(var_value_0),
+        .var_value_o(var_value_o_0),
 
         .wr_i(wr_0),
         .rd_i(rd_0),
@@ -165,7 +165,7 @@ module clause4 #(
         .rst(rst), 
         
         .var_value_i(var_value_i),
-        .var_value_o(var_value_1),
+        .var_value_o(var_value_o_1),
 
         .wr_i(wr_1),
         .rd_i(rd_1),
@@ -210,17 +210,17 @@ module clause2 #(
 
     wire [NUM_CLAUSES/2-1:0]                wr_0, wr_1;
     wire [NUM_CLAUSES/2-1:0]                rd_0, rd_1;
-    wire [3*NUM_VARS-1:0]                   var_value_0, var_value_1;
+    wire [3*NUM_VARS-1:0]                   var_value_o_0, var_value_o_1;
     wire [NUM_VARS*2-1 : 0]                 clause_o_0, clause_o_1;
     wire [WIDTH_C_LEN*NUM_CLAUSES/2-1 : 0]  clause_len_o_0, clause_len_o_1;
     wire                                    all_c_sat_o_0, all_c_sat_o_1;
 
     assign {wr_1, wr_0} = wr_i;
     assign {rd_1, rd_0} = rd_i;
-    assign var_value_o = var_value_0 | var_value_1;
+    assign var_value_o = var_value_o_0 | var_value_o_1;
     assign clause_o = clause_o_0 | clause_o_1;
     assign clause_len_o = {clause_len_o_1, clause_len_o_0};
-    assign all_c_sat_o = all_c_sat_o_0 | all_c_sat_o_1;
+    assign all_c_sat_o = all_c_sat_o_0 & all_c_sat_o_1;
 
     clause1 #(
         .NUM_VARS(NUM_VARS),
@@ -231,7 +231,7 @@ module clause2 #(
         .rst(rst),
 
         .var_value_i(var_value_i),
-        .var_value_o(var_value_0),
+        .var_value_o(var_value_o_0),
 
         .wr_i(wr_0),
         .rd_i(rd_0),
@@ -254,7 +254,7 @@ module clause2 #(
         .rst(rst), 
         
         .var_value_i(var_value_i),
-        .var_value_o(var_value_1),
+        .var_value_o(var_value_o_1),
 
         .wr_i(wr_1),
         .rd_i(rd_1),
