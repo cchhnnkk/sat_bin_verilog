@@ -26,7 +26,7 @@ module state_list #(
         // var value I/O
         input [NUM_VARS*3-1:0]                    var_value_i,
         output [NUM_VARS*3-1:0]                   var_value_o,
-        output [WIDTH_C_LEN-1 : 0]                clause_len_o,
+        output [NUM_VARS*2-1:0]                   learnt_lit_o,
 
         //decide
         input                                     load_lvl_en,
@@ -87,6 +87,7 @@ module state_list #(
         .rst                  (rst),
         .var_value_i          (var_value_i),
         .var_value_o          (var_value_o),
+        .learnt_lit_o         (learnt_lit_o),
         .valid_from_decision_i(valid_from_decision),
         .cur_lvl_i            (cur_lvl_o),
         .apply_imply_i        (apply_imply_i),
@@ -94,7 +95,6 @@ module state_list #(
         .find_conflict_o      (find_conflict_cur),
         .apply_analyze_i      (apply_analyze_i),
         .max_lvl_o            (max_lvl),
-        .clause_len_o         (clause_len_o),
         .apply_bkt_i          (apply_bkt_cur_bin_i),
         .bkt_lvl_i            (bkt_lvl_o),
         .wr_states            (wr_var_states),
@@ -251,7 +251,7 @@ module state_list #(
                     else
                         n_analyze_state = ANALYZE_IDLE;
                 FIND_LEARNTC:
-                    if(find_conflict_cur!=find_conflict_pre)
+                    if(find_conflict_cur==find_conflict_pre)
                         n_analyze_state = ADD_LEARNTC;
                     else
                         n_analyze_state = FIND_LEARNTC;
@@ -344,18 +344,28 @@ module state_list #(
         begin
             if(c_analyze_state==FIND_LEARNTC)
             begin
+                $display("\tfind_conflict_cur = %b", find_conflict_cur);
                 cdata_learntc.reset();
                 cdata_learntc.set(var_value_o);
                 cdata_learntc.display_lits();
-                $display("%b", find_conflict_cur);
+            end
+            else if(c_analyze_state==ADD_LEARNTC)
+            begin
+                $display("\tlearnt clause = %b", find_conflict_cur);
+                cdata_learntc.reset();
+                cdata_learntc.set_clause(var_value_o);
+                cdata_learntc.display_lits();
             end
             else if(done_analyze_o)
             begin
                 //$display("sim time %4tns", $time/1000);
-                $display("%1tns done analysis bkt_bin %d bkt_lvl %d", $time/1000, bkt_bin_o, bkt_lvl_o);
+                $display("%1tns done analysis", $time/1000);
+                $display("\tbkt_bin %d bkt_lvl %d", bkt_bin_o, bkt_lvl_o);
             end
-
         end
+
+        wire debug_conflict_valid;
+        assign debug_conflict_valid = c_analyze_state!=n_analyze_state && c_analyze_state==FIND_LEARNTC;
 
     `endif
 

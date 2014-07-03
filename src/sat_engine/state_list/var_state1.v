@@ -18,6 +18,7 @@ module var_state1 #(
      // data I/O
      input [2:0]                     var_value_i,
      output [2:0]                    var_value_o,
+     output [1:0]                    learnt_lit_o,
      output [WIDTH_C_LEN-1 : 0]      clause_len_o,
  
      //decide
@@ -52,7 +53,8 @@ module var_state1 #(
     //由于var_value_r在冲突分析时可能会变为11，所以需要将其值保存下来
     reg [2:0]  saved_var_value_r;
 
-    assign var_value_o = apply_analyze_i? {learnt_lit_r, 1'b0}:var_value_r;
+    assign var_value_o = var_value_r;
+    assign learnt_lit_o = learnt_lit_r;
 
     assign update_clause_o = var_value_i[2:1];
 

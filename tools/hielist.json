@@ -124,6 +124,10 @@
     [
       "clause_array", 
       "clause_array"
+    ], 
+    [
+      "c_len8", 
+      "c_len8"
     ]
   ], 
   "bram_w36_d1204": [
@@ -143,10 +147,10 @@
       "reduce_in_2_datas_inst1"
     ]
   ], 
-  "test_clause_array_top": [
+  "decision": [
     [
-      "test_clause_array", 
-      "test_clause_array"
+      "dcd_in_var8", 
+      "dcd_in_var8"
     ]
   ], 
   "lvl_state2": [
@@ -355,6 +359,12 @@
       "lit2_1"
     ]
   ], 
+  "test_clause_array_top": [
+    [
+      "test_clause_array", 
+      "test_clause_array"
+    ]
+  ], 
   "lit1": [], 
   "bram_w18_d1024": [
     [
@@ -382,6 +392,16 @@
       "max_in_4_datas_inst1"
     ]
   ], 
+  "c_len8": [
+    [
+      "c_len4", 
+      "c_len4_0"
+    ], 
+    [
+      "c_len4", 
+      "c_len4_1"
+    ]
+  ], 
   "clause_array": [
     [
       "clause8", 
@@ -392,13 +412,28 @@
       "max_in_4_datas_inst0"
     ]
   ], 
-  "rd_bin_info": [], 
-  "decision": [
+  "c_len4": [
     [
-      "dcd_in_var8", 
-      "dcd_in_var8"
+      "c_len2", 
+      "c_len2_0"
+    ], 
+    [
+      "c_len2", 
+      "c_len2_1"
     ]
   ], 
+  "rd_bin_info": [], 
+  "c_len2": [
+    [
+      "c_len1", 
+      "c_len1_0"
+    ], 
+    [
+      "c_len1", 
+      "c_len1_1"
+    ]
+  ], 
+  "c_len1": [], 
   "bram_w12_d1024": [
     [
       "BLK_MEM_GEN_V7_3", 

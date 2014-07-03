@@ -94,6 +94,7 @@ module sat_engine #(
     wire [NUM_VARS*3-1:0]       var_value_from_stlist;
     wire [NUM_VARS*3-1:0]       var_value_from_carray;
     wire                        add_learntc_en;
+    wire [NUM_VARS*2-1:0]       learnt_lit;
     wire [WIDTH_C_LEN-1 : 0]    clause_len;
 
     state_list #(
@@ -110,6 +111,7 @@ module sat_engine #(
         // var value I/O
         .var_value_i        (var_value_from_carray),
         .var_value_o        (var_value_from_stlist),
+        .learnt_lit_o       (learnt_lit),
         //decide
         .load_lvl_en        (start_core_i),
         .load_lvl_i         (load_lvl_i),
@@ -124,7 +126,6 @@ module sat_engine #(
         //conflict
         .apply_analyze_i    (apply_analyze),
         .add_learntc_en_o   (add_learntc_en),
-        .clause_len_o       (clause_len),
         .done_analyze_o     (done_analyze),
         .bkt_bin_o          (bkt_bin_o),
         .bkt_lvl_o          (bkt_lvl_o),
@@ -142,6 +143,8 @@ module sat_engine #(
         .base_lvl_i         (base_lvl_i)
     );
 
+    wire [NUM_VARS*2-1:0]  clause_to_carray;
+    assign clause_to_carray = wr_carray_i!=0? clause_i : learnt_lit;
 
     clause_array #(
         .NUM_CLAUSES     (NUM_CLAUSES),
@@ -165,6 +168,17 @@ module sat_engine #(
         .all_c_sat_o     (all_c_is_sat),
         .apply_impl_i    (apply_imply),
         .apply_bkt_i     (apply_bkt_cur_bin)
+    );
+
+    wire [NUM_VARS*2-1:0]  clause_to_len;
+    assign clause_to_len = clause_to_carray;
+
+    c_len8 #(
+        .WIDTH(WIDTH_C_LEN)
+    )
+    c_len8(
+        .clause_i(clause_to_len),
+        .len_o(clause_len)
     );
 
     /***  输出load的信息 ***/

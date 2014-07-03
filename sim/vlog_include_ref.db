@@ -24,6 +24,7 @@
     "../tb/test_sat_engine.sv", 
     "../tb/test_clause_array.sv"
   ], 
+  "../src/sat_engine/state_list/c_len1.v": [], 
   "../src/sat_engine/clause_array/clause1.v": [], 
   "../src/sat_engine/clause_array/clause_array.v": [], 
   "../tb/test_lit_cell.sv": [], 
@@ -32,6 +33,7 @@
   "../src/sat_engine/clause_array/lits.v": [], 
   "../tb/test_clause1.sv": [], 
   "../src/sat_engine/state_list/encode_8to3.v": [], 
+  "../src/sat_engine/state_list/c_lens.v": [], 
   "../src/sat_engine/clause_array/max_in_datas.v": [], 
   "../tb/class_ls_list.sv": [
     "../src/sat_engine/state_list/state_list.v", 
