@@ -26,6 +26,8 @@ module state_list #(
         // var value I/O
         input [NUM_VARS*3-1:0]                    var_value_i,
         output [NUM_VARS*3-1:0]                   var_value_o,
+        input [NUM_VARS*WIDTH_LVL-1:0]            var_lvl_i,
+        output [NUM_VARS*WIDTH_LVL-1:0]           var_lvl_o,
         output [NUM_VARS*2-1:0]                   learnt_lit_o,
 
         //decide
@@ -87,6 +89,8 @@ module state_list #(
         .rst                  (rst),
         .var_value_i          (var_value_i),
         .var_value_o          (var_value_o),
+        .var_lvl_i            (var_lvl_i),
+        .var_lvl_o            (var_lvl_o),
         .learnt_lit_o         (learnt_lit_o),
         .valid_from_decision_i(valid_from_decision),
         .cur_lvl_i            (cur_lvl_o),
@@ -365,7 +369,7 @@ module state_list #(
         end
 
         wire debug_conflict_valid;
-        assign debug_conflict_valid = c_analyze_state!=n_analyze_state && c_analyze_state==FIND_LEARNTC;
+        assign debug_conflict_valid = c_analyze_state!=n_analyze_state && c_analyze_state==ANALYZE_IDLE;
 
     `endif
 

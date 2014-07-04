@@ -64,6 +64,21 @@ module test_sat_engine(input clk, input rst);
         end
     endtask
 
+    task rd_clause_array();
+        begin
+            rd_carray_i = 0;
+            for (int i = 0; i < 8; ++i)
+            begin
+                @ (posedge clk);
+                    rd_carray_i = 0;
+                    rd_carray_i[i] = 1;
+            end
+            @ (posedge clk);
+            rd_carray_i = 0;
+            @ (posedge clk);
+        end
+    endtask
+
     `include "../tb/class_vs_list.sv";
     class_vs_list #(8, WIDTH_LVL) vs_list = new();
 
@@ -120,7 +135,7 @@ module test_sat_engine(input clk, input rst);
     } struct_process;
 
 
-    task init_core(input int bin_data[8][8], value[8], implied[8], level[8], dcd_bin[8], has_bkt[8],
+    task load_core(input int bin_data[8][8], value[8], implied[8], level[8], dcd_bin[8], has_bkt[8],
                              cur_bin_num, load_lvl, base_lvl);
         begin
             reset_all_signal();
@@ -143,7 +158,12 @@ module test_sat_engine(input clk, input rst);
             @ (posedge clk);
                 start_core_i = 0;
                 base_lvl_en = 0;
+            @ (posedge clk);
         end
+    endtask
+
+    task update_core();
+        rd_clause_array();
     endtask
 
     task dis_process(struct_process process_data[], int i);
@@ -163,6 +183,8 @@ module test_sat_engine(input clk, input rst);
             int valid_from_decision_1;
             int valid_from_decision_2;
             int i;
+            bit error_tag;
+            error_tag = 0;
             i = 0;
             while(i<process_len)
             begin
@@ -172,11 +194,14 @@ module test_sat_engine(input clk, input rst);
                     assert(process_data[i].name=="decision")
                     else begin
                         $display("!----- Error: decision");
-                        $finish();
+                        error_tag = 1;
                     end
+
                     valid_from_decision_1 = sat_engine.state_list.valid_from_decision;
                     valid_from_decision_2 = 1<<process_data[i].var_id;
-                    assert(valid_from_decision_1 == valid_from_decision_2) else dis_process(process_data, i);
+                    assert(valid_from_decision_1 == valid_from_decision_2)
+                    else
+                        dis_process(process_data, i);
                     i++;
                 end
 
@@ -186,7 +211,7 @@ module test_sat_engine(input clk, input rst);
                     else begin
                         $display("!----- Error: bcp");
                         dis_process(process_data, i);
-                        $finish();
+                        error_tag = 1;
                     end
                     vs_list.set(sat_engine.state_list.debug_var_state_o);
 
@@ -197,7 +222,7 @@ module test_sat_engine(input clk, input rst);
                             assert(process_data[i].name  == "bcp")
                             else begin
                                 $display("!----- Error: bcp");
-                                $finish();
+                                error_tag = 1;
                             end
 
                             assert(process_data[i].value == vs_list.value[j])
@@ -221,9 +246,8 @@ module test_sat_engine(input clk, input rst);
                     assert(process_data[i].name=="conflict")
                     else begin
                         $display("!----- Error: conflict");
-                        $finish();
+                        error_tag = 1;
                     end
-
                     i++;
                 end
 
@@ -233,7 +257,7 @@ module test_sat_engine(input clk, input rst);
                     assert(process_data[i].name=="psat")
                     else begin
                         $display("!----- Error: psat");
-                        $finish();
+                        error_tag = 1;
                     end
                     i++;
                 end
@@ -244,18 +268,24 @@ module test_sat_engine(input clk, input rst);
                     assert(process_data[i].name=="punsat")
                     else begin
                         $display("!----- Error: punsat");
-                        $finish();
+                        error_tag = 1;
                     end
 
                     i++;
                 end
+
                 @ (posedge clk);
+
+                if(error_tag == 1) begin
+                    repeat (10) @ (posedge clk);
+                    $finish();
+                end
             end
 
             while(done_core_o!=1)
                 @ (posedge clk);
 
-            repeat (100) @(posedge clk);
+            repeat (10) @(posedge clk);
         end
     endtask
 
@@ -334,13 +364,15 @@ module test_sat_engine(input clk, input rst);
 
             $display("===============================================");
             $display("test case 1");
-            init_core(bin1, value1, implied1, level1, dcd_bin1, has_bkt1, cur_bin_num1, load_lvl1, base_lvl1);
+            load_core(bin1, value1, implied1, level1, dcd_bin1, has_bkt1, cur_bin_num1, load_lvl1, base_lvl1);
             test_core(process_data1, process_len1);
+            update_core();
 
             $display("===============================================");
             $display("test case 2");
-            init_core(bin2, value2, implied2, level2, dcd_bin2, has_bkt2, cur_bin_num2, load_lvl2, base_lvl2);
+            load_core(bin2, value2, implied2, level2, dcd_bin2, has_bkt2, cur_bin_num2, load_lvl2, base_lvl2);
             test_core(process_data2, process_len2);
+            update_core();
         end
     endtask
 

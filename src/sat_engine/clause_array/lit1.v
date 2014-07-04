@@ -1,25 +1,36 @@
-module lit1
-(
-    input            clk,
-    input            rst,
-
-    input [2:0]      var_value_i,
-    output reg [2:0] var_value_o,
-
-    input            wr_i,
-    input [1:0]      lit_i,
-    output [1:0]     lit_o,
-
-    input [1:0]      freelitcnt_pre,
-    output reg [1:0] freelitcnt_next,
-
-    input            imp_drv_i,
-
-    output           cclause_o,
-    input            cclause_drv_i,
-
-    output           clausesat_o
-);
+module lit1 #(
+        parameter WIDTH_LVL   = 16
+    )
+    (
+        input                               clk,
+        input                               rst,
+        
+        input      [2:0]                    var_value_i,
+        output reg [2:0]                    var_value_o,
+        
+        //down在阵列中向下传播
+        input      [WIDTH_LVL-1:0]          var_lvl_i,
+        input      [WIDTH_LVL-1:0]          var_lvl_down_i,
+        output     [WIDTH_LVL-1:0]          var_lvl_down_o,
+        
+        input                               wr_i,
+        input      [1:0]                    lit_i,
+        output     [1:0]                    lit_o,
+        
+        input      [1:0]                    freelitcnt_pre,
+        output reg [1:0]                    freelitcnt_next,
+        
+        input                               imp_drv_i,
+        
+        output                              cclause_o,
+        input                               cclause_drv_i,
+        
+        output                              clausesat_o,
+        
+        //连接terminal cell
+        input      [WIDTH_LVL-1:0]          max_lvl_i,
+        output     [WIDTH_LVL-1:0]          max_lvl_o
+    );
 
     reg [1:0]         lit_of_clause_r;
     reg               var_implied_r;
@@ -97,5 +108,12 @@ module lit1
     end
 
     assign lit_o = lit_of_clause_r;
+
+    wire var_lvl_this;
+    assign var_lvl_this   = participate && isfree && imp_drv_i ? max_lvl_i : -1;
+    //在每一列选择较小的lvl
+    assign var_lvl_down_o = var_lvl_down_i < var_lvl_this      ? var_lvl_down_i : var_lvl_this;
+
+    assign max_lvl_o      = participate && ~isfree             ? var_lvl_i : 0;
 
 endmodule

@@ -18,8 +18,9 @@ module var_state1 #(
      // data I/O
      input [2:0]                     var_value_i,
      output [2:0]                    var_value_o,
+     input [WIDTH_LVL-1:0]           var_lvl_i,
+     output [WIDTH_LVL-1:0]          var_lvl_o,
      output [1:0]                    learnt_lit_o,
-     output [WIDTH_C_LEN-1 : 0]      clause_len_o,
  
      //decide
      input                           valid_from_decision_i,
@@ -95,10 +96,12 @@ module var_state1 #(
         else if(valid_from_decision_i)  //决策
             var_lvl_r <=  cur_lvl_i;
         else if(apply_imply_i && var_value_i[0])     //推理
-            var_lvl_r <=  cur_lvl_i;
+            var_lvl_r <=  var_lvl_i;
         else
             var_lvl_r <= var_lvl_r;
     end
+
+    assign var_lvl_o = var_lvl_r;
 
     always @(posedge clk) begin: set_saved_var_value_r
         if(~rst)
@@ -135,7 +138,5 @@ module var_state1 #(
     end
 
     assign max_lvl_o = (learnt_lit_r!=0) ? var_lvl_r : 0;
-
-    assign clause_len_o = (learnt_lit_r!=0) ? 1 : 0;
 
 endmodule

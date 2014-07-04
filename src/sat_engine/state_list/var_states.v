@@ -22,6 +22,8 @@ module var_state8 #(
         // data I/O
         input [NUM_VARS*3-1:0]                   var_value_i,
         output [NUM_VARS*3-1:0]                  var_value_o,
+        input [NUM_VARS*WIDTH_LVL-1:0]           var_lvl_i,
+        output [NUM_VARS*WIDTH_LVL-1:0]          var_lvl_o,
         output [NUM_VARS*2-1:0]                  learnt_lit_o,
 
         //decide
@@ -47,31 +49,35 @@ module var_state8 #(
         output [WIDTH_VAR_STATES*NUM_VARS-1 : 0] vars_states_o
     );
 
-    wire [NUM_VARS*3/2-1 : 0]   var_value_i_0, var_value_i_1;
-    wire [NUM_VARS*3/2-1 : 0]   var_value_o_0, var_value_o_1;
-    wire [NUM_VARS*2/2-1 : 0]   learnt_lit_o_0, learnt_lit_o_1;
-    wire [NUM_VARS/2-1:0]       valid_from_decision_i_0, valid_from_decision_i_1;
-    wire [NUM_VARS/2-1:0]       find_imply_o_0, find_imply_o_1;
-    wire [NUM_VARS/2-1:0]       find_conflict_o_0, find_conflict_o_1;
-    wire [WIDTH_LVL-1:0]        max_lvl_o_0, max_lvl_o_1;
+    wire [NUM_VARS*3/2-1 : 0]         var_value_i_0,            var_value_i_1;
+    wire [NUM_VARS*3/2-1 : 0]         var_value_o_0,            var_value_o_1;
+    wire [NUM_VARS*WIDTH_LVL/2-1 : 0] var_lvl_i_0,              var_lvl_i_1;
+    wire [NUM_VARS*WIDTH_LVL/2-1 : 0] var_lvl_o_0,              var_lvl_o_1;
+    wire [NUM_VARS*2/2-1 : 0]         learnt_lit_o_0,           learnt_lit_o_1;
+    wire [NUM_VARS/2-1:0]             valid_from_decision_i_0,  valid_from_decision_i_1;
+    wire [NUM_VARS/2-1:0]             find_imply_o_0,           find_imply_o_1;
+    wire [NUM_VARS/2-1:0]             find_conflict_o_0,        find_conflict_o_1;
+    wire [WIDTH_LVL-1:0]              max_lvl_o_0,              max_lvl_o_1;
 
-    assign {var_value_i_0, var_value_i_1} = var_value_i;
-    assign var_value_o = {var_value_o_0, var_value_o_1};
-    assign learnt_lit_o = {learnt_lit_o_0, learnt_lit_o_1};
-    assign {valid_from_decision_i_0, valid_from_decision_i_1} = valid_from_decision_i;
+    assign {var_value_i_1, var_value_i_0} = var_value_i;
+    assign var_value_o = {var_value_o_1, var_value_o_0};
+    assign {var_lvl_i_1, var_lvl_i_0} = var_lvl_i;
+    assign var_lvl_o = {var_lvl_o_1, var_lvl_o_0};
+    assign learnt_lit_o = {learnt_lit_o_1, learnt_lit_o_0};
+    assign {valid_from_decision_i_1, valid_from_decision_i_0} = valid_from_decision_i;
 
-    assign find_imply_o = {find_imply_o_0, find_imply_o_1};
-    assign find_conflict_o = {find_conflict_o_0, find_conflict_o_1};
+    assign find_imply_o = {find_imply_o_1, find_imply_o_0};
+    assign find_conflict_o = {find_conflict_o_1, find_conflict_o_0};
 
-    assign max_lvl_o = max_lvl_o_0 > max_lvl_o_1 ? max_lvl_o_0 : max_lvl_o_1;
+    assign max_lvl_o = max_lvl_o_1 > max_lvl_o_0 ? max_lvl_o_1 : max_lvl_o_0;
 
     wire [NUM_VARS/2-1:0]                    wr_states_0, wr_states_1;
     wire [WIDTH_VAR_STATES*NUM_VARS/2-1 : 0] vars_states_i_0, vars_states_i_1;
     wire [WIDTH_VAR_STATES*NUM_VARS/2-1 : 0] vars_states_o_0, vars_states_o_1;
 
-    assign {wr_states_0, wr_states_1} = wr_states;
-    assign {vars_states_i_0, vars_states_i_1} = vars_states_i;
-    assign vars_states_o = {vars_states_o_0, vars_states_o_1};
+    assign {wr_states_1, wr_states_0} = wr_states;
+    assign {vars_states_i_1, vars_states_i_0} = vars_states_i;
+    assign vars_states_o = {vars_states_o_1, vars_states_o_0};
 
     var_state4 #(
         .WIDTH_VAR_STATES(WIDTH_VAR_STATES),
@@ -83,6 +89,8 @@ module var_state8 #(
         .rst                  (rst),
         .var_value_i          (var_value_i_0),
         .var_value_o          (var_value_o_0),
+        .var_lvl_i            (var_lvl_i_0),
+        .var_lvl_o            (var_lvl_o_0),
         .learnt_lit_o         (learnt_lit_o_0),
         .valid_from_decision_i(valid_from_decision_i_0),
         .cur_lvl_i            (cur_lvl_i),
@@ -108,6 +116,8 @@ module var_state8 #(
         .rst                  (rst),
         .var_value_i          (var_value_i_1),
         .var_value_o          (var_value_o_1),
+        .var_lvl_i            (var_lvl_i_1),
+        .var_lvl_o            (var_lvl_o_1),
         .learnt_lit_o         (learnt_lit_o_1),
         .valid_from_decision_i(valid_from_decision_i_1),
         .cur_lvl_i            (cur_lvl_i),
@@ -144,6 +154,8 @@ module var_state4 #(
         // data I/O
         input [NUM_VARS*3-1:0]                   var_value_i,
         output [NUM_VARS*3-1:0]                  var_value_o,
+        input [NUM_VARS*WIDTH_LVL-1:0]           var_lvl_i,
+        output [NUM_VARS*WIDTH_LVL-1:0]          var_lvl_o,
         output [NUM_VARS*2-1:0]                  learnt_lit_o,
 
         //decide
@@ -169,31 +181,35 @@ module var_state4 #(
         output [WIDTH_VAR_STATES*NUM_VARS-1 : 0] vars_states_o
     );
 
-    wire [NUM_VARS*3/2-1 : 0]   var_value_i_0, var_value_i_1;
-    wire [NUM_VARS*3/2-1 : 0]   var_value_o_0, var_value_o_1;
-    wire [NUM_VARS*2/2-1 : 0]   learnt_lit_o_0, learnt_lit_o_1;
-    wire [NUM_VARS/2-1:0]       valid_from_decision_i_0, valid_from_decision_i_1;
-    wire [NUM_VARS/2-1:0]       find_imply_o_0, find_imply_o_1;
-    wire [NUM_VARS/2-1:0]       find_conflict_o_0, find_conflict_o_1;
-    wire [WIDTH_LVL-1:0]        max_lvl_o_0, max_lvl_o_1;
+    wire [NUM_VARS*3/2-1 : 0]         var_value_i_0,            var_value_i_1;
+    wire [NUM_VARS*3/2-1 : 0]         var_value_o_0,            var_value_o_1;
+    wire [NUM_VARS*WIDTH_LVL/2-1 : 0] var_lvl_i_0,              var_lvl_i_1;
+    wire [NUM_VARS*WIDTH_LVL/2-1 : 0] var_lvl_o_0,              var_lvl_o_1;
+    wire [NUM_VARS*2/2-1 : 0]         learnt_lit_o_0,           learnt_lit_o_1;
+    wire [NUM_VARS/2-1:0]             valid_from_decision_i_0,  valid_from_decision_i_1;
+    wire [NUM_VARS/2-1:0]             find_imply_o_0,           find_imply_o_1;
+    wire [NUM_VARS/2-1:0]             find_conflict_o_0,        find_conflict_o_1;
+    wire [WIDTH_LVL-1:0]              max_lvl_o_0,              max_lvl_o_1;
 
-    assign {var_value_i_0, var_value_i_1} = var_value_i;
-    assign var_value_o = {var_value_o_0, var_value_o_1};
-    assign learnt_lit_o = {learnt_lit_o_0, learnt_lit_o_1};
-    assign {valid_from_decision_i_0, valid_from_decision_i_1} = valid_from_decision_i;
+    assign {var_value_i_1, var_value_i_0} = var_value_i;
+    assign var_value_o = {var_value_o_1, var_value_o_0};
+    assign {var_lvl_i_1, var_lvl_i_0} = var_lvl_i;
+    assign var_lvl_o = {var_lvl_o_1, var_lvl_o_0};
+    assign learnt_lit_o = {learnt_lit_o_1, learnt_lit_o_0};
+    assign {valid_from_decision_i_1, valid_from_decision_i_0} = valid_from_decision_i;
 
-    assign find_imply_o = {find_imply_o_0, find_imply_o_1};
-    assign find_conflict_o = {find_conflict_o_0, find_conflict_o_1};
+    assign find_imply_o = {find_imply_o_1, find_imply_o_0};
+    assign find_conflict_o = {find_conflict_o_1, find_conflict_o_0};
 
-    assign max_lvl_o = max_lvl_o_0 > max_lvl_o_1 ? max_lvl_o_0 : max_lvl_o_1;
+    assign max_lvl_o = max_lvl_o_1 > max_lvl_o_0 ? max_lvl_o_1 : max_lvl_o_0;
 
     wire [NUM_VARS/2-1:0]                    wr_states_0, wr_states_1;
     wire [WIDTH_VAR_STATES*NUM_VARS/2-1 : 0] vars_states_i_0, vars_states_i_1;
     wire [WIDTH_VAR_STATES*NUM_VARS/2-1 : 0] vars_states_o_0, vars_states_o_1;
 
-    assign {wr_states_0, wr_states_1} = wr_states;
-    assign {vars_states_i_0, vars_states_i_1} = vars_states_i;
-    assign vars_states_o = {vars_states_o_0, vars_states_o_1};
+    assign {wr_states_1, wr_states_0} = wr_states;
+    assign {vars_states_i_1, vars_states_i_0} = vars_states_i;
+    assign vars_states_o = {vars_states_o_1, vars_states_o_0};
 
     var_state2 #(
         .WIDTH_VAR_STATES(WIDTH_VAR_STATES),
@@ -205,6 +221,8 @@ module var_state4 #(
         .rst                  (rst),
         .var_value_i          (var_value_i_0),
         .var_value_o          (var_value_o_0),
+        .var_lvl_i            (var_lvl_i_0),
+        .var_lvl_o            (var_lvl_o_0),
         .learnt_lit_o         (learnt_lit_o_0),
         .valid_from_decision_i(valid_from_decision_i_0),
         .cur_lvl_i            (cur_lvl_i),
@@ -230,6 +248,8 @@ module var_state4 #(
         .rst                  (rst),
         .var_value_i          (var_value_i_1),
         .var_value_o          (var_value_o_1),
+        .var_lvl_i            (var_lvl_i_1),
+        .var_lvl_o            (var_lvl_o_1),
         .learnt_lit_o         (learnt_lit_o_1),
         .valid_from_decision_i(valid_from_decision_i_1),
         .cur_lvl_i            (cur_lvl_i),
@@ -266,6 +286,8 @@ module var_state2 #(
         // data I/O
         input [NUM_VARS*3-1:0]                   var_value_i,
         output [NUM_VARS*3-1:0]                  var_value_o,
+        input [NUM_VARS*WIDTH_LVL-1:0]           var_lvl_i,
+        output [NUM_VARS*WIDTH_LVL-1:0]          var_lvl_o,
         output [NUM_VARS*2-1:0]                  learnt_lit_o,
 
         //decide
@@ -291,31 +313,35 @@ module var_state2 #(
         output [WIDTH_VAR_STATES*NUM_VARS-1 : 0] vars_states_o
     );
 
-    wire [NUM_VARS*3/2-1 : 0]   var_value_i_0, var_value_i_1;
-    wire [NUM_VARS*3/2-1 : 0]   var_value_o_0, var_value_o_1;
-    wire [NUM_VARS*2/2-1 : 0]   learnt_lit_o_0, learnt_lit_o_1;
-    wire [NUM_VARS/2-1:0]       valid_from_decision_i_0, valid_from_decision_i_1;
-    wire [NUM_VARS/2-1:0]       find_imply_o_0, find_imply_o_1;
-    wire [NUM_VARS/2-1:0]       find_conflict_o_0, find_conflict_o_1;
-    wire [WIDTH_LVL-1:0]        max_lvl_o_0, max_lvl_o_1;
+    wire [NUM_VARS*3/2-1 : 0]         var_value_i_0,            var_value_i_1;
+    wire [NUM_VARS*3/2-1 : 0]         var_value_o_0,            var_value_o_1;
+    wire [NUM_VARS*WIDTH_LVL/2-1 : 0] var_lvl_i_0,              var_lvl_i_1;
+    wire [NUM_VARS*WIDTH_LVL/2-1 : 0] var_lvl_o_0,              var_lvl_o_1;
+    wire [NUM_VARS*2/2-1 : 0]         learnt_lit_o_0,           learnt_lit_o_1;
+    wire [NUM_VARS/2-1:0]             valid_from_decision_i_0,  valid_from_decision_i_1;
+    wire [NUM_VARS/2-1:0]             find_imply_o_0,           find_imply_o_1;
+    wire [NUM_VARS/2-1:0]             find_conflict_o_0,        find_conflict_o_1;
+    wire [WIDTH_LVL-1:0]              max_lvl_o_0,              max_lvl_o_1;
 
-    assign {var_value_i_0, var_value_i_1} = var_value_i;
-    assign var_value_o = {var_value_o_0, var_value_o_1};
-    assign learnt_lit_o = {learnt_lit_o_0, learnt_lit_o_1};
-    assign {valid_from_decision_i_0, valid_from_decision_i_1} = valid_from_decision_i;
+    assign {var_value_i_1, var_value_i_0} = var_value_i;
+    assign var_value_o = {var_value_o_1, var_value_o_0};
+    assign {var_lvl_i_1, var_lvl_i_0} = var_lvl_i;
+    assign var_lvl_o = {var_lvl_o_1, var_lvl_o_0};
+    assign learnt_lit_o = {learnt_lit_o_1, learnt_lit_o_0};
+    assign {valid_from_decision_i_1, valid_from_decision_i_0} = valid_from_decision_i;
 
-    assign find_imply_o = {find_imply_o_0, find_imply_o_1};
-    assign find_conflict_o = {find_conflict_o_0, find_conflict_o_1};
+    assign find_imply_o = {find_imply_o_1, find_imply_o_0};
+    assign find_conflict_o = {find_conflict_o_1, find_conflict_o_0};
 
-    assign max_lvl_o = max_lvl_o_0 > max_lvl_o_1 ? max_lvl_o_0 : max_lvl_o_1;
+    assign max_lvl_o = max_lvl_o_1 > max_lvl_o_0 ? max_lvl_o_1 : max_lvl_o_0;
 
     wire [NUM_VARS/2-1:0]                    wr_states_0, wr_states_1;
     wire [WIDTH_VAR_STATES*NUM_VARS/2-1 : 0] vars_states_i_0, vars_states_i_1;
     wire [WIDTH_VAR_STATES*NUM_VARS/2-1 : 0] vars_states_o_0, vars_states_o_1;
 
-    assign {wr_states_0, wr_states_1} = wr_states;
-    assign {vars_states_i_0, vars_states_i_1} = vars_states_i;
-    assign vars_states_o = {vars_states_o_0, vars_states_o_1};
+    assign {wr_states_1, wr_states_0} = wr_states;
+    assign {vars_states_i_1, vars_states_i_0} = vars_states_i;
+    assign vars_states_o = {vars_states_o_1, vars_states_o_0};
 
     var_state1 #(
         .WIDTH_VAR_STATES(WIDTH_VAR_STATES),
@@ -327,6 +353,8 @@ module var_state2 #(
         .rst                  (rst),
         .var_value_i          (var_value_i_0),
         .var_value_o          (var_value_o_0),
+        .var_lvl_i            (var_lvl_i_0),
+        .var_lvl_o            (var_lvl_o_0),
         .learnt_lit_o         (learnt_lit_o_0),
         .valid_from_decision_i(valid_from_decision_i_0),
         .cur_lvl_i            (cur_lvl_i),
@@ -352,6 +380,8 @@ module var_state2 #(
         .rst                  (rst),
         .var_value_i          (var_value_i_1),
         .var_value_o          (var_value_o_1),
+        .var_lvl_i            (var_lvl_i_1),
+        .var_lvl_o            (var_lvl_o_1),
         .learnt_lit_o         (learnt_lit_o_1),
         .valid_from_decision_i(valid_from_decision_i_1),
         .cur_lvl_i            (cur_lvl_i),

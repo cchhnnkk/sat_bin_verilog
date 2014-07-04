@@ -135,6 +135,8 @@ parameter           IDLE          =   0,
             done_core_o <= 0;
         else if(c_state==PARTIAL_SAT || c_state==PARTIAL_UNSAT)
             done_core_o <= 1;
+        else if(start_core_i)
+            done_core_o <= 0;
         else
             done_core_o <= done_core_o;
     end

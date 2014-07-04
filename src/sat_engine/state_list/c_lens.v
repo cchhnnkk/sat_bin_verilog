@@ -36,7 +36,7 @@ module c_len8 #(
     )
     c_len4_1(
         .clause_i(clause_i_1),
-        .len_o(len_o)
+        .len_o(len_o_1)
     );
 
 endmodule
@@ -74,7 +74,7 @@ module c_len4 #(
     )
     c_len2_1(
         .clause_i(clause_i_1),
-        .len_o(len_o)
+        .len_o(len_o_1)
     );
 
 endmodule
@@ -112,7 +112,7 @@ module c_len2 #(
     )
     c_len1_1(
         .clause_i(clause_i_1),
-        .len_o(len_o)
+        .len_o(len_o_1)
     );
 
 endmodule

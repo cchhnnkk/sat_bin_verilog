@@ -1,28 +1,34 @@
 module clause1 #(
-        parameter NUM_VARS = 8,
+        parameter NUM_VARS    = 8,
         parameter NUM_CLAUSES = 1,
+        parameter WIDTH_LVL   = 16,
         parameter WIDTH_C_LEN = 4
     )
     (
-        input                                        clk,
-        input                                        rst,
-
+        input                                  clk,
+        input                                  rst,
+        
         //data I/O
-        input [NUM_VARS*3-1:0]                       var_value_i,
-        output [NUM_VARS*3-1:0]                      var_value_o,
-
+        input  [NUM_VARS*3-1:0]                var_value_i,
+        output [NUM_VARS*3-1:0]                var_value_o,
+        
+        //用于推理时求得剩余最大lvl
+        input  [NUM_VARS*WIDTH_LVL-1:0]        var_lvl_i,
+        input  [NUM_VARS*WIDTH_LVL-1:0]        var_lvl_down_i,
+        output [NUM_VARS*WIDTH_LVL-1:0]        var_lvl_down_o,
+        
         //load update
-        input [NUM_CLAUSES-1:0]                      wr_i,
-        input [NUM_CLAUSES-1:0]                      rd_i,
-        input [NUM_VARS*2-1 : 0]                     clause_i,
-        output [NUM_VARS*2-1 : 0]                    clause_o,
-        input [WIDTH_C_LEN-1 : 0]                    clause_len_i,
-        output [WIDTH_C_LEN*NUM_CLAUSES-1 : 0]       clause_len_o,
-
+        input  [NUM_CLAUSES-1:0]               wr_i,
+        input  [NUM_CLAUSES-1:0]               rd_i,
+        input  [NUM_VARS*2-1 : 0]              clause_i,
+        output [NUM_VARS*2-1 : 0]              clause_o,
+        input  [WIDTH_C_LEN-1 : 0]             clause_len_i,
+        output [WIDTH_C_LEN*NUM_CLAUSES-1 : 0] clause_len_o,
+        
         //ctrl
-        output                                       all_c_sat_o,
-        input                                        apply_impl_i,
-        input                                        apply_bkt_i
+        output                                 all_c_sat_o,
+        input                                  apply_impl_i,
+        input                                  apply_bkt_i
     );
 
     wire [1:0]                     freelitcnt;
@@ -33,40 +39,52 @@ module clause1 #(
     wire [NUM_VARS*2-1 : 0]        clause_lits;
 
     lit8 lit8(
-        .clk(clk),
-        .rst(rst),
+        .clk            (clk),
+        .rst            (rst),
+        
+        .var_value_i    (var_value_i),
+        .var_value_o    (var_value_o),
 
-        .var_value_i(var_value_i),
-        .var_value_o(var_value_o),
+        .var_lvl_i      (var_lvl_i),
+        .var_lvl_down_i (var_lvl_down_i),
+        .var_lvl_down_o (var_lvl_down_o),
 
-        .wr_i(wr_i),
-        .lit_i(clause_i),
-        .lit_o(clause_lits),
-
-        .freelitcnt_pre(0),
+        .max_lvl_i      (max_lvl_from_term),
+        .max_lvl_o      (max_lvl_from_lits),
+        
+        .wr_i           (wr_i),
+        .lit_i          (clause_i),
+        .lit_o          (clause_lits),
+        
+        .freelitcnt_pre (0),
         .freelitcnt_next(freelitcnt),
-
-        .imp_drv_i(imp_drv),
-
-        .cclause_o(cclause),
-        .cclause_drv_i(cclause_drv),
-
-        .clausesat_o(clausesat)
+        
+        .imp_drv_i      (imp_drv),
+        
+        .cclause_o      (cclause),
+        .cclause_drv_i  (cclause_drv),
+        
+        .clausesat_o    (clausesat)
     );
 
     assign clause_o = rd_i? clause_lits : 0;
 
-    wire                           cclause_drv_o;
+    wire   cclause_drv_o;
     assign cclause_drv=cclause_drv_o;
 
-    terminal_cell terminal_cell(
-        .clk(clk),
-        .rst(rst),
-        .clausesat_i(clausesat),
-        .freelitcnt_i(freelitcnt),
-        .imp_drv_o(imp_drv),
-        .cclause_i(cclause),
-        .cclause_drv_o(cclause_drv_o)
+    terminal_cell #(
+        .WIDTH_LVL(WIDTH_LVL)
+    )
+    terminal_cell(
+        .clk          (clk),
+        .rst          (rst),
+        .clausesat_i  (clausesat),
+        .freelitcnt_i (freelitcnt),
+        .imp_drv_o    (imp_drv),
+        .cclause_i    (cclause),
+        .cclause_drv_o(cclause_drv_o),
+        .max_lvl_i    (max_lvl_from_lits),
+        .max_lvl_o    (max_lvl_from_term)
     );
 
     reg                            need_clear;

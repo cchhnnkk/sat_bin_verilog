@@ -31,7 +31,7 @@ module c_len{$NUM} #(
     )
     c_len{$NUM/2}_1(
         .clause_i(clause_i_1),
-        .len_o(len_o)
+        .len_o(len_o_1)
     );
 
 endmodule
