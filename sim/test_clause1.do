@@ -3,12 +3,13 @@ quit -sim
 vlib work
 vmap work work
 
-vlog -sv ../src/sat_engine/clause_array/lit1.v
-vlog -sv ../src/sat_engine/clause_array/lits.v
-vlog -sv ../src/sat_engine/clause_array/terminal_cell.v
-vlog -sv ../src/sat_engine/clause_array/clause1.v
-vlog -sv ../tb/class_clause_data.sv -sv
-vlog -sv ../tb/test_clause1.sv
+# vlog -sv ../src/sat_engine/clause_array/lit1.v
+# vlog -sv ../src/sat_engine/clause_array/lits.v
+# vlog -sv ../src/sat_engine/clause_array/terminal_cell.v
+# vlog -sv ../src/sat_engine/clause_array/clause1.v
+# vlog -sv ../tb/class_clause_data.sv
+# vlog -sv ../tb/class_lvl_data.sv
+# vlog -sv ../tb/test_clause1.sv
 
 vsim -quiet -novopt test_clause1_top -wlf test_clause1_top.wlf
 

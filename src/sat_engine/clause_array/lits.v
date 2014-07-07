@@ -55,8 +55,8 @@ module lit8 #(
     assign {var_value_i_1, var_value_i_0} = var_value_i;
     assign var_value_o = {var_value_o_1, var_value_o_0};
     
-    assign {var_lvl_i_0, var_lvl_i_1} = var_lvl_i;
-    assign {var_lvl_down_i_0, var_lvl_down_i_1} = var_lvl_down_i;
+    assign {var_lvl_i_1, var_lvl_i_0} = var_lvl_i;
+    assign {var_lvl_down_i_1, var_lvl_down_i_0} = var_lvl_down_i;
     assign var_lvl_down_o = {var_lvl_down_o_1, var_lvl_down_o_0};
     assign max_lvl_o = max_lvl_o_1 > max_lvl_o_0? max_lvl_o_1 : max_lvl_o_0;
     
@@ -187,8 +187,8 @@ module lit4 #(
     assign {var_value_i_1, var_value_i_0} = var_value_i;
     assign var_value_o = {var_value_o_1, var_value_o_0};
     
-    assign {var_lvl_i_0, var_lvl_i_1} = var_lvl_i;
-    assign {var_lvl_down_i_0, var_lvl_down_i_1} = var_lvl_down_i;
+    assign {var_lvl_i_1, var_lvl_i_0} = var_lvl_i;
+    assign {var_lvl_down_i_1, var_lvl_down_i_0} = var_lvl_down_i;
     assign var_lvl_down_o = {var_lvl_down_o_1, var_lvl_down_o_0};
     assign max_lvl_o = max_lvl_o_1 > max_lvl_o_0? max_lvl_o_1 : max_lvl_o_0;
     
@@ -319,8 +319,8 @@ module lit2 #(
     assign {var_value_i_1, var_value_i_0} = var_value_i;
     assign var_value_o = {var_value_o_1, var_value_o_0};
     
-    assign {var_lvl_i_0, var_lvl_i_1} = var_lvl_i;
-    assign {var_lvl_down_i_0, var_lvl_down_i_1} = var_lvl_down_i;
+    assign {var_lvl_i_1, var_lvl_i_0} = var_lvl_i;
+    assign {var_lvl_down_i_1, var_lvl_down_i_0} = var_lvl_down_i;
     assign var_lvl_down_o = {var_lvl_down_o_1, var_lvl_down_o_0};
     assign max_lvl_o = max_lvl_o_1 > max_lvl_o_0? max_lvl_o_1 : max_lvl_o_0;
     

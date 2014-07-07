@@ -25,7 +25,8 @@ module terminal_cell #(
 
     assign cclause_drv_o = |cclause_i;
 
-    always @(posedge clk) begin
+    //先用组合逻辑，后优化
+    always @(*) begin
         if(~rst)
             max_lvl_o <= 0;
         else

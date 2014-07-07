@@ -13,7 +13,6 @@ class class_lvl_data #(int nv = 8, int width_lvl = 16);
 	function void reset();
 		for (int i = 0; i < nv; ++i)
 			level[i] = 0;
-		end
 	endfunction
 
 	function void get(output [nv*width_lvl-1:0]  data);
@@ -31,6 +30,12 @@ class class_lvl_data #(int nv = 8, int width_lvl = 16);
 		for (int i = 0; i < nv; ++i)
 		begin
 			level[i] = data2[i];
+		end
+	endfunction
+
+	function void set_lvls(int l[nv]);
+		foreach (l[i]) begin
+			level[i] = l[i];
 		end
 	endfunction
 

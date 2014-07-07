@@ -10,38 +10,50 @@ module test_clause1(input clk, input rst);
         end
     endtask
 
-    parameter NUM_VARS = 8;
-    reg wr_i;
-    reg [NUM_VARS*3-1:0] var_value_i;
-    wire [NUM_VARS*3-1:0] var_value_o;
-    reg [NUM_VARS*2-1:0] clause_i;
-    wire [NUM_VARS*2-1:0] clause_o;
-    reg [4:0] clause_len_i;
-    wire [4:0] clause_len_o;
-    reg apply_bkt_i;
+    parameter NUM_VARS  = 8;
+    parameter WIDTH_LVL = 16;
+
+    reg                           wr_i;
+    reg  [NUM_VARS*3-1:0]         var_value_i;
+    wire [NUM_VARS*3-1:0]         var_value_o;
+    reg  [NUM_VARS*2-1:0]         clause_i;
+    wire [NUM_VARS*2-1:0]         clause_o;
+    reg  [4:0]                    clause_len_i;
+    wire [4:0]                    clause_len_o;
+    reg                           apply_bkt_i;
+
+    reg  [NUM_VARS*WIDTH_LVL-1:0] var_lvl_i;
+    reg  [NUM_VARS*WIDTH_LVL-1:0] var_lvl_down_i;
+    wire [NUM_VARS*WIDTH_LVL-1:0] var_lvl_down_o;
 
     clause1 #(
         .NUM_VARS(NUM_VARS)
     )
     clause1
     (
-        .clk(clk),
-        .rst(rst),
-        .var_value_i(var_value_i),
-        .var_value_o(var_value_o),
+        .clk           (clk),
+        .rst           (rst),
+        .var_value_i   (var_value_i),
+        .var_value_o   (var_value_o),
 
-        .wr_i(wr_i),
-        .clause_i(clause_i),
-        .clause_o(clause_o),
-        .clause_len_i(clause_len_i),
-        .clause_len_o(clause_len_o),
+        .var_lvl_i     (var_lvl_i),
+        .var_lvl_down_i(var_lvl_down_i),
+        .var_lvl_down_o(var_lvl_temp),
 
-        .apply_bkt_i(apply_bkt_i)
+        .wr_i          (wr_i),
+        .clause_i      (clause_i),
+        .clause_o      (clause_o),
+        .clause_len_i  (clause_len_i),
+        .clause_len_o  (clause_len_o),
+
+        .apply_bkt_i   (apply_bkt_i)
     );
 
     `include "../tb/class_clause_data.sv";
+    `include "../tb/class_lvl_data.sv";
     class_clause_data #(8) cdata_i = new;
     class_clause_data #(8) cdata_o = new;
+    class_lvl_data #(8,16) ldata   = new;
 
     /* --- 测试free_lit_count --- */
     task test_clause1_task();
@@ -56,20 +68,31 @@ module test_clause1(input clk, input rst);
                 cdata_i.display();
                 cdata_i.get(var_value_i);
                 cdata_i.get_clause(clause_i);
+
+                ldata.set_lvls('{1, 2, 3, 4, 5, 6, 7, 8});
+                ldata.get(var_lvl_i);
+                ldata.display();
                 $display("var_value_i = %b", var_value_i);
                 $display("clause_i    = %b", clause_i);
+                $display("level       = %b", var_lvl_i);
                 wr_i = 1;
 
             @ (posedge clk);
                 wr_i = 0;
                 #1
                 assert(clause1.all_c_sat_o == 1);
+                $display("clause1.all_c_sat_o = %1d", clause1.all_c_sat_o);
+                assert(clause1.max_lvl_from_lits == 6);
+                $display("clause1.max_lvl_from_lits = %1d", clause1.max_lvl_from_lits);
 
             @ (posedge clk);
                 cdata_i.reset();
                 cdata_i.get(var_value_i);
                 #1
                 assert(clause1.freelitcnt == 3);
+                $display("clause1.freelitcnt = %1d", clause1.freelitcnt);
+                assert(clause1.max_lvl_from_lits == 0);
+                $display("clause1.max_lvl_from_lits = %1d", clause1.max_lvl_from_lits);
 
             @ (posedge clk);
                 cdata_i.set_lits('{0, 2, 0, 0, 0, 1, 0, 0});
@@ -81,7 +104,11 @@ module test_clause1(input clk, input rst);
                 $display("clause_i    = %b", clause_i);
                 #1
                 assert(clause1.freelitcnt == 1);
+                $display("clause1.freelitcnt = %1d", clause1.freelitcnt);
                 assert(clause1.imp_drv == 1);
+                $display("clause1.imp_drv = %1d", clause1.imp_drv);
+                assert(clause1.max_lvl_from_lits == 6);
+                $display("clause1.max_lvl_from_lits = %1d", clause1.max_lvl_from_lits);
                 cdata_o.set(var_value_o);
                 cdata_o.assert_index(3, 3'b101);
 
@@ -91,10 +118,11 @@ module test_clause1(input clk, input rst);
                 cdata_i.display();
                 #1
                 assert(clause1.cclause_drv == 1);
+                $display("clause1.cclause_drv = %1d", clause1.cclause_drv);
                 cdata_o.set(var_value_o);
                 cdata_o.display();
                 cdata_o.assert_index(1, 3'b110);
-                cdata_o.assert_index(3, 3'b111);
+                cdata_o.assert_index(3, 3'b110);
                 cdata_o.assert_index(5, 3'b110);
         end
     endtask

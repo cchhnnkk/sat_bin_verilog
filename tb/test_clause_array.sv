@@ -14,6 +14,7 @@ module test_clause_array(input clk, input rst);
 
 	parameter NUM_CLAUSES = 8;
 	parameter NUM_VARS = 8;
+	parameter WIDTH_LVL = 16;
 	parameter WIDTH_VAR_STATES = 30;
 	parameter WIDTH_C_LEN = 4;
 
@@ -22,29 +23,38 @@ module test_clause_array(input clk, input rst);
 	reg apply_impl_i;
 	reg apply_bkt_i;
 
-	reg [NUM_CLAUSES-1:0] wr_i;
-	reg [NUM_VARS*3-1:0] var_value_i;
-	wire [NUM_VARS*3-1:0] var_value_o;
-	wire [NUM_CLAUSES-1:0] learntc_insert_index_o;
+	reg  [NUM_CLAUSES-1:0]        wr_i;
+	reg  [NUM_VARS*3-1:0]         var_value_i;
+	wire [NUM_VARS*3-1:0]         var_value_o;
+	wire [NUM_CLAUSES-1:0]        learntc_insert_index_o;
+	reg  [NUM_VARS*WIDTH_LVL-1:0] var_lvl_i;
+	wire [NUM_VARS*WIDTH_LVL-1:0] var_lvl_o;
 
 	clause_array #(
 		.NUM_CLAUSES(NUM_CLAUSES),
-		.NUM_VARS(NUM_VARS),
+		.NUM_VARS   (NUM_VARS),
 		.WIDTH_C_LEN(WIDTH_C_LEN)
 	)
 	clause_array(
-		.clk(clk),
-		.rst(rst),
-		.wr_i(wr_i),
+		.clk         (clk),
+		.rst         (rst),
+		.wr_i        (wr_i),
 		.clause_len_i(clause_len_i),
-		.var_value_i(var_value_i),
-		.var_value_o(var_value_o),
+		.var_value_i (var_value_i),
+		.var_value_o (var_value_o),
+
+        .var_lvl_i   (var_lvl_i),
+        .var_lvl_o   (var_lvl_o),
+
 		.apply_impl_i(apply_impl_i),
-		.apply_bkt_i(apply_bkt_i)
+		.apply_bkt_i (apply_bkt_i)
 	);
 
 	`include "../tb/class_clause_array.sv";
-	class_clause_array #(8, 8) carray_data = new();
+    `include "../tb/class_lvl_data.sv";
+	class_clause_array #(8, 8) carray_data = new;
+    class_clause_data  #(8)    cdata       = new;
+	class_lvl_data     #(8,16) ldata       = new;
 
 	int bin1[8][8] = '{
 			'{2, 0, 1, 0, 0, 0, 0, 0},
@@ -105,6 +115,64 @@ module test_clause_array(input clk, input rst);
 		end
 	endtask
 
+	int bin3[8][8] = '{
+			'{2, 0, 1, 0, 0, 0, 0, 0},
+			'{0, 2, 0, 1, 0, 2, 0, 0},
+			'{2, 0, 0, 1, 2, 0, 0, 0},
+			'{1, 1, 0, 0, 1, 0, 0, 0},
+
+			'{0, 1, 2, 0, 2, 0, 0, 0},
+			'{0, 0, 0, 0, 0, 0, 0, 0},
+			'{0, 0, 0, 0, 0, 0, 0, 0},
+			'{0, 0, 0, 0, 0, 0, 0, 0}
+		};
+	int level3[] = '{1, 2, 3, 4, 5, 6, 7, 8};
+
+	task test_lvl_data(input int bin_data[8][8], level[8]);
+		begin
+			@ (posedge clk);
+				$display("test_lvl_data");
+				apply_bkt_i = 0;
+				apply_impl_i = 0;
+			@ (posedge clk);
+				wr_clause_array(bin_data);
+                ldata.set_lvls(level);
+                ldata.get(var_lvl_i);
+                $display("var_lvl_i");
+                ldata.display();
+
+            @ (posedge clk);
+                cdata.set_lits('{0, 2, 0, 0, 0, 2, 0, 0});
+                cdata.set_imps('{0, 0, 0, 0, 0, 0, 0, 0});
+                cdata.get(var_value_i);
+                $display("var_value_i");
+                cdata.display();
+
+                cdata.set(var_value_o);
+                $display("var_value_o");
+                cdata.display();
+
+                ldata.get(var_lvl_o);
+                $display("var_lvl_o");
+                ldata.display();
+
+            @ (posedge clk);
+                cdata.set_lits('{1, 1, 0, 0, 0, 0, 0, 0});
+                cdata.set_imps('{0, 0, 0, 0, 0, 0, 0, 0});
+                cdata.get(var_value_i);
+                $display("var_value_i");
+                cdata.display();
+
+                cdata.set(var_value_o);
+                $display("var_value_o");
+                cdata.display();
+
+                ldata.get(var_lvl_o);
+                $display("var_lvl_o");
+                ldata.display();
+
+		end
+	endtask
 	/* --- 测试free_lit_count --- */
 	task test_clause_array_task();
 		begin

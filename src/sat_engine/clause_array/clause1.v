@@ -37,6 +37,7 @@ module clause1 #(
     wire                           cclause_drv;
     wire                           clausesat;
     wire [NUM_VARS*2-1 : 0]        clause_lits;
+    wire [WIDTH_LVL-1:0]           max_lvl_from_term, max_lvl_from_lits;
 
     lit8 lit8(
         .clk            (clk),
