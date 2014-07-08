@@ -11,6 +11,14 @@ view:
 vlog_sat_engine:
 	vlog_test_sat_engine.sh
 
+sim_clause_array:
+	sed "s/test_sat_engine_top/test_clause_array_top/g" test_se_console.do > test_ca_console.do
+	vsim -c -do test_ca_console.do
+	rm test_ca_console.do
+	python transcript_info.py
+	sed -i "s/--//g" transcript.todo
+	sublime_text transcript.todo
+
 sim_sat_engine:
 	vsim -c -do test_se_console.do
 	python transcript_info.py

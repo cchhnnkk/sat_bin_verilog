@@ -109,7 +109,7 @@ module lit1 #(
 
     assign lit_o = lit_of_clause_r;
 
-    wire var_lvl_this;
+    wire [WIDTH_LVL-1:0] var_lvl_this;
     assign var_lvl_this   = participate && isfree && imp_drv_i ? max_lvl_i : -1;
     //在每一列选择较小的lvl
     assign var_lvl_down_o = var_lvl_down_i < var_lvl_this      ? var_lvl_down_i : var_lvl_this;

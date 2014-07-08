@@ -7,8 +7,6 @@ module test_clause_array(input clk, input rst);
 		begin
 			@(posedge clk);
 				test_clause_array_task();
-			@(posedge clk);
-				$stop();
 		end
 	endtask
 
@@ -26,6 +24,8 @@ module test_clause_array(input clk, input rst);
 	reg  [NUM_CLAUSES-1:0]        wr_i;
 	reg  [NUM_VARS*3-1:0]         var_value_i;
 	wire [NUM_VARS*3-1:0]         var_value_o;
+    reg  [NUM_VARS*2-1:0]         clause_i;
+    wire [NUM_VARS*2-1:0]         clause_o;
 	wire [NUM_CLAUSES-1:0]        learntc_insert_index_o;
 	reg  [NUM_VARS*WIDTH_LVL-1:0] var_lvl_i;
 	wire [NUM_VARS*WIDTH_LVL-1:0] var_lvl_o;
@@ -39,7 +39,10 @@ module test_clause_array(input clk, input rst);
 		.clk         (clk),
 		.rst         (rst),
 		.wr_i        (wr_i),
+        .clause_i      (clause_i),
+        .clause_o      (clause_o),
 		.clause_len_i(clause_len_i),
+
 		.var_value_i (var_value_i),
 		.var_value_o (var_value_o),
 
@@ -91,7 +94,8 @@ module test_clause_array(input clk, input rst);
 					wr_i = 0;
 					wr_i[i] = 1;
 					clause_len_i = carray_data.get_len(i);
-					carray_data.get(i, var_value_i);
+					carray_data.get_clause(i, clause_i);
+                	carray_data.cdatas[i].display_lits();
 			end
 			@ (posedge clk);
 				wr_i = 0;
@@ -138,37 +142,39 @@ module test_clause_array(input clk, input rst);
 				wr_clause_array(bin_data);
                 ldata.set_lvls(level);
                 ldata.get(var_lvl_i);
-                $display("var_lvl_i");
+                $display("%1tns var_lvl_i", $time/1000.0);
                 ldata.display();
 
             @ (posedge clk);
                 cdata.set_lits('{0, 2, 0, 0, 0, 2, 0, 0});
                 cdata.set_imps('{0, 0, 0, 0, 0, 0, 0, 0});
                 cdata.get(var_value_i);
-                $display("var_value_i");
+                $display("%1tns var_value_i", $time/1000.0);
                 cdata.display();
 
+                # 1
                 cdata.set(var_value_o);
-                $display("var_value_o");
+                $display("%1tns var_value_o", $time/1000.0);
                 cdata.display();
 
-                ldata.get(var_lvl_o);
-                $display("var_lvl_o");
+                ldata.set(var_lvl_o);
+                $display("%1tns var_lvl_o", $time/1000.0);
                 ldata.display();
 
             @ (posedge clk);
                 cdata.set_lits('{1, 1, 0, 0, 0, 0, 0, 0});
                 cdata.set_imps('{0, 0, 0, 0, 0, 0, 0, 0});
                 cdata.get(var_value_i);
-                $display("var_value_i");
+                $display("%1tns var_value_i", $time/1000.0);
                 cdata.display();
 
+                # 1
                 cdata.set(var_value_o);
-                $display("var_value_o");
+                $display("%1tns var_value_o", $time/1000.0);
                 cdata.display();
 
-                ldata.get(var_lvl_o);
-                $display("var_lvl_o");
+                ldata.set(var_lvl_o);
+                $display("%1tns var_lvl_o", $time/1000.0);
                 ldata.display();
 
 		end
@@ -179,6 +185,7 @@ module test_clause_array(input clk, input rst);
 			$display("test_clause_array_task");
 			test_inserti(bin1);
 			test_inserti(bin2);
+			test_lvl_data(bin3, level3);
 		end
 	endtask
 endmodule
@@ -218,7 +225,9 @@ module test_clause_array_top;
 
 	initial begin
 		reset();
+        $display("start sim");
 		test_clause_array.run();
-		$display("done");
+        $display("done sim");
+        $finish();
 	end
 endmodule
