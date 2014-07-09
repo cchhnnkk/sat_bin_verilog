@@ -14,7 +14,8 @@ module lit8 #(
         input                           rst,
         
         input  [NUM_LITS*3-1 : 0]       var_value_i,
-        output [NUM_LITS*3-1 : 0]       var_value_o,
+        input  [NUM_LITS*3-1 : 0]       var_value_down_i,
+        output [NUM_LITS*3-1 : 0]       var_value_down_o,
         
         input  [NUM_LITS*WIDTH_LVL-1:0] var_lvl_i,
         input  [NUM_LITS*WIDTH_LVL-1:0] var_lvl_down_i,
@@ -33,6 +34,8 @@ module lit8 #(
         input                           cclause_drv_i,
         
         output                          clausesat_o,
+
+        input                           apply_bkt_i,
         
         //连接terminal cell
         input  [WIDTH_LVL-1:0]          max_lvl_i,
@@ -40,7 +43,8 @@ module lit8 #(
     );
 
     wire [NUM_LITS/2*3-1:0]           var_value_i_0,  var_value_i_1;
-    wire [NUM_LITS/2*3-1:0]           var_value_o_0,  var_value_o_1;
+    wire [NUM_LITS/2*3-1:0]           var_value_down_i_0,  var_value_down_i_1;
+    wire [NUM_LITS/2*3-1:0]           var_value_down_o_0,  var_value_down_o_1;
     wire [NUM_LITS*WIDTH_LVL/2-1 : 0] var_lvl_i_0,    var_lvl_i_1;
     wire [NUM_LITS*WIDTH_LVL/2-1 : 0] var_lvl_down_i_0,    var_lvl_down_i_1;
     wire [NUM_LITS*WIDTH_LVL/2-1 : 0] var_lvl_down_o_0,    var_lvl_down_o_1;
@@ -53,7 +57,8 @@ module lit8 #(
     wire                              clausesat_0,    clausesat_1;
 
     assign {var_value_i_1, var_value_i_0} = var_value_i;
-    assign var_value_o = {var_value_o_1, var_value_o_0};
+    assign {var_value_down_i_1, var_value_down_i_0} = var_value_down_i;
+    assign var_value_down_o = {var_value_down_o_1, var_value_down_o_0};
     
     assign {var_lvl_i_1, var_lvl_i_0} = var_lvl_i;
     assign {var_lvl_down_i_1, var_lvl_down_i_0} = var_lvl_down_i;
@@ -73,64 +78,70 @@ module lit8 #(
         .WIDTH_LVL(WIDTH_LVL)
     )
     lit4_0(
-        .clk            (clk),
-        .rst            (rst),
+        .clk             (clk),
+        .rst             (rst),
         
-        .var_value_i    (var_value_i_0),
-        .var_value_o    (var_value_o_0),
+        .var_value_i     (var_value_i_0),
+        .var_value_down_i(var_value_down_i_0),
+        .var_value_down_o(var_value_down_o_0),
         
-        .var_lvl_i      (var_lvl_i_0),
-        .var_lvl_down_i (var_lvl_down_i_0),
-        .var_lvl_down_o (var_lvl_down_o_0),
+        .var_lvl_i       (var_lvl_i_0),
+        .var_lvl_down_i  (var_lvl_down_i_0),
+        .var_lvl_down_o  (var_lvl_down_o_0),
         
-        .wr_i           (wr_i),
-        .lit_i          (lit_i_0),
-        .lit_o          (lit_o_0),
+        .wr_i            (wr_i),
+        .lit_i           (lit_i_0),
+        .lit_o           (lit_o_0),
         
-        .freelitcnt_pre (freelitcnt_pre),
-        .freelitcnt_next(freelitcnt_0),
+        .freelitcnt_pre  (freelitcnt_pre),
+        .freelitcnt_next (freelitcnt_0),
         
-        .imp_drv_i      (imp_drv_0),
+        .imp_drv_i       (imp_drv_0),
         
-        .cclause_o      (cclause_0),
-        .cclause_drv_i  (cclause_drv_i),
+        .cclause_o       (cclause_0),
+        .cclause_drv_i   (cclause_drv_i),
         
-        .clausesat_o    (clausesat_0),
+        .clausesat_o     (clausesat_0),
         
-        .max_lvl_i      (max_lvl_i),
-        .max_lvl_o      (max_lvl_o_0)
+        .apply_bkt_i     (apply_bkt_i),
+        
+        .max_lvl_i       (max_lvl_i),
+        .max_lvl_o       (max_lvl_o_0)
         );
 
     lit4 #(
         .WIDTH_LVL(WIDTH_LVL)
     )
     lit4_1(
-        .clk            (clk),
-        .rst            (rst),
+        .clk             (clk),
+        .rst             (rst),
         
-        .var_value_i    (var_value_i_1),
-        .var_value_o    (var_value_o_1),
+        .var_value_i     (var_value_i_1),
+        .var_value_down_i(var_value_down_i_1),
+        .var_value_down_o(var_value_down_o_1),
         
-        .var_lvl_i      (var_lvl_i_1),
-        .var_lvl_down_i (var_lvl_down_i_1),
-        .var_lvl_down_o (var_lvl_down_o_1),
+        .var_lvl_i       (var_lvl_i_1),
+        .var_lvl_down_i  (var_lvl_down_i_1),
+        .var_lvl_down_o  (var_lvl_down_o_1),
         
-        .wr_i           (wr_i),
-        .lit_i          (lit_i_1),
-        .lit_o          (lit_o_1),
+        .wr_i            (wr_i),
+        .lit_i           (lit_i_1),
+        .lit_o           (lit_o_1),
         
-        .freelitcnt_pre (freelitcnt_0),
-        .freelitcnt_next(freelitcnt_next),
+        .freelitcnt_pre  (freelitcnt_0),
+        .freelitcnt_next (freelitcnt_next),
         
-        .imp_drv_i      (imp_drv_1),
+        .imp_drv_i       (imp_drv_1),
         
-        .cclause_o      (cclause_1),
-        .cclause_drv_i  (cclause_drv_i),
+        .cclause_o       (cclause_1),
+        .cclause_drv_i   (cclause_drv_i),
         
-        .clausesat_o    (clausesat_1),
+        .clausesat_o     (clausesat_1),
         
-        .max_lvl_i      (max_lvl_i),
-        .max_lvl_o      (max_lvl_o_1)
+        .apply_bkt_i     (apply_bkt_i),
+        
+        .max_lvl_i       (max_lvl_i),
+        .max_lvl_o       (max_lvl_o_1)
         );
  
 endmodule
@@ -146,7 +157,8 @@ module lit4 #(
         input                           rst,
         
         input  [NUM_LITS*3-1 : 0]       var_value_i,
-        output [NUM_LITS*3-1 : 0]       var_value_o,
+        input  [NUM_LITS*3-1 : 0]       var_value_down_i,
+        output [NUM_LITS*3-1 : 0]       var_value_down_o,
         
         input  [NUM_LITS*WIDTH_LVL-1:0] var_lvl_i,
         input  [NUM_LITS*WIDTH_LVL-1:0] var_lvl_down_i,
@@ -165,6 +177,8 @@ module lit4 #(
         input                           cclause_drv_i,
         
         output                          clausesat_o,
+
+        input                           apply_bkt_i,
         
         //连接terminal cell
         input  [WIDTH_LVL-1:0]          max_lvl_i,
@@ -172,7 +186,8 @@ module lit4 #(
     );
 
     wire [NUM_LITS/2*3-1:0]           var_value_i_0,  var_value_i_1;
-    wire [NUM_LITS/2*3-1:0]           var_value_o_0,  var_value_o_1;
+    wire [NUM_LITS/2*3-1:0]           var_value_down_i_0,  var_value_down_i_1;
+    wire [NUM_LITS/2*3-1:0]           var_value_down_o_0,  var_value_down_o_1;
     wire [NUM_LITS*WIDTH_LVL/2-1 : 0] var_lvl_i_0,    var_lvl_i_1;
     wire [NUM_LITS*WIDTH_LVL/2-1 : 0] var_lvl_down_i_0,    var_lvl_down_i_1;
     wire [NUM_LITS*WIDTH_LVL/2-1 : 0] var_lvl_down_o_0,    var_lvl_down_o_1;
@@ -185,7 +200,8 @@ module lit4 #(
     wire                              clausesat_0,    clausesat_1;
 
     assign {var_value_i_1, var_value_i_0} = var_value_i;
-    assign var_value_o = {var_value_o_1, var_value_o_0};
+    assign {var_value_down_i_1, var_value_down_i_0} = var_value_down_i;
+    assign var_value_down_o = {var_value_down_o_1, var_value_down_o_0};
     
     assign {var_lvl_i_1, var_lvl_i_0} = var_lvl_i;
     assign {var_lvl_down_i_1, var_lvl_down_i_0} = var_lvl_down_i;
@@ -205,64 +221,70 @@ module lit4 #(
         .WIDTH_LVL(WIDTH_LVL)
     )
     lit2_0(
-        .clk            (clk),
-        .rst            (rst),
+        .clk             (clk),
+        .rst             (rst),
         
-        .var_value_i    (var_value_i_0),
-        .var_value_o    (var_value_o_0),
+        .var_value_i     (var_value_i_0),
+        .var_value_down_i(var_value_down_i_0),
+        .var_value_down_o(var_value_down_o_0),
         
-        .var_lvl_i      (var_lvl_i_0),
-        .var_lvl_down_i (var_lvl_down_i_0),
-        .var_lvl_down_o (var_lvl_down_o_0),
+        .var_lvl_i       (var_lvl_i_0),
+        .var_lvl_down_i  (var_lvl_down_i_0),
+        .var_lvl_down_o  (var_lvl_down_o_0),
         
-        .wr_i           (wr_i),
-        .lit_i          (lit_i_0),
-        .lit_o          (lit_o_0),
+        .wr_i            (wr_i),
+        .lit_i           (lit_i_0),
+        .lit_o           (lit_o_0),
         
-        .freelitcnt_pre (freelitcnt_pre),
-        .freelitcnt_next(freelitcnt_0),
+        .freelitcnt_pre  (freelitcnt_pre),
+        .freelitcnt_next (freelitcnt_0),
         
-        .imp_drv_i      (imp_drv_0),
+        .imp_drv_i       (imp_drv_0),
         
-        .cclause_o      (cclause_0),
-        .cclause_drv_i  (cclause_drv_i),
+        .cclause_o       (cclause_0),
+        .cclause_drv_i   (cclause_drv_i),
         
-        .clausesat_o    (clausesat_0),
+        .clausesat_o     (clausesat_0),
         
-        .max_lvl_i      (max_lvl_i),
-        .max_lvl_o      (max_lvl_o_0)
+        .apply_bkt_i     (apply_bkt_i),
+        
+        .max_lvl_i       (max_lvl_i),
+        .max_lvl_o       (max_lvl_o_0)
         );
 
     lit2 #(
         .WIDTH_LVL(WIDTH_LVL)
     )
     lit2_1(
-        .clk            (clk),
-        .rst            (rst),
+        .clk             (clk),
+        .rst             (rst),
         
-        .var_value_i    (var_value_i_1),
-        .var_value_o    (var_value_o_1),
+        .var_value_i     (var_value_i_1),
+        .var_value_down_i(var_value_down_i_1),
+        .var_value_down_o(var_value_down_o_1),
         
-        .var_lvl_i      (var_lvl_i_1),
-        .var_lvl_down_i (var_lvl_down_i_1),
-        .var_lvl_down_o (var_lvl_down_o_1),
+        .var_lvl_i       (var_lvl_i_1),
+        .var_lvl_down_i  (var_lvl_down_i_1),
+        .var_lvl_down_o  (var_lvl_down_o_1),
         
-        .wr_i           (wr_i),
-        .lit_i          (lit_i_1),
-        .lit_o          (lit_o_1),
+        .wr_i            (wr_i),
+        .lit_i           (lit_i_1),
+        .lit_o           (lit_o_1),
         
-        .freelitcnt_pre (freelitcnt_0),
-        .freelitcnt_next(freelitcnt_next),
+        .freelitcnt_pre  (freelitcnt_0),
+        .freelitcnt_next (freelitcnt_next),
         
-        .imp_drv_i      (imp_drv_1),
+        .imp_drv_i       (imp_drv_1),
         
-        .cclause_o      (cclause_1),
-        .cclause_drv_i  (cclause_drv_i),
+        .cclause_o       (cclause_1),
+        .cclause_drv_i   (cclause_drv_i),
         
-        .clausesat_o    (clausesat_1),
+        .clausesat_o     (clausesat_1),
         
-        .max_lvl_i      (max_lvl_i),
-        .max_lvl_o      (max_lvl_o_1)
+        .apply_bkt_i     (apply_bkt_i),
+        
+        .max_lvl_i       (max_lvl_i),
+        .max_lvl_o       (max_lvl_o_1)
         );
  
 endmodule
@@ -278,7 +300,8 @@ module lit2 #(
         input                           rst,
         
         input  [NUM_LITS*3-1 : 0]       var_value_i,
-        output [NUM_LITS*3-1 : 0]       var_value_o,
+        input  [NUM_LITS*3-1 : 0]       var_value_down_i,
+        output [NUM_LITS*3-1 : 0]       var_value_down_o,
         
         input  [NUM_LITS*WIDTH_LVL-1:0] var_lvl_i,
         input  [NUM_LITS*WIDTH_LVL-1:0] var_lvl_down_i,
@@ -297,6 +320,8 @@ module lit2 #(
         input                           cclause_drv_i,
         
         output                          clausesat_o,
+
+        input                           apply_bkt_i,
         
         //连接terminal cell
         input  [WIDTH_LVL-1:0]          max_lvl_i,
@@ -304,7 +329,8 @@ module lit2 #(
     );
 
     wire [NUM_LITS/2*3-1:0]           var_value_i_0,  var_value_i_1;
-    wire [NUM_LITS/2*3-1:0]           var_value_o_0,  var_value_o_1;
+    wire [NUM_LITS/2*3-1:0]           var_value_down_i_0,  var_value_down_i_1;
+    wire [NUM_LITS/2*3-1:0]           var_value_down_o_0,  var_value_down_o_1;
     wire [NUM_LITS*WIDTH_LVL/2-1 : 0] var_lvl_i_0,    var_lvl_i_1;
     wire [NUM_LITS*WIDTH_LVL/2-1 : 0] var_lvl_down_i_0,    var_lvl_down_i_1;
     wire [NUM_LITS*WIDTH_LVL/2-1 : 0] var_lvl_down_o_0,    var_lvl_down_o_1;
@@ -317,7 +343,8 @@ module lit2 #(
     wire                              clausesat_0,    clausesat_1;
 
     assign {var_value_i_1, var_value_i_0} = var_value_i;
-    assign var_value_o = {var_value_o_1, var_value_o_0};
+    assign {var_value_down_i_1, var_value_down_i_0} = var_value_down_i;
+    assign var_value_down_o = {var_value_down_o_1, var_value_down_o_0};
     
     assign {var_lvl_i_1, var_lvl_i_0} = var_lvl_i;
     assign {var_lvl_down_i_1, var_lvl_down_i_0} = var_lvl_down_i;
@@ -337,64 +364,70 @@ module lit2 #(
         .WIDTH_LVL(WIDTH_LVL)
     )
     lit1_0(
-        .clk            (clk),
-        .rst            (rst),
+        .clk             (clk),
+        .rst             (rst),
         
-        .var_value_i    (var_value_i_0),
-        .var_value_o    (var_value_o_0),
+        .var_value_i     (var_value_i_0),
+        .var_value_down_i(var_value_down_i_0),
+        .var_value_down_o(var_value_down_o_0),
         
-        .var_lvl_i      (var_lvl_i_0),
-        .var_lvl_down_i (var_lvl_down_i_0),
-        .var_lvl_down_o (var_lvl_down_o_0),
+        .var_lvl_i       (var_lvl_i_0),
+        .var_lvl_down_i  (var_lvl_down_i_0),
+        .var_lvl_down_o  (var_lvl_down_o_0),
         
-        .wr_i           (wr_i),
-        .lit_i          (lit_i_0),
-        .lit_o          (lit_o_0),
+        .wr_i            (wr_i),
+        .lit_i           (lit_i_0),
+        .lit_o           (lit_o_0),
         
-        .freelitcnt_pre (freelitcnt_pre),
-        .freelitcnt_next(freelitcnt_0),
+        .freelitcnt_pre  (freelitcnt_pre),
+        .freelitcnt_next (freelitcnt_0),
         
-        .imp_drv_i      (imp_drv_0),
+        .imp_drv_i       (imp_drv_0),
         
-        .cclause_o      (cclause_0),
-        .cclause_drv_i  (cclause_drv_i),
+        .cclause_o       (cclause_0),
+        .cclause_drv_i   (cclause_drv_i),
         
-        .clausesat_o    (clausesat_0),
+        .clausesat_o     (clausesat_0),
         
-        .max_lvl_i      (max_lvl_i),
-        .max_lvl_o      (max_lvl_o_0)
+        .apply_bkt_i     (apply_bkt_i),
+        
+        .max_lvl_i       (max_lvl_i),
+        .max_lvl_o       (max_lvl_o_0)
         );
 
     lit1 #(
         .WIDTH_LVL(WIDTH_LVL)
     )
     lit1_1(
-        .clk            (clk),
-        .rst            (rst),
+        .clk             (clk),
+        .rst             (rst),
         
-        .var_value_i    (var_value_i_1),
-        .var_value_o    (var_value_o_1),
+        .var_value_i     (var_value_i_1),
+        .var_value_down_i(var_value_down_i_1),
+        .var_value_down_o(var_value_down_o_1),
         
-        .var_lvl_i      (var_lvl_i_1),
-        .var_lvl_down_i (var_lvl_down_i_1),
-        .var_lvl_down_o (var_lvl_down_o_1),
+        .var_lvl_i       (var_lvl_i_1),
+        .var_lvl_down_i  (var_lvl_down_i_1),
+        .var_lvl_down_o  (var_lvl_down_o_1),
         
-        .wr_i           (wr_i),
-        .lit_i          (lit_i_1),
-        .lit_o          (lit_o_1),
+        .wr_i            (wr_i),
+        .lit_i           (lit_i_1),
+        .lit_o           (lit_o_1),
         
-        .freelitcnt_pre (freelitcnt_0),
-        .freelitcnt_next(freelitcnt_next),
+        .freelitcnt_pre  (freelitcnt_0),
+        .freelitcnt_next (freelitcnt_next),
         
-        .imp_drv_i      (imp_drv_1),
+        .imp_drv_i       (imp_drv_1),
         
-        .cclause_o      (cclause_1),
-        .cclause_drv_i  (cclause_drv_i),
+        .cclause_o       (cclause_1),
+        .cclause_drv_i   (cclause_drv_i),
         
-        .clausesat_o    (clausesat_1),
+        .clausesat_o     (clausesat_1),
         
-        .max_lvl_i      (max_lvl_i),
-        .max_lvl_o      (max_lvl_o_1)
+        .apply_bkt_i     (apply_bkt_i),
+        
+        .max_lvl_i       (max_lvl_i),
+        .max_lvl_o       (max_lvl_o_1)
         );
  
 endmodule

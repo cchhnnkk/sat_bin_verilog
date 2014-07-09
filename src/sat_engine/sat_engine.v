@@ -206,7 +206,7 @@ module sat_engine #(
                 cdata.display_lits();
             end
             if(wr_var_states!=0) begin
-                vs_list.set(lvl_states_i);
+                vs_list.set(vars_states_i);
                 //$display("sim time %4tns", $time/1000);
                 $display("%1tns wr var state list", $time/1000);
                 $display("\twr_var_states = %b", wr_var_states);
@@ -243,11 +243,11 @@ module sat_engine #(
                 //$display("sim time %4tns", $time/1000);
                 $display("%1tns done_core_i", $time/1000);
 
-                vs_list.set(lvl_states_i);
+                vs_list.set(lvl_states_o);
                 $display("%1tns var state list", $time/1000);
                 vs_list.display();
 
-                ls_list.set(lvl_states_i);
+                ls_list.set(lvl_states_o);
                 $display("%1tns lvl state list", $time/1000);
                 ls_list.display();
             end

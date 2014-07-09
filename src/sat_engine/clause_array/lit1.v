@@ -2,38 +2,41 @@ module lit1 #(
         parameter WIDTH_LVL   = 16
     )
     (
-        input                               clk,
-        input                               rst,
+        input                           clk,
+        input                           rst,
         
-        input      [2:0]                    var_value_i,
-        output reg [2:0]                    var_value_o,
+        input  [2:0]                    var_value_i,
+        input  [2:0]                    var_value_down_i,
+        output [2:0]                    var_value_down_o,
         
         //down在阵列中向下传播
-        input      [WIDTH_LVL-1:0]          var_lvl_i,
-        input      [WIDTH_LVL-1:0]          var_lvl_down_i,
-        output     [WIDTH_LVL-1:0]          var_lvl_down_o,
+        input  [WIDTH_LVL-1:0]          var_lvl_i,
+        input  [WIDTH_LVL-1:0]          var_lvl_down_i,
+        output [WIDTH_LVL-1:0]          var_lvl_down_o,
         
-        input                               wr_i,
-        input      [1:0]                    lit_i,
-        output     [1:0]                    lit_o,
+        input                           wr_i,
+        input  [1:0]                    lit_i,
+        output [1:0]                    lit_o,
         
-        input      [1:0]                    freelitcnt_pre,
-        output reg [1:0]                    freelitcnt_next,
+        input  [1:0]                    freelitcnt_pre,
+        output [1:0]                    freelitcnt_next,
         
-        input                               imp_drv_i,
+        input                           imp_drv_i,
         
-        output                              cclause_o,
-        input                               cclause_drv_i,
+        output                          cclause_o,
+        input                           cclause_drv_i,
         
-        output                              clausesat_o,
+        output                          clausesat_o,
+
+        input                           apply_bkt_i,
         
         //连接terminal cell
-        input      [WIDTH_LVL-1:0]          max_lvl_i,
-        output     [WIDTH_LVL-1:0]          max_lvl_o
+        input  [WIDTH_LVL-1:0]          max_lvl_i,
+        output [WIDTH_LVL-1:0]          max_lvl_o
     );
 
     reg [1:0]         lit_of_clause_r;
-    reg               var_implied_r;
+    reg               var_implied_r;    //用于冲突分析时冲突子句的识别
 
     wire              participate;
     assign participate = lit_of_clause_r[0] | lit_of_clause_r[1];
@@ -44,15 +47,17 @@ module lit1 #(
     assign clausesat_o = participate && lit_of_clause_r==var_value_i[2:1];
 
     //free lit cnt
-    always @(*) begin: set_free_lit_cnt
+    reg [1:0] freelitcnt;
+    assign freelitcnt_next = freelitcnt;
+    always @(*) begin
         if (participate && isfree) begin
             if(freelitcnt_pre==2'b00)
-                freelitcnt_next = 2'b01;
+                freelitcnt = 2'b01;
             else
-                freelitcnt_next = 2'b11;
+                freelitcnt = 2'b11;
         end
         else begin
-            freelitcnt_next = freelitcnt_pre;
+            freelitcnt = freelitcnt_pre;
         end
     end
 
@@ -72,28 +77,36 @@ module lit1 #(
     assign cclause_o = participate && var_implied_r && var_value_i[2:1]==2'b11;
 
     //var, var_bar to base cell
+    reg [2:0] var_value_w;
+    assign var_value_down_o = var_value_w | var_value_down_i;
+
     always @(*) begin: set_var_value
         if (participate && isfree && imp_drv_i)
-            var_value_o[2:1] = lit_of_clause_r[1:0];
+            var_value_w[2:1] = lit_of_clause_r[1:0];
         else if(participate && cclause_drv_i)
-            var_value_o[2:1] = 2'b11;
+            var_value_w[2:1] = 2'b11;
         else
-            var_value_o[2:1] = 2'b00;
+            var_value_w[2:1] = 2'b00;
     end
 
-    always @(*) begin: set_var_value_o_0
+    always @(*) begin
         if (participate && isfree && imp_drv_i)
-            var_value_o[0] = 1;
+            var_value_w[0] = 1;
         else
-            var_value_o[0] = 0;
+            var_value_w[0] = 0;
     end
 
 
+    //var_implied_r用于冲突分析时冲突子句的识别
     always @(posedge clk) begin: set_var_implied_r
         if (~rst)
             var_implied_r <= 0;
-        else if (participate && isfree && imp_drv_i)
+        else if (var_value_down_o != var_value_down_i) //该子句是第一个推理的
             var_implied_r <= 1;
+        else if (apply_bkt_i && var_value_i[0]==0) //回退时置为0
+            var_implied_r <= 0;
+        else if (wr_i)              //load时置为0
+            var_implied_r <= 0;
         else
             var_implied_r <= var_implied_r;
     end
@@ -111,8 +124,9 @@ module lit1 #(
 
     wire [WIDTH_LVL-1:0] var_lvl_this;
     assign var_lvl_this   = participate && isfree && imp_drv_i ? max_lvl_i : -1;
-    //在每一列选择较小的lvl
-    assign var_lvl_down_o = var_lvl_down_i < var_lvl_this      ? var_lvl_down_i : var_lvl_this;
+
+    //该子句是第一个推理的
+    assign var_lvl_down_o = var_value_down_o!=var_value_down_i ? var_lvl_this : var_lvl_down_i;
 
     assign max_lvl_o      = participate && ~isfree             ? var_lvl_i : 0;
 

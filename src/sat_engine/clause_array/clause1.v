@@ -10,7 +10,8 @@ module clause1 #(
         
         //data I/O
         input  [NUM_VARS*3-1:0]                var_value_i,
-        output [NUM_VARS*3-1:0]                var_value_o,
+        input  [NUM_VARS*3-1:0]                var_value_down_i,
+        output [NUM_VARS*3-1:0]                var_value_down_o,
         
         //用于推理时求得剩余最大lvl
         input  [NUM_VARS*WIDTH_LVL-1:0]        var_lvl_i,
@@ -40,32 +41,35 @@ module clause1 #(
     wire [WIDTH_LVL-1:0]           max_lvl_from_term, max_lvl_from_lits;
 
     lit8 lit8(
-        .clk            (clk),
-        .rst            (rst),
+        .clk             (clk),
+        .rst             (rst),
         
-        .var_value_i    (var_value_i),
-        .var_value_o    (var_value_o),
-
-        .var_lvl_i      (var_lvl_i),
-        .var_lvl_down_i (var_lvl_down_i),
-        .var_lvl_down_o (var_lvl_down_o),
-
-        .max_lvl_i      (max_lvl_from_term),
-        .max_lvl_o      (max_lvl_from_lits),
+        .var_value_i     (var_value_i),
+        .var_value_down_i(var_value_down_i),
+        .var_value_down_o(var_value_down_o),
         
-        .wr_i           (wr_i),
-        .lit_i          (clause_i),
-        .lit_o          (clause_lits),
+        .var_lvl_i       (var_lvl_i),
+        .var_lvl_down_i  (var_lvl_down_i),
+        .var_lvl_down_o  (var_lvl_down_o),
         
-        .freelitcnt_pre (0),
-        .freelitcnt_next(freelitcnt),
+        .max_lvl_i       (max_lvl_from_term),
+        .max_lvl_o       (max_lvl_from_lits),
         
-        .imp_drv_i      (imp_drv),
+        .wr_i            (wr_i),
+        .lit_i           (clause_i),
+        .lit_o           (clause_lits),
         
-        .cclause_o      (cclause),
-        .cclause_drv_i  (cclause_drv),
+        .freelitcnt_pre  (0),
+        .freelitcnt_next (freelitcnt),
         
-        .clausesat_o    (clausesat)
+        .imp_drv_i       (imp_drv),
+        
+        .cclause_o       (cclause),
+        .cclause_drv_i   (cclause_drv),
+        
+        .clausesat_o     (clausesat),
+        
+        .apply_bkt_i     (apply_bkt_i)
     );
 
     assign clause_o = rd_i? clause_lits : 0;

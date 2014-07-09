@@ -39,33 +39,36 @@ module clause_array #(
 
     assign {clause_lens, originc_lens} = clause_len;
 
+    wire [3*NUM_VARS-1:0]           var_value_down_start;
     wire  [NUM_VARS*WIDTH_LVL-1:0]  var_lvl_down_start;
+    assign var_value_down_start = 0;
     assign var_lvl_down_start = -1;
 
     clause8 #(
         .WIDTH_C_LEN(WIDTH_C_LEN)
     )
     clause8(
-        .clk           (clk),
-        .rst           (rst),
+        .clk             (clk),
+        .rst             (rst),
         
-        .var_value_i   (var_value_i),
-        .var_value_o   (var_value_o),
+        .var_value_i     (var_value_i),
+        .var_value_down_i(var_value_down_start),
+        .var_value_down_o(var_value_o),
         
-        .var_lvl_i     (var_lvl_i),
-        .var_lvl_down_i(var_lvl_down_start),
-        .var_lvl_down_o(var_lvl_o),
+        .var_lvl_i       (var_lvl_i),
+        .var_lvl_down_i  (var_lvl_down_start),
+        .var_lvl_down_o  (var_lvl_o),
         
-        .wr_i          (wr_i),
-        .rd_i          (rd_i),
-        .clause_i      (clause_i),
-        .clause_o      (clause_o),
-        .clause_len_i  (clause_len_i),
-        .clause_len_o  (clause_len),
+        .wr_i            (wr_i),
+        .rd_i            (rd_i),
+        .clause_i        (clause_i),
+        .clause_o        (clause_o),
+        .clause_len_i    (clause_len_i),
+        .clause_len_o    (clause_len),
         
-        .all_c_sat_o   (all_c_sat_o),
-        .apply_impl_i  (apply_impl_i),
-        .apply_bkt_i   (apply_bkt_i)
+        .all_c_sat_o     (all_c_sat_o),
+        .apply_impl_i    (apply_impl_i),
+        .apply_bkt_i     (apply_bkt_i)
     );
 
     wire [WIDTH_C_LEN-1 : 0]    max_len;
