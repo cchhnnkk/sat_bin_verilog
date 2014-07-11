@@ -312,12 +312,12 @@
   ], 
   "clause1": [
     [
-      "lit8", 
-      "lit8"
-    ], 
-    [
       "terminal_cell", 
       "terminal_cell"
+    ], 
+    [
+      "lit8", 
+      "lit8"
     ]
   ], 
   "buffer_state": [], 

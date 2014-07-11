@@ -33,7 +33,8 @@ module clause8 #(
         
         //ctrl
         output                                 all_c_sat_o,
-        input                                  apply_impl_i,
+        input                                  apply_imply_i,
+        input                                  apply_analyze_i,
         input                                  apply_bkt_i
     );
 
@@ -75,7 +76,8 @@ module clause8 #(
         .clause_len_o    (clause_len_o_0),
         
         .all_c_sat_o     (all_c_sat_o_0),
-        .apply_impl_i    (apply_impl_i),
+        .apply_imply_i   (apply_imply_i),
+        .apply_analyze_i (apply_analyze_i),
         .apply_bkt_i     (apply_bkt_i)
         );
 
@@ -103,7 +105,8 @@ module clause8 #(
         .clause_len_o    (clause_len_o_1),
         
         .all_c_sat_o     (all_c_sat_o_1),
-        .apply_impl_i    (apply_impl_i),
+        .apply_imply_i   (apply_imply_i),
+        .apply_analyze_i (apply_analyze_i),
         .apply_bkt_i     (apply_bkt_i)
         );
 
@@ -139,7 +142,8 @@ module clause4 #(
         
         //ctrl
         output                                 all_c_sat_o,
-        input                                  apply_impl_i,
+        input                                  apply_imply_i,
+        input                                  apply_analyze_i,
         input                                  apply_bkt_i
     );
 
@@ -181,7 +185,8 @@ module clause4 #(
         .clause_len_o    (clause_len_o_0),
         
         .all_c_sat_o     (all_c_sat_o_0),
-        .apply_impl_i    (apply_impl_i),
+        .apply_imply_i   (apply_imply_i),
+        .apply_analyze_i (apply_analyze_i),
         .apply_bkt_i     (apply_bkt_i)
         );
 
@@ -209,7 +214,8 @@ module clause4 #(
         .clause_len_o    (clause_len_o_1),
         
         .all_c_sat_o     (all_c_sat_o_1),
-        .apply_impl_i    (apply_impl_i),
+        .apply_imply_i   (apply_imply_i),
+        .apply_analyze_i (apply_analyze_i),
         .apply_bkt_i     (apply_bkt_i)
         );
 
@@ -245,7 +251,8 @@ module clause2 #(
         
         //ctrl
         output                                 all_c_sat_o,
-        input                                  apply_impl_i,
+        input                                  apply_imply_i,
+        input                                  apply_analyze_i,
         input                                  apply_bkt_i
     );
 
@@ -287,7 +294,8 @@ module clause2 #(
         .clause_len_o    (clause_len_o_0),
         
         .all_c_sat_o     (all_c_sat_o_0),
-        .apply_impl_i    (apply_impl_i),
+        .apply_imply_i   (apply_imply_i),
+        .apply_analyze_i (apply_analyze_i),
         .apply_bkt_i     (apply_bkt_i)
         );
 
@@ -315,7 +323,8 @@ module clause2 #(
         .clause_len_o    (clause_len_o_1),
         
         .all_c_sat_o     (all_c_sat_o_1),
-        .apply_impl_i    (apply_impl_i),
+        .apply_imply_i   (apply_imply_i),
+        .apply_analyze_i (apply_analyze_i),
         .apply_bkt_i     (apply_bkt_i)
         );
 

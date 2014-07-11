@@ -28,17 +28,18 @@ module clause1 #(
         
         //ctrl
         output                                 all_c_sat_o,
-        input                                  apply_impl_i,
+        input                                  apply_imply_i,
+        input                                  apply_analyze_i,
         input                                  apply_bkt_i
     );
 
     wire [1:0]                     freelitcnt;
     wire                           imp_drv;
-    wire                           cclause;
-    wire                           cclause_drv;
-    wire                           clausesat;
+    wire                           conflict_c;
+    wire                           conflict_c_drv;
+    wire                           csat_from_lits, csat_from_term;
     wire [NUM_VARS*2-1 : 0]        clause_lits;
-    wire [WIDTH_LVL-1:0]           max_lvl_from_term, max_lvl_from_lits;
+    wire [WIDTH_LVL-1:0]           cmax_lvl_from_term, cmax_lvl_from_lits;
 
     lit8 lit8(
         .clk             (clk),
@@ -52,8 +53,8 @@ module clause1 #(
         .var_lvl_down_i  (var_lvl_down_i),
         .var_lvl_down_o  (var_lvl_down_o),
         
-        .max_lvl_i       (max_lvl_from_term),
-        .max_lvl_o       (max_lvl_from_lits),
+        .cmax_lvl_i      (cmax_lvl_from_term),
+        .cmax_lvl_o      (cmax_lvl_from_lits),
         
         .wr_i            (wr_i),
         .lit_i           (clause_i),
@@ -64,32 +65,36 @@ module clause1 #(
         
         .imp_drv_i       (imp_drv),
         
-        .cclause_o       (cclause),
-        .cclause_drv_i   (cclause_drv),
+        .conflict_c_o    (conflict_c),
+        .conflict_c_drv_i(conflict_c_drv),
         
-        .clausesat_o     (clausesat),
+        .csat_o          (csat_from_lits),
+        .csat_drv_i      (csat_from_term),
         
+        .apply_imply_i   (apply_imply_i),
+        .apply_analyze_i (apply_analyze_i),
         .apply_bkt_i     (apply_bkt_i)
     );
 
     assign clause_o = rd_i? clause_lits : 0;
 
-    wire   cclause_drv_o;
-    assign cclause_drv=cclause_drv_o;
+    wire   conflict_c_drv_o;
+    assign conflict_c_drv=conflict_c_drv_o;
 
     terminal_cell #(
         .WIDTH_LVL(WIDTH_LVL)
     )
     terminal_cell(
-        .clk          (clk),
-        .rst          (rst),
-        .clausesat_i  (clausesat),
-        .freelitcnt_i (freelitcnt),
-        .imp_drv_o    (imp_drv),
-        .cclause_i    (cclause),
-        .cclause_drv_o(cclause_drv_o),
-        .max_lvl_i    (max_lvl_from_lits),
-        .max_lvl_o    (max_lvl_from_term)
+        .clk             (clk),
+        .rst             (rst),
+        .csat_i          (csat_from_lits),
+        .csat_drv_o      (csat_from_term),
+        .freelitcnt_i    (freelitcnt),
+        .imp_drv_o       (imp_drv),
+        .conflict_c_i    (conflict_c),
+        .conflict_c_drv_o(conflict_c_drv_o),
+        .cmax_lvl_i      (cmax_lvl_from_lits),
+        .cmax_lvl_o      (cmax_lvl_from_term)
     );
 
     reg                            need_clear;
@@ -98,7 +103,7 @@ module clause1 #(
     always @(posedge clk) begin: set_need_clear
         if(~rst)
             need_clear <= 0;
-        else if(is_reason_r && cclause_drv_o)
+        else if(is_reason_r && conflict_c_drv_o)
             need_clear <= 1;
         else if(~is_reason_r)
             need_clear <= 0;
@@ -109,7 +114,7 @@ module clause1 #(
     always @(posedge clk) begin: set_is_reason_r
         if(~rst)
             is_reason_r <= 0;
-        else if(apply_impl_i && imp_drv)
+        else if(apply_imply_i && imp_drv)
             is_reason_r <= 1;
         else if(apply_bkt_i && need_clear)
             is_reason_r <= 0;
@@ -129,5 +134,5 @@ module clause1 #(
     //当该子句不是原因子句时，才将其长度输出
     assign clause_len_o = is_reason_r? 0:clause_len_r;
 
-    assign all_c_sat_o = clausesat || clause_lits==0;
+    assign all_c_sat_o = csat_from_lits || clause_lits==0;
 endmodule

@@ -262,7 +262,10 @@ module state_list #(
                 ADD_LEARNTC:
                     n_analyze_state = ANALYZE_DONE;
                 ANALYZE_DONE:
-                    n_analyze_state = ANALYZE_IDLE;
+                    if(~apply_analyze_i)    //等待ctrl_core处理完
+                        n_analyze_state = ANALYZE_IDLE;
+                    else
+                        n_analyze_state = ANALYZE_DONE;
                 default:
                     n_analyze_state = ANALYZE_IDLE;
             endcase
@@ -357,7 +360,7 @@ module state_list #(
             begin
                 $display("\tlearnt clause = %b", find_conflict_cur);
                 cdata_learntc.reset();
-                cdata_learntc.set_clause(var_value_o);
+                cdata_learntc.set_clause(learnt_lit_o);
                 cdata_learntc.display_lits();
             end
             else if(done_analyze_o)

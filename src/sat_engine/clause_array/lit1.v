@@ -23,16 +23,20 @@ module lit1 #(
         
         input                           imp_drv_i,
         
-        output                          cclause_o,
-        input                           cclause_drv_i,
+        output                          conflict_c_o,
+        input                           conflict_c_drv_i,
         
-        output                          clausesat_o,
+        output                          csat_o,
+        input                           csat_drv_i,
 
-        input                           apply_bkt_i,
-        
         //连接terminal cell
-        input  [WIDTH_LVL-1:0]          max_lvl_i,
-        output [WIDTH_LVL-1:0]          max_lvl_o
+        input  [WIDTH_LVL-1:0]          cmax_lvl_i,
+        output [WIDTH_LVL-1:0]          cmax_lvl_o,
+
+        //控制信号
+        input                           apply_imply_i,
+        input                           apply_analyze_i,
+        input                           apply_bkt_i
     );
 
     reg [1:0]         lit_of_clause_r;
@@ -44,7 +48,7 @@ module lit1 #(
     wire              isfree;
     assign isfree = var_value_i[2:1]==2'b00;
 
-    assign clausesat_o = participate && lit_of_clause_r==var_value_i[2:1];
+    assign csat_o = participate && lit_of_clause_r==var_value_i[2:1];
 
     //free lit cnt
     reg [1:0] freelitcnt;
@@ -74,36 +78,41 @@ module lit1 #(
 */
 
     //find conflict
-    assign cclause_o = participate && var_implied_r && var_value_i[2:1]==2'b11;
+    assign conflict_c_o = participate && var_implied_r && var_value_i[2:1]==2'b11;
 
     //var, var_bar to base cell
     reg [2:0] var_value_w;
     assign var_value_down_o = var_value_w | var_value_down_i;
 
-    always @(*) begin: set_var_value
-        if (participate && isfree && imp_drv_i)
+    wire can_imply;
+    assign can_imply = participate && isfree && ~csat_drv_i && imp_drv_i;
+
+    always @(*) begin
+        if (can_imply)
             var_value_w[2:1] = lit_of_clause_r[1:0];
-        else if(participate && cclause_drv_i)
+        else if(participate && conflict_c_drv_i)
             var_value_w[2:1] = 2'b11;
         else
             var_value_w[2:1] = 2'b00;
     end
 
     always @(*) begin
-        if (participate && isfree && imp_drv_i)
+        if (can_imply)
             var_value_w[0] = 1;
         else
             var_value_w[0] = 0;
     end
 
+    wire first_imply;
+    assign first_imply = apply_imply_i && can_imply && var_value_down_o != var_value_down_i;
 
     //var_implied_r用于冲突分析时冲突子句的识别
-    always @(posedge clk) begin: set_var_implied_r
+    always @(posedge clk) begin
         if (~rst)
             var_implied_r <= 0;
-        else if (var_value_down_o != var_value_down_i) //该子句是第一个推理的
+        else if (first_imply)       //该子句是第一个推理的
             var_implied_r <= 1;
-        else if (apply_bkt_i && var_value_i[0]==0) //回退时置为0
+        else if (apply_bkt_i && participate && var_value_i[0]==0) //回退时置为0
             var_implied_r <= 0;
         else if (wr_i)              //load时置为0
             var_implied_r <= 0;
@@ -111,7 +120,7 @@ module lit1 #(
             var_implied_r <= var_implied_r;
     end
 
-    always @(posedge clk) begin: set_lit_of_clause_r
+    always @(posedge clk) begin
         if (~rst)
             lit_of_clause_r <= 0;
         else if (wr_i)
@@ -122,12 +131,12 @@ module lit1 #(
 
     assign lit_o = lit_of_clause_r;
 
-    wire [WIDTH_LVL-1:0] var_lvl_this;
-    assign var_lvl_this   = participate && isfree && imp_drv_i ? max_lvl_i : -1;
+    //wire [WIDTH_LVL-1:0] var_lvl_this;
+    //assign var_lvl_this   = participate && isfree && imp_drv_i ? cmax_lvl_i    : -1;
 
     //该子句是第一个推理的
-    assign var_lvl_down_o = var_value_down_o!=var_value_down_i ? var_lvl_this : var_lvl_down_i;
+    assign var_lvl_down_o = first_imply                        ? cmax_lvl_i    : var_lvl_down_i;
 
-    assign max_lvl_o      = participate && ~isfree             ? var_lvl_i : 0;
+    assign cmax_lvl_o     = participate && ~isfree             ? var_lvl_i    : 0;
 
 endmodule

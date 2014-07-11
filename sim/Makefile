@@ -27,6 +27,9 @@ sim_sat_engine:
 wave_sat_engine: hielist
 	cd ../tools && ../tools/gen_wave.sh test_sat_engine_top 3
 
+wave_exlist_sat_engine:
+	cd ../tools && ../tools/gen_wave.sh test_sat_engine_top 3 wave_exlist_sat_engine.txt
+
 init_ref_sat_engine:
 	../tools/gen_include_ref.py > vlog_include_ref.db ../src/sat_engine ../tb
 

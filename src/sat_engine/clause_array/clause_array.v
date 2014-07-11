@@ -29,7 +29,8 @@ module clause_array #(
         //ctrl
         input                           add_learntc_en_i,
         output                          all_c_sat_o,
-        input                           apply_impl_i,
+        input                           apply_imply_i,
+        input                           apply_analyze_i,
         input                           apply_bkt_i
     );
 
@@ -42,7 +43,7 @@ module clause_array #(
     wire [3*NUM_VARS-1:0]           var_value_down_start;
     wire  [NUM_VARS*WIDTH_LVL-1:0]  var_lvl_down_start;
     assign var_value_down_start = 0;
-    assign var_lvl_down_start = -1;
+    assign var_lvl_down_start = 0;
 
     clause8 #(
         .WIDTH_C_LEN(WIDTH_C_LEN)
@@ -67,7 +68,8 @@ module clause_array #(
         .clause_len_o    (clause_len),
         
         .all_c_sat_o     (all_c_sat_o),
-        .apply_impl_i    (apply_impl_i),
+        .apply_imply_i   (apply_imply_i),
+        .apply_analyze_i (apply_analyze_i),
         .apply_bkt_i     (apply_bkt_i)
     );
 

@@ -32,8 +32,8 @@ def gen_clause():
 
         .imp_drv_i(imp_drv_%d),
 
-        .cclause_o(cclause_%d),
-        .cclause_drv_i(cclause_drv_%d),
+        .conflict_c_o(cclause_%d),
+        .conflict_c_drv_i(cclause_drv_%d),
 
         .clausesat_o(clausesat_%d)
     )""" % (i, i, i, i - 1, i, i, i, i, i)

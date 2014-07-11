@@ -38,8 +38,8 @@ module test_lit1;
 	reg [1:0] freelitcnt_pre;
 	wire [1:0] freelitcnt_next;
 	reg imp_drv_i;
-	wire cclause_o;
-	reg cclause_drv_i;
+	wire conflict_c_o;
+	reg conflict_c_drv_i;
 	wire clausesat_o;
 
 	lit1 lit1(
@@ -51,8 +51,8 @@ module test_lit1;
 		.freelitcnt_pre(freelitcnt_pre),
 		.freelitcnt_next(freelitcnt_next),
 		.imp_drv_i(imp_drv_i),
-		.cclause_o(cclause_o),
-		.cclause_drv_i(cclause_drv_i),
+		.conflict_c_o(conflict_c_o),
+		.conflict_c_drv_i(conflict_c_drv_i),
 		.clausesat_o(clausesat_o)
 	);
 

@@ -30,16 +30,20 @@ module lit8 #(
         
         input                           imp_drv_i,
         
-        output                          cclause_o,
-        input                           cclause_drv_i,
+        output                          conflict_c_o,
+        input                           conflict_c_drv_i,
         
-        output                          clausesat_o,
-
-        input                           apply_bkt_i,
+        output                          csat_o,
+        input                           csat_drv_i,
         
         //连接terminal cell
-        input  [WIDTH_LVL-1:0]          max_lvl_i,
-        output [WIDTH_LVL-1:0]          max_lvl_o
+        input  [WIDTH_LVL-1:0]          cmax_lvl_i,
+        output [WIDTH_LVL-1:0]          cmax_lvl_o,
+
+        //控制信号
+        input                           apply_imply_i,
+        input                           apply_analyze_i,
+        input                           apply_bkt_i
     );
 
     wire [NUM_LITS/2*3-1:0]           var_value_i_0,  var_value_i_1;
@@ -48,13 +52,13 @@ module lit8 #(
     wire [NUM_LITS*WIDTH_LVL/2-1 : 0] var_lvl_i_0,    var_lvl_i_1;
     wire [NUM_LITS*WIDTH_LVL/2-1 : 0] var_lvl_down_i_0,    var_lvl_down_i_1;
     wire [NUM_LITS*WIDTH_LVL/2-1 : 0] var_lvl_down_o_0,    var_lvl_down_o_1;
-    wire [WIDTH_LVL/2-1 : 0]          max_lvl_o_0,    max_lvl_o_1;
+    wire [WIDTH_LVL/2-1 : 0]          cmax_lvl_o_0,    cmax_lvl_o_1;
     wire [NUM_LITS/2*2-1:0]           lit_i_0,        lit_i_1;
     wire [NUM_LITS/2*2-1:0]           lit_o_0,        lit_o_1;
     wire [1:0]                        freelitcnt_0;
     wire                              imp_drv_0,      imp_drv_1;
-    wire                              cclause_0,      cclause_1;
-    wire                              clausesat_0,    clausesat_1;
+    wire                              conflict_c_0,      conflict_c_1;
+    wire                              csat_o_0,    csat_o_1;
 
     assign {var_value_i_1, var_value_i_0} = var_value_i;
     assign {var_value_down_i_1, var_value_down_i_0} = var_value_down_i;
@@ -63,13 +67,13 @@ module lit8 #(
     assign {var_lvl_i_1, var_lvl_i_0} = var_lvl_i;
     assign {var_lvl_down_i_1, var_lvl_down_i_0} = var_lvl_down_i;
     assign var_lvl_down_o = {var_lvl_down_o_1, var_lvl_down_o_0};
-    assign max_lvl_o = max_lvl_o_1 > max_lvl_o_0? max_lvl_o_1 : max_lvl_o_0;
+    assign cmax_lvl_o = cmax_lvl_o_1 > cmax_lvl_o_0? cmax_lvl_o_1 : cmax_lvl_o_0;
     
     assign {lit_i_1, lit_i_0} = lit_i;
     assign lit_o = {lit_o_1, lit_o_0};
     
-    assign clausesat_o = clausesat_1 | clausesat_0;
-    assign cclause_o = cclause_1 | cclause_0;
+    assign csat_o = csat_o_1 | csat_o_0;
+    assign conflict_c_o = conflict_c_1 | conflict_c_0;
     
     assign imp_drv_0 = imp_drv_i;
     assign imp_drv_1 = imp_drv_i;
@@ -98,15 +102,18 @@ module lit8 #(
         
         .imp_drv_i       (imp_drv_0),
         
-        .cclause_o       (cclause_0),
-        .cclause_drv_i   (cclause_drv_i),
+        .conflict_c_o    (conflict_c_0),
+        .conflict_c_drv_i(conflict_c_drv_i),
         
-        .clausesat_o     (clausesat_0),
+        .csat_o          (csat_o_0),
+        .csat_drv_i      (csat_drv_i),
         
+        .apply_imply_i   (apply_imply_i),
+        .apply_analyze_i (apply_analyze_i),
         .apply_bkt_i     (apply_bkt_i),
         
-        .max_lvl_i       (max_lvl_i),
-        .max_lvl_o       (max_lvl_o_0)
+        .cmax_lvl_i      (cmax_lvl_i),
+        .cmax_lvl_o      (cmax_lvl_o_0)
         );
 
     lit4 #(
@@ -133,15 +140,18 @@ module lit8 #(
         
         .imp_drv_i       (imp_drv_1),
         
-        .cclause_o       (cclause_1),
-        .cclause_drv_i   (cclause_drv_i),
+        .conflict_c_o    (conflict_c_1),
+        .conflict_c_drv_i(conflict_c_drv_i),
         
-        .clausesat_o     (clausesat_1),
+        .csat_o          (csat_o_1),
+        .csat_drv_i      (csat_drv_i),
         
+        .apply_imply_i   (apply_imply_i),
+        .apply_analyze_i (apply_analyze_i),
         .apply_bkt_i     (apply_bkt_i),
         
-        .max_lvl_i       (max_lvl_i),
-        .max_lvl_o       (max_lvl_o_1)
+        .cmax_lvl_i       (cmax_lvl_i),
+        .cmax_lvl_o       (cmax_lvl_o_1)
         );
  
 endmodule
@@ -173,16 +183,20 @@ module lit4 #(
         
         input                           imp_drv_i,
         
-        output                          cclause_o,
-        input                           cclause_drv_i,
+        output                          conflict_c_o,
+        input                           conflict_c_drv_i,
         
-        output                          clausesat_o,
-
-        input                           apply_bkt_i,
+        output                          csat_o,
+        input                           csat_drv_i,
         
         //连接terminal cell
-        input  [WIDTH_LVL-1:0]          max_lvl_i,
-        output [WIDTH_LVL-1:0]          max_lvl_o
+        input  [WIDTH_LVL-1:0]          cmax_lvl_i,
+        output [WIDTH_LVL-1:0]          cmax_lvl_o,
+
+        //控制信号
+        input                           apply_imply_i,
+        input                           apply_analyze_i,
+        input                           apply_bkt_i
     );
 
     wire [NUM_LITS/2*3-1:0]           var_value_i_0,  var_value_i_1;
@@ -191,13 +205,13 @@ module lit4 #(
     wire [NUM_LITS*WIDTH_LVL/2-1 : 0] var_lvl_i_0,    var_lvl_i_1;
     wire [NUM_LITS*WIDTH_LVL/2-1 : 0] var_lvl_down_i_0,    var_lvl_down_i_1;
     wire [NUM_LITS*WIDTH_LVL/2-1 : 0] var_lvl_down_o_0,    var_lvl_down_o_1;
-    wire [WIDTH_LVL/2-1 : 0]          max_lvl_o_0,    max_lvl_o_1;
+    wire [WIDTH_LVL/2-1 : 0]          cmax_lvl_o_0,    cmax_lvl_o_1;
     wire [NUM_LITS/2*2-1:0]           lit_i_0,        lit_i_1;
     wire [NUM_LITS/2*2-1:0]           lit_o_0,        lit_o_1;
     wire [1:0]                        freelitcnt_0;
     wire                              imp_drv_0,      imp_drv_1;
-    wire                              cclause_0,      cclause_1;
-    wire                              clausesat_0,    clausesat_1;
+    wire                              conflict_c_0,      conflict_c_1;
+    wire                              csat_o_0,    csat_o_1;
 
     assign {var_value_i_1, var_value_i_0} = var_value_i;
     assign {var_value_down_i_1, var_value_down_i_0} = var_value_down_i;
@@ -206,13 +220,13 @@ module lit4 #(
     assign {var_lvl_i_1, var_lvl_i_0} = var_lvl_i;
     assign {var_lvl_down_i_1, var_lvl_down_i_0} = var_lvl_down_i;
     assign var_lvl_down_o = {var_lvl_down_o_1, var_lvl_down_o_0};
-    assign max_lvl_o = max_lvl_o_1 > max_lvl_o_0? max_lvl_o_1 : max_lvl_o_0;
+    assign cmax_lvl_o = cmax_lvl_o_1 > cmax_lvl_o_0? cmax_lvl_o_1 : cmax_lvl_o_0;
     
     assign {lit_i_1, lit_i_0} = lit_i;
     assign lit_o = {lit_o_1, lit_o_0};
     
-    assign clausesat_o = clausesat_1 | clausesat_0;
-    assign cclause_o = cclause_1 | cclause_0;
+    assign csat_o = csat_o_1 | csat_o_0;
+    assign conflict_c_o = conflict_c_1 | conflict_c_0;
     
     assign imp_drv_0 = imp_drv_i;
     assign imp_drv_1 = imp_drv_i;
@@ -241,15 +255,18 @@ module lit4 #(
         
         .imp_drv_i       (imp_drv_0),
         
-        .cclause_o       (cclause_0),
-        .cclause_drv_i   (cclause_drv_i),
+        .conflict_c_o    (conflict_c_0),
+        .conflict_c_drv_i(conflict_c_drv_i),
         
-        .clausesat_o     (clausesat_0),
+        .csat_o          (csat_o_0),
+        .csat_drv_i      (csat_drv_i),
         
+        .apply_imply_i   (apply_imply_i),
+        .apply_analyze_i (apply_analyze_i),
         .apply_bkt_i     (apply_bkt_i),
         
-        .max_lvl_i       (max_lvl_i),
-        .max_lvl_o       (max_lvl_o_0)
+        .cmax_lvl_i      (cmax_lvl_i),
+        .cmax_lvl_o      (cmax_lvl_o_0)
         );
 
     lit2 #(
@@ -276,15 +293,18 @@ module lit4 #(
         
         .imp_drv_i       (imp_drv_1),
         
-        .cclause_o       (cclause_1),
-        .cclause_drv_i   (cclause_drv_i),
+        .conflict_c_o    (conflict_c_1),
+        .conflict_c_drv_i(conflict_c_drv_i),
         
-        .clausesat_o     (clausesat_1),
+        .csat_o          (csat_o_1),
+        .csat_drv_i      (csat_drv_i),
         
+        .apply_imply_i   (apply_imply_i),
+        .apply_analyze_i (apply_analyze_i),
         .apply_bkt_i     (apply_bkt_i),
         
-        .max_lvl_i       (max_lvl_i),
-        .max_lvl_o       (max_lvl_o_1)
+        .cmax_lvl_i       (cmax_lvl_i),
+        .cmax_lvl_o       (cmax_lvl_o_1)
         );
  
 endmodule
@@ -316,16 +336,20 @@ module lit2 #(
         
         input                           imp_drv_i,
         
-        output                          cclause_o,
-        input                           cclause_drv_i,
+        output                          conflict_c_o,
+        input                           conflict_c_drv_i,
         
-        output                          clausesat_o,
-
-        input                           apply_bkt_i,
+        output                          csat_o,
+        input                           csat_drv_i,
         
         //连接terminal cell
-        input  [WIDTH_LVL-1:0]          max_lvl_i,
-        output [WIDTH_LVL-1:0]          max_lvl_o
+        input  [WIDTH_LVL-1:0]          cmax_lvl_i,
+        output [WIDTH_LVL-1:0]          cmax_lvl_o,
+
+        //控制信号
+        input                           apply_imply_i,
+        input                           apply_analyze_i,
+        input                           apply_bkt_i
     );
 
     wire [NUM_LITS/2*3-1:0]           var_value_i_0,  var_value_i_1;
@@ -334,13 +358,13 @@ module lit2 #(
     wire [NUM_LITS*WIDTH_LVL/2-1 : 0] var_lvl_i_0,    var_lvl_i_1;
     wire [NUM_LITS*WIDTH_LVL/2-1 : 0] var_lvl_down_i_0,    var_lvl_down_i_1;
     wire [NUM_LITS*WIDTH_LVL/2-1 : 0] var_lvl_down_o_0,    var_lvl_down_o_1;
-    wire [WIDTH_LVL/2-1 : 0]          max_lvl_o_0,    max_lvl_o_1;
+    wire [WIDTH_LVL/2-1 : 0]          cmax_lvl_o_0,    cmax_lvl_o_1;
     wire [NUM_LITS/2*2-1:0]           lit_i_0,        lit_i_1;
     wire [NUM_LITS/2*2-1:0]           lit_o_0,        lit_o_1;
     wire [1:0]                        freelitcnt_0;
     wire                              imp_drv_0,      imp_drv_1;
-    wire                              cclause_0,      cclause_1;
-    wire                              clausesat_0,    clausesat_1;
+    wire                              conflict_c_0,      conflict_c_1;
+    wire                              csat_o_0,    csat_o_1;
 
     assign {var_value_i_1, var_value_i_0} = var_value_i;
     assign {var_value_down_i_1, var_value_down_i_0} = var_value_down_i;
@@ -349,13 +373,13 @@ module lit2 #(
     assign {var_lvl_i_1, var_lvl_i_0} = var_lvl_i;
     assign {var_lvl_down_i_1, var_lvl_down_i_0} = var_lvl_down_i;
     assign var_lvl_down_o = {var_lvl_down_o_1, var_lvl_down_o_0};
-    assign max_lvl_o = max_lvl_o_1 > max_lvl_o_0? max_lvl_o_1 : max_lvl_o_0;
+    assign cmax_lvl_o = cmax_lvl_o_1 > cmax_lvl_o_0? cmax_lvl_o_1 : cmax_lvl_o_0;
     
     assign {lit_i_1, lit_i_0} = lit_i;
     assign lit_o = {lit_o_1, lit_o_0};
     
-    assign clausesat_o = clausesat_1 | clausesat_0;
-    assign cclause_o = cclause_1 | cclause_0;
+    assign csat_o = csat_o_1 | csat_o_0;
+    assign conflict_c_o = conflict_c_1 | conflict_c_0;
     
     assign imp_drv_0 = imp_drv_i;
     assign imp_drv_1 = imp_drv_i;
@@ -384,15 +408,18 @@ module lit2 #(
         
         .imp_drv_i       (imp_drv_0),
         
-        .cclause_o       (cclause_0),
-        .cclause_drv_i   (cclause_drv_i),
+        .conflict_c_o    (conflict_c_0),
+        .conflict_c_drv_i(conflict_c_drv_i),
         
-        .clausesat_o     (clausesat_0),
+        .csat_o          (csat_o_0),
+        .csat_drv_i      (csat_drv_i),
         
+        .apply_imply_i   (apply_imply_i),
+        .apply_analyze_i (apply_analyze_i),
         .apply_bkt_i     (apply_bkt_i),
         
-        .max_lvl_i       (max_lvl_i),
-        .max_lvl_o       (max_lvl_o_0)
+        .cmax_lvl_i      (cmax_lvl_i),
+        .cmax_lvl_o      (cmax_lvl_o_0)
         );
 
     lit1 #(
@@ -419,15 +446,18 @@ module lit2 #(
         
         .imp_drv_i       (imp_drv_1),
         
-        .cclause_o       (cclause_1),
-        .cclause_drv_i   (cclause_drv_i),
+        .conflict_c_o    (conflict_c_1),
+        .conflict_c_drv_i(conflict_c_drv_i),
         
-        .clausesat_o     (clausesat_1),
+        .csat_o          (csat_o_1),
+        .csat_drv_i      (csat_drv_i),
         
+        .apply_imply_i   (apply_imply_i),
+        .apply_analyze_i (apply_analyze_i),
         .apply_bkt_i     (apply_bkt_i),
         
-        .max_lvl_i       (max_lvl_i),
-        .max_lvl_o       (max_lvl_o_1)
+        .cmax_lvl_i       (cmax_lvl_i),
+        .cmax_lvl_o       (cmax_lvl_o_1)
         );
  
 endmodule

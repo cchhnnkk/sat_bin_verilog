@@ -172,7 +172,8 @@ module sat_engine #(
 
         .add_learntc_en_i(add_learntc_en),
         .all_c_sat_o     (all_c_is_sat),
-        .apply_impl_i    (apply_imply),
+        .apply_imply_i   (apply_imply),
+        .apply_analyze_i (apply_analyze),
         .apply_bkt_i     (apply_bkt_cur_bin)
     );
 

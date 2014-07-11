@@ -325,7 +325,7 @@ module test_sat_engine(input clk, input rst);
         '{"psat",     1, 1, 1}
     };
 
-    /*** 测试数据2 ***/
+    /*** 测试数据2，冲突 ***/
 
     int bin2[8][8] = '{
         '{1, 0, 2, 0, 2, 0, 0, 0},
@@ -338,7 +338,7 @@ module test_sat_engine(input clk, input rst);
         '{0, 0, 0, 0, 0, 0, 0, 0}
     };
     //var state list:
-    int value2[]   = '{2, 1, 1, 2, 0, 0, 0, 0};
+    int value2[]   = '{1, 1, 1, 2, 0, 0, 0, 0};
     int implied2[] = '{1, 0, 1, 1, 0, 0, 0, 0};
     int level2[]   = '{0, 1, 2, 1, 0, 0, 0, 0};
     //lvl state list:
@@ -359,9 +359,9 @@ module test_sat_engine(input clk, input rst);
 
     /*
     load_bin 3
-        c1  -1 3 5 
-        c2  2 -4 -5 
-        c3  2 5 
+        c1  -1 3 5
+        c2  2 -4 -5
+        c3  2 5
         local vars  [1, 2, 3, 4, 5]
         value       [1, 1, 1, 2, 0]
         implied     [1, 0, 1, 1, 0]
@@ -388,10 +388,10 @@ module test_sat_engine(input clk, input rst);
             bkt_bin 2 bkt_lvl 1
     --  backtrack across bin: bkt_lvl == 1
     update_bin 3
-        c1  -1 3 5 
-        c2  2 -4 -5 
-        c3  2 5 
-        c4  2 -4 
+        c1  -1 3 5
+        c2  2 -4 -5
+        c3  2 5
+        c4  2 -4
         local vars  [1, 2, 3, 4, 5]
         value       [1, 2, 0, 0, 0]
         implied     [1, 0, 0, 0, 0]
@@ -401,6 +401,12 @@ module test_sat_engine(input clk, input rst);
       bkted   1
       d_bin   2
     */
+
+
+    /*** 测试数据2，冲突 ***/
+
+    // todooo
+
     task test_sat_engine_task();
         begin
             reset_all_signal();

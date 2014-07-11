@@ -222,10 +222,10 @@ cclause_1	lit8.v	28
 cclause_drv_0	clause1.v	24
 cclause_drv_0	clause1.v	48
 cclause_drv_o	clause1.v	47
-cclause_o	lit2.v	36
-cclause_o	lit4.v	36
-cclause_o	lit8.v	36
-cclause_o	lit1.v	58
+conflict_c_o	lit2.v	36
+conflict_c_o	lit4.v	36
+conflict_c_o	lit8.v	36
+conflict_c_o	lit1.v	58
 clause_len_12	var24.v	137
 clause_len_13	var24.v	137
 clause_len_14	var24.v	137
