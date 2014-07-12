@@ -14,6 +14,16 @@ vlog_db_mtime = 'vlog_mtime.db'
 vlog_db_ref = 'vlog_include_ref.db'
 editer = '"D:/Program Files/Sublime Text 3/sublime_text.exe" '
 
+# 忽略的文件
+ignore_list = ["case", "class"]
+
+
+def in_ignore(filename):
+    for l in ignore_list:
+        if l in filename:
+            return True
+    return False
+
 
 def init_vlog():
     if os.path.isfile(vlog_db_mtime) is False:
@@ -52,11 +62,13 @@ def find_vlog_list(mtime_list, ref_list):
 
         if filename.endswith('.v') or filename.endswith('.sv') or \
                 filename.endswith('.gen'):
+            if in_ignore(filename):
+                continue
             need_vlog_flist += [filename]
             if filename not in ref_list:
                 continue
             for f in ref_list[filename]:
-                if f not in need_vlog_flist:
+                if f not in need_vlog_flist and ~in_ignore(f):
                     need_vlog_flist += [f]
 
     print "need_vlog_flist"
