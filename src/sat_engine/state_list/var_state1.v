@@ -6,44 +6,51 @@
      value为11的变量，而且该变量:
      非当前层 or 当前层决策 or 当前层没有原因子句的
  */
+
+`include "../src/debug_define.v"
+
 module var_state1 #(
         parameter WIDTH_VAR_STATES = 19,
         parameter WIDTH_LVL        = 16,
         parameter WIDTH_C_LEN      = 4
     )
     (
-     input                           clk,
-     input                           rst,
+        input                           clk,
+        input                           rst,
 
-     // data I/O
-     input [2:0]                     var_value_i,
-     output [2:0]                    var_value_o,
-     input [WIDTH_LVL-1:0]           var_lvl_i,
-     output [WIDTH_LVL-1:0]          var_lvl_o,
-     output [1:0]                    learnt_lit_o,
- 
-     //decide
-     input                           valid_from_decision_i,
-     input [WIDTH_LVL-1:0]           cur_lvl_i,
- 
-     //imply
-     input                           apply_imply_i,
-     output                          find_imply_o,
-     output                          find_conflict_o,
- 
-     //conflict
-     input                           apply_analyze_i,
-     output [WIDTH_LVL-1:0]          max_lvl_o,
- 
-     //backtrack
-     input                           apply_bkt_i,
-     input [WIDTH_LVL-1:0]           bkt_lvl_i,
- 
-     //load update var states
-     input                           wr_states,
-     input [WIDTH_VAR_STATES-1  : 0] vars_states_i,
-     output [WIDTH_VAR_STATES-1 : 0] vars_states_o
-     );
+        // data I/O
+        input [2:0]                     var_value_i,
+        output [2:0]                    var_value_o,
+        input [WIDTH_LVL-1:0]           var_lvl_i,
+        output [WIDTH_LVL-1:0]          var_lvl_o,
+        output [1:0]                    learnt_lit_o,
+
+        //decide
+        input                           valid_from_decision_i,
+        input [WIDTH_LVL-1:0]           cur_lvl_i,
+
+        //imply
+        input                           apply_imply_i,
+        output                          find_imply_o,
+        output                          find_conflict_o,
+
+        //conflict
+        input                           apply_analyze_i,
+        output [WIDTH_LVL-1:0]          max_lvl_o,
+
+        //backtrack
+        input                           apply_bkt_i,
+        input [WIDTH_LVL-1:0]           bkt_lvl_i,
+
+        //load update var states
+        input                           wr_states,
+        input [WIDTH_VAR_STATES-1  : 0] vars_states_i,
+        output [WIDTH_VAR_STATES-1 : 0] vars_states_o,
+
+        //用于调试的信号
+        input  [31 : 0]                 debug_vid_next_i,
+        output [31 : 0]                 debug_vid_next_o
+    );
 
     //var state
     reg [2:0] var_value_r;
@@ -65,14 +72,14 @@ module var_state1 #(
     wire [WIDTH_LVL-1:0] load_lvl_i;
     assign {load_value_i, load_lvl_i} = vars_states_i;
 
-    always @(posedge clk) begin: set_vars_value_r
+    always @(posedge clk) begin
         if(~rst)
             var_value_r <= -1;
         else if(wr_states)              //加载
             var_value_r <= load_value_i;
         else if(valid_from_decision_i)  //决策
             var_value_r <= 3'b010;
-        else if(apply_imply_i && var_value_i[0]) //推理
+        else if(apply_imply_i && (var_value_i[0])) //推理
             var_value_r <= var_value_i;
         else if(apply_analyze_i && var_value_i[2:1]==2'b11) //冲突分析
             var_value_r <= var_value_i;
@@ -86,9 +93,9 @@ module var_state1 #(
     end
 
     assign find_imply_o = var_value_r[0];
-    assign find_conflict_o = var_value_r[2:1]==2'b11;
+    assign find_conflict_o = var_value_i[2:1]==2'b11;
 
-    always @(posedge clk) begin: set_var_lvl_r
+    always @(posedge clk) begin
         if(~rst)
             var_lvl_r <= 0;
         else if(wr_states)              //加载
@@ -96,14 +103,14 @@ module var_state1 #(
         else if(valid_from_decision_i)  //决策
             var_lvl_r <=  cur_lvl_i;
         else if(apply_imply_i && var_value_i[0])     //推理
-            var_lvl_r <=  var_lvl_i;
+            var_lvl_r <= var_lvl_i;
         else
             var_lvl_r <= var_lvl_r;
     end
 
     assign var_lvl_o = var_lvl_r;
 
-    always @(posedge clk) begin: set_saved_var_value_r
+    always @(posedge clk) begin
         if(~rst)
             saved_var_value_r <= 0;
         else if(~apply_analyze_i)
@@ -114,7 +121,7 @@ module var_state1 #(
 
     //learnt lit
     //参照sat_bin_python的push_cclause_fifo()函数
-    always @(posedge clk) begin: set_learnt_lit_r
+    always @(posedge clk) begin
         if(~rst)
             learnt_lit_r <= 0;
         else if(var_value_r[2:1]==2'b11) begin
@@ -138,5 +145,42 @@ module var_state1 #(
     end
 
     assign max_lvl_o = (learnt_lit_r!=0) ? var_lvl_r : 0;
+
+
+    `ifdef DEBUG_var_state
+        assign debug_vid_next_o = debug_vid_next_i + 1;
+        //显示所有文字
+        int disp_all_vs = 1;
+        //显示特定文字
+        int len = 3;
+        int v[] = '{1, 3, 4};
+        always @(posedge clk) begin
+            if($time/1000 >= `T_START && $time/1000 <= `T_END) begin
+                if(disp_all_vs)
+                    display_state();
+                else begin
+                    for(int i=0; i<len; i++) begin
+                        if(debug_vid_next_i==v[i]) begin
+                            display_state();
+                        end
+                    end
+                end
+            end
+        end
+
+        task display_state();
+            $display("%1tns var state %1d", $time/1000, debug_vid_next_i);
+            $display("\tvar_value_i      = %03b", var_value_i);
+            $display("\tvar_value_o      = %03b", var_value_o);
+            $display("\tvar_value_r      = %1d", var_value_r);
+            $display("\tvar_lvl_i        = %1d", var_lvl_i);
+            $display("\tvar_lvl_o        = %1d", var_lvl_o);
+            $display("\tvar_lvl_r        = %1b", var_lvl_r);
+            $display("\tapply_imply_i    = %1d", apply_imply_i);
+            $display("\tlearnt_lit_r     = %1d", learnt_lit_r);
+            $display("\tfind_imply_o     = %1d", find_imply_o);
+            $display("\tfind_conflict_o  = %1b", find_conflict_o);
+        endtask
+    `endif
 
 endmodule

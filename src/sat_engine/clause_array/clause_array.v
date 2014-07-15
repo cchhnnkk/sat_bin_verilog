@@ -3,6 +3,8 @@
  主要功能：实例化clause8，以及find_learntc_inserti
  */
 
+`include "../src/debug_define.v"
+
 module clause_array #(
         parameter NUM_CLAUSES = 8,
         parameter NUM_VARS    = 8,
@@ -70,7 +72,10 @@ module clause_array #(
         .all_c_sat_o     (all_c_sat_o),
         .apply_imply_i   (apply_imply_i),
         .apply_analyze_i (apply_analyze_i),
-        .apply_bkt_i     (apply_bkt_i)
+        .apply_bkt_i     (apply_bkt_i),
+
+        .debug_cid_down_i(0),
+        .debug_cid_down_o()
     );
 
     wire [WIDTH_C_LEN-1 : 0]    max_len;
@@ -87,5 +92,21 @@ module clause_array #(
         );
     assign learntc_insert_index = {insert_index, 4'd0};
     assign wr_clause = add_learntc_en_i? learntc_insert_index : wr_i;
+
+
+    `ifdef DEBUG_clause_array
+        `include "../tb/class_clause_data.sv";
+        class_clause_data #(8) cdata = new;
+
+        always @(posedge clk) begin
+            //if($time/1000 >= 1640 && $time/1000 <= 1670) begin
+            if($time/1000 >= `T_START && $time/1000 <= `T_END) begin
+                $display("%1tns var_value_i", $time/1000);
+                $display("\tvar_value_i");
+                cdata.set(var_value_i);
+                cdata.display();
+            end
+        end
+    `endif
 
 endmodule

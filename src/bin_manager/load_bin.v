@@ -14,7 +14,7 @@ module load_bin #(
         parameter NUM_LVLS_A_BIN         = 8,
         parameter WIDTH_CLAUSES          = NUM_VARS_A_BIN*2,
         parameter WIDTH_VARS             = 12,
-        parameter WIDTH_LVL              = 16
+        parameter WIDTH_LVL              = 16,
         parameter WIDTH_BIN_ID           = 10,
         parameter WIDTH_VAR_STATES       = 30,
         parameter WIDTH_LVL_STATES       = 30,

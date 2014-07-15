@@ -12,7 +12,7 @@ f = open("transcript")
 data = f.readlines()
 f.close()
 
-f = open("transcript.todo", "w")
+f = open("transcript.log", "w")
 
 start_tag = 0
 for i, l in enumerate(data):

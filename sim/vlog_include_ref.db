@@ -12,25 +12,53 @@
   "../src/sat_engine/state_list/lvl_states.v": [], 
   "../src/sat_engine/state_list/decision.v": [], 
   "../src/sat_engine/ctrl_core.v": [], 
+  "../tb/test_se_case4.sv": [
+    "../tb/test_sat_engine.sv"
+  ], 
   "../tb/test_sat_engine.sv": [], 
+  "../tb/test_se_case3.sv": [
+    "../tb/test_sat_engine.sv"
+  ], 
   "../tb/test_clause_array.sv": [], 
   "../tb/class_clause_data.sv": [
     "../src/sat_engine/state_list/state_list.v", 
     "../src/sat_engine/sat_engine.v", 
     "../tb/class_clause_array.sv", 
+    "../src/sat_engine/clause_array/clause1.v", 
+    "../src/sat_engine/clause_array/clause_array.v", 
     "../tb/test_clause1.sv"
   ], 
   "../tb/class_clause_array.sv": [
     "../tb/test_sat_engine.sv", 
     "../tb/test_clause_array.sv"
   ], 
+  "../tb/test_se_case1.sv": [
+    "../tb/test_sat_engine.sv"
+  ], 
   "../src/sat_engine/state_list/c_len1.v": [], 
   "../src/sat_engine/clause_array/clause1.v": [], 
   "../src/sat_engine/clause_array/clause_array.v": [], 
   "../tb/test_lit_cell.sv": [], 
+  "../tb/test_se_case5.sv": [
+    "../tb/test_sat_engine.sv"
+  ], 
+  "../tb/class_lvl_data.sv": [
+    "../tb/test_clause_array.sv", 
+    "../tb/test_clause1.sv"
+  ], 
   "../src/sat_engine/state_list/dcd_in_vars.v": [], 
   "../src/sat_engine/state_list/var_states.v": [], 
   "../src/sat_engine/clause_array/lits.v": [], 
+  "../src/debug_define.v": [
+    "../src/sat_engine/state_list/state_list.v", 
+    "../src/sat_engine/state_list/var_state1.v", 
+    "../src/sat_engine/sat_engine.v", 
+    "../src/sat_engine/ctrl_core.v", 
+    "../src/sat_engine/clause_array/clause1.v", 
+    "../src/sat_engine/clause_array/clause_array.v", 
+    "../src/sat_engine/clause_array/lit1.v", 
+    "../src/sat_engine/clause_array/terminal_cell.v"
+  ], 
   "../tb/test_clause1.sv": [], 
   "../src/sat_engine/state_list/encode_8to3.v": [], 
   "../src/sat_engine/state_list/c_lens.v": [], 
@@ -43,5 +71,8 @@
   "../src/sat_engine/clause_array/lit1.v": [], 
   "../src/sat_engine/clause_array/clauses.v": [], 
   "../src/sat_engine/clause_array/terminal_cell.v": [], 
-  "../tb/test_lit_cell.v": []
+  "../tb/test_lit_cell.v": [], 
+  "../tb/test_se_case2.sv": [
+    "../tb/test_sat_engine.sv"
+  ]
 }

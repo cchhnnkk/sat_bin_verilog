@@ -1,28 +1,36 @@
 
 
-vlog: vlog_sat_engine
+vlog: vlog_se
 
-sim: sim_sat_engine
+sim: sim_se
 
 view:
 	start vsim -view vsim.wlf
 
 # sat engine
-vlog_sat_engine:
+vlog_se:
 	vlog_test_sat_engine.sh
 
-sim_clause_array:
+sim_ca:
 	sed "s/test_sat_engine_top/test_clause_array_top/g" test_se_console.do > test_ca_console.do
 	vsim -c -do test_ca_console.do
 	rm test_ca_console.do
 	python transcript_info.py
-	sed -i "s/--//g" transcript.todo
-	sublime_text transcript.todo
+	sed -i "s/--//g" transcript.log
+	sublime_text transcript.log
 
-sim_sat_engine:
+sim_c1:
+	sed "s/test_sat_engine_top/test_clause1_top/g" test_se_console.do > test_c1_console.do
+	vsim -c -do test_c1_console.do
+	rm test_c1_console.do
+	python transcript_info.py
+	sed -i "s/--//g" transcript.log
+	sublime_text transcript.log
+
+sim_se:
 	vsim -c -do test_se_console.do
 	python transcript_info.py
-	sublime_text transcript.todo
+	sublime_text transcript.log
 
 wave_sat_engine: hielist
 	cd ../tools && ../tools/gen_wave.sh test_sat_engine_top 3
@@ -30,15 +38,21 @@ wave_sat_engine: hielist
 wave_exlist_sat_engine:
 	cd ../tools && ../tools/gen_wave.sh test_sat_engine_top 3 wave_exlist_sat_engine.txt
 
-init_ref_sat_engine:
-	../tools/gen_include_ref.py > vlog_include_ref.db ../src/sat_engine ../tb
+init_ref_se:
+	../tools/find_verilog_file.py ../src/sat_engine ../tb > filelist.txt
+	echo "../src/debug_define.v" >> filelist.txt
+	cat filelist.txt | ../tools/gen_include_ref.py > vlog_include_ref.db
+	rm filelist.txt
 
 # clause1
 wave_clause1: hielist
 	cd ../tools && ../tools/gen_wave.sh test_clause1_top 3
 
 init_ref_all:
-	../tools/gen_include_ref.py > vlog_include_ref.db ..
+	cd ../tools && find_verilog_file .. > filelist.txt
+	echo "../debug_define.v" >> filelist.txt
+	cat filelist.txt | ../tools/gen_include_ref.py > vlog_include_ref.db
+	rm filelist.txt
 
 hielist:
 	cd ../tools && gen_all_hielist.sh

@@ -55,7 +55,7 @@ load_bin 3
 sat engine run_core: cur_bin == 3
 --  preprocess
 --  bcp
-        c2 var 5 gvar 7 value 1 level 1
+        c2 var 5 gvar 7 value 3 level 1
 --  analysis the conflict
         conflict c3
         lits    [2, 5]

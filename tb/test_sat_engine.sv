@@ -168,7 +168,7 @@ module test_sat_engine(input clk, input rst);
     endtask
 
     task dis_process(struct_process process_data[], int i);
-        $display("%1tns process_data: name=%s", $time/1000.0, process_data[i].name);
+        $display("%1tns process_data %1d: name=%s", $time/1000.0, i, process_data[i].name);
 
         if(process_data[i].name=="decision" || process_data[i].name=="bcp")
             $display("\tvar_id=%1d, value=%1d, level=%1d",
@@ -184,16 +184,25 @@ module test_sat_engine(input clk, input rst);
         begin
             int i;
             int i_n;
-            bit error_tag;
+            bit error_tag, error_tag_n;
             error_tag = 0;
             i = 0;
             while(i<process_len)
             begin
-                test_decision(process_data, i, i_n, error_tag);
-                test_bcp(process_data, i, i_n, error_tag);
-                test_confict(process_data, i, i_n, error_tag);
-                test_psat(process_data, i, i_n, error_tag);
-                test_punsat(process_data, i, i_n, error_tag);
+                test_decision(process_data, i, i, error_tag_n);
+                error_tag |= error_tag_n;
+
+                test_bcp(process_data, i, i, error_tag_n);
+                error_tag |= error_tag_n;
+
+                test_confict(process_data, i, i, error_tag_n);
+                error_tag |= error_tag_n;
+
+                test_psat(process_data, i, i, error_tag_n);
+                error_tag |= error_tag_n;
+
+                test_punsat(process_data, i, i, error_tag_n);
+                error_tag |= error_tag_n;
 
                 @ (posedge clk);
 
@@ -201,8 +210,6 @@ module test_sat_engine(input clk, input rst);
                     repeat (10) @ (posedge clk);
                     $finish();
                 end
-
-                i = i_n;
             end
 
             while(done_core_o!=1)
@@ -305,6 +312,7 @@ module test_sat_engine(input clk, input rst);
             end
             i++;
         end
+        i_n = i;
     endtask
 
     task test_punsat(struct_process process_data[], input int i_c, output int i_n, error_tag);

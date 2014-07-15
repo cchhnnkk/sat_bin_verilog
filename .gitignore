@@ -5,6 +5,7 @@ ipcore/*
 *.mti
 *.mpf
 *.todo
+*.log
 *.ini
 temp
 transcript

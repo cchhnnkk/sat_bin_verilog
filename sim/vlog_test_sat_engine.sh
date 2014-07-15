@@ -34,4 +34,4 @@ if [[ ! -x "work" ]]; then
 	vmap work work
 fi
 
-myvlog $svfile $vfile
+myvlog $svfile $vfile "../src/debug_define.v"

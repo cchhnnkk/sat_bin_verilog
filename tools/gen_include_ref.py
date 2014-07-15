@@ -1,19 +1,19 @@
 #!python
 # -*- coding: utf-8 -*-
 
-# gen_include_ref.py > include_ref.json ..
+# cat filelist.txt > gen_include_ref.py > include_ref.json ..
 
-import os
+# import os
 import json
 import re
 import sys
 
-files = ""
-for i in xrange(1, len(sys.argv)):
-    src_dir = sys.argv[i]
-    files1 = os.popen('find %s -name "*.v"' % src_dir).read()
-    files2 = os.popen('find %s -name "*.sv"' % src_dir).read()
-    files += files1 + files2
+# files = ""
+# for i in xrange(1, len(sys.argv)):
+#     src_dir = sys.argv[i]
+#     files1 = os.popen('find %s -name "*.v"' % src_dir).read()
+#     files2 = os.popen('find %s -name "*.sv"' % src_dir).read()
+#     files += files1 + files2
 
 # files1 = os.popen('find .. -name "*.v"').read()
 # files2 = os.popen('find .. -name "*.sv"').read()
@@ -23,6 +23,7 @@ for i in xrange(1, len(sys.argv)):
 
 include_flist = {}
 
+files = sys.stdin.read()
 filelist = files.strip().split('\n')
 
 # cat $files1 $files2 | gen_hielist.py > hielist.json

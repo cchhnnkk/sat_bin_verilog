@@ -41,7 +41,7 @@ module ctrl_core #(
      output reg			      unsat_o
     );
 
-parameter           IDLE          =   0,
+    parameter       IDLE          =   0,
                     BCP           =   1,
                     DECISION      =   2,
                     ANALYSIS      =   3,

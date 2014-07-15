@@ -1,29 +1,38 @@
+
+`include "../src/debug_define.v"
+
 module terminal_cell #(
-        parameter WIDTH_LVL   = 16
+        parameter WIDTH_LVL   = 16,
+        parameter WIDTH_C_LEN = 4
     )
     (
-        input                  clk,
-        input                  rst,
+        input                    clk,
+        input                    rst,
         
-        input                  csat_i,
-        output                 csat_drv_o,
+        input                    csat_i,
+        output                   csat_drv_o,
         
-        input  [1:0]           freelitcnt_i,
+        input  [1:0]             freelitcnt_i,
+        input  [WIDTH_C_LEN-1:0] clause_len_i,
         
-        output                 imp_drv_o,
+        output                   imp_drv_o,
         
-        input                  conflict_c_i,
-        output                 conflict_c_drv_o,
+        input                    conflict_c_i,
+        input                    all_lit_false_i,
+        output                   conflict_c_drv_o,
         
-        input  [WIDTH_LVL-1:0] cmax_lvl_i,
-        output [WIDTH_LVL-1:0] cmax_lvl_o
+        input  [WIDTH_LVL-1:0]   cmax_lvl_i,
+        output [WIDTH_LVL-1:0]   cmax_lvl_o,
+
+        //用于调试的信号
+        input  [31:0]            debug_cid_i
      );
 
     assign csat_drv_o = csat_i;
 
     assign imp_drv_o = freelitcnt_i==2'b01;
 
-    assign conflict_c_drv_o = |conflict_c_i;
+    assign conflict_c_drv_o = conflict_c_i | (all_lit_false_i && clause_len_i!=0);
 
     //先用组合逻辑，后优化
     reg [WIDTH_LVL-1:0] cmax_lvl_w;
@@ -35,5 +44,36 @@ module terminal_cell #(
         else
             cmax_lvl_w <= cmax_lvl_i;
     end
+
+    `ifdef DEBUG_clause_array
+        //显示所有子句terminal cell
+        int disp_all_c = 1;
+        //显示特定子句的terminal cell
+        int len = 3;
+        int c[] = '{0, 1, 2};
+        always @(posedge clk) begin
+            if($time/1000 >= `T_START && $time/1000 <= `T_END) begin
+                if(disp_all_c)
+                    display_state();
+                else begin
+                    for(int i=0; i<len; i++) begin
+                        if(debug_cid_i==c[i]) begin
+                            display_state();
+                        end
+                    end
+                end
+            end
+        end
+
+        task display_state();
+            $display("%1tns c%1d terminal_cell", $time/1000, debug_cid_i);
+            $display("\tall_lit_false_i  = %1d", all_lit_false_i);
+            $display("\tconflict_c_i     = %1d", conflict_c_i);
+            $display("\tconflict_c_drv_o = %1d", conflict_c_drv_o);
+            $display("\tcsat_drv_o       = %1d", csat_drv_o);
+            $display("\tclause_len_i     = %1d", clause_len_i);
+            $display("\tcmax_lvl_o       = %1d", cmax_lvl_o);
+        endtask
+    `endif
 
 endmodule

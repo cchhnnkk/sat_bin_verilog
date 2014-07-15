@@ -43,7 +43,6 @@ endtask
 c1  2 4 -5
 c2  1 6 -7
 c3  1 3 -7
-global vars [7, 8, 11, 14, 17, 18, 20]
 local vars  [1, 2, 3, 4, 5, 6, 7]
 value       [1, 1, 1, 1, 2, 2, 1]
 implied     [0, 0, 0, 0, 0, 1, 1]
@@ -68,7 +67,6 @@ update_bin 16
     c1  2 4 -5
     c2  1 6 -7
     c3  1 3 -7
-    global vars [7, 8, 11, 14, 17, 18, 20]
     local vars  [1, 2, 3, 4, 5, 6, 7]
     value       [1, 1, 1, 2, 2, 2, 1]
     implied     [0, 0, 0, 0, 0, 1, 1]

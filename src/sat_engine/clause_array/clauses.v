@@ -35,13 +35,18 @@ module clause8 #(
         output                                 all_c_sat_o,
         input                                  apply_imply_i,
         input                                  apply_analyze_i,
-        input                                  apply_bkt_i
+        input                                  apply_bkt_i,
+
+        //用于调试的信号
+        input  [31 : 0]                        debug_cid_down_i,
+        output [31 : 0]                        debug_cid_down_o
     );
 
     wire [NUM_CLAUSES/2-1:0]                wr_0, wr_1;
     wire [NUM_CLAUSES/2-1:0]                rd_0, rd_1;
     wire [3*NUM_VARS-1:0]                   var_value_temp;
     wire [NUM_VARS*WIDTH_LVL-1 : 0]         var_lvl_temp;
+    wire [31 : 0]                           debug_cid_temp;
     wire [NUM_VARS*2-1 : 0]                 clause_o_0, clause_o_1;
     wire [WIDTH_C_LEN*NUM_CLAUSES/2-1 : 0]  clause_len_o_0, clause_len_o_1;
     wire                                    all_c_sat_o_0, all_c_sat_o_1;
@@ -78,7 +83,10 @@ module clause8 #(
         .all_c_sat_o     (all_c_sat_o_0),
         .apply_imply_i   (apply_imply_i),
         .apply_analyze_i (apply_analyze_i),
-        .apply_bkt_i     (apply_bkt_i)
+        .apply_bkt_i     (apply_bkt_i),
+
+        .debug_cid_down_i(debug_cid_down_i),
+        .debug_cid_down_o(debug_cid_temp)
         );
 
     clause4 #(
@@ -107,7 +115,10 @@ module clause8 #(
         .all_c_sat_o     (all_c_sat_o_1),
         .apply_imply_i   (apply_imply_i),
         .apply_analyze_i (apply_analyze_i),
-        .apply_bkt_i     (apply_bkt_i)
+        .apply_bkt_i     (apply_bkt_i),
+
+        .debug_cid_down_i(debug_cid_temp),
+        .debug_cid_down_o(debug_cid_down_o)
         );
 
 endmodule
@@ -144,13 +155,18 @@ module clause4 #(
         output                                 all_c_sat_o,
         input                                  apply_imply_i,
         input                                  apply_analyze_i,
-        input                                  apply_bkt_i
+        input                                  apply_bkt_i,
+
+        //用于调试的信号
+        input  [31 : 0]                        debug_cid_down_i,
+        output [31 : 0]                        debug_cid_down_o
     );
 
     wire [NUM_CLAUSES/2-1:0]                wr_0, wr_1;
     wire [NUM_CLAUSES/2-1:0]                rd_0, rd_1;
     wire [3*NUM_VARS-1:0]                   var_value_temp;
     wire [NUM_VARS*WIDTH_LVL-1 : 0]         var_lvl_temp;
+    wire [31 : 0]                           debug_cid_temp;
     wire [NUM_VARS*2-1 : 0]                 clause_o_0, clause_o_1;
     wire [WIDTH_C_LEN*NUM_CLAUSES/2-1 : 0]  clause_len_o_0, clause_len_o_1;
     wire                                    all_c_sat_o_0, all_c_sat_o_1;
@@ -187,7 +203,10 @@ module clause4 #(
         .all_c_sat_o     (all_c_sat_o_0),
         .apply_imply_i   (apply_imply_i),
         .apply_analyze_i (apply_analyze_i),
-        .apply_bkt_i     (apply_bkt_i)
+        .apply_bkt_i     (apply_bkt_i),
+
+        .debug_cid_down_i(debug_cid_down_i),
+        .debug_cid_down_o(debug_cid_temp)
         );
 
     clause2 #(
@@ -216,7 +235,10 @@ module clause4 #(
         .all_c_sat_o     (all_c_sat_o_1),
         .apply_imply_i   (apply_imply_i),
         .apply_analyze_i (apply_analyze_i),
-        .apply_bkt_i     (apply_bkt_i)
+        .apply_bkt_i     (apply_bkt_i),
+
+        .debug_cid_down_i(debug_cid_temp),
+        .debug_cid_down_o(debug_cid_down_o)
         );
 
 endmodule
@@ -253,13 +275,18 @@ module clause2 #(
         output                                 all_c_sat_o,
         input                                  apply_imply_i,
         input                                  apply_analyze_i,
-        input                                  apply_bkt_i
+        input                                  apply_bkt_i,
+
+        //用于调试的信号
+        input  [31 : 0]                        debug_cid_down_i,
+        output [31 : 0]                        debug_cid_down_o
     );
 
     wire [NUM_CLAUSES/2-1:0]                wr_0, wr_1;
     wire [NUM_CLAUSES/2-1:0]                rd_0, rd_1;
     wire [3*NUM_VARS-1:0]                   var_value_temp;
     wire [NUM_VARS*WIDTH_LVL-1 : 0]         var_lvl_temp;
+    wire [31 : 0]                           debug_cid_temp;
     wire [NUM_VARS*2-1 : 0]                 clause_o_0, clause_o_1;
     wire [WIDTH_C_LEN*NUM_CLAUSES/2-1 : 0]  clause_len_o_0, clause_len_o_1;
     wire                                    all_c_sat_o_0, all_c_sat_o_1;
@@ -296,7 +323,10 @@ module clause2 #(
         .all_c_sat_o     (all_c_sat_o_0),
         .apply_imply_i   (apply_imply_i),
         .apply_analyze_i (apply_analyze_i),
-        .apply_bkt_i     (apply_bkt_i)
+        .apply_bkt_i     (apply_bkt_i),
+
+        .debug_cid_down_i(debug_cid_down_i),
+        .debug_cid_down_o(debug_cid_temp)
         );
 
     clause1 #(
@@ -325,7 +355,10 @@ module clause2 #(
         .all_c_sat_o     (all_c_sat_o_1),
         .apply_imply_i   (apply_imply_i),
         .apply_analyze_i (apply_analyze_i),
-        .apply_bkt_i     (apply_bkt_i)
+        .apply_bkt_i     (apply_bkt_i),
+
+        .debug_cid_down_i(debug_cid_temp),
+        .debug_cid_down_o(debug_cid_down_o)
         );
 
 endmodule

@@ -1,3 +1,6 @@
+
+`include "../src/debug_define.v"
+
 module lit1 #(
         parameter WIDTH_LVL   = 16
     )
@@ -24,6 +27,7 @@ module lit1 #(
         input                           imp_drv_i,
         
         output                          conflict_c_o,
+        output                          all_lit_false_o,
         input                           conflict_c_drv_i,
         
         output                          csat_o,
@@ -36,7 +40,12 @@ module lit1 #(
         //控制信号
         input                           apply_imply_i,
         input                           apply_analyze_i,
-        input                           apply_bkt_i
+        input                           apply_bkt_i,
+
+        //用于调试的信号
+        input  [31 : 0]                 debug_cid_i,
+        input  [31 : 0]                 debug_vid_next_i,
+        output [31 : 0]                 debug_vid_next_o
     );
 
     reg [1:0]         lit_of_clause_r;
@@ -79,6 +88,7 @@ module lit1 #(
 
     //find conflict
     assign conflict_c_o = participate && var_implied_r && var_value_i[2:1]==2'b11;
+    assign all_lit_false_o = participate && ~isfree && lit_of_clause_r!=var_value_i[2:1] || ~participate;
 
     //var, var_bar to base cell
     reg [2:0] var_value_w;
@@ -138,5 +148,43 @@ module lit1 #(
     assign var_lvl_down_o = first_imply                        ? cmax_lvl_i    : var_lvl_down_i;
 
     assign cmax_lvl_o     = participate && ~isfree             ? var_lvl_i    : 0;
+
+
+    `ifdef DEBUG_clause_array
+        assign debug_vid_next_o = debug_vid_next_i + 1;
+        //显示所有文字
+        int disp_all_lit = 1;
+        //显示特定文字
+        int len = 3;
+        int c[] = '{0, 0, 0};
+        int v[] = '{1, 3, 4};
+        always @(posedge clk) begin
+            if($time/1000 >= `T_START && $time/1000 <= `T_END) begin
+                if(disp_all_lit)
+                    if(debug_cid_i==1)
+                        display_state();
+                else begin
+                    for(int i=0; i<len; i++) begin
+                        if(debug_cid_i==c[i] && debug_vid_next_i==v[i]) begin
+                            display_state();
+                        end
+                    end
+                end
+            end
+        end
+
+        task display_state();
+            $display("%1tns c%1d v%1d", $time/1000, debug_cid_i, debug_vid_next_i);
+            $display("\tvar_value_i      = %03b", var_value_i);
+            $display("\tvar_value_down_i = %03b", var_value_down_i);
+            $display("\tvar_value_down_o = %03b", var_value_down_o);
+            $display("\tconflict_c_o     = %1d", conflict_c_o);
+            $display("\tall_lit_false_o  = %1d", all_lit_false_o);
+            $display("\tisfree           = %1d", isfree);
+            $display("\tparticipate      = %1d", participate);
+            $display("\tlit_of_clause_r  = %1b", lit_of_clause_r);
+            $display("\tconflict_c_drv_i = %1b", conflict_c_drv_i);
+        endtask
+    `endif
 
 endmodule

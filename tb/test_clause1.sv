@@ -31,22 +31,23 @@ module test_clause1(input clk, input rst);
     )
     clause1
     (
-        .clk           (clk),
-        .rst           (rst),
-        .var_value_i   (var_value_i),
-        .var_value_o   (var_value_o),
+        .clk             (clk),
+        .rst             (rst),
+        .var_value_i     (var_value_i),
+        .var_value_down_i(0),
+        .var_value_down_o(var_value_o),
 
-        .var_lvl_i     (var_lvl_i),
-        .var_lvl_down_i(var_lvl_down_i),
-        .var_lvl_down_o(var_lvl_temp),
+        .var_lvl_i       (var_lvl_i),
+        .var_lvl_down_i  (var_lvl_down_i),
+        .var_lvl_down_o  (var_lvl_temp),
 
-        .wr_i          (wr_i),
-        .clause_i      (clause_i),
-        .clause_o      (clause_o),
-        .clause_len_i  (clause_len_i),
-        .clause_len_o  (clause_len_o),
+        .wr_i            (wr_i),
+        .clause_i        (clause_i),
+        .clause_o        (clause_o),
+        .clause_len_i    (clause_len_i),
+        .clause_len_o    (clause_len_o),
 
-        .apply_bkt_i   (apply_bkt_i)
+        .apply_bkt_i     (apply_bkt_i)
     );
 
     `include "../tb/class_clause_data.sv";
@@ -63,6 +64,7 @@ module test_clause1(input clk, input rst);
             cdata_i.reset();
 
             @ (posedge clk);
+                $display("%1tns", $time/1000.0);
                 cdata_i.set_lits('{0, 1, 0, 2, 0, 2, 0, 0});
                 cdata_i.set_imps('{0, 0, 0, 0, 0, 0, 0, 0});
                 cdata_i.display();
@@ -78,23 +80,26 @@ module test_clause1(input clk, input rst);
                 wr_i = 1;
 
             @ (posedge clk);
+                $display("%1tns", $time/1000.0);
                 wr_i = 0;
                 #1
                 assert(clause1.all_c_sat_o == 1);
                 $display("clause1.all_c_sat_o = %1d", clause1.all_c_sat_o);
-                assert(clause1.max_lvl_from_lits == 6);
-                $display("clause1.max_lvl_from_lits = %1d", clause1.max_lvl_from_lits);
+                assert(clause1.cmax_lvl_from_lits == 6);
+                $display("clause1.cmax_lvl_from_lits = %1d", clause1.cmax_lvl_from_lits);
 
             @ (posedge clk);
+                $display("%1tns", $time/1000.0);
                 cdata_i.reset();
                 cdata_i.get(var_value_i);
                 #1
                 assert(clause1.freelitcnt == 3);
                 $display("clause1.freelitcnt = %1d", clause1.freelitcnt);
-                assert(clause1.max_lvl_from_lits == 0);
-                $display("clause1.max_lvl_from_lits = %1d", clause1.max_lvl_from_lits);
+                assert(clause1.cmax_lvl_from_lits == 0);
+                $display("clause1.cmax_lvl_from_lits = %1d", clause1.cmax_lvl_from_lits);
 
             @ (posedge clk);
+                $display("%1tns", $time/1000.0);
                 cdata_i.set_lits('{0, 2, 0, 0, 0, 1, 0, 0});
                 cdata_i.set_imps('{0, 0, 0, 0, 0, 0, 0, 0});
                 cdata_i.display();
@@ -107,23 +112,38 @@ module test_clause1(input clk, input rst);
                 $display("clause1.freelitcnt = %1d", clause1.freelitcnt);
                 assert(clause1.imp_drv == 1);
                 $display("clause1.imp_drv = %1d", clause1.imp_drv);
-                assert(clause1.max_lvl_from_lits == 6);
-                $display("clause1.max_lvl_from_lits = %1d", clause1.max_lvl_from_lits);
+                assert(clause1.cmax_lvl_from_lits == 6);
+                $display("clause1.cmax_lvl_from_lits = %1d", clause1.cmax_lvl_from_lits);
                 cdata_o.set(var_value_o);
                 cdata_o.assert_index(3, 3'b101);
 
             @ (posedge clk);
+                $display("%1tns", $time/1000.0);
                 cdata_i.set_index(3, 3'b111);
                 cdata_i.get(var_value_i);
                 cdata_i.display();
                 #1
-                assert(clause1.cclause_drv == 1);
-                $display("clause1.cclause_drv = %1d", clause1.cclause_drv);
+                assert(clause1.conflict_c_drv == 1);
+                $display("clause1.conflict_c_drv = %1d", clause1.conflict_c_drv);
                 cdata_o.set(var_value_o);
                 cdata_o.display();
                 cdata_o.assert_index(1, 3'b110);
                 cdata_o.assert_index(3, 3'b110);
                 cdata_o.assert_index(5, 3'b110);
+
+            @ (posedge clk);
+                $display("%1tns", $time/1000.0);
+                $display("write clause");
+                cdata_i.set_lits('{0, 2, 0, 2, 0, 1, 0, 0});
+                cdata_i.display_lits();
+                cdata_i.get_clause(clause_i);
+                cdata_i.set_lits('{0, 1, 0, 1, 0, 2, 0, 0});
+                cdata_i.get(var_value_i);
+                #1
+                assert(clause1.conflict_c_drv == 1);
+                $display("clause1.conflict_c_drv = %1d", clause1.conflict_c_drv);
+                cdata_o.set(var_value_o);
+                cdata_o.display();
         end
     endtask
 
@@ -159,7 +179,9 @@ module test_clause1_top;
 
     initial begin
         reset();
+        $display("start sim");
         test_clause1.run();
-        $display("done");
+        $display("done sim");
+        $finish();
     end
 endmodule

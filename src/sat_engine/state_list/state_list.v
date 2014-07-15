@@ -103,7 +103,10 @@ module state_list #(
         .bkt_lvl_i            (bkt_lvl_o),
         .wr_states            (wr_var_states),
         .vars_states_i        (vars_states_i),
-        .vars_states_o        (vars_states_o)
+        .vars_states_o        (vars_states_o),
+
+        .debug_vid_next_i     (0),
+        .debug_vid_next_o     ()
     );
 
     assign find_conflict_o = |find_conflict_cur;
@@ -196,7 +199,7 @@ module state_list #(
     always @(posedge clk) begin: set_done_imply_o
         if(~rst)
             done_imply_o <= 0;
-        else if(apply_imply_i && find_imply_cur==find_imply_pre)
+        else if(apply_imply_i && (find_imply_cur==find_imply_pre || find_conflict_o))
             done_imply_o <= 1;
         else
             done_imply_o <= 0;
@@ -207,6 +210,7 @@ module state_list #(
             if(apply_imply_i && find_imply_cur!=find_imply_pre) begin
                 //$display("sim time %4tns", $time/1000);
                 $display("%1tns bcp", $time/1000);
+                $display("\tfind_imply_cur=%08b", find_imply_cur);
                 vs_list.set(vars_states_o);
                 vs_list.display_index(find_imply_cur^find_imply_pre);
                 $display("\t%1tns var states", $time/1000);
@@ -220,7 +224,7 @@ module state_list #(
         wire                                 debug_imply_valid;
         wire [NUM_VARS-1:0]                  debug_imply_index;
         wire [WIDTH_VAR_STATES*NUM_VARS-1:0] debug_var_state_o;
-        assign debug_imply_valid = apply_imply_i && find_imply_cur!=find_imply_pre;
+        assign debug_imply_valid = apply_imply_i && (find_imply_cur!=find_imply_pre);
         assign debug_imply_index = find_imply_cur^find_imply_pre;
         assign debug_var_state_o = vars_states_o;
 

@@ -31,6 +31,7 @@ module lit8 #(
         input                           imp_drv_i,
         
         output                          conflict_c_o,
+        output                          all_lit_false_o,
         input                           conflict_c_drv_i,
         
         output                          csat_o,
@@ -43,22 +44,29 @@ module lit8 #(
         //控制信号
         input                           apply_imply_i,
         input                           apply_analyze_i,
-        input                           apply_bkt_i
+        input                           apply_bkt_i,
+
+        //用于调试的信号
+        input  [31 : 0]                 debug_cid_i,
+        input  [31 : 0]                 debug_vid_next_i,
+        output [31 : 0]                 debug_vid_next_o
     );
 
-    wire [NUM_LITS/2*3-1:0]           var_value_i_0,  var_value_i_1;
+    wire [NUM_LITS/2*3-1:0]           var_value_i_0,       var_value_i_1;
     wire [NUM_LITS/2*3-1:0]           var_value_down_i_0,  var_value_down_i_1;
     wire [NUM_LITS/2*3-1:0]           var_value_down_o_0,  var_value_down_o_1;
-    wire [NUM_LITS*WIDTH_LVL/2-1 : 0] var_lvl_i_0,    var_lvl_i_1;
+    wire [NUM_LITS*WIDTH_LVL/2-1 : 0] var_lvl_i_0,         var_lvl_i_1;
     wire [NUM_LITS*WIDTH_LVL/2-1 : 0] var_lvl_down_i_0,    var_lvl_down_i_1;
     wire [NUM_LITS*WIDTH_LVL/2-1 : 0] var_lvl_down_o_0,    var_lvl_down_o_1;
-    wire [WIDTH_LVL/2-1 : 0]          cmax_lvl_o_0,    cmax_lvl_o_1;
-    wire [NUM_LITS/2*2-1:0]           lit_i_0,        lit_i_1;
-    wire [NUM_LITS/2*2-1:0]           lit_o_0,        lit_o_1;
+    wire [WIDTH_LVL/2-1 : 0]          cmax_lvl_o_0,        cmax_lvl_o_1;
+    wire [NUM_LITS/2*2-1:0]           lit_i_0,             lit_i_1;
+    wire [NUM_LITS/2*2-1:0]           lit_o_0,             lit_o_1;
     wire [1:0]                        freelitcnt_0;
-    wire                              imp_drv_0,      imp_drv_1;
-    wire                              conflict_c_0,      conflict_c_1;
-    wire                              csat_o_0,    csat_o_1;
+    wire                              imp_drv_0,           imp_drv_1;
+    wire                              conflict_c_0,        conflict_c_1;
+    wire                              all_lit_false_0,     all_lit_false_1;
+    wire                              csat_o_0,            csat_o_1;
+    wire [31 : 0]                     debug_vid_temp;
 
     assign {var_value_i_1, var_value_i_0} = var_value_i;
     assign {var_value_down_i_1, var_value_down_i_0} = var_value_down_i;
@@ -74,6 +82,7 @@ module lit8 #(
     
     assign csat_o = csat_o_1 | csat_o_0;
     assign conflict_c_o = conflict_c_1 | conflict_c_0;
+    assign all_lit_false_o = all_lit_false_1 & all_lit_false_0;
     
     assign imp_drv_0 = imp_drv_i;
     assign imp_drv_1 = imp_drv_i;
@@ -103,6 +112,7 @@ module lit8 #(
         .imp_drv_i       (imp_drv_0),
         
         .conflict_c_o    (conflict_c_0),
+        .all_lit_false_o (all_lit_false_0),
         .conflict_c_drv_i(conflict_c_drv_i),
         
         .csat_o          (csat_o_0),
@@ -113,7 +123,11 @@ module lit8 #(
         .apply_bkt_i     (apply_bkt_i),
         
         .cmax_lvl_i      (cmax_lvl_i),
-        .cmax_lvl_o      (cmax_lvl_o_0)
+        .cmax_lvl_o      (cmax_lvl_o_0),
+
+        .debug_cid_i     (debug_cid_i),
+        .debug_vid_next_i(debug_vid_next_i),
+        .debug_vid_next_o(debug_vid_temp)
         );
 
     lit4 #(
@@ -141,6 +155,7 @@ module lit8 #(
         .imp_drv_i       (imp_drv_1),
         
         .conflict_c_o    (conflict_c_1),
+        .all_lit_false_o (all_lit_false_1),
         .conflict_c_drv_i(conflict_c_drv_i),
         
         .csat_o          (csat_o_1),
@@ -151,7 +166,11 @@ module lit8 #(
         .apply_bkt_i     (apply_bkt_i),
         
         .cmax_lvl_i       (cmax_lvl_i),
-        .cmax_lvl_o       (cmax_lvl_o_1)
+        .cmax_lvl_o       (cmax_lvl_o_1),
+
+        .debug_cid_i     (debug_cid_i),
+        .debug_vid_next_i(debug_vid_temp),
+        .debug_vid_next_o(debug_vid_next_o)
         );
  
 endmodule
@@ -184,6 +203,7 @@ module lit4 #(
         input                           imp_drv_i,
         
         output                          conflict_c_o,
+        output                          all_lit_false_o,
         input                           conflict_c_drv_i,
         
         output                          csat_o,
@@ -196,22 +216,29 @@ module lit4 #(
         //控制信号
         input                           apply_imply_i,
         input                           apply_analyze_i,
-        input                           apply_bkt_i
+        input                           apply_bkt_i,
+
+        //用于调试的信号
+        input  [31 : 0]                 debug_cid_i,
+        input  [31 : 0]                 debug_vid_next_i,
+        output [31 : 0]                 debug_vid_next_o
     );
 
-    wire [NUM_LITS/2*3-1:0]           var_value_i_0,  var_value_i_1;
+    wire [NUM_LITS/2*3-1:0]           var_value_i_0,       var_value_i_1;
     wire [NUM_LITS/2*3-1:0]           var_value_down_i_0,  var_value_down_i_1;
     wire [NUM_LITS/2*3-1:0]           var_value_down_o_0,  var_value_down_o_1;
-    wire [NUM_LITS*WIDTH_LVL/2-1 : 0] var_lvl_i_0,    var_lvl_i_1;
+    wire [NUM_LITS*WIDTH_LVL/2-1 : 0] var_lvl_i_0,         var_lvl_i_1;
     wire [NUM_LITS*WIDTH_LVL/2-1 : 0] var_lvl_down_i_0,    var_lvl_down_i_1;
     wire [NUM_LITS*WIDTH_LVL/2-1 : 0] var_lvl_down_o_0,    var_lvl_down_o_1;
-    wire [WIDTH_LVL/2-1 : 0]          cmax_lvl_o_0,    cmax_lvl_o_1;
-    wire [NUM_LITS/2*2-1:0]           lit_i_0,        lit_i_1;
-    wire [NUM_LITS/2*2-1:0]           lit_o_0,        lit_o_1;
+    wire [WIDTH_LVL/2-1 : 0]          cmax_lvl_o_0,        cmax_lvl_o_1;
+    wire [NUM_LITS/2*2-1:0]           lit_i_0,             lit_i_1;
+    wire [NUM_LITS/2*2-1:0]           lit_o_0,             lit_o_1;
     wire [1:0]                        freelitcnt_0;
-    wire                              imp_drv_0,      imp_drv_1;
-    wire                              conflict_c_0,      conflict_c_1;
-    wire                              csat_o_0,    csat_o_1;
+    wire                              imp_drv_0,           imp_drv_1;
+    wire                              conflict_c_0,        conflict_c_1;
+    wire                              all_lit_false_0,     all_lit_false_1;
+    wire                              csat_o_0,            csat_o_1;
+    wire [31 : 0]                     debug_vid_temp;
 
     assign {var_value_i_1, var_value_i_0} = var_value_i;
     assign {var_value_down_i_1, var_value_down_i_0} = var_value_down_i;
@@ -227,6 +254,7 @@ module lit4 #(
     
     assign csat_o = csat_o_1 | csat_o_0;
     assign conflict_c_o = conflict_c_1 | conflict_c_0;
+    assign all_lit_false_o = all_lit_false_1 & all_lit_false_0;
     
     assign imp_drv_0 = imp_drv_i;
     assign imp_drv_1 = imp_drv_i;
@@ -256,6 +284,7 @@ module lit4 #(
         .imp_drv_i       (imp_drv_0),
         
         .conflict_c_o    (conflict_c_0),
+        .all_lit_false_o (all_lit_false_0),
         .conflict_c_drv_i(conflict_c_drv_i),
         
         .csat_o          (csat_o_0),
@@ -266,7 +295,11 @@ module lit4 #(
         .apply_bkt_i     (apply_bkt_i),
         
         .cmax_lvl_i      (cmax_lvl_i),
-        .cmax_lvl_o      (cmax_lvl_o_0)
+        .cmax_lvl_o      (cmax_lvl_o_0),
+
+        .debug_cid_i     (debug_cid_i),
+        .debug_vid_next_i(debug_vid_next_i),
+        .debug_vid_next_o(debug_vid_temp)
         );
 
     lit2 #(
@@ -294,6 +327,7 @@ module lit4 #(
         .imp_drv_i       (imp_drv_1),
         
         .conflict_c_o    (conflict_c_1),
+        .all_lit_false_o (all_lit_false_1),
         .conflict_c_drv_i(conflict_c_drv_i),
         
         .csat_o          (csat_o_1),
@@ -304,7 +338,11 @@ module lit4 #(
         .apply_bkt_i     (apply_bkt_i),
         
         .cmax_lvl_i       (cmax_lvl_i),
-        .cmax_lvl_o       (cmax_lvl_o_1)
+        .cmax_lvl_o       (cmax_lvl_o_1),
+
+        .debug_cid_i     (debug_cid_i),
+        .debug_vid_next_i(debug_vid_temp),
+        .debug_vid_next_o(debug_vid_next_o)
         );
  
 endmodule
@@ -337,6 +375,7 @@ module lit2 #(
         input                           imp_drv_i,
         
         output                          conflict_c_o,
+        output                          all_lit_false_o,
         input                           conflict_c_drv_i,
         
         output                          csat_o,
@@ -349,22 +388,29 @@ module lit2 #(
         //控制信号
         input                           apply_imply_i,
         input                           apply_analyze_i,
-        input                           apply_bkt_i
+        input                           apply_bkt_i,
+
+        //用于调试的信号
+        input  [31 : 0]                 debug_cid_i,
+        input  [31 : 0]                 debug_vid_next_i,
+        output [31 : 0]                 debug_vid_next_o
     );
 
-    wire [NUM_LITS/2*3-1:0]           var_value_i_0,  var_value_i_1;
+    wire [NUM_LITS/2*3-1:0]           var_value_i_0,       var_value_i_1;
     wire [NUM_LITS/2*3-1:0]           var_value_down_i_0,  var_value_down_i_1;
     wire [NUM_LITS/2*3-1:0]           var_value_down_o_0,  var_value_down_o_1;
-    wire [NUM_LITS*WIDTH_LVL/2-1 : 0] var_lvl_i_0,    var_lvl_i_1;
+    wire [NUM_LITS*WIDTH_LVL/2-1 : 0] var_lvl_i_0,         var_lvl_i_1;
     wire [NUM_LITS*WIDTH_LVL/2-1 : 0] var_lvl_down_i_0,    var_lvl_down_i_1;
     wire [NUM_LITS*WIDTH_LVL/2-1 : 0] var_lvl_down_o_0,    var_lvl_down_o_1;
-    wire [WIDTH_LVL/2-1 : 0]          cmax_lvl_o_0,    cmax_lvl_o_1;
-    wire [NUM_LITS/2*2-1:0]           lit_i_0,        lit_i_1;
-    wire [NUM_LITS/2*2-1:0]           lit_o_0,        lit_o_1;
+    wire [WIDTH_LVL/2-1 : 0]          cmax_lvl_o_0,        cmax_lvl_o_1;
+    wire [NUM_LITS/2*2-1:0]           lit_i_0,             lit_i_1;
+    wire [NUM_LITS/2*2-1:0]           lit_o_0,             lit_o_1;
     wire [1:0]                        freelitcnt_0;
-    wire                              imp_drv_0,      imp_drv_1;
-    wire                              conflict_c_0,      conflict_c_1;
-    wire                              csat_o_0,    csat_o_1;
+    wire                              imp_drv_0,           imp_drv_1;
+    wire                              conflict_c_0,        conflict_c_1;
+    wire                              all_lit_false_0,     all_lit_false_1;
+    wire                              csat_o_0,            csat_o_1;
+    wire [31 : 0]                     debug_vid_temp;
 
     assign {var_value_i_1, var_value_i_0} = var_value_i;
     assign {var_value_down_i_1, var_value_down_i_0} = var_value_down_i;
@@ -380,6 +426,7 @@ module lit2 #(
     
     assign csat_o = csat_o_1 | csat_o_0;
     assign conflict_c_o = conflict_c_1 | conflict_c_0;
+    assign all_lit_false_o = all_lit_false_1 & all_lit_false_0;
     
     assign imp_drv_0 = imp_drv_i;
     assign imp_drv_1 = imp_drv_i;
@@ -409,6 +456,7 @@ module lit2 #(
         .imp_drv_i       (imp_drv_0),
         
         .conflict_c_o    (conflict_c_0),
+        .all_lit_false_o (all_lit_false_0),
         .conflict_c_drv_i(conflict_c_drv_i),
         
         .csat_o          (csat_o_0),
@@ -419,7 +467,11 @@ module lit2 #(
         .apply_bkt_i     (apply_bkt_i),
         
         .cmax_lvl_i      (cmax_lvl_i),
-        .cmax_lvl_o      (cmax_lvl_o_0)
+        .cmax_lvl_o      (cmax_lvl_o_0),
+
+        .debug_cid_i     (debug_cid_i),
+        .debug_vid_next_i(debug_vid_next_i),
+        .debug_vid_next_o(debug_vid_temp)
         );
 
     lit1 #(
@@ -447,6 +499,7 @@ module lit2 #(
         .imp_drv_i       (imp_drv_1),
         
         .conflict_c_o    (conflict_c_1),
+        .all_lit_false_o (all_lit_false_1),
         .conflict_c_drv_i(conflict_c_drv_i),
         
         .csat_o          (csat_o_1),
@@ -457,7 +510,11 @@ module lit2 #(
         .apply_bkt_i     (apply_bkt_i),
         
         .cmax_lvl_i       (cmax_lvl_i),
-        .cmax_lvl_o       (cmax_lvl_o_1)
+        .cmax_lvl_o       (cmax_lvl_o_1),
+
+        .debug_cid_i     (debug_cid_i),
+        .debug_vid_next_i(debug_vid_temp),
+        .debug_vid_next_o(debug_vid_next_o)
         );
  
 endmodule
