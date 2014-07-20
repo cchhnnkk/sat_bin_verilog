@@ -73,7 +73,6 @@ module state_list #(
     */
     reg  [WIDTH_LVL-1:0]      base_lvl_r;
     wire [WIDTH_LVL-1:0]      max_lvl;
-    wire [NUM_VARS-1:0]       findindex;
     wire [WIDTH_LVL-1:0]      local_bkt_lvl;
     wire [NUM_VARS-1:0]       find_imply_cur, find_conflict_cur;
     reg [NUM_VARS-1:0]        find_imply_pre, find_conflict_pre;
@@ -126,7 +125,7 @@ module state_list #(
     lvl_state8(
         .clk                  (clk),
         .rst                  (rst),
-        .valid_from_decision_i(valid_from_decision),
+        .valid_from_decision_i(valid_from_decision!=0),
         .cur_bin_num_i        (cur_bin_num_i),
         .cur_lvl_i            (cur_lvl_o),
         .lvl_next_i           (base_lvl_r),

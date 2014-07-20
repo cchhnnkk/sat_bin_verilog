@@ -195,7 +195,7 @@ module sat_engine #(
         `include "../tb/class_ls_list.sv";
         class_clause_data #(8) cdata = new;
         class_vs_list #(8, WIDTH_LVL) vs_list = new();
-        class_ls_list #(8, WIDTH_LVL) ls_list = new();
+        class_ls_list #(8, WIDTH_BIN_ID) ls_list = new();
 
         always @(posedge clk) begin: display_load_info
             if(wr_carray_i!=0) begin

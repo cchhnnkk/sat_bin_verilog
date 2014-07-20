@@ -2,7 +2,7 @@
 *	层级状态列表类
 *	提供一些lvl state相关的数据转换的功能
 */
-class class_ls_list #(int nv = 8, int width_bini = 16, int width_ls = width_bini+1);
+class class_ls_list #(int nv = 8, int width_bini = 10, int width_ls = width_bini+1);
 
 	int dcd_bin[nv];
 	int has_bkt[nv];

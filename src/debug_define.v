@@ -8,6 +8,6 @@
 //`define T_END   310 	//ns
 //`define T_START 730 	//ns
 //`define T_END   780 	//ns
-`define T_START 1680 	//ns
-`define T_END   1710 	//ns
+`define T_START 2150 	//ns
+`define T_END   2200 	//ns
 

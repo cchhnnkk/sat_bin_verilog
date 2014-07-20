@@ -59,6 +59,7 @@ def find_vlog_list(mtime_list, ref_list):
         if filename in mtime_list:
             if mtime_list[filename] == mtime:
                 continue
+        mtime_list[filename] = mtime
 
         if filename.endswith('.v') or filename.endswith('.sv') or \
                 filename.endswith('.gen'):
@@ -71,10 +72,6 @@ def find_vlog_list(mtime_list, ref_list):
                     print f
                     need_vlog_flist += [f]
 
-        statinfo = os.stat(filename)
-        mtime = statinfo.st_mtime
-        mtime = int(mtime)
-        mtime_list[filename] = mtime
 
     file_db = open(vlog_db_mtime, 'w')
     str1 = json.dumps(mtime_list, indent=2)

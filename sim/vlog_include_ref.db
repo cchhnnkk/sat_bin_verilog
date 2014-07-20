@@ -52,6 +52,7 @@
   "../src/debug_define.v": [
     "../src/sat_engine/state_list/state_list.v", 
     "../src/sat_engine/state_list/var_state1.v", 
+    "../src/sat_engine/state_list/lvl_state1.v", 
     "../src/sat_engine/sat_engine.v", 
     "../src/sat_engine/ctrl_core.v", 
     "../src/sat_engine/clause_array/clause1.v", 
@@ -60,7 +61,6 @@
     "../src/sat_engine/clause_array/terminal_cell.v"
   ], 
   "../tb/test_clause1.sv": [], 
-  "../src/sat_engine/state_list/encode_8to3.v": [], 
   "../src/sat_engine/state_list/c_lens.v": [], 
   "../src/sat_engine/clause_array/max_in_datas.v": [], 
   "../tb/class_ls_list.sv": [

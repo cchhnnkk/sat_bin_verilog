@@ -13,10 +13,10 @@ module test_sat_engine(input clk, input rst);
     parameter NUM_CLAUSES      = 8;
     parameter NUM_VARS         = 8;
     parameter NUM_LVLS         = 8;
-    parameter WIDTH_BIN_ID     = 10;
+    parameter WIDTH_BIN_ID     = 15;
     parameter WIDTH_C_LEN      = 4;
     parameter WIDTH_LVL        = 16;
-    parameter WIDTH_LVL_STATES = 11;
+    parameter WIDTH_LVL_STATES = 16;
     parameter WIDTH_VAR_STATES = 19;
 
     reg                                     start_core_i;
@@ -96,7 +96,7 @@ module test_sat_engine(input clk, input rst);
     endtask
 
     `include "../tb/class_ls_list.sv";
-    class_ls_list #(8, WIDTH_LVL) ls_list = new();
+    class_ls_list #(8, WIDTH_BIN_ID) ls_list = new();
 
     task wr_ls_list(input int dcd_bin[8], has_bkt[8]);
         begin

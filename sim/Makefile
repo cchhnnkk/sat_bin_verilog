@@ -33,10 +33,10 @@ sim_se:
 	python transcript_info.py
 	# sublime_text transcript.log
 
-wave_sat_engine: hielist
+wave_se: hielist
 	cd ../tools && ../tools/gen_wave.sh test_sat_engine_top 3
 
-wave_exlist_sat_engine:
+wave_exlist_se:
 	cd ../tools && ../tools/gen_wave.sh test_sat_engine_top 3 wave_exlist_sat_engine.txt
 
 init_ref_se:

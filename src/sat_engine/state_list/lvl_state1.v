@@ -65,12 +65,12 @@ module lvl_state1 #(
         if(~rst)
             lvl_r <= 0;
         else
-            lvl_r <= lvl_next_o;
+            lvl_r <= lvl_next_i;
     end
 
     wire can_wr_ls;
 
-    assign can_wr_ls = valid_from_decision_i && lvl_r==cur_lvl_i;
+    assign can_wr_ls = valid_from_decision_i!=0 && lvl_r==cur_lvl_i;
 
     always @(posedge clk) begin
         if(~rst)

@@ -7,6 +7,7 @@
 import sys
 import json
 
+expand_list = []
 if len(sys.argv) == 1:
     expand_lvl = 3
 elif len(sys.argv) == 2:
@@ -14,8 +15,7 @@ elif len(sys.argv) == 2:
 elif len(sys.argv) == 3:
     expand_lvl = int(sys.argv[1])
     expand_list = open(sys.argv[2]).readlines()
-
-expand_list = [l for l in expand_list if l[0] != '#']
+    expand_list = [l for l in expand_list if l[0] != '#']
 
 data = sys.stdin.read()
 
