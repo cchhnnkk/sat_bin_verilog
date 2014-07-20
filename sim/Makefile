@@ -1,4 +1,5 @@
 
+all: vlog sim
 
 vlog: vlog_se
 
@@ -17,7 +18,7 @@ sim_ca:
 	rm test_ca_console.do
 	python transcript_info.py
 	sed -i "s/--//g" transcript.log
-	sublime_text transcript.log
+	# sublime_text transcript.log
 
 sim_c1:
 	sed "s/test_sat_engine_top/test_clause1_top/g" test_se_console.do > test_c1_console.do
@@ -25,12 +26,12 @@ sim_c1:
 	rm test_c1_console.do
 	python transcript_info.py
 	sed -i "s/--//g" transcript.log
-	sublime_text transcript.log
+	# sublime_text transcript.log
 
 sim_se:
 	vsim -c -do test_se_console.do
 	python transcript_info.py
-	sublime_text transcript.log
+	# sublime_text transcript.log
 
 wave_sat_engine: hielist
 	cd ../tools && ../tools/gen_wave.sh test_sat_engine_top 3

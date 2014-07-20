@@ -16,6 +16,7 @@ module lit8 #(
         input  [NUM_LITS*3-1 : 0]       var_value_i,
         input  [NUM_LITS*3-1 : 0]       var_value_down_i,
         output [NUM_LITS*3-1 : 0]       var_value_down_o,
+        output [NUM_LITS-1:0]           participate_o,
         
         input  [NUM_LITS*WIDTH_LVL-1:0] var_lvl_i,
         input  [NUM_LITS*WIDTH_LVL-1:0] var_lvl_down_i,
@@ -55,6 +56,7 @@ module lit8 #(
     wire [NUM_LITS/2*3-1:0]           var_value_i_0,       var_value_i_1;
     wire [NUM_LITS/2*3-1:0]           var_value_down_i_0,  var_value_down_i_1;
     wire [NUM_LITS/2*3-1:0]           var_value_down_o_0,  var_value_down_o_1;
+    wire [NUM_LITS/2-1:0]             participate_o_0,     participate_o_1;
     wire [NUM_LITS*WIDTH_LVL/2-1 : 0] var_lvl_i_0,         var_lvl_i_1;
     wire [NUM_LITS*WIDTH_LVL/2-1 : 0] var_lvl_down_i_0,    var_lvl_down_i_1;
     wire [NUM_LITS*WIDTH_LVL/2-1 : 0] var_lvl_down_o_0,    var_lvl_down_o_1;
@@ -71,6 +73,7 @@ module lit8 #(
     assign {var_value_i_1, var_value_i_0} = var_value_i;
     assign {var_value_down_i_1, var_value_down_i_0} = var_value_down_i;
     assign var_value_down_o = {var_value_down_o_1, var_value_down_o_0};
+    assign participate_o = {participate_o_1, participate_o_0};
     
     assign {var_lvl_i_1, var_lvl_i_0} = var_lvl_i;
     assign {var_lvl_down_i_1, var_lvl_down_i_0} = var_lvl_down_i;
@@ -97,6 +100,7 @@ module lit8 #(
         .var_value_i     (var_value_i_0),
         .var_value_down_i(var_value_down_i_0),
         .var_value_down_o(var_value_down_o_0),
+        .participate_o   (participate_o_0),
         
         .var_lvl_i       (var_lvl_i_0),
         .var_lvl_down_i  (var_lvl_down_i_0),
@@ -140,6 +144,7 @@ module lit8 #(
         .var_value_i     (var_value_i_1),
         .var_value_down_i(var_value_down_i_1),
         .var_value_down_o(var_value_down_o_1),
+        .participate_o   (participate_o_1),
         
         .var_lvl_i       (var_lvl_i_1),
         .var_lvl_down_i  (var_lvl_down_i_1),
@@ -188,6 +193,7 @@ module lit4 #(
         input  [NUM_LITS*3-1 : 0]       var_value_i,
         input  [NUM_LITS*3-1 : 0]       var_value_down_i,
         output [NUM_LITS*3-1 : 0]       var_value_down_o,
+        output [NUM_LITS-1:0]           participate_o,
         
         input  [NUM_LITS*WIDTH_LVL-1:0] var_lvl_i,
         input  [NUM_LITS*WIDTH_LVL-1:0] var_lvl_down_i,
@@ -227,6 +233,7 @@ module lit4 #(
     wire [NUM_LITS/2*3-1:0]           var_value_i_0,       var_value_i_1;
     wire [NUM_LITS/2*3-1:0]           var_value_down_i_0,  var_value_down_i_1;
     wire [NUM_LITS/2*3-1:0]           var_value_down_o_0,  var_value_down_o_1;
+    wire [NUM_LITS/2-1:0]             participate_o_0,     participate_o_1;
     wire [NUM_LITS*WIDTH_LVL/2-1 : 0] var_lvl_i_0,         var_lvl_i_1;
     wire [NUM_LITS*WIDTH_LVL/2-1 : 0] var_lvl_down_i_0,    var_lvl_down_i_1;
     wire [NUM_LITS*WIDTH_LVL/2-1 : 0] var_lvl_down_o_0,    var_lvl_down_o_1;
@@ -243,6 +250,7 @@ module lit4 #(
     assign {var_value_i_1, var_value_i_0} = var_value_i;
     assign {var_value_down_i_1, var_value_down_i_0} = var_value_down_i;
     assign var_value_down_o = {var_value_down_o_1, var_value_down_o_0};
+    assign participate_o = {participate_o_1, participate_o_0};
     
     assign {var_lvl_i_1, var_lvl_i_0} = var_lvl_i;
     assign {var_lvl_down_i_1, var_lvl_down_i_0} = var_lvl_down_i;
@@ -269,6 +277,7 @@ module lit4 #(
         .var_value_i     (var_value_i_0),
         .var_value_down_i(var_value_down_i_0),
         .var_value_down_o(var_value_down_o_0),
+        .participate_o   (participate_o_0),
         
         .var_lvl_i       (var_lvl_i_0),
         .var_lvl_down_i  (var_lvl_down_i_0),
@@ -312,6 +321,7 @@ module lit4 #(
         .var_value_i     (var_value_i_1),
         .var_value_down_i(var_value_down_i_1),
         .var_value_down_o(var_value_down_o_1),
+        .participate_o   (participate_o_1),
         
         .var_lvl_i       (var_lvl_i_1),
         .var_lvl_down_i  (var_lvl_down_i_1),
@@ -360,6 +370,7 @@ module lit2 #(
         input  [NUM_LITS*3-1 : 0]       var_value_i,
         input  [NUM_LITS*3-1 : 0]       var_value_down_i,
         output [NUM_LITS*3-1 : 0]       var_value_down_o,
+        output [NUM_LITS-1:0]           participate_o,
         
         input  [NUM_LITS*WIDTH_LVL-1:0] var_lvl_i,
         input  [NUM_LITS*WIDTH_LVL-1:0] var_lvl_down_i,
@@ -399,6 +410,7 @@ module lit2 #(
     wire [NUM_LITS/2*3-1:0]           var_value_i_0,       var_value_i_1;
     wire [NUM_LITS/2*3-1:0]           var_value_down_i_0,  var_value_down_i_1;
     wire [NUM_LITS/2*3-1:0]           var_value_down_o_0,  var_value_down_o_1;
+    wire [NUM_LITS/2-1:0]             participate_o_0,     participate_o_1;
     wire [NUM_LITS*WIDTH_LVL/2-1 : 0] var_lvl_i_0,         var_lvl_i_1;
     wire [NUM_LITS*WIDTH_LVL/2-1 : 0] var_lvl_down_i_0,    var_lvl_down_i_1;
     wire [NUM_LITS*WIDTH_LVL/2-1 : 0] var_lvl_down_o_0,    var_lvl_down_o_1;
@@ -415,6 +427,7 @@ module lit2 #(
     assign {var_value_i_1, var_value_i_0} = var_value_i;
     assign {var_value_down_i_1, var_value_down_i_0} = var_value_down_i;
     assign var_value_down_o = {var_value_down_o_1, var_value_down_o_0};
+    assign participate_o = {participate_o_1, participate_o_0};
     
     assign {var_lvl_i_1, var_lvl_i_0} = var_lvl_i;
     assign {var_lvl_down_i_1, var_lvl_down_i_0} = var_lvl_down_i;
@@ -441,6 +454,7 @@ module lit2 #(
         .var_value_i     (var_value_i_0),
         .var_value_down_i(var_value_down_i_0),
         .var_value_down_o(var_value_down_o_0),
+        .participate_o   (participate_o_0),
         
         .var_lvl_i       (var_lvl_i_0),
         .var_lvl_down_i  (var_lvl_down_i_0),
@@ -484,6 +498,7 @@ module lit2 #(
         .var_value_i     (var_value_i_1),
         .var_value_down_i(var_value_down_i_1),
         .var_value_down_o(var_value_down_o_1),
+        .participate_o   (participate_o_1),
         
         .var_lvl_i       (var_lvl_i_1),
         .var_lvl_down_i  (var_lvl_down_i_1),

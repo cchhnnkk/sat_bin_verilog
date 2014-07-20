@@ -205,6 +205,7 @@ module sat_engine #(
                 $display("\t%1tns wr_carray_i = %b", $time/1000, wr_carray_i);
                 //$display("\tclause_i = %b", clause_i);
                 cdata.display_lits();
+                $display("\tclause_len = %1d", clause_len);
             end
             if(wr_var_states!=0) begin
                 vs_list.set(vars_states_i);
@@ -218,6 +219,9 @@ module sat_engine #(
                 $display("%1tns wr lvl state list", $time/1000);
                 $display("\twr_lvl_states = %b", wr_lvl_states);
                 ls_list.display();
+            end
+            if(base_lvl_en==1) begin
+                $display("\tbase_lvl_i = %1d", base_lvl_i);
             end
         end
     `endif

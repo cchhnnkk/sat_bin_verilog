@@ -62,14 +62,23 @@ def find_vlog_list(mtime_list, ref_list):
 
         if filename.endswith('.v') or filename.endswith('.sv') or \
                 filename.endswith('.gen'):
-            if in_ignore(filename):
-                continue
-            need_vlog_flist += [filename]
+            if not in_ignore(filename):
+                need_vlog_flist += [filename]
             if filename not in ref_list:
                 continue
             for f in ref_list[filename]:
-                if f not in need_vlog_flist and ~in_ignore(f):
+                if f not in need_vlog_flist and not in_ignore(f):
+                    print f
                     need_vlog_flist += [f]
+
+        statinfo = os.stat(filename)
+        mtime = statinfo.st_mtime
+        mtime = int(mtime)
+        mtime_list[filename] = mtime
+
+    file_db = open(vlog_db_mtime, 'w')
+    str1 = json.dumps(mtime_list, indent=2)
+    file_db.write(str1)
 
     print "need_vlog_flist"
     for f in need_vlog_flist:
@@ -78,7 +87,7 @@ def find_vlog_list(mtime_list, ref_list):
 
 
 # 编译
-def vlog_file(need_vlog_flist, mtime_list):
+def vlog_file(need_vlog_flist):
     # pattern_error = re.compile(r'\((\d+)\)')
     for filename in need_vlog_flist:
         if filename.endswith('.v') or filename.endswith('.sv'):
@@ -107,16 +116,7 @@ def vlog_file(need_vlog_flist, mtime_list):
             #                         '8'])
             gn.gen_num_verilog(filename, 8)
 
-        statinfo = os.stat(filename)
-        mtime = statinfo.st_mtime
-        mtime = int(mtime)
-        mtime_list[filename] = mtime
-
-    file_db = open(vlog_db_mtime, 'w')
-    str1 = json.dumps(mtime_list, indent=2)
-    file_db.write(str1)
-
 if __name__ == '__main__':
     mtime_list, ref_list = init_vlog()
     need_vlog_flist = find_vlog_list(mtime_list, ref_list)
-    vlog_file(need_vlog_flist, mtime_list)
+    vlog_file(need_vlog_flist)

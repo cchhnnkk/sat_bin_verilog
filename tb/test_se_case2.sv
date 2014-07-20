@@ -52,6 +52,8 @@ load_bin 3
     implied     [1, 0, 1, 1, 0]
     level       [0, 1, 2, 1, 0]
 
+    int base_lvl2 = 2;
+
 sat engine run_core: cur_bin == 3
 --  preprocess
 --  bcp

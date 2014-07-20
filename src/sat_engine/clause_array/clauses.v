@@ -17,6 +17,7 @@ module clause8 #(
         input  [NUM_VARS*3-1:0]                var_value_i,
         input  [NUM_VARS*3-1:0]                var_value_down_i,
         output [NUM_VARS*3-1:0]                var_value_down_o,
+        output [NUM_VARS-1:0]                  participate_o,
         
         //用于推理时求得剩余最大lvl
         input  [NUM_VARS*WIDTH_LVL-1:0]        var_lvl_i,
@@ -46,6 +47,7 @@ module clause8 #(
     wire [NUM_CLAUSES/2-1:0]                rd_0, rd_1;
     wire [3*NUM_VARS-1:0]                   var_value_temp;
     wire [NUM_VARS*WIDTH_LVL-1 : 0]         var_lvl_temp;
+    wire [NUM_VARS-1:0]                     participate_o_0, participate_o_1;
     wire [31 : 0]                           debug_cid_temp;
     wire [NUM_VARS*2-1 : 0]                 clause_o_0, clause_o_1;
     wire [WIDTH_C_LEN*NUM_CLAUSES/2-1 : 0]  clause_len_o_0, clause_len_o_1;
@@ -56,6 +58,7 @@ module clause8 #(
     assign clause_o     = clause_o_1 | clause_o_0;
     assign clause_len_o = {clause_len_o_1, clause_len_o_0};
     assign all_c_sat_o  = all_c_sat_o_1 & all_c_sat_o_0;
+    assign participate_o = participate_o_1 | participate_o_0;
 
     clause4 #(
         .NUM_VARS(NUM_VARS),
@@ -68,6 +71,7 @@ module clause8 #(
         .var_value_i     (var_value_i),
         .var_value_down_i(var_value_down_i),
         .var_value_down_o(var_value_temp),
+        .participate_o   (participate_o_0),
         
         .var_lvl_i       (var_lvl_i),
         .var_lvl_down_i  (var_lvl_down_i),
@@ -100,6 +104,7 @@ module clause8 #(
         .var_value_i     (var_value_i),
         .var_value_down_i(var_value_temp),
         .var_value_down_o(var_value_down_o),
+        .participate_o   (participate_o_1),
         
         .var_lvl_i       (var_lvl_i),
         .var_lvl_down_i  (var_lvl_temp),
@@ -137,6 +142,7 @@ module clause4 #(
         input  [NUM_VARS*3-1:0]                var_value_i,
         input  [NUM_VARS*3-1:0]                var_value_down_i,
         output [NUM_VARS*3-1:0]                var_value_down_o,
+        output [NUM_VARS-1:0]                  participate_o,
         
         //用于推理时求得剩余最大lvl
         input  [NUM_VARS*WIDTH_LVL-1:0]        var_lvl_i,
@@ -166,6 +172,7 @@ module clause4 #(
     wire [NUM_CLAUSES/2-1:0]                rd_0, rd_1;
     wire [3*NUM_VARS-1:0]                   var_value_temp;
     wire [NUM_VARS*WIDTH_LVL-1 : 0]         var_lvl_temp;
+    wire [NUM_VARS-1:0]                     participate_o_0, participate_o_1;
     wire [31 : 0]                           debug_cid_temp;
     wire [NUM_VARS*2-1 : 0]                 clause_o_0, clause_o_1;
     wire [WIDTH_C_LEN*NUM_CLAUSES/2-1 : 0]  clause_len_o_0, clause_len_o_1;
@@ -176,6 +183,7 @@ module clause4 #(
     assign clause_o     = clause_o_1 | clause_o_0;
     assign clause_len_o = {clause_len_o_1, clause_len_o_0};
     assign all_c_sat_o  = all_c_sat_o_1 & all_c_sat_o_0;
+    assign participate_o = participate_o_1 | participate_o_0;
 
     clause2 #(
         .NUM_VARS(NUM_VARS),
@@ -188,6 +196,7 @@ module clause4 #(
         .var_value_i     (var_value_i),
         .var_value_down_i(var_value_down_i),
         .var_value_down_o(var_value_temp),
+        .participate_o   (participate_o_0),
         
         .var_lvl_i       (var_lvl_i),
         .var_lvl_down_i  (var_lvl_down_i),
@@ -220,6 +229,7 @@ module clause4 #(
         .var_value_i     (var_value_i),
         .var_value_down_i(var_value_temp),
         .var_value_down_o(var_value_down_o),
+        .participate_o   (participate_o_1),
         
         .var_lvl_i       (var_lvl_i),
         .var_lvl_down_i  (var_lvl_temp),
@@ -257,6 +267,7 @@ module clause2 #(
         input  [NUM_VARS*3-1:0]                var_value_i,
         input  [NUM_VARS*3-1:0]                var_value_down_i,
         output [NUM_VARS*3-1:0]                var_value_down_o,
+        output [NUM_VARS-1:0]                  participate_o,
         
         //用于推理时求得剩余最大lvl
         input  [NUM_VARS*WIDTH_LVL-1:0]        var_lvl_i,
@@ -286,6 +297,7 @@ module clause2 #(
     wire [NUM_CLAUSES/2-1:0]                rd_0, rd_1;
     wire [3*NUM_VARS-1:0]                   var_value_temp;
     wire [NUM_VARS*WIDTH_LVL-1 : 0]         var_lvl_temp;
+    wire [NUM_VARS-1:0]                     participate_o_0, participate_o_1;
     wire [31 : 0]                           debug_cid_temp;
     wire [NUM_VARS*2-1 : 0]                 clause_o_0, clause_o_1;
     wire [WIDTH_C_LEN*NUM_CLAUSES/2-1 : 0]  clause_len_o_0, clause_len_o_1;
@@ -296,6 +308,7 @@ module clause2 #(
     assign clause_o     = clause_o_1 | clause_o_0;
     assign clause_len_o = {clause_len_o_1, clause_len_o_0};
     assign all_c_sat_o  = all_c_sat_o_1 & all_c_sat_o_0;
+    assign participate_o = participate_o_1 | participate_o_0;
 
     clause1 #(
         .NUM_VARS(NUM_VARS),
@@ -308,6 +321,7 @@ module clause2 #(
         .var_value_i     (var_value_i),
         .var_value_down_i(var_value_down_i),
         .var_value_down_o(var_value_temp),
+        .participate_o   (participate_o_0),
         
         .var_lvl_i       (var_lvl_i),
         .var_lvl_down_i  (var_lvl_down_i),
@@ -340,6 +354,7 @@ module clause2 #(
         .var_value_i     (var_value_i),
         .var_value_down_i(var_value_temp),
         .var_value_down_o(var_value_down_o),
+        .participate_o   (participate_o_1),
         
         .var_lvl_i       (var_lvl_i),
         .var_lvl_down_i  (var_lvl_temp),

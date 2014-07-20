@@ -14,6 +14,7 @@
                <--    <--    <--
      findflag: 2 ... 2 1 0 ... 0
  */
+
 module lvl_state8 #(
         parameter NUM_LVLS         = 8,
         parameter WIDTH_LVL_STATES = 11,
@@ -28,6 +29,8 @@ module lvl_state8 #(
         input [NUM_LVLS-1:0]                      valid_from_decision_i,
         input [WIDTH_BIN_ID-1:0]                  cur_bin_num_i,
      	input [WIDTH_LVL-1:0]                     cur_lvl_i,
+        input [WIDTH_LVL-1:0]                     lvl_next_i,
+        output [WIDTH_LVL-1:0]                    lvl_next_o,
 
         //find bkt lvl
         input [1:0]                               findflag_i,
@@ -35,6 +38,7 @@ module lvl_state8 #(
         output [NUM_LVLS-1:0]                     findindex_o,
         input [WIDTH_LVL-1:0]                     max_lvl_i,
         output [WIDTH_BIN_ID-1:0]                 bkt_bin_o,
+        output [WIDTH_LVL-1:0]                    bkt_lvl_o,
 
         //backtrack
         input                                     apply_bkt_i,
@@ -42,16 +46,21 @@ module lvl_state8 #(
         //load update
         input [NUM_LVLS-1:0]                      wr_states,
         input [WIDTH_LVL_STATES*NUM_LVLS -1 : 0]  lvl_states_i,
-        output [WIDTH_LVL_STATES*NUM_LVLS -1 : 0] lvl_states_o
+        output [WIDTH_LVL_STATES*NUM_LVLS -1 : 0] lvl_states_o,
+
+        //用于调试的信号
+        input  [31 : 0]                           debug_lid_next_i,
+        output [31 : 0]                           debug_lid_next_o
     );
 
     wire [NUM_LVLS/2-1:0]                      valid_from_decision_0, valid_from_decision_1;
     wire [WIDTH_BIN_ID-1:0]                    bkt_bin_o_0, bkt_bin_o_1;
+    wire [WIDTH_LVL-1:0]                       bkt_lvl_o_0, bkt_lvl_o_1;
     wire [NUM_LVLS/2-1:0]                      findindex_o_0, findindex_o_1;
 
     assign {valid_from_decision_0, valid_from_decision_1} = valid_from_decision_i;
     assign bkt_bin_o = bkt_bin_o_0 | bkt_bin_o_1;
-    assign findindex_o = {findindex_o_1, findindex_o_0};
+    assign bkt_lvl_o = bkt_lvl_o_0 | bkt_lvl_o_1;
 
     wire [NUM_LVLS/2-1:0]                      wr_states_0, wr_states_1;
     wire [WIDTH_LVL_STATES*NUM_LVLS/2-1:0]     lvl_states_i_0, lvl_states_i_1;
@@ -59,7 +68,9 @@ module lvl_state8 #(
     assign {wr_states_0, wr_states_1} = wr_states;
     assign {lvl_states_i_0, lvl_states_i_1} = lvl_states_i;
     assign lvl_states_o = {lvl_states_o_0, lvl_states_o_1};
-    assign findindex_o = {findindex_o_1, findindex_o_0};
+
+    wire [WIDTH_LVL-1:0]                   lvl_temp;
+    wire [31 : 0]                          debug_lid_temp;
 
     lvl_state4 #(
         .WIDTH_LVL_STATES(WIDTH_LVL_STATES),
@@ -72,15 +83,20 @@ module lvl_state8 #(
         .valid_from_decision_i(valid_from_decision_i_0),
         .cur_bin_num_i        (cur_bin_num_i),
         .cur_lvl_i            (cur_lvl_i),
+        .lvl_next_i           (lvl_next_i),
+        .lvl_next_o           (lvl_temp),
         .findflag_i           (findflag_i),
         .findflag_o           (findflag_o),
-        .findindex_o          (findindex_o_0),
         .max_lvl_i            (max_lvl_i),
         .bkt_bin_o            (bkt_bin_o_0),
+        .bkt_lvl_o            (bkt_lvl_o_0),
         .apply_bkt_i          (apply_bkt_i),
         .wr_states            (wr_states_0),
         .lvl_states_i         (lvl_states_i_0),
-        .lvl_states_o         (lvl_states_o_0)
+        .lvl_states_o         (lvl_states_o_0),
+
+        .debug_lid_next_i     (debug_lid_next_i),
+        .debug_lid_next_o     (debug_lid_temp)
     );
 
     lvl_state4 #(
@@ -94,15 +110,20 @@ module lvl_state8 #(
         .valid_from_decision_i(valid_from_decision_i_1),
         .cur_bin_num_i        (cur_bin_num_i),
         .cur_lvl_i            (cur_lvl_i),
+        .lvl_next_i           (lvl_temp),
+        .lvl_next_o           (lvl_next_o),
         .findflag_i           (findflag_i),
         .findflag_o           (findflag_o),
-        .findindex_o          (findindex_o_1),
         .max_lvl_i            (max_lvl_i),
         .bkt_bin_o            (bkt_bin_o_1),
+        .bkt_lvl_o            (bkt_lvl_o_1),
         .apply_bkt_i          (apply_bkt_i),
         .wr_states            (wr_states_1),
         .lvl_states_i         (lvl_states_i_1),
-        .lvl_states_o         (lvl_states_o_1)
+        .lvl_states_o         (lvl_states_o_1),
+
+        .debug_lid_next_i     (debug_lid_temp),
+        .debug_lid_next_o     (debug_lid_next_o)
     );
 
 endmodule
@@ -118,6 +139,7 @@ endmodule
                <--    <--    <--
      findflag: 2 ... 2 1 0 ... 0
  */
+
 module lvl_state4 #(
         parameter NUM_LVLS         = 4,
         parameter WIDTH_LVL_STATES = 11,
@@ -132,6 +154,8 @@ module lvl_state4 #(
         input [NUM_LVLS-1:0]                      valid_from_decision_i,
         input [WIDTH_BIN_ID-1:0]                  cur_bin_num_i,
      	input [WIDTH_LVL-1:0]                     cur_lvl_i,
+        input [WIDTH_LVL-1:0]                     lvl_next_i,
+        output [WIDTH_LVL-1:0]                    lvl_next_o,
 
         //find bkt lvl
         input [1:0]                               findflag_i,
@@ -139,6 +163,7 @@ module lvl_state4 #(
         output [NUM_LVLS-1:0]                     findindex_o,
         input [WIDTH_LVL-1:0]                     max_lvl_i,
         output [WIDTH_BIN_ID-1:0]                 bkt_bin_o,
+        output [WIDTH_LVL-1:0]                    bkt_lvl_o,
 
         //backtrack
         input                                     apply_bkt_i,
@@ -146,16 +171,21 @@ module lvl_state4 #(
         //load update
         input [NUM_LVLS-1:0]                      wr_states,
         input [WIDTH_LVL_STATES*NUM_LVLS -1 : 0]  lvl_states_i,
-        output [WIDTH_LVL_STATES*NUM_LVLS -1 : 0] lvl_states_o
+        output [WIDTH_LVL_STATES*NUM_LVLS -1 : 0] lvl_states_o,
+
+        //用于调试的信号
+        input  [31 : 0]                           debug_lid_next_i,
+        output [31 : 0]                           debug_lid_next_o
     );
 
     wire [NUM_LVLS/2-1:0]                      valid_from_decision_0, valid_from_decision_1;
     wire [WIDTH_BIN_ID-1:0]                    bkt_bin_o_0, bkt_bin_o_1;
+    wire [WIDTH_LVL-1:0]                       bkt_lvl_o_0, bkt_lvl_o_1;
     wire [NUM_LVLS/2-1:0]                      findindex_o_0, findindex_o_1;
 
     assign {valid_from_decision_0, valid_from_decision_1} = valid_from_decision_i;
     assign bkt_bin_o = bkt_bin_o_0 | bkt_bin_o_1;
-    assign findindex_o = {findindex_o_1, findindex_o_0};
+    assign bkt_lvl_o = bkt_lvl_o_0 | bkt_lvl_o_1;
 
     wire [NUM_LVLS/2-1:0]                      wr_states_0, wr_states_1;
     wire [WIDTH_LVL_STATES*NUM_LVLS/2-1:0]     lvl_states_i_0, lvl_states_i_1;
@@ -163,7 +193,9 @@ module lvl_state4 #(
     assign {wr_states_0, wr_states_1} = wr_states;
     assign {lvl_states_i_0, lvl_states_i_1} = lvl_states_i;
     assign lvl_states_o = {lvl_states_o_0, lvl_states_o_1};
-    assign findindex_o = {findindex_o_1, findindex_o_0};
+
+    wire [WIDTH_LVL-1:0]                   lvl_temp;
+    wire [31 : 0]                          debug_lid_temp;
 
     lvl_state2 #(
         .WIDTH_LVL_STATES(WIDTH_LVL_STATES),
@@ -176,15 +208,20 @@ module lvl_state4 #(
         .valid_from_decision_i(valid_from_decision_i_0),
         .cur_bin_num_i        (cur_bin_num_i),
         .cur_lvl_i            (cur_lvl_i),
+        .lvl_next_i           (lvl_next_i),
+        .lvl_next_o           (lvl_temp),
         .findflag_i           (findflag_i),
         .findflag_o           (findflag_o),
-        .findindex_o          (findindex_o_0),
         .max_lvl_i            (max_lvl_i),
         .bkt_bin_o            (bkt_bin_o_0),
+        .bkt_lvl_o            (bkt_lvl_o_0),
         .apply_bkt_i          (apply_bkt_i),
         .wr_states            (wr_states_0),
         .lvl_states_i         (lvl_states_i_0),
-        .lvl_states_o         (lvl_states_o_0)
+        .lvl_states_o         (lvl_states_o_0),
+
+        .debug_lid_next_i     (debug_lid_next_i),
+        .debug_lid_next_o     (debug_lid_temp)
     );
 
     lvl_state2 #(
@@ -198,15 +235,20 @@ module lvl_state4 #(
         .valid_from_decision_i(valid_from_decision_i_1),
         .cur_bin_num_i        (cur_bin_num_i),
         .cur_lvl_i            (cur_lvl_i),
+        .lvl_next_i           (lvl_temp),
+        .lvl_next_o           (lvl_next_o),
         .findflag_i           (findflag_i),
         .findflag_o           (findflag_o),
-        .findindex_o          (findindex_o_1),
         .max_lvl_i            (max_lvl_i),
         .bkt_bin_o            (bkt_bin_o_1),
+        .bkt_lvl_o            (bkt_lvl_o_1),
         .apply_bkt_i          (apply_bkt_i),
         .wr_states            (wr_states_1),
         .lvl_states_i         (lvl_states_i_1),
-        .lvl_states_o         (lvl_states_o_1)
+        .lvl_states_o         (lvl_states_o_1),
+
+        .debug_lid_next_i     (debug_lid_temp),
+        .debug_lid_next_o     (debug_lid_next_o)
     );
 
 endmodule
@@ -222,6 +264,7 @@ endmodule
                <--    <--    <--
      findflag: 2 ... 2 1 0 ... 0
  */
+
 module lvl_state2 #(
         parameter NUM_LVLS         = 2,
         parameter WIDTH_LVL_STATES = 11,
@@ -236,6 +279,8 @@ module lvl_state2 #(
         input [NUM_LVLS-1:0]                      valid_from_decision_i,
         input [WIDTH_BIN_ID-1:0]                  cur_bin_num_i,
      	input [WIDTH_LVL-1:0]                     cur_lvl_i,
+        input [WIDTH_LVL-1:0]                     lvl_next_i,
+        output [WIDTH_LVL-1:0]                    lvl_next_o,
 
         //find bkt lvl
         input [1:0]                               findflag_i,
@@ -243,6 +288,7 @@ module lvl_state2 #(
         output [NUM_LVLS-1:0]                     findindex_o,
         input [WIDTH_LVL-1:0]                     max_lvl_i,
         output [WIDTH_BIN_ID-1:0]                 bkt_bin_o,
+        output [WIDTH_LVL-1:0]                    bkt_lvl_o,
 
         //backtrack
         input                                     apply_bkt_i,
@@ -250,16 +296,21 @@ module lvl_state2 #(
         //load update
         input [NUM_LVLS-1:0]                      wr_states,
         input [WIDTH_LVL_STATES*NUM_LVLS -1 : 0]  lvl_states_i,
-        output [WIDTH_LVL_STATES*NUM_LVLS -1 : 0] lvl_states_o
+        output [WIDTH_LVL_STATES*NUM_LVLS -1 : 0] lvl_states_o,
+
+        //用于调试的信号
+        input  [31 : 0]                           debug_lid_next_i,
+        output [31 : 0]                           debug_lid_next_o
     );
 
     wire [NUM_LVLS/2-1:0]                      valid_from_decision_0, valid_from_decision_1;
     wire [WIDTH_BIN_ID-1:0]                    bkt_bin_o_0, bkt_bin_o_1;
+    wire [WIDTH_LVL-1:0]                       bkt_lvl_o_0, bkt_lvl_o_1;
     wire [NUM_LVLS/2-1:0]                      findindex_o_0, findindex_o_1;
 
     assign {valid_from_decision_0, valid_from_decision_1} = valid_from_decision_i;
     assign bkt_bin_o = bkt_bin_o_0 | bkt_bin_o_1;
-    assign findindex_o = {findindex_o_1, findindex_o_0};
+    assign bkt_lvl_o = bkt_lvl_o_0 | bkt_lvl_o_1;
 
     wire [NUM_LVLS/2-1:0]                      wr_states_0, wr_states_1;
     wire [WIDTH_LVL_STATES*NUM_LVLS/2-1:0]     lvl_states_i_0, lvl_states_i_1;
@@ -267,7 +318,9 @@ module lvl_state2 #(
     assign {wr_states_0, wr_states_1} = wr_states;
     assign {lvl_states_i_0, lvl_states_i_1} = lvl_states_i;
     assign lvl_states_o = {lvl_states_o_0, lvl_states_o_1};
-    assign findindex_o = {findindex_o_1, findindex_o_0};
+
+    wire [WIDTH_LVL-1:0]                   lvl_temp;
+    wire [31 : 0]                          debug_lid_temp;
 
     lvl_state1 #(
         .WIDTH_LVL_STATES(WIDTH_LVL_STATES),
@@ -280,15 +333,20 @@ module lvl_state2 #(
         .valid_from_decision_i(valid_from_decision_i_0),
         .cur_bin_num_i        (cur_bin_num_i),
         .cur_lvl_i            (cur_lvl_i),
+        .lvl_next_i           (lvl_next_i),
+        .lvl_next_o           (lvl_temp),
         .findflag_i           (findflag_i),
         .findflag_o           (findflag_o),
-        .findindex_o          (findindex_o_0),
         .max_lvl_i            (max_lvl_i),
         .bkt_bin_o            (bkt_bin_o_0),
+        .bkt_lvl_o            (bkt_lvl_o_0),
         .apply_bkt_i          (apply_bkt_i),
         .wr_states            (wr_states_0),
         .lvl_states_i         (lvl_states_i_0),
-        .lvl_states_o         (lvl_states_o_0)
+        .lvl_states_o         (lvl_states_o_0),
+
+        .debug_lid_next_i     (debug_lid_next_i),
+        .debug_lid_next_o     (debug_lid_temp)
     );
 
     lvl_state1 #(
@@ -302,15 +360,20 @@ module lvl_state2 #(
         .valid_from_decision_i(valid_from_decision_i_1),
         .cur_bin_num_i        (cur_bin_num_i),
         .cur_lvl_i            (cur_lvl_i),
+        .lvl_next_i           (lvl_temp),
+        .lvl_next_o           (lvl_next_o),
         .findflag_i           (findflag_i),
         .findflag_o           (findflag_o),
-        .findindex_o          (findindex_o_1),
         .max_lvl_i            (max_lvl_i),
         .bkt_bin_o            (bkt_bin_o_1),
+        .bkt_lvl_o            (bkt_lvl_o_1),
         .apply_bkt_i          (apply_bkt_i),
         .wr_states            (wr_states_1),
         .lvl_states_i         (lvl_states_i_1),
-        .lvl_states_o         (lvl_states_o_1)
+        .lvl_states_o         (lvl_states_o_1),
+
+        .debug_lid_next_i     (debug_lid_temp),
+        .debug_lid_next_o     (debug_lid_next_o)
     );
 
 endmodule

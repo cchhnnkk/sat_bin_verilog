@@ -7,29 +7,30 @@ module lit1 #(
     (
         input                           clk,
         input                           rst,
-        
+
         input  [2:0]                    var_value_i,
         input  [2:0]                    var_value_down_i,
         output [2:0]                    var_value_down_o,
-        
+        output                          participate_o,
+
         //down在阵列中向下传播
         input  [WIDTH_LVL-1:0]          var_lvl_i,
         input  [WIDTH_LVL-1:0]          var_lvl_down_i,
         output [WIDTH_LVL-1:0]          var_lvl_down_o,
-        
+
         input                           wr_i,
         input  [1:0]                    lit_i,
         output [1:0]                    lit_o,
-        
+
         input  [1:0]                    freelitcnt_pre,
         output [1:0]                    freelitcnt_next,
-        
+
         input                           imp_drv_i,
-        
+
         output                          conflict_c_o,
         output                          all_lit_false_o,
         input                           conflict_c_drv_i,
-        
+
         output                          csat_o,
         input                           csat_drv_i,
 
@@ -52,6 +53,7 @@ module lit1 #(
     reg               var_implied_r;    //用于冲突分析时冲突子句的识别
 
     wire              participate;
+    assign participate_o = participate;
     assign participate = lit_of_clause_r[0] | lit_of_clause_r[1];
 
     wire              isfree;
@@ -153,16 +155,17 @@ module lit1 #(
     `ifdef DEBUG_clause_array
         assign debug_vid_next_o = debug_vid_next_i + 1;
         //显示所有文字
-        int disp_all_lit = 1;
+        int disp_all_lit = 0;
         //显示特定文字
         int len = 3;
         int c[] = '{0, 0, 0};
         int v[] = '{1, 3, 4};
         always @(posedge clk) begin
             if($time/1000 >= `T_START && $time/1000 <= `T_END) begin
-                if(disp_all_lit)
+                if(disp_all_lit) begin
                     if(debug_cid_i==1)
                         display_state();
+                end
                 else begin
                     for(int i=0; i<len; i++) begin
                         if(debug_cid_i==c[i] && debug_vid_next_i==v[i]) begin
@@ -173,18 +176,49 @@ module lit1 #(
             end
         end
 
+        string str = "";
+        string str_all = "";
+
         task display_state();
+            str = "";
+            str_all = "";
             $display("%1tns c%1d v%1d", $time/1000, debug_cid_i, debug_vid_next_i);
-            $display("\tvar_value_i      = %03b", var_value_i);
-            $display("\tvar_value_down_i = %03b", var_value_down_i);
-            $display("\tvar_value_down_o = %03b", var_value_down_o);
-            $display("\tconflict_c_o     = %1d", conflict_c_o);
-            $display("\tall_lit_false_o  = %1d", all_lit_false_o);
-            $display("\tisfree           = %1d", isfree);
-            $display("\tparticipate      = %1d", participate);
-            $display("\tlit_of_clause_r  = %1b", lit_of_clause_r);
-            $display("\tconflict_c_drv_i = %1b", conflict_c_drv_i);
+            //              01234567890123456789
+            $sformat(str,"\t     var_value_i");      str_all = {str_all, str};
+            $sformat(str, " var_value_down_i");      str_all = {str_all, str};
+            $sformat(str, " var_value_down_o");      str_all = {str_all, str};
+            $sformat(str, "     conflict_c_o");      str_all = {str_all, str};
+            $sformat(str, "  all_lit_false_o");      str_all = {str_all, str};
+            $sformat(str, "           isfree");      str_all = {str_all, str};
+            $sformat(str, "      participate");      str_all = {str_all, str};
+            $sformat(str, "  lit_of_clause_r");      str_all = {str_all, str};
+            $sformat(str, " conflict_c_drv_i\n");    str_all = {str_all, str}; 
+
+            $sformat(str,"\t%16b", var_value_i     );      str_all = {str_all, str};
+            $sformat(str, " %16b", var_value_down_i);      str_all = {str_all, str};
+            $sformat(str, " %16b", var_value_down_o);      str_all = {str_all, str};
+            $sformat(str, " %16d", conflict_c_o    );      str_all = {str_all, str};
+            $sformat(str, " %16d", all_lit_false_o );      str_all = {str_all, str};
+            $sformat(str, " %16d", isfree          );      str_all = {str_all, str};
+            $sformat(str, " %16d", participate     );      str_all = {str_all, str};
+            $sformat(str, " %16b", lit_of_clause_r );      str_all = {str_all, str};
+            $sformat(str, " %16b", conflict_c_drv_i);      str_all = {str_all, str};
+
+            $display(str_all);
         endtask
+
+        //task display_state();
+        //    $display("%1tns c%1d v%1d", $time/1000, debug_cid_i, debug_vid_next_i);
+        //    $display("\tvar_value_i      = %03b", var_value_i);
+        //    $display("\tvar_value_down_i = %03b", var_value_down_i);
+        //    $display("\tvar_value_down_o = %03b", var_value_down_o);
+        //    $display("\tconflict_c_o     = %1d", conflict_c_o);
+        //    $display("\tall_lit_false_o  = %1d", all_lit_false_o);
+        //    $display("\tisfree           = %1d", isfree);
+        //    $display("\tparticipate      = %1d", participate);
+        //    $display("\tlit_of_clause_r  = %1b", lit_of_clause_r);
+        //    $display("\tconflict_c_drv_i = %1b", conflict_c_drv_i);
+        //endtask
     `endif
 
 endmodule

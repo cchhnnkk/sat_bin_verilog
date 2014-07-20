@@ -1,5 +1,5 @@
 
-/*** 测试数据3，直接partial sat ***/
+/*** 虏芒脢脭脢媒戮脻3拢卢脰卤陆脫partial sat ***/
 
 int bin3[8][8] = '{
     '{1, 0, 2, 0, 2, 0, 0, 0},
@@ -23,7 +23,7 @@ int cur_bin_num3 = 2;
 int load_lvl3 = 4;
 int base_lvl3 = 3;
 
-//运算过程数据
+//脭脣脣茫鹿媒鲁脤脢媒戮脻
 int process_len3 = 1;
 struct_process process_data3[] = '{
     '{"psat",   0, 0, 0}
@@ -52,7 +52,6 @@ implied     [1, 0, 1, 1, 0]
 level       [0, 1, 2, 3, 0]
 
 sat engine run_core: cur_bin == 3
---  preprocess
 --  bcp
 --  decision
 ----        partial sat

@@ -65,15 +65,40 @@ module terminal_cell #(
             end
         end
 
+        string str = "";
+        string str_all = "";
+
         task display_state();
+            str = "";
+            str_all = "";
             $display("%1tns c%1d terminal_cell", $time/1000, debug_cid_i);
-            $display("\tall_lit_false_i  = %1d", all_lit_false_i);
-            $display("\tconflict_c_i     = %1d", conflict_c_i);
-            $display("\tconflict_c_drv_o = %1d", conflict_c_drv_o);
-            $display("\tcsat_drv_o       = %1d", csat_drv_o);
-            $display("\tclause_len_i     = %1d", clause_len_i);
-            $display("\tcmax_lvl_o       = %1d", cmax_lvl_o);
+            //               01234567890123456789
+            $sformat(str,"\t all_lit_false_i");      str_all = {str_all, str};
+            $sformat(str, "     conflict_c_i");      str_all = {str_all, str};
+            $sformat(str, " conflict_c_drv_o");      str_all = {str_all, str};
+            $sformat(str, "       csat_drv_o");      str_all = {str_all, str};
+            $sformat(str, "     clause_len_i");      str_all = {str_all, str};
+            $sformat(str, "       cmax_lvl_o\n");    str_all = {str_all, str};
+
+            $sformat(str,"\t%16b", all_lit_false_i );      str_all = {str_all, str};
+            $sformat(str, " %16b", conflict_c_i    );      str_all = {str_all, str};
+            $sformat(str, " %16b", conflict_c_drv_o);      str_all = {str_all, str};
+            $sformat(str, " %16d", csat_drv_o      );      str_all = {str_all, str};
+            $sformat(str, " %16d", clause_len_i    );      str_all = {str_all, str};
+            $sformat(str, " %16d", cmax_lvl_o      );      str_all = {str_all, str};
+
+            $display(str_all);
         endtask
+
+        //task display_state();
+        //    $display("%1tns c%1d v%1d", $time/1000, debug_cid_i, debug_vid_next_i);
+        //    $display("\tall_lit_false_i  = %1d", all_lit_false_i);
+        //    $display("\tconflict_c_i     = %1d", conflict_c_i);
+        //    $display("\tconflict_c_drv_o = %1d", conflict_c_drv_o);
+        //    $display("\tcsat_drv_o       = %1d", csat_drv_o);
+        //    $display("\tclause_len_i     = %1d", clause_len_i);
+        //    $display("\tcmax_lvl_o       = %1d", cmax_lvl_o);
+        //endtask
     `endif
 
 endmodule

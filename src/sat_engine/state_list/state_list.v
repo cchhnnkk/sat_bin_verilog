@@ -4,7 +4,7 @@
       lvl_state[]
 
     协助find_bkt_lvl, 计算bkt_lvl计算:
-      根据lvl_state[]得到的findindex和以及该bin的base_lvl，
+      根据lvl_state[]得到的bkt_lvl和bkt_bin，
       得出需要返回的层级;
   */
 
@@ -113,6 +113,8 @@ module state_list #(
     /**
     * 层级状态
     */
+
+    wire [WIDTH_LVL-1:0] bkt_lvl_from_ls;
     wire [1:0] findflag_i;
     assign findflag_i = 0;
 
@@ -127,16 +129,24 @@ module state_list #(
         .valid_from_decision_i(valid_from_decision),
         .cur_bin_num_i        (cur_bin_num_i),
         .cur_lvl_i            (cur_lvl_o),
+        .lvl_next_i           (base_lvl_r),
+        .lvl_next_o           (),
         .findflag_i           (findflag_i),
         .findflag_o           (),
-        .findindex_o          (findindex),
         .max_lvl_i            (max_lvl),
         .bkt_bin_o            (bkt_bin_o),
+        .bkt_lvl_o            (bkt_lvl_from_ls),
         .apply_bkt_i          (apply_bkt_cur_bin_i),
         .wr_states            (wr_lvl_states),
         .lvl_states_i         (lvl_states_i),
-        .lvl_states_o         (lvl_states_o)
+        .lvl_states_o         (lvl_states_o),
+
+        .debug_lid_next_i     (0),
+        .debug_lid_next_o     ()
     );
+
+    //为判断真时bin间回退
+    assign bkt_lvl_o = max_lvl<base_lvl_r? max_lvl:bkt_lvl_from_ls;
 
     /*** 决策 ***/
     wire [WIDTH_LVL-1:0]  cur_local_lvl;
@@ -155,11 +165,11 @@ module state_list #(
         .index_decided_o(valid_from_decision),
         .decision_done  (done_decision_o),
         .apply_bkt_i    (apply_bkt_cur_bin_i),
-        .local_bkt_lvl_i(local_bkt_lvl),
-        .cur_local_lvl_o(cur_local_lvl)
+        .bkt_lvl_i      (bkt_lvl_o),
+        .cur_lvl_o      (cur_lvl_o)
     );
 
-    assign cur_lvl_o = base_lvl_r + cur_local_lvl;
+    //assign cur_lvl_o = base_lvl_r + cur_local_lvl;
 
     `ifdef DEBUG_state_list
         `include "../tb/class_vs_list.sv";
@@ -174,7 +184,6 @@ module state_list #(
             if(done_decision_o) begin
                 $display("%1tns done_decision", $time/1000);
                 $display("\tindex_decided_o = %b", valid_from_decision);
-                $display("\tcur_local_lvl   = %4d", cur_local_lvl);
                 $display("\tbase_lvl_r      = %4d", base_lvl_r);
                 $display("\tcur_lvl_o       = %4d", cur_lvl_o);
                 @(posedge clk)
@@ -196,7 +205,7 @@ module state_list #(
             find_imply_pre <= find_imply_cur;
     end
 
-    always @(posedge clk) begin: set_done_imply_o
+    always @(posedge clk) begin
         if(~rst)
             done_imply_o <= 0;
         else if(apply_imply_i && (find_imply_cur==find_imply_pre || find_conflict_o))
@@ -248,7 +257,7 @@ module state_list #(
             c_analyze_state <= n_analyze_state;
     end
 
-    always @(*) begin: set_n_analyze_state
+    always @(*) begin
         if(~rst)
             n_analyze_state = 0;
         else
@@ -292,7 +301,7 @@ module state_list #(
             add_learntc_en_o <= 0;
     end
 
-    always @(posedge clk) begin: set_done_analyze_o
+    always @(posedge clk) begin
         if(~rst)
             done_analyze_o <= 0;
         else if(c_analyze_state==ANALYZE_DONE)
@@ -306,9 +315,6 @@ module state_list #(
 
     /*** 计算bkt_lvl ***/
 
-    encode_8to3 encode_8to3(.data_i(findindex), .data_o(data_from_encode));
-    assign local_bkt_lvl = data_from_encode;
-
     always @(posedge clk)
     begin
         if(~rst)
@@ -318,19 +324,6 @@ module state_list #(
         else
             base_lvl_r <= base_lvl_r;
     end
-
-    reg [WIDTH_LVL-1:0] bkt_lvl_r;
-
-    always @(posedge clk) begin: set_bkt_lvl_r
-        if(~rst)
-            bkt_lvl_r <= 0;
-        else if(findindex==0) // 需要bin间回退
-            bkt_lvl_r <= max_lvl;
-        else
-            bkt_lvl_r <= base_lvl_r + local_bkt_lvl;
-    end
-
-    assign bkt_lvl_o = bkt_lvl_r;
 
     `ifdef DEBUG_state_list
         string s[] = '{
@@ -362,7 +355,7 @@ module state_list #(
             end
             else if(c_analyze_state==ADD_LEARNTC)
             begin
-                $display("\tlearnt clause = %b", find_conflict_cur);
+                $display("\tlearntc = %b", find_conflict_cur);
                 cdata_learntc.reset();
                 cdata_learntc.set_clause(learnt_lit_o);
                 cdata_learntc.display_lits();
@@ -382,7 +375,7 @@ module state_list #(
 
     /*** 回退的控制 ***/
 
-    always @(posedge clk) begin: set_done_bkt_cur_bin_o
+    always @(posedge clk) begin
         if(~rst)
             done_bkt_cur_bin_o    <= 0;
         else if(apply_bkt_cur_bin_i)
@@ -410,5 +403,40 @@ module state_list #(
             end
         end
     `endif
+
+
+    `ifdef DEBUG_state_list
+        always @(posedge clk) begin
+            if($time/1000 >= `T_START && $time/1000 <= `T_END) begin
+                display_state();
+            end
+        end
+
+        string str = "";
+        string str_all = "";
+
+        task display_state();
+            str = "";
+            str_all = "";
+            $display("%1tns state_list", $time/1000);
+            //               01234567890123456789
+            $sformat(str,"\t         max_lvl");     str_all = {str_all, str};
+            $sformat(str, "        bkt_bin_o");     str_all = {str_all, str};
+            $sformat(str, "        bkt_lvl_o");     str_all = {str_all, str};
+            $sformat(str, "    cur_bin_num_i");     str_all = {str_all, str};
+            $sformat(str, "        cur_lvl_o\n");   str_all = {str_all, str};
+
+            $sformat(str,"\t%16d", max_lvl          );     str_all = {str_all, str};
+            $sformat(str, " %16d", bkt_bin_o        );     str_all = {str_all, str};
+            $sformat(str, " %16d", bkt_lvl_o        );     str_all = {str_all, str};
+            $sformat(str, " %16d", cur_bin_num_i    );     str_all = {str_all, str};
+            $sformat(str, " %16d", cur_lvl_o        );     str_all = {str_all, str};
+            $sformat(str, str_all);
+
+            $display(str_all);
+        endtask
+
+    `endif
+
 
 endmodule

@@ -20,8 +20,8 @@ int dcd_bin1[] = '{0, 0, 0, 0, 0, 0, 0, 0};
 int has_bkt1[] = '{0, 0, 0, 0, 0, 0, 0, 0};
 //ctrl
 int cur_bin_num1 = 1;
-int load_lvl1 = 1;
-int base_lvl1 = 1;
+int load_lvl1 = 2;
+int base_lvl1 = 2;
 
 //运算过程数据
 int process_len1 = 6;

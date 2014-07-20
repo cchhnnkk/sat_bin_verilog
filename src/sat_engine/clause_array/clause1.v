@@ -15,6 +15,7 @@ module clause1 #(
         input  [NUM_VARS*3-1:0]                var_value_i,
         input  [NUM_VARS*3-1:0]                var_value_down_i,
         output [NUM_VARS*3-1:0]                var_value_down_o,
+        output [NUM_VARS-1:0]                  participate_o,
         
         //用于推理时求得剩余最大lvl
         input  [NUM_VARS*WIDTH_LVL-1:0]        var_lvl_i,
@@ -56,6 +57,7 @@ module clause1 #(
         .var_value_i     (var_value_i),
         .var_value_down_i(var_value_down_i),
         .var_value_down_o(var_value_down_o),
+        .participate_o   (participate_o),
         
         .var_lvl_i       (var_lvl_i),
         .var_lvl_down_i  (var_lvl_down_i),

@@ -32,13 +32,15 @@ for i in xrange(start_tag, len(data)):
                 # print l[0], tab_len
         info_data += [line]
 
-print tab_len
+# print tab_len
+cur_time = 0
 for line in info_data:
     if line[0] == '=':
         pass
     elif line[0] not in ' \t':
         l = line.strip().split()
-        # print line, l
+        if len(l) == 0:
+            continue
         n = tab_len - len(l[0])
         index1 = line.find(' ')
         index2 = line.find('\t')
@@ -48,6 +50,15 @@ for line in info_data:
         # print index
         if index != -1:
             line = l[0] + repeat_space(n + 1) + line[index + 1:]
+
+        if len(l[0]) >= 3 and l[0][-2:]=='ns':
+            next_time = int(l[0][:-3])
+            if cur_time < next_time:
+                cur_time = next_time
+                # f.write(repeat_space(tab_len) + 
+                #         '----------------------------------\n\n')
+                f.write('----------------------------------\n\n')
+
     elif line[0] == '\t':
         line = repeat_space(tab_len + 1) + line[1:]
     else:
@@ -55,3 +66,5 @@ for line in info_data:
     f.write(line)
 
 f.close()
+
+print 'please view transcript.log'

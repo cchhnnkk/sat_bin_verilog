@@ -21,34 +21,34 @@ module decision #(
         output reg                        decision_done,
 
         input                             apply_bkt_i,
-        input      [WIDTH_LVL-1:0]        local_bkt_lvl_i,
-        output     [WIDTH_LVL-1:0]        cur_local_lvl_o
+        input      [WIDTH_LVL-1:0]        bkt_lvl_i,
+        output     [WIDTH_LVL-1:0]        cur_lvl_o
     );
 
-    reg [WIDTH_LVL-1:0]                   cur_local_lvl_r;
+    reg [WIDTH_LVL-1:0]                   next_lvl_r;
 
-    always @(posedge clk) begin: set_cur_local_lvl_r
+    always @(posedge clk) begin
         if(~rst)
-            cur_local_lvl_r <= -1;
+            next_lvl_r <= -1;
         else if(load_lvl_en)                      //load
-            cur_local_lvl_r <= load_lvl_i;
+            next_lvl_r <= load_lvl_i;
         else if(decision_pulse)                   //决策
-            cur_local_lvl_r <= cur_local_lvl_r+1;
+            next_lvl_r <= next_lvl_r+1;
         else if(apply_bkt_i)                      //回退
-            cur_local_lvl_r <= local_bkt_lvl_i;
+            next_lvl_r <= bkt_lvl_i;
         else
-            cur_local_lvl_r <= cur_local_lvl_r;
+            next_lvl_r <= next_lvl_r;
     end
 
-    assign cur_local_lvl_o = cur_local_lvl_r-1;
+    assign cur_lvl_o = next_lvl_r-1;
 
-    wire [NUM_VARS-1:0] index_o;
+    wire [NUM_VARS-1:0] index_w;
 
     dcd_in_var8 dcd_in_var8(
-        .value_i(vars_value_i),
+        .value_i   (vars_value_i),
         .lock_cnt_i(0),
         .lock_cnt_o(),
-        .index_o(index_o)
+        .index_o   (index_w)
     );
 
     always @(posedge clk)
@@ -56,7 +56,7 @@ module decision #(
         if(~rst)
             index_decided_o <= 0;
         else if(decision_pulse)
-            index_decided_o <= index_o;
+            index_decided_o <= index_w;
         else
             index_decided_o <= 0;
     end

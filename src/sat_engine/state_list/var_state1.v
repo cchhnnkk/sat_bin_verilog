@@ -168,19 +168,53 @@ module var_state1 #(
             end
         end
 
+        string str = "";
+        string str_all = "";
+
         task display_state();
+            str = "";
+            str_all = "";
             $display("%1tns var state %1d", $time/1000, debug_vid_next_i);
-            $display("\tvar_value_i      = %03b", var_value_i);
-            $display("\tvar_value_o      = %03b", var_value_o);
-            $display("\tvar_value_r      = %1d", var_value_r);
-            $display("\tvar_lvl_i        = %1d", var_lvl_i);
-            $display("\tvar_lvl_o        = %1d", var_lvl_o);
-            $display("\tvar_lvl_r        = %1b", var_lvl_r);
-            $display("\tapply_imply_i    = %1d", apply_imply_i);
-            $display("\tlearnt_lit_r     = %1d", learnt_lit_r);
-            $display("\tfind_imply_o     = %1d", find_imply_o);
-            $display("\tfind_conflict_o  = %1b", find_conflict_o);
+            //               01234567890123456789
+            $sformat(str,"\t     var_value_i");     str_all = {str_all, str};
+            $sformat(str, "      var_value_o");     str_all = {str_all, str};
+            $sformat(str, "      var_value_r");     str_all = {str_all, str};
+            $sformat(str, "        var_lvl_i");     str_all = {str_all, str};
+            $sformat(str, "        var_lvl_o");     str_all = {str_all, str};
+            $sformat(str, "        var_lvl_r");     str_all = {str_all, str};
+            $sformat(str, "    apply_imply_i");     str_all = {str_all, str};
+            $sformat(str, "     learnt_lit_r");     str_all = {str_all, str};
+            $sformat(str, "     find_imply_o");     str_all = {str_all, str};
+            $sformat(str, "  find_conflict_o\n");   str_all = {str_all, str};
+
+            $sformat(str,"\t%16b", var_value_i    );     str_all = {str_all, str};
+            $sformat(str, " %16b", var_value_o    );     str_all = {str_all, str};
+            $sformat(str, " %16b", var_value_r    );     str_all = {str_all, str};
+            $sformat(str, " %16d", var_lvl_i      );     str_all = {str_all, str};
+            $sformat(str, " %16d", var_lvl_o      );     str_all = {str_all, str};
+            $sformat(str, " %16d", var_lvl_r      );     str_all = {str_all, str};
+            $sformat(str, " %16d", apply_imply_i  );     str_all = {str_all, str};
+            $sformat(str, " %16d", learnt_lit_r   );     str_all = {str_all, str};
+            $sformat(str, " %16d", find_imply_o   );     str_all = {str_all, str};
+            $sformat(str, " %16b", find_conflict_o);     str_all = {str_all, str};
+            $sformat(str, str_all);
+
+            $display(str_all);
         endtask
+
+        //task display_state();
+        //    $display("%1tns var state %1d", $time/1000, debug_vid_next_i);
+        //    $display("\tvar_value_i      = %03b", var_value_i);
+        //    $display("\tvar_value_o      = %03b", var_value_o);
+        //    $display("\tvar_value_r      = %1d", var_value_r);
+        //    $display("\tvar_lvl_i        = %1d", var_lvl_i);
+        //    $display("\tvar_lvl_o        = %1d", var_lvl_o);
+        //    $display("\tvar_lvl_r        = %1d", var_lvl_r);
+        //    $display("\tapply_imply_i    = %1d", apply_imply_i);
+        //    $display("\tlearnt_lit_r     = %1d", learnt_lit_r);
+        //    $display("\tfind_imply_o     = %1d", find_imply_o);
+        //    $display("\tfind_conflict_o  = %1b", find_conflict_o);
+        //endtask
     `endif
 
 endmodule

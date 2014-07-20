@@ -104,8 +104,8 @@ class class_clause_data #(int size = 8);
 	endfunction
 
 	function void display();
-		display_lits();
-		display_implied();
+		display_lits_a();
+		display_implied_a();
 	endfunction
 
 	function void display_lits();
@@ -121,7 +121,20 @@ class class_clause_data #(int size = 8);
         $display("--\tvalue = %s", str_all);
 	endfunction
 
-	function void display_implied();
+	function void display_lits_a();
+        string str;
+        bit [1:0] d;
+        string str_all = "";
+		for (int i = 0; i < size; ++i)
+		begin
+			d = value[i];
+			$sformat(str, "%d", d);
+            str_all = {str_all, str, " "};
+		end
+        $display("\tvalue = %s", str_all);
+	endfunction
+
+	function void display_implied_a();
         string str;
         bit d;
         string str_all = "";
@@ -132,7 +145,7 @@ class class_clause_data #(int size = 8);
 			// str.itoa(data[i*3]);
             str_all = {str_all, str, " "};
 		end
-        $display("--\timply = %s", str_all);
+        $display("\timply = %s", str_all);
 	endfunction
 
 endclass

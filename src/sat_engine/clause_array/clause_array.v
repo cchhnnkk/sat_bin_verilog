@@ -20,6 +20,7 @@ module clause_array #(
         output [NUM_VARS*3-1:0]         var_value_o,
         input  [NUM_VARS*WIDTH_LVL-1:0] var_lvl_i,
         output [NUM_VARS*WIDTH_LVL-1:0] var_lvl_o,
+        output [NUM_VARS-1:0]           participate_o,
         
         //load update
         input  [NUM_CLAUSES-1:0]        wr_i,
@@ -57,6 +58,7 @@ module clause_array #(
         .var_value_i     (var_value_i),
         .var_value_down_i(var_value_down_start),
         .var_value_down_o(var_value_o),
+        .participate_o   (participate_o),
         
         .var_lvl_i       (var_lvl_i),
         .var_lvl_down_i  (var_lvl_down_start),
