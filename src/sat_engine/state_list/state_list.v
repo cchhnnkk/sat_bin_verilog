@@ -53,7 +53,7 @@ module state_list #(
 
         //backtrack cur bin
         input                                     apply_bkt_cur_bin_i,
-        output reg                                done_bkt_cur_bin_o,
+        output                                    done_bkt_cur_bin_o,
 
         //load update var states
         input [NUM_VARS-1:0]                      wr_var_states,
@@ -114,8 +114,8 @@ module state_list #(
     */
 
     wire [WIDTH_LVL-1:0] bkt_lvl_from_ls;
-    wire [1:0] findflag_i;
-    assign findflag_i = 0;
+    wire [1:0] findflag_left_i;
+    assign findflag_left_i = 0;
 
     lvl_state8 #(
         .WIDTH_LVL_STATES(WIDTH_LVL_STATES),
@@ -130,18 +130,15 @@ module state_list #(
         .cur_lvl_i            (cur_lvl_o),
         .lvl_next_i           (base_lvl_r),
         .lvl_next_o           (),
-        .findflag_i           (findflag_i),
-        .findflag_o           (),
+        .findflag_left_i      (findflag_left_i),
+        .findflag_left_o      (),
         .max_lvl_i            (max_lvl),
         .bkt_bin_o            (bkt_bin_o),
         .bkt_lvl_o            (bkt_lvl_from_ls),
         .apply_bkt_i          (apply_bkt_cur_bin_i),
         .wr_states            (wr_lvl_states),
         .lvl_states_i         (lvl_states_i),
-        .lvl_states_o         (lvl_states_o),
-
-        .debug_lid_next_i     (0),
-        .debug_lid_next_o     ()
+        .lvl_states_o         (lvl_states_o)
     );
 
     //为判断真时bin间回退
@@ -244,9 +241,10 @@ module state_list #(
     parameter   ANALYZE_IDLE          =  0,
                 FIND_LEARNTC          =  1,
                 ADD_LEARNTC           =  2,
-                ANALYZE_DONE          =  3;
+                ANALYZE_DONE          =  3,
+                ANALYZE_WAIT          =  4;
 
-    reg [1:0] c_analyze_state, n_analyze_state;
+    reg [2:0] c_analyze_state, n_analyze_state;
 
     always @(posedge clk)
     begin
@@ -274,10 +272,12 @@ module state_list #(
                 ADD_LEARNTC:
                     n_analyze_state = ANALYZE_DONE;
                 ANALYZE_DONE:
+                    n_analyze_state = ANALYZE_WAIT;
+                ANALYZE_WAIT:
                     if(~apply_analyze_i)    //等待ctrl_core处理完
                         n_analyze_state = ANALYZE_IDLE;
                     else
-                        n_analyze_state = ANALYZE_DONE;
+                        n_analyze_state = ANALYZE_WAIT;
                 default:
                     n_analyze_state = ANALYZE_IDLE;
             endcase
@@ -329,7 +329,8 @@ module state_list #(
             "ANALYZE_IDLE",
             "FIND_LEARNTC",
             "ADD_LEARNTC",
-            "ANALYZE_DONE"};
+            "ANALYZE_DONE",
+            "ANALYZE_WAIT"};
 
         always @(posedge clk) begin
             if(c_analyze_state!=n_analyze_state && n_analyze_state!=ANALYZE_IDLE)
@@ -374,18 +375,22 @@ module state_list #(
 
     /*** 回退的控制 ***/
 
-    always @(posedge clk) begin
+    //一个周期完成
+    reg done_bkt_cur_bin_w;
+    assign done_bkt_cur_bin_o = done_bkt_cur_bin_w;
+
+    always @(*) begin
         if(~rst)
-            done_bkt_cur_bin_o    <= 0;
+            done_bkt_cur_bin_w <= 0;
         else if(apply_bkt_cur_bin_i)
-            done_bkt_cur_bin_o    <= 1;
+            done_bkt_cur_bin_w <= 1;
         else
-            done_bkt_cur_bin_o    <= 0;
+            done_bkt_cur_bin_w <= 0;
     end
 
     `ifdef DEBUG_state_list
         `include "../tb/class_ls_list.sv";
-        class_ls_list #(8, WIDTH_LVL) ls_list = new();
+        class_ls_list #(8, WIDTH_BIN_ID) ls_list = new();
 
         always @(posedge clk) begin
             if(apply_bkt_cur_bin_i) begin
@@ -395,6 +400,7 @@ module state_list #(
                 ls_list.display();
             end
             if(done_bkt_cur_bin_o) begin
+                @(posedge clk)
                 ls_list.set(lvl_states_o);
                 //$display("sim time %4tns", $time/1000);
                 $display("%1tns done_bkt_cur_bin_o", $time/1000);

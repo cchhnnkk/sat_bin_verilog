@@ -7,7 +7,7 @@
      根据max_lvl -> 遍历has_bkt[]
      沿着isbkt[]从后向前查找bkted为False的层级
                <--    <--    <--
-     findflag: 2 ... 2 1 0 ... 0
+     findflag_left: 2 ... 2 1 0 ... 0
  */
 
 module lvl_state{$NUM} #(
@@ -28,8 +28,8 @@ module lvl_state{$NUM} #(
         output [WIDTH_LVL-1:0]                    lvl_next_o,
 
         //find bkt lvl
-        input [1:0]                               findflag_i,
-        output [1:0]                              findflag_o,
+        input [1:0]                               findflag_left_i,
+        output [1:0]                              findflag_left_o,
         input [WIDTH_LVL-1:0]                     max_lvl_i,
         output [WIDTH_BIN_ID-1:0]                 bkt_bin_o,
         output [WIDTH_LVL-1:0]                    bkt_lvl_o,
@@ -40,17 +40,13 @@ module lvl_state{$NUM} #(
         //load update
         input [NUM_LVLS-1:0]                      wr_states,
         input [WIDTH_LVL_STATES*NUM_LVLS -1 : 0]  lvl_states_i,
-        output [WIDTH_LVL_STATES*NUM_LVLS -1 : 0] lvl_states_o,
-
-        //用于调试的信号
-        input  [31 : 0]                           debug_lid_next_i,
-        output [31 : 0]                           debug_lid_next_o
+        output [WIDTH_LVL_STATES*NUM_LVLS -1 : 0] lvl_states_o
     );
 
     wire [NUM_LVLS/2-1:0]                      valid_from_decision_0, valid_from_decision_1;
     wire [WIDTH_BIN_ID-1:0]                    bkt_bin_o_0, bkt_bin_o_1;
     wire [WIDTH_LVL-1:0]                       bkt_lvl_o_0, bkt_lvl_o_1;
-    wire [1:0]                                 findflag_temp;
+    wire [1:0]                                 findflag_left_temp;
 
     assign bkt_bin_o = bkt_bin_o_1 | bkt_bin_o_0;
     assign bkt_lvl_o = bkt_lvl_o_1 | bkt_lvl_o_0;
@@ -78,18 +74,15 @@ module lvl_state{$NUM} #(
         .cur_lvl_i            (cur_lvl_i),
         .lvl_next_i           (lvl_next_i),
         .lvl_next_o           (lvl_temp),
-        .findflag_i           (findflag_i),
-        .findflag_o           (findflag_temp),
+        .findflag_left_i      (findflag_left_temp),
+        .findflag_left_o      (findflag_left_o),
         .max_lvl_i            (max_lvl_i),
         .bkt_bin_o            (bkt_bin_o_0),
         .bkt_lvl_o            (bkt_lvl_o_0),
         .apply_bkt_i          (apply_bkt_i),
         .wr_states            (wr_states_0),
         .lvl_states_i         (lvl_states_i_0),
-        .lvl_states_o         (lvl_states_o_0),
-
-        .debug_lid_next_i     (debug_lid_next_i),
-        .debug_lid_next_o     (debug_lid_temp)
+        .lvl_states_o         (lvl_states_o_0)
     );
 
     lvl_state{$NUM/2} #(
@@ -105,18 +98,15 @@ module lvl_state{$NUM} #(
         .cur_lvl_i            (cur_lvl_i),
         .lvl_next_i           (lvl_temp),
         .lvl_next_o           (lvl_next_o),
-        .findflag_i           (findflag_temp),
-        .findflag_o           (findflag_o),
+        .findflag_left_i      (findflag_left_i),
+        .findflag_left_o      (findflag_left_temp),
         .max_lvl_i            (max_lvl_i),
         .bkt_bin_o            (bkt_bin_o_1),
         .bkt_lvl_o            (bkt_lvl_o_1),
         .apply_bkt_i          (apply_bkt_i),
         .wr_states            (wr_states_1),
         .lvl_states_i         (lvl_states_i_1),
-        .lvl_states_o         (lvl_states_o_1),
-
-        .debug_lid_next_i     (debug_lid_temp),
-        .debug_lid_next_o     (debug_lid_next_o)
+        .lvl_states_o         (lvl_states_o_1)
     );
 
 endmodule

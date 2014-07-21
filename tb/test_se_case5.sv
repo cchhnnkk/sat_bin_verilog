@@ -18,7 +18,7 @@ int level5[]   = '{11, 12, 3, 10, 10, 10, 0, 0};
 int dcd_bin5[] = '{3, 5, 5, 5, 16, 5, 0, 0};
 int has_bkt5[] = '{1, 0, 1, 0, 0, 0, 0, 0};
 //ctrl
-int cur_bin_num5 = 27;
+int cur_bin_num5 = 5;
 int load_lvl5 = 13;
 int base_lvl5 = 10;
 

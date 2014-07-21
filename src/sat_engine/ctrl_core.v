@@ -96,7 +96,7 @@ module ctrl_core #(
                         n_state = ANALYSIS;
                 BKT_CUR_BIN:
                     if(done_bkt_cur_bin_i)
-                        n_state = DECISION;
+                        n_state = BCP;
                     else
                         n_state = BKT_CUR_BIN;
                 PARTIAL_SAT:
@@ -203,7 +203,7 @@ module ctrl_core #(
     begin
         if(~rst)
             apply_bkt_cur_bin_o <= 0;
-        else if(c_state==BKT_CUR_BIN)
+        else if(c_state==BKT_CUR_BIN && done_bkt_cur_bin_i==0)
             apply_bkt_cur_bin_o <= 1;
         else
             apply_bkt_cur_bin_o <= 0;

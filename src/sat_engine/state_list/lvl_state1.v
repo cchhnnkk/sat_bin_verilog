@@ -30,8 +30,8 @@ module lvl_state1 #(
         output [WIDTH_LVL-1:0]          lvl_next_o,
 
         //find bkt lvl
-        input [1:0]                     findflag_i,
-        output [1:0]                    findflag_o,
+        input [1:0]                     findflag_left_i,
+        output [1:0]                    findflag_left_o,
         input [WIDTH_LVL-1:0]           max_lvl_i,
         output reg [WIDTH_BIN_ID-1:0]   bkt_bin_o,
         output reg [WIDTH_LVL-1:0]      bkt_lvl_o,
@@ -42,11 +42,7 @@ module lvl_state1 #(
         //load update
         input                           wr_states,
         input [WIDTH_LVL_STATES-1 : 0]  lvl_states_i,
-        output [WIDTH_LVL_STATES-1 : 0] lvl_states_o,
-
-        //用于调试的信号
-        input  [31 : 0]                 debug_lid_next_i,
-        output [31 : 0]                 debug_lid_next_o
+        output [WIDTH_LVL_STATES-1 : 0] lvl_states_o
     );
 
     //加载和更新数据
@@ -79,6 +75,8 @@ module lvl_state1 #(
             dcd_bin_r <= dcd_bin_i;
         else if(can_wr_ls) //决策
             dcd_bin_r <= cur_bin_num_i;
+        else if(apply_bkt_i && findflag_left_o==0) //清除
+            dcd_bin_r <= 0;
         else
             dcd_bin_r <= dcd_bin_r;
     end
@@ -90,8 +88,10 @@ module lvl_state1 #(
             has_bkt_r <= has_bkt_i;
         else if(can_wr_ls)
             has_bkt_r <= 0;
-        else if(apply_bkt_i && findflag_o==1) //翻转
+        else if(apply_bkt_i && findflag_left_o==1) //翻转
             has_bkt_r <= 1;
+        else if(apply_bkt_i && findflag_left_o==0) //清除
+            has_bkt_r <= 0;
         else
             has_bkt_r <= has_bkt_r;
     end
@@ -99,7 +99,7 @@ module lvl_state1 #(
     always @(posedge clk) begin
         if(~rst)
             bkt_bin_o <= 0;
-        else if(findflag_o==1)
+        else if(findflag_left_o==1)
             bkt_bin_o <= dcd_bin_r;
         else
             bkt_bin_o <= 0;
@@ -108,18 +108,17 @@ module lvl_state1 #(
     always @(posedge clk) begin
         if(~rst)
             bkt_lvl_o <= 0;
-        else if(findflag_o==1)
+        else if(findflag_left_o==1)
             bkt_lvl_o <= lvl_r;
         else
             bkt_lvl_o <= 0;
     end
 
-    assign findflag_o = findflag_i != 0 ? 2 : 
+    assign findflag_left_o = findflag_left_i != 0 ? 2 : 
         (max_lvl_i >= lvl_r && has_bkt_r == 0) ? 1:0;
 
 
     `ifdef DEBUG_lvl_state
-        assign debug_lid_next_o = debug_lid_next_i + 1;
         //显示所有
         int disp_all_ls = 1;
         //显示特定
@@ -131,7 +130,7 @@ module lvl_state1 #(
                     display_state();
                 else begin
                     for(int i=0; i<len; i++) begin
-                        if(debug_lid_next_i==l[i]) begin
+                        if(lvl_next_i==l[i]) begin
                             display_state();
                         end
                     end
@@ -145,13 +144,13 @@ module lvl_state1 #(
         task display_state();
             str = "";
             str_all = "";
-            $display("%1tns lvl state %1d", $time/1000, debug_lid_next_i);
+            $display("%1tns lvl state %1d", $time/1000, lvl_next_i);
             //               01234567890123456789
             $sformat(str,"\t           lvl_r");     str_all = {str_all, str};
             $sformat(str,"\t       dcd_bin_r");     str_all = {str_all, str};
             $sformat(str, "        has_bkt_r");     str_all = {str_all, str};
-            $sformat(str, "       findflag_i");     str_all = {str_all, str};
-            $sformat(str, "       findflag_o");     str_all = {str_all, str};
+            $sformat(str, "  findflag_left_i");     str_all = {str_all, str};
+            $sformat(str, "  findflag_left_o");     str_all = {str_all, str};
             $sformat(str, "        max_lvl_i");     str_all = {str_all, str};
             $sformat(str, "        bkt_bin_o");   str_all = {str_all, str};
             $sformat(str, "        bkt_lvl_o\n");   str_all = {str_all, str};
@@ -159,8 +158,8 @@ module lvl_state1 #(
             $sformat(str,"\t%16d", lvl_r          );     str_all = {str_all, str};
             $sformat(str,"\t%16d", dcd_bin_r      );     str_all = {str_all, str};
             $sformat(str, " %16d", has_bkt_r      );     str_all = {str_all, str};
-            $sformat(str, " %16d", findflag_i     );     str_all = {str_all, str};
-            $sformat(str, " %16d", findflag_o     );     str_all = {str_all, str};
+            $sformat(str, " %16d", findflag_left_i);     str_all = {str_all, str};
+            $sformat(str, " %16d", findflag_left_o);     str_all = {str_all, str};
             $sformat(str, " %16d", max_lvl_i      );     str_all = {str_all, str};
             $sformat(str, " %16d", bkt_bin_o      );     str_all = {str_all, str};
             $sformat(str, " %16d", bkt_lvl_o      );     str_all = {str_all, str};

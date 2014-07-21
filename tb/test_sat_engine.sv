@@ -198,6 +198,9 @@ module test_sat_engine(input clk, input rst);
                 test_confict(process_data, i, i, error_tag_n);
                 error_tag |= error_tag_n;
 
+                test_bkt_curb(process_data, i, i, error_tag_n);
+                error_tag |= error_tag_n;
+
                 test_psat(process_data, i, i, error_tag_n);
                 error_tag |= error_tag_n;
 
@@ -299,6 +302,23 @@ module test_sat_engine(input clk, input rst);
         i_n = i;
     endtask
 
+    task test_bkt_curb(struct_process process_data[], input int i_c, output int i_n, error_tag);
+        int i;
+        i = i_c;
+        if(sat_engine.ctrl_core.done_analyze_i && 
+            sat_engine.ctrl_core.bkt_bin_num_i==sat_engine.ctrl_core.cur_bin_num_i)
+        begin
+            dis_process(process_data, i);
+            assert(process_data[i].name=="bkt_curb")
+            else begin
+                $display("!----- Error: bkt_curb");
+                error_tag = 1;
+            end
+            i++;
+        end
+        i_n = i;
+    endtask
+
     task test_psat(struct_process process_data[], input int i_c, output int i_n, error_tag);
         int i;
         i = i_c;
@@ -332,7 +352,7 @@ module test_sat_engine(input clk, input rst);
     endtask
 
     /*** 测试用例集 ***/
-    
+
     `include "../tb/test_se_case1.sv"
     `include "../tb/test_se_case2.sv"
     `include "../tb/test_se_case3.sv"

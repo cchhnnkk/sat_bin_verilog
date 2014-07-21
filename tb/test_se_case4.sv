@@ -19,7 +19,7 @@ int level4[]   = '{2, 4, 11, 9, 6, 0, 0, 0};
 int dcd_bin4[] = '{11, 0, 0, 0, 0, 0, 0, 0};
 int has_bkt4[] = '{0, 0, 0, 0, 0, 0, 0, 0};
 //ctrl
-int cur_bin_num4 = 18;
+int cur_bin_num4 = 19;
 int load_lvl4 = 17;
 int base_lvl4 = 16;
 
