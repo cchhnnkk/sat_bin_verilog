@@ -34,12 +34,21 @@ struct_process process_data1[] = '{
     '{"psat",     0, 0, 0}
 };
 
-task test_se_case1();
+task se_test_case1();
     begin
         $display("===============================================");
         $display("test case 1");
-        load_core(bin1, value1, implied1, level1, dcd_bin1, has_bkt1, cur_bin_num1, load_lvl1, base_lvl1);
-        test_core(process_data1, process_len1);
-        update_core();
+        bin          = bin1;
+        value        = value1;
+        implied      = implied1;
+        level        = level1;
+        dcd_bin      = dcd_bin1;
+        has_bkt      = has_bkt1;
+        cur_bin_num  = cur_bin_num1;
+        load_lvl     = load_lvl1;
+        base_lvl     = base_lvl1;
+        process_len  = process_len1;
+        process_data = process_data1;
+        run_test_case();
     end
 endtask

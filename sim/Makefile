@@ -1,16 +1,30 @@
 
 all: vlog sim
 
-vlog: vlog_se
+vlog: vlog_bm
 
-sim: sim_se
+sim: sim_bm
 
 view:
 	start vsim -view vsim.wlf
 
+# bin_manager
+vlog_bm:
+	vlog_test_bin_manager.sh
+
 # sat engine
 vlog_se:
 	vlog_test_sat_engine.sh
+
+sim_bm:
+	vsim -c -do test_bm_console.do
+	python transcript_info.py
+	# sublime_text transcript.log
+
+sim_se:
+	vsim -c -do test_se_console.do
+	python transcript_info.py
+	# sublime_text transcript.log
 
 sim_ca:
 	sed "s/test_sat_engine_top/test_clause_array_top/g" test_se_console.do > test_ca_console.do
@@ -26,11 +40,6 @@ sim_c1:
 	rm test_c1_console.do
 	python transcript_info.py
 	sed -i "s/--//g" transcript.log
-	# sublime_text transcript.log
-
-sim_se:
-	vsim -c -do test_se_console.do
-	python transcript_info.py
 	# sublime_text transcript.log
 
 wave_se: hielist

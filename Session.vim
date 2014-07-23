@@ -102,52 +102,536 @@ if expand('%') == '' && !&modified && line('$') <= 1 && getline(1) == ''
   let s:wipebuf = bufnr('%')
 endif
 set shortmess=aoO
-badd +150 tb\class_clause_data.sv
+badd +51 tb\class_clause_data.sv
 badd +1 set_vim_path
 badd +49 src\sat_engine\state_list\var_state1.v
 badd +640 sim\transcript.log
 badd +84 src\sat_engine\clause_array\terminal_cell.v
-badd +173 .\src\sat_engine\clause_array\clause1.v
+badd +173 src\sat_engine\clause_array\clause1.v
 badd +1 sim\transcript_info.py
 badd +88 sim\transcript
-badd +60 sim\Makefile
+badd +13 sim\Makefile
 badd +195 src\sat_engine\clause_array\lit1.v
 badd +22 tb\test_se_case4.sv
-badd +17 .\src\sat_engine\state_list\state_list.v
-badd +34 src\sat_engine\state_list\lvl_state1.v
-badd +56 src\sat_engine\state_list\lvl_states.gen
+badd +392 src\sat_engine\state_list\state_list.v
+badd +152 src\sat_engine\state_list\lvl_state1.v
+badd +71 src\sat_engine\state_list\lvl_states.gen
 badd +1 src\sat_engine\state_list\var_states.gen
-badd +208 ~\_vimrc
+badd +1 ~\_vimrc
 badd +12 src\debug_define.v
 badd +34 src\sat_engine\state_list\decision.v
 badd +1 e:\ºÐ·¹-¶«±±²Ë½È×Ó¹Ý-07-20.txt
 badd +63 tools\vlog.py
-badd +47 tb\test_se_case2.sv
+badd +30 tb\test_se_case2.sv
 badd +23 tb\test_se_case1.sv
 badd +19 tb\test_se_case5.sv
 badd +1 sim\test_sat_engine.do
-badd +313 tb\test_sat_engine.sv
+badd +368 tb\test_sat_engine.sv
 badd +0 sim\vlog_mtime.db
-badd +222 .\src\sat_engine\sat_engine.v
+badd +52 src\sat_engine\sat_engine.v
 badd +9 tools\gen_wave_do.py
 badd +1360 sim\temp.log
 badd +42 tb\class_ls_list.sv
-badd +0 .\src\sat_engine\ctrl_core.v
+badd +18 src\sat_engine\ctrl_core.v
 badd +88 Session.vim
+badd +63 tb\test_clause1.sv
+badd +1 sim\test_clause1_top.wlf
+badd +0 ipcore\bram_w40.v
+badd +20 src\bin_manager\load_bin.v
+badd +43 src\bin_manager\ctrl_bm.v
+badd +43 src\bin_manager\bin_manager.v
+badd +24 src\bin_manager\rd_bin_info.v
+badd +1 sim\vlog_test_sat_engine.sh
+badd +1 sim\vlog_test_bin_manager.sh
+badd +7 sim\test_bin_manager.do
+badd +207 tb\test_bin_manager.sv
+badd +19 temp
+badd +50 src\bin_manager\update_bin.v
+badd +151 src\bin_manager\find_global_bkt_lvl.v
+badd +127 src\bin_manager\bkt_across_bin.v
+badd +41 tb\se_test_case1.sv
+badd +39 tb\se_test_case2.sv
+badd +47 tb\se_test_case3.sv
+badd +48 tb\se_test_case4.sv
+badd +49 tb\se_test_case5.sv
+badd +59 tools\gen_inst.py
+badd +0 tb\bm_test_case1.sv
 silent! argdel *
-edit .\src\sat_engine\ctrl_core.v
+edit tb\test_bin_manager.sv
+set splitbelow splitright
+wincmd _ | wincmd |
+vsplit
+wincmd _ | wincmd |
+vsplit
+2wincmd h
+wincmd w
+wincmd w
+set nosplitbelow
+set nosplitright
+wincmd t
+set winheight=1 winwidth=1
+exe 'vert 1resize ' . ((&columns * 31 + 117) / 235)
+exe 'vert 2resize ' . ((&columns * 88 + 117) / 235)
+exe 'vert 3resize ' . ((&columns * 114 + 117) / 235)
+argglobal
+enew
+setlocal keymap=
+setlocal noarabic
+setlocal autoindent
+setlocal balloonexpr=
+setlocal nobinary
+setlocal bufhidden=
+setlocal buflisted
+setlocal buftype=
+setlocal cindent
+setlocal cinkeys=0{,0},0),:,0#,!^F,o,O,e
+setlocal cinoptions=
+setlocal cinwords=if,else,while,do,for,switch
+setlocal colorcolumn=
+setlocal comments=s1:/*,mb:*,ex:*/,://,b:#,:%,:XCOMM,n:>,fb:-
+setlocal commentstring=/*%s*/
+setlocal complete=.,w,b,u,t,i
+setlocal concealcursor=
+setlocal conceallevel=0
+setlocal completefunc=neocomplcache#complete#manual_complete
+setlocal nocopyindent
+setlocal cryptmethod=
+setlocal nocursorbind
+setlocal nocursorcolumn
+setlocal nocursorline
+setlocal define=
+setlocal dictionary=
+setlocal nodiff
+setlocal equalprg=
+setlocal errorformat=
+setlocal expandtab
+if &filetype != ''
+setlocal filetype=
+endif
+setlocal foldcolumn=0
+setlocal foldenable
+setlocal foldexpr=0
+setlocal foldignore=#
+setlocal foldlevel=0
+setlocal foldmarker={{{,}}}
+setlocal foldmethod=manual
+setlocal foldminlines=1
+setlocal foldnestmax=20
+setlocal foldtext=foldtext()
+setlocal formatexpr=
+setlocal formatoptions=tcq
+setlocal formatlistpat=^\\s*\\d\\+[\\]:.)}\\t\ ]\\s*
+setlocal grepprg=
+setlocal iminsert=2
+setlocal imsearch=2
+setlocal include=
+setlocal includeexpr=
+setlocal indentexpr=
+setlocal indentkeys=0{,0},:,0#,!^F,o,O,e
+setlocal noinfercase
+setlocal iskeyword=@,48-57,_,128-167,224-235
+setlocal keywordprg=
+setlocal nolinebreak
+setlocal nolisp
+setlocal nolist
+setlocal makeprg=
+setlocal matchpairs=(:),{:},[:]
+setlocal modeline
+setlocal modifiable
+setlocal nrformats=octal,hex
+set number
+setlocal number
+setlocal numberwidth=4
+setlocal omnifunc=verilogcomplete#Complete
+setlocal path=
+setlocal nopreserveindent
+setlocal nopreviewwindow
+setlocal quoteescape=\\
+setlocal noreadonly
+setlocal norelativenumber
+setlocal norightleft
+setlocal rightleftcmd=search
+setlocal noscrollbind
+setlocal shiftwidth=4
+setlocal noshortname
+setlocal smartindent
+setlocal softtabstop=4
+setlocal nospell
+setlocal spellcapcheck=[.?!]\\_[\\])'\"\	\ ]\\+
+setlocal spellfile=
+setlocal spelllang=en
+setlocal statusline=
+setlocal suffixesadd=
+setlocal swapfile
+setlocal synmaxcol=3000
+if &syntax != ''
+setlocal syntax=
+endif
+setlocal tabstop=4
+setlocal tags=
+setlocal textwidth=0
+setlocal thesaurus=
+setlocal noundofile
+setlocal nowinfixheight
+setlocal nowinfixwidth
+setlocal wrap
+setlocal wrapmargin=0
+wincmd w
+argglobal
+setlocal keymap=
+setlocal noarabic
+setlocal autoindent
+setlocal balloonexpr=
+setlocal nobinary
+setlocal bufhidden=
+setlocal buflisted
+setlocal buftype=
+setlocal cindent
+setlocal cinkeys=0{,0},0),:,0#,!^F,o,O,e
+setlocal cinoptions=
+setlocal cinwords=if,else,while,do,for,switch
+setlocal colorcolumn=
+setlocal comments=s1:/*,mb:*,ex:*/,://,b:#,:%,:XCOMM,n:>,fb:-
+setlocal commentstring=/*%s*/
+setlocal complete=.,w,b,u,t,i
+setlocal concealcursor=
+setlocal conceallevel=0
+setlocal completefunc=neocomplcache#complete#auto_complete
+setlocal nocopyindent
+setlocal cryptmethod=
+setlocal nocursorbind
+setlocal nocursorcolumn
+setlocal nocursorline
+setlocal define=
+setlocal dictionary=
+setlocal nodiff
+setlocal equalprg=
+setlocal errorformat=
+setlocal expandtab
+if &filetype != 'verilog_systemverilog'
+setlocal filetype=verilog_systemverilog
+endif
+setlocal foldcolumn=0
+setlocal foldenable
+setlocal foldexpr=0
+setlocal foldignore=#
+setlocal foldlevel=0
+setlocal foldmarker={{{,}}}
+setlocal foldmethod=manual
+setlocal foldminlines=1
+setlocal foldnestmax=20
+setlocal foldtext=foldtext()
+setlocal formatexpr=
+setlocal formatoptions=tcq
+setlocal formatlistpat=^\\s*\\d\\+[\\]:.)}\\t\ ]\\s*
+setlocal grepprg=
+setlocal iminsert=2
+setlocal imsearch=2
+setlocal include=
+setlocal includeexpr=
+setlocal indentexpr=GetVerilog_SystemVerilogIndent()
+setlocal indentkeys=!^F,o,O,0),0},=begin,=end,=join,=endcase,=join_any,=join_none,=endmodule,=endfunction,=endtask,=endspecify,=endclass,=endpackage,=endsequence,=endclocking,=endinterface,=endgroup,=endprogram,=endproperty,=`else,=`endif
+setlocal noinfercase
+setlocal iskeyword=@,48-57,63,_,192-255
+setlocal keywordprg=
+setlocal nolinebreak
+setlocal nolisp
+setlocal nolist
+setlocal makeprg=
+setlocal matchpairs=(:),{:},[:]
+setlocal modeline
+setlocal modifiable
+setlocal nrformats=octal,hex
+set number
+setlocal number
+setlocal numberwidth=4
+setlocal omnifunc=verilogcomplete#Complete
+setlocal path=
+setlocal nopreserveindent
+setlocal nopreviewwindow
+setlocal quoteescape=\\
+setlocal noreadonly
+setlocal norelativenumber
+setlocal norightleft
+setlocal rightleftcmd=search
+setlocal noscrollbind
+setlocal shiftwidth=4
+setlocal noshortname
+setlocal smartindent
+setlocal softtabstop=4
+setlocal nospell
+setlocal spellcapcheck=[.?!]\\_[\\])'\"\	\ ]\\+
+setlocal spellfile=
+setlocal spelllang=en
+setlocal statusline=
+setlocal suffixesadd=
+setlocal swapfile
+setlocal synmaxcol=3000
+if &syntax != 'verilog_systemverilog'
+setlocal syntax=verilog_systemverilog
+endif
+setlocal tabstop=4
+setlocal tags=
+setlocal textwidth=0
+setlocal thesaurus=
+setlocal noundofile
+setlocal nowinfixheight
+setlocal nowinfixwidth
+setlocal wrap
+setlocal wrapmargin=0
+silent! normal! zE
+let s:l = 1 - ((0 * winheight(0) + 23) / 47)
+if s:l < 1 | let s:l = 1 | endif
+exe s:l
+normal! zt
+1
+normal! 0
+wincmd w
+argglobal
+edit tb\bm_test_case1.sv
+setlocal keymap=
+setlocal noarabic
+setlocal autoindent
+setlocal balloonexpr=
+setlocal nobinary
+setlocal bufhidden=
+setlocal buflisted
+setlocal buftype=
+setlocal cindent
+setlocal cinkeys=0{,0},0),:,0#,!^F,o,O,e
+setlocal cinoptions=
+setlocal cinwords=if,else,while,do,for,switch
+setlocal colorcolumn=
+setlocal comments=s1:/*,mb:*,ex:*/,://,b:#,:%,:XCOMM,n:>,fb:-
+setlocal commentstring=/*%s*/
+setlocal complete=.,w,b,u,t,i
+setlocal concealcursor=
+setlocal conceallevel=0
+setlocal completefunc=neocomplcache#complete#auto_complete
+setlocal nocopyindent
+setlocal cryptmethod=
+setlocal nocursorbind
+setlocal nocursorcolumn
+setlocal nocursorline
+setlocal define=
+setlocal dictionary=
+setlocal nodiff
+setlocal equalprg=
+setlocal errorformat=
+setlocal expandtab
+if &filetype != 'verilog_systemverilog'
+setlocal filetype=verilog_systemverilog
+endif
+setlocal foldcolumn=0
+setlocal foldenable
+setlocal foldexpr=0
+setlocal foldignore=#
+setlocal foldlevel=0
+setlocal foldmarker={{{,}}}
+setlocal foldmethod=manual
+setlocal foldminlines=1
+setlocal foldnestmax=20
+setlocal foldtext=foldtext()
+setlocal formatexpr=
+setlocal formatoptions=tcq
+setlocal formatlistpat=^\\s*\\d\\+[\\]:.)}\\t\ ]\\s*
+setlocal grepprg=
+setlocal iminsert=2
+setlocal imsearch=2
+setlocal include=
+setlocal includeexpr=
+setlocal indentexpr=GetVerilog_SystemVerilogIndent()
+setlocal indentkeys=!^F,o,O,0),0},=begin,=end,=join,=endcase,=join_any,=join_none,=endmodule,=endfunction,=endtask,=endspecify,=endclass,=endpackage,=endsequence,=endclocking,=endinterface,=endgroup,=endprogram,=endproperty,=`else,=`endif
+setlocal noinfercase
+setlocal iskeyword=@,48-57,63,_,192-255
+setlocal keywordprg=
+setlocal nolinebreak
+setlocal nolisp
+setlocal nolist
+setlocal makeprg=
+setlocal matchpairs=(:),{:},[:]
+setlocal modeline
+setlocal modifiable
+setlocal nrformats=octal,hex
+set number
+setlocal number
+setlocal numberwidth=4
+setlocal omnifunc=verilogcomplete#Complete
+setlocal path=
+setlocal nopreserveindent
+setlocal nopreviewwindow
+setlocal quoteescape=\\
+setlocal noreadonly
+setlocal norelativenumber
+setlocal norightleft
+setlocal rightleftcmd=search
+setlocal noscrollbind
+setlocal shiftwidth=4
+setlocal noshortname
+setlocal smartindent
+setlocal softtabstop=4
+setlocal nospell
+setlocal spellcapcheck=[.?!]\\_[\\])'\"\	\ ]\\+
+setlocal spellfile=
+setlocal spelllang=en
+setlocal statusline=
+setlocal suffixesadd=
+setlocal swapfile
+setlocal synmaxcol=3000
+if &syntax != 'verilog_systemverilog'
+setlocal syntax=verilog_systemverilog
+endif
+setlocal tabstop=4
+setlocal tags=
+setlocal textwidth=0
+setlocal thesaurus=
+setlocal noundofile
+setlocal nowinfixheight
+setlocal nowinfixwidth
+setlocal wrap
+setlocal wrapmargin=0
+silent! normal! zE
+let s:l = 43 - ((42 * winheight(0) + 23) / 47)
+if s:l < 1 | let s:l = 1 | endif
+exe s:l
+normal! zt
+43
+normal! 011|
+wincmd w
+exe 'vert 1resize ' . ((&columns * 31 + 117) / 235)
+exe 'vert 2resize ' . ((&columns * 88 + 117) / 235)
+exe 'vert 3resize ' . ((&columns * 114 + 117) / 235)
+tabedit tb\test_sat_engine.sv
 set splitbelow splitright
 wincmd _ | wincmd |
 vsplit
 1wincmd h
+wincmd w
+wincmd _ | wincmd |
+split
+1wincmd k
 wincmd w
 set nosplitbelow
 set nosplitright
 wincmd t
 set winheight=1 winwidth=1
 exe 'vert 1resize ' . ((&columns * 117 + 117) / 235)
+exe '2resize ' . ((&lines * 23 + 24) / 49)
 exe 'vert 2resize ' . ((&columns * 117 + 117) / 235)
+exe '3resize ' . ((&lines * 23 + 24) / 49)
+exe 'vert 3resize ' . ((&columns * 117 + 117) / 235)
 argglobal
+setlocal keymap=
+setlocal noarabic
+setlocal autoindent
+setlocal balloonexpr=
+setlocal nobinary
+setlocal bufhidden=
+setlocal buflisted
+setlocal buftype=
+setlocal cindent
+setlocal cinkeys=0{,0},0),:,0#,!^F,o,O,e
+setlocal cinoptions=
+setlocal cinwords=if,else,while,do,for,switch
+setlocal colorcolumn=
+setlocal comments=s1:/*,mb:*,ex:*/,://,b:#,:%,:XCOMM,n:>,fb:-
+setlocal commentstring=/*%s*/
+setlocal complete=.,w,b,u,t,i
+setlocal concealcursor=
+setlocal conceallevel=0
+setlocal completefunc=neocomplcache#complete#auto_complete
+setlocal nocopyindent
+setlocal cryptmethod=
+setlocal nocursorbind
+setlocal nocursorcolumn
+setlocal nocursorline
+setlocal define=
+setlocal dictionary=
+setlocal nodiff
+setlocal equalprg=
+setlocal errorformat=
+setlocal expandtab
+if &filetype != 'verilog_systemverilog'
+setlocal filetype=verilog_systemverilog
+endif
+setlocal foldcolumn=0
+setlocal foldenable
+setlocal foldexpr=0
+setlocal foldignore=#
+setlocal foldlevel=0
+setlocal foldmarker={{{,}}}
+setlocal foldmethod=manual
+setlocal foldminlines=1
+setlocal foldnestmax=20
+setlocal foldtext=foldtext()
+setlocal formatexpr=
+setlocal formatoptions=tcq
+setlocal formatlistpat=^\\s*\\d\\+[\\]:.)}\\t\ ]\\s*
+setlocal grepprg=
+setlocal iminsert=2
+setlocal imsearch=2
+setlocal include=
+setlocal includeexpr=
+setlocal indentexpr=GetVerilog_SystemVerilogIndent()
+setlocal indentkeys=!^F,o,O,0),0},=begin,=end,=join,=endcase,=join_any,=join_none,=endmodule,=endfunction,=endtask,=endspecify,=endclass,=endpackage,=endsequence,=endclocking,=endinterface,=endgroup,=endprogram,=endproperty,=`else,=`endif
+setlocal noinfercase
+setlocal iskeyword=@,48-57,63,_,192-255
+setlocal keywordprg=
+setlocal nolinebreak
+setlocal nolisp
+setlocal nolist
+setlocal makeprg=
+setlocal matchpairs=(:),{:},[:]
+setlocal modeline
+setlocal modifiable
+setlocal nrformats=octal,hex
+set number
+setlocal number
+setlocal numberwidth=4
+setlocal omnifunc=verilogcomplete#Complete
+setlocal path=
+setlocal nopreserveindent
+setlocal nopreviewwindow
+setlocal quoteescape=\\
+setlocal noreadonly
+setlocal norelativenumber
+setlocal norightleft
+setlocal rightleftcmd=search
+setlocal noscrollbind
+setlocal shiftwidth=4
+setlocal noshortname
+setlocal smartindent
+setlocal softtabstop=4
+setlocal nospell
+setlocal spellcapcheck=[.?!]\\_[\\])'\"\	\ ]\\+
+setlocal spellfile=
+setlocal spelllang=en
+setlocal statusline=
+setlocal suffixesadd=
+setlocal swapfile
+setlocal synmaxcol=3000
+if &syntax != 'verilog_systemverilog'
+setlocal syntax=verilog_systemverilog
+endif
+setlocal tabstop=4
+setlocal tags=
+setlocal textwidth=0
+setlocal thesaurus=
+setlocal noundofile
+setlocal nowinfixheight
+setlocal nowinfixwidth
+setlocal wrap
+setlocal wrapmargin=0
+silent! normal! zE
+let s:l = 385 - ((29 * winheight(0) + 23) / 47)
+if s:l < 1 | let s:l = 1 | endif
+exe s:l
+normal! zt
+385
+normal! 05|
+wincmd w
+argglobal
+edit tb\se_test_case2.sv
 setlocal keymap=
 setlocal noarabic
 setlocal autoindent
@@ -250,15 +734,15 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 93 - ((30 * winheight(0) + 23) / 47)
+let s:l = 35 - ((0 * winheight(0) + 11) / 23)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-93
-normal! 029|
+35
+normal! 0
 wincmd w
 argglobal
-edit src\sat_engine\state_list\lvl_state1.v
+edit tb\se_test_case1.sv
 setlocal keymap=
 setlocal noarabic
 setlocal autoindent
@@ -361,27 +845,393 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 56 - ((28 * winheight(0) + 23) / 47)
+let s:l = 52 - ((15 * winheight(0) + 11) / 23)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-56
-normal! 031|
+52
+normal! 0
 wincmd w
+2wincmd w
 exe 'vert 1resize ' . ((&columns * 117 + 117) / 235)
+exe '2resize ' . ((&lines * 23 + 24) / 49)
 exe 'vert 2resize ' . ((&columns * 117 + 117) / 235)
-tabedit tb\test_sat_engine.sv
+exe '3resize ' . ((&lines * 23 + 24) / 49)
+exe 'vert 3resize ' . ((&columns * 117 + 117) / 235)
+tabedit temp
+set splitbelow splitright
+wincmd _ | wincmd |
+vsplit
+wincmd _ | wincmd |
+vsplit
+2wincmd h
+wincmd w
+wincmd w
+set nosplitbelow
+set nosplitright
+wincmd t
+set winheight=1 winwidth=1
+exe 'vert 1resize ' . ((&columns * 37 + 117) / 235)
+exe 'vert 2resize ' . ((&columns * 67 + 117) / 235)
+exe 'vert 3resize ' . ((&columns * 129 + 117) / 235)
+argglobal
+setlocal keymap=
+setlocal noarabic
+setlocal autoindent
+setlocal balloonexpr=
+setlocal nobinary
+setlocal bufhidden=
+setlocal buflisted
+setlocal buftype=
+setlocal cindent
+setlocal cinkeys=0{,0},0),:,0#,!^F,o,O,e
+setlocal cinoptions=
+setlocal cinwords=if,else,while,do,for,switch
+setlocal colorcolumn=
+setlocal comments=s1:/*,mb:*,ex:*/,://,b:#,:%,:XCOMM,n:>,fb:-
+setlocal commentstring=/*%s*/
+setlocal complete=.,w,b,u,t,i
+setlocal concealcursor=
+setlocal conceallevel=0
+setlocal completefunc=neocomplcache#complete#manual_complete
+setlocal nocopyindent
+setlocal cryptmethod=
+setlocal nocursorbind
+setlocal nocursorcolumn
+setlocal nocursorline
+setlocal define=
+setlocal dictionary=
+setlocal nodiff
+setlocal equalprg=
+setlocal errorformat=
+setlocal expandtab
+if &filetype != ''
+setlocal filetype=
+endif
+setlocal foldcolumn=0
+setlocal foldenable
+setlocal foldexpr=0
+setlocal foldignore=#
+setlocal foldlevel=0
+setlocal foldmarker={{{,}}}
+setlocal foldmethod=manual
+setlocal foldminlines=1
+setlocal foldnestmax=20
+setlocal foldtext=foldtext()
+setlocal formatexpr=
+setlocal formatoptions=tcq
+setlocal formatlistpat=^\\s*\\d\\+[\\]:.)}\\t\ ]\\s*
+setlocal grepprg=
+setlocal iminsert=2
+setlocal imsearch=2
+setlocal include=
+setlocal includeexpr=
+setlocal indentexpr=
+setlocal indentkeys=0{,0},:,0#,!^F,o,O,e
+setlocal noinfercase
+setlocal iskeyword=@,48-57,_,128-167,224-235
+setlocal keywordprg=
+setlocal nolinebreak
+setlocal nolisp
+setlocal nolist
+setlocal makeprg=
+setlocal matchpairs=(:),{:},[:]
+setlocal modeline
+setlocal modifiable
+setlocal nrformats=octal,hex
+set number
+setlocal number
+setlocal numberwidth=4
+setlocal omnifunc=verilogcomplete#Complete
+setlocal path=
+setlocal nopreserveindent
+setlocal nopreviewwindow
+setlocal quoteescape=\\
+setlocal noreadonly
+setlocal norelativenumber
+setlocal norightleft
+setlocal rightleftcmd=search
+setlocal noscrollbind
+setlocal shiftwidth=4
+setlocal noshortname
+setlocal smartindent
+setlocal softtabstop=4
+setlocal nospell
+setlocal spellcapcheck=[.?!]\\_[\\])'\"\	\ ]\\+
+setlocal spellfile=
+setlocal spelllang=en
+setlocal statusline=
+setlocal suffixesadd=
+setlocal swapfile
+setlocal synmaxcol=3000
+if &syntax != ''
+setlocal syntax=
+endif
+setlocal tabstop=4
+setlocal tags=
+setlocal textwidth=0
+setlocal thesaurus=
+setlocal noundofile
+setlocal nowinfixheight
+setlocal nowinfixwidth
+setlocal wrap
+setlocal wrapmargin=0
+silent! normal! zE
+let s:l = 12 - ((11 * winheight(0) + 23) / 47)
+if s:l < 1 | let s:l = 1 | endif
+exe s:l
+normal! zt
+12
+normal! 05|
+lcd f:\sat\github\sat_bin_verilog
+wincmd w
+argglobal
+edit f:\sat\github\sat_bin_verilog\src\bin_manager\bin_manager.v
+setlocal keymap=
+setlocal noarabic
+setlocal autoindent
+setlocal balloonexpr=
+setlocal nobinary
+setlocal bufhidden=
+setlocal buflisted
+setlocal buftype=
+setlocal cindent
+setlocal cinkeys=0{,0},0),:,0#,!^F,o,O,e
+setlocal cinoptions=
+setlocal cinwords=if,else,while,do,for,switch
+setlocal colorcolumn=
+setlocal comments=s1:/*,mb:*,ex:*/,://,b:#,:%,:XCOMM,n:>,fb:-
+setlocal commentstring=/*%s*/
+setlocal complete=.,w,b,u,t,i
+setlocal concealcursor=
+setlocal conceallevel=0
+setlocal completefunc=neocomplcache#complete#auto_complete
+setlocal nocopyindent
+setlocal cryptmethod=
+setlocal nocursorbind
+setlocal nocursorcolumn
+setlocal nocursorline
+setlocal define=
+setlocal dictionary=
+setlocal nodiff
+setlocal equalprg=
+setlocal errorformat=
+setlocal expandtab
+if &filetype != 'verilog_systemverilog'
+setlocal filetype=verilog_systemverilog
+endif
+setlocal foldcolumn=0
+setlocal foldenable
+setlocal foldexpr=0
+setlocal foldignore=#
+setlocal foldlevel=0
+setlocal foldmarker={{{,}}}
+setlocal foldmethod=manual
+setlocal foldminlines=1
+setlocal foldnestmax=20
+setlocal foldtext=foldtext()
+setlocal formatexpr=
+setlocal formatoptions=tcq
+setlocal formatlistpat=^\\s*\\d\\+[\\]:.)}\\t\ ]\\s*
+setlocal grepprg=
+setlocal iminsert=2
+setlocal imsearch=2
+setlocal include=
+setlocal includeexpr=
+setlocal indentexpr=GetVerilog_SystemVerilogIndent()
+setlocal indentkeys=!^F,o,O,0),0},=begin,=end,=join,=endcase,=join_any,=join_none,=endmodule,=endfunction,=endtask,=endspecify,=endclass,=endpackage,=endsequence,=endclocking,=endinterface,=endgroup,=endprogram,=endproperty,=`else,=`endif
+setlocal noinfercase
+setlocal iskeyword=@,48-57,63,_,192-255
+setlocal keywordprg=
+setlocal nolinebreak
+setlocal nolisp
+setlocal nolist
+setlocal makeprg=
+setlocal matchpairs=(:),{:},[:]
+setlocal modeline
+setlocal modifiable
+setlocal nrformats=octal,hex
+set number
+setlocal number
+setlocal numberwidth=4
+setlocal omnifunc=verilogcomplete#Complete
+setlocal path=
+setlocal nopreserveindent
+setlocal nopreviewwindow
+setlocal quoteescape=\\
+setlocal noreadonly
+setlocal norelativenumber
+setlocal norightleft
+setlocal rightleftcmd=search
+setlocal noscrollbind
+setlocal shiftwidth=4
+setlocal noshortname
+setlocal smartindent
+setlocal softtabstop=4
+setlocal nospell
+setlocal spellcapcheck=[.?!]\\_[\\])'\"\	\ ]\\+
+setlocal spellfile=
+setlocal spelllang=en
+setlocal statusline=
+setlocal suffixesadd=
+setlocal swapfile
+setlocal synmaxcol=3000
+if &syntax != 'verilog_systemverilog'
+setlocal syntax=verilog_systemverilog
+endif
+setlocal tabstop=4
+setlocal tags=
+setlocal textwidth=0
+setlocal thesaurus=
+setlocal noundofile
+setlocal nowinfixheight
+setlocal nowinfixwidth
+setlocal wrap
+setlocal wrapmargin=0
+silent! normal! zE
+let s:l = 71 - ((8 * winheight(0) + 23) / 47)
+if s:l < 1 | let s:l = 1 | endif
+exe s:l
+normal! zt
+71
+normal! 059|
+lcd f:\sat\github\sat_bin_verilog
+wincmd w
+argglobal
+edit f:\sat\github\sat_bin_verilog\src\bin_manager\update_bin.v
+setlocal keymap=
+setlocal noarabic
+setlocal autoindent
+setlocal balloonexpr=
+setlocal nobinary
+setlocal bufhidden=
+setlocal buflisted
+setlocal buftype=
+setlocal cindent
+setlocal cinkeys=0{,0},0),:,0#,!^F,o,O,e
+setlocal cinoptions=
+setlocal cinwords=if,else,while,do,for,switch
+setlocal colorcolumn=
+setlocal comments=s1:/*,mb:*,ex:*/,://,b:#,:%,:XCOMM,n:>,fb:-
+setlocal commentstring=/*%s*/
+setlocal complete=.,w,b,u,t,i
+setlocal concealcursor=
+setlocal conceallevel=0
+setlocal completefunc=neocomplcache#complete#auto_complete
+setlocal nocopyindent
+setlocal cryptmethod=
+setlocal nocursorbind
+setlocal nocursorcolumn
+setlocal nocursorline
+setlocal define=
+setlocal dictionary=
+setlocal nodiff
+setlocal equalprg=
+setlocal errorformat=
+setlocal expandtab
+if &filetype != 'verilog_systemverilog'
+setlocal filetype=verilog_systemverilog
+endif
+setlocal foldcolumn=0
+setlocal foldenable
+setlocal foldexpr=0
+setlocal foldignore=#
+setlocal foldlevel=0
+setlocal foldmarker={{{,}}}
+setlocal foldmethod=manual
+setlocal foldminlines=1
+setlocal foldnestmax=20
+setlocal foldtext=foldtext()
+setlocal formatexpr=
+setlocal formatoptions=tcq
+setlocal formatlistpat=^\\s*\\d\\+[\\]:.)}\\t\ ]\\s*
+setlocal grepprg=
+setlocal iminsert=2
+setlocal imsearch=2
+setlocal include=
+setlocal includeexpr=
+setlocal indentexpr=GetVerilog_SystemVerilogIndent()
+setlocal indentkeys=!^F,o,O,0),0},=begin,=end,=join,=endcase,=join_any,=join_none,=endmodule,=endfunction,=endtask,=endspecify,=endclass,=endpackage,=endsequence,=endclocking,=endinterface,=endgroup,=endprogram,=endproperty,=`else,=`endif
+setlocal noinfercase
+setlocal iskeyword=@,48-57,63,_,192-255
+setlocal keywordprg=
+setlocal nolinebreak
+setlocal nolisp
+setlocal nolist
+setlocal makeprg=
+setlocal matchpairs=(:),{:},[:]
+setlocal modeline
+setlocal modifiable
+setlocal nrformats=octal,hex
+set number
+setlocal number
+setlocal numberwidth=4
+setlocal omnifunc=verilogcomplete#Complete
+setlocal path=
+setlocal nopreserveindent
+setlocal nopreviewwindow
+setlocal quoteescape=\\
+setlocal noreadonly
+setlocal norelativenumber
+setlocal norightleft
+setlocal rightleftcmd=search
+setlocal noscrollbind
+setlocal shiftwidth=4
+setlocal noshortname
+setlocal smartindent
+setlocal softtabstop=4
+setlocal nospell
+setlocal spellcapcheck=[.?!]\\_[\\])'\"\	\ ]\\+
+setlocal spellfile=
+setlocal spelllang=en
+setlocal statusline=
+setlocal suffixesadd=
+setlocal swapfile
+setlocal synmaxcol=3000
+if &syntax != 'verilog_systemverilog'
+setlocal syntax=verilog_systemverilog
+endif
+setlocal tabstop=4
+setlocal tags=
+setlocal textwidth=0
+setlocal thesaurus=
+setlocal noundofile
+setlocal nowinfixheight
+setlocal nowinfixwidth
+setlocal wrap
+setlocal wrapmargin=0
+silent! normal! zE
+let s:l = 58 - ((26 * winheight(0) + 23) / 47)
+if s:l < 1 | let s:l = 1 | endif
+exe s:l
+normal! zt
+58
+normal! 0
+lcd f:\sat\github\sat_bin_verilog
+wincmd w
+2wincmd w
+exe 'vert 1resize ' . ((&columns * 37 + 117) / 235)
+exe 'vert 2resize ' . ((&columns * 67 + 117) / 235)
+exe 'vert 3resize ' . ((&columns * 129 + 117) / 235)
+tabedit f:\sat\github\sat_bin_verilog\sim\Makefile
 set splitbelow splitright
 wincmd _ | wincmd |
 vsplit
 1wincmd h
+wincmd w
+wincmd _ | wincmd |
+split
+1wincmd k
 wincmd w
 set nosplitbelow
 set nosplitright
 wincmd t
 set winheight=1 winwidth=1
 exe 'vert 1resize ' . ((&columns * 118 + 117) / 235)
+exe '2resize ' . ((&lines * 23 + 24) / 49)
 exe 'vert 2resize ' . ((&columns * 116 + 117) / 235)
+exe '3resize ' . ((&lines * 23 + 24) / 49)
+exe 'vert 3resize ' . ((&columns * 116 + 117) / 235)
 argglobal
 setlocal keymap=
 setlocal noarabic
@@ -396,8 +1246,8 @@ setlocal cinkeys=0{,0},0),:,0#,!^F,o,O,e
 setlocal cinoptions=
 setlocal cinwords=if,else,while,do,for,switch
 setlocal colorcolumn=
-setlocal comments=s1:/*,mb:*,ex:*/,://,b:#,:%,:XCOMM,n:>,fb:-
-setlocal commentstring=/*%s*/
+setlocal comments=sO:#\ -,mO:#\ \ ,b:#
+setlocal commentstring=#\ %s
 setlocal complete=.,w,b,u,t,i
 setlocal concealcursor=
 setlocal conceallevel=0
@@ -412,9 +1262,9 @@ setlocal dictionary=
 setlocal nodiff
 setlocal equalprg=
 setlocal errorformat=
-setlocal expandtab
-if &filetype != 'verilog_systemverilog'
-setlocal filetype=verilog_systemverilog
+setlocal noexpandtab
+if &filetype != 'make'
+setlocal filetype=make
 endif
 setlocal foldcolumn=0
 setlocal foldenable
@@ -427,17 +1277,17 @@ setlocal foldminlines=1
 setlocal foldnestmax=20
 setlocal foldtext=foldtext()
 setlocal formatexpr=
-setlocal formatoptions=tcq
+setlocal formatoptions=croql
 setlocal formatlistpat=^\\s*\\d\\+[\\]:.)}\\t\ ]\\s*
 setlocal grepprg=
 setlocal iminsert=2
 setlocal imsearch=2
-setlocal include=
+setlocal include=^\\s*include
 setlocal includeexpr=
-setlocal indentexpr=GetVerilog_SystemVerilogIndent()
-setlocal indentkeys=!^F,o,O,0),0},=begin,=end,=join,=endcase,=join_any,=join_none,=endmodule,=endfunction,=endtask,=endspecify,=endclass,=endpackage,=endsequence,=endclocking,=endinterface,=endgroup,=endprogram,=endproperty,=`else,=`endif
+setlocal indentexpr=GetMakeIndent()
+setlocal indentkeys=!^F,o,O,<:>,=else,=endif
 setlocal noinfercase
-setlocal iskeyword=@,48-57,63,_,192-255
+setlocal iskeyword=@,48-57,_,128-167,224-235
 setlocal keywordprg=
 setlocal nolinebreak
 setlocal nolisp
@@ -462,8 +1312,8 @@ setlocal rightleftcmd=search
 setlocal noscrollbind
 setlocal shiftwidth=4
 setlocal noshortname
-setlocal smartindent
-setlocal softtabstop=4
+setlocal nosmartindent
+setlocal softtabstop=0
 setlocal nospell
 setlocal spellcapcheck=[.?!]\\_[\\])'\"\	\ ]\\+
 setlocal spellfile=
@@ -472,8 +1322,8 @@ setlocal statusline=
 setlocal suffixesadd=
 setlocal swapfile
 setlocal synmaxcol=3000
-if &syntax != 'verilog_systemverilog'
-setlocal syntax=verilog_systemverilog
+if &syntax != 'make'
+setlocal syntax=make
 endif
 setlocal tabstop=4
 setlocal tags=
@@ -485,15 +1335,15 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 305 - ((18 * winheight(0) + 23) / 47)
+let s:l = 8 - ((7 * winheight(0) + 23) / 47)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-305
-normal! 037|
+8
+normal! 0
 wincmd w
 argglobal
-edit .\src\sat_engine\sat_engine.v
+edit f:\sat\github\sat_bin_verilog\sim\vlog_test_sat_engine.sh
 setlocal keymap=
 setlocal noarabic
 setlocal autoindent
@@ -508,11 +1358,11 @@ setlocal cinoptions=
 setlocal cinwords=if,else,while,do,for,switch
 setlocal colorcolumn=
 setlocal comments=s1:/*,mb:*,ex:*/,://,b:#,:%,:XCOMM,n:>,fb:-
-setlocal commentstring=/*%s*/
+setlocal commentstring=#%s
 setlocal complete=.,w,b,u,t,i
 setlocal concealcursor=
 setlocal conceallevel=0
-setlocal completefunc=neocomplcache#complete#auto_complete
+setlocal completefunc=neocomplcache#complete#manual_complete
 setlocal nocopyindent
 setlocal cryptmethod=
 setlocal nocursorbind
@@ -524,8 +1374,8 @@ setlocal nodiff
 setlocal equalprg=
 setlocal errorformat=
 setlocal expandtab
-if &filetype != 'verilog_systemverilog'
-setlocal filetype=verilog_systemverilog
+if &filetype != 'sh'
+setlocal filetype=sh
 endif
 setlocal foldcolumn=0
 setlocal foldenable
@@ -545,10 +1395,10 @@ setlocal iminsert=2
 setlocal imsearch=2
 setlocal include=
 setlocal includeexpr=
-setlocal indentexpr=GetVerilog_SystemVerilogIndent()
-setlocal indentkeys=!^F,o,O,0),0},=begin,=end,=join,=endcase,=join_any,=join_none,=endmodule,=endfunction,=endtask,=endspecify,=endclass,=endpackage,=endsequence,=endclocking,=endinterface,=endgroup,=endprogram,=endproperty,=`else,=`endif
+setlocal indentexpr=GetShIndent()
+setlocal indentkeys=0{,0},!^F,o,O,e,0=then,0=do,0=else,0=elif,0=fi,0=esac,0=done,),0=;;,0=;&,0=fin,0=fil,0=fip,0=fir,0=fix
 setlocal noinfercase
-setlocal iskeyword=@,48-57,63,_,192-255
+setlocal iskeyword=@,48-57,_,128-167,224-235,.
 setlocal keywordprg=
 setlocal nolinebreak
 setlocal nolisp
@@ -573,7 +1423,7 @@ setlocal rightleftcmd=search
 setlocal noscrollbind
 setlocal shiftwidth=4
 setlocal noshortname
-setlocal smartindent
+setlocal nosmartindent
 setlocal softtabstop=4
 setlocal nospell
 setlocal spellcapcheck=[.?!]\\_[\\])'\"\	\ ]\\+
@@ -583,8 +1433,8 @@ setlocal statusline=
 setlocal suffixesadd=
 setlocal swapfile
 setlocal synmaxcol=3000
-if &syntax != 'verilog_systemverilog'
-setlocal syntax=verilog_systemverilog
+if &syntax != 'sh'
+setlocal syntax=sh
 endif
 setlocal tabstop=4
 setlocal tags=
@@ -596,16 +1446,131 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 177 - ((46 * winheight(0) + 23) / 47)
+let s:l = 37 - ((22 * winheight(0) + 11) / 23)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-177
-normal! 027|
+37
+normal! 0
 wincmd w
+argglobal
+edit f:\sat\github\sat_bin_verilog\sim\vlog_test_bin_manager.sh
+setlocal keymap=
+setlocal noarabic
+setlocal autoindent
+setlocal balloonexpr=
+setlocal nobinary
+setlocal bufhidden=
+setlocal buflisted
+setlocal buftype=
+setlocal cindent
+setlocal cinkeys=0{,0},0),:,0#,!^F,o,O,e
+setlocal cinoptions=
+setlocal cinwords=if,else,while,do,for,switch
+setlocal colorcolumn=
+setlocal comments=s1:/*,mb:*,ex:*/,://,b:#,:%,:XCOMM,n:>,fb:-
+setlocal commentstring=#%s
+setlocal complete=.,w,b,u,t,i
+setlocal concealcursor=
+setlocal conceallevel=0
+setlocal completefunc=neocomplcache#complete#auto_complete
+setlocal nocopyindent
+setlocal cryptmethod=
+setlocal nocursorbind
+setlocal nocursorcolumn
+setlocal nocursorline
+setlocal define=
+setlocal dictionary=
+setlocal nodiff
+setlocal equalprg=
+setlocal errorformat=
+setlocal expandtab
+if &filetype != 'sh'
+setlocal filetype=sh
+endif
+setlocal foldcolumn=0
+setlocal foldenable
+setlocal foldexpr=0
+setlocal foldignore=#
+setlocal foldlevel=0
+setlocal foldmarker={{{,}}}
+setlocal foldmethod=manual
+setlocal foldminlines=1
+setlocal foldnestmax=20
+setlocal foldtext=foldtext()
+setlocal formatexpr=
+setlocal formatoptions=tcq
+setlocal formatlistpat=^\\s*\\d\\+[\\]:.)}\\t\ ]\\s*
+setlocal grepprg=
+setlocal iminsert=2
+setlocal imsearch=2
+setlocal include=
+setlocal includeexpr=
+setlocal indentexpr=GetShIndent()
+setlocal indentkeys=0{,0},!^F,o,O,e,0=then,0=do,0=else,0=elif,0=fi,0=esac,0=done,),0=;;,0=;&,0=fin,0=fil,0=fip,0=fir,0=fix
+setlocal noinfercase
+setlocal iskeyword=@,48-57,_,128-167,224-235,.
+setlocal keywordprg=
+setlocal nolinebreak
+setlocal nolisp
+setlocal nolist
+setlocal makeprg=
+setlocal matchpairs=(:),{:},[:]
+setlocal modeline
+setlocal modifiable
+setlocal nrformats=octal,hex
+set number
+setlocal number
+setlocal numberwidth=4
+setlocal omnifunc=verilogcomplete#Complete
+setlocal path=
+setlocal nopreserveindent
+setlocal nopreviewwindow
+setlocal quoteescape=\\
+setlocal noreadonly
+setlocal norelativenumber
+setlocal norightleft
+setlocal rightleftcmd=search
+setlocal noscrollbind
+setlocal shiftwidth=4
+setlocal noshortname
+setlocal nosmartindent
+setlocal softtabstop=4
+setlocal nospell
+setlocal spellcapcheck=[.?!]\\_[\\])'\"\	\ ]\\+
+setlocal spellfile=
+setlocal spelllang=en
+setlocal statusline=
+setlocal suffixesadd=
+setlocal swapfile
+setlocal synmaxcol=3000
+if &syntax != 'sh'
+setlocal syntax=sh
+endif
+setlocal tabstop=4
+setlocal tags=
+setlocal textwidth=0
+setlocal thesaurus=
+setlocal noundofile
+setlocal nowinfixheight
+setlocal nowinfixwidth
+setlocal wrap
+setlocal wrapmargin=0
+silent! normal! zE
+let s:l = 29 - ((22 * winheight(0) + 11) / 23)
+if s:l < 1 | let s:l = 1 | endif
+exe s:l
+normal! zt
+29
+normal! 0
+wincmd w
+2wincmd w
 exe 'vert 1resize ' . ((&columns * 118 + 117) / 235)
+exe '2resize ' . ((&lines * 23 + 24) / 49)
 exe 'vert 2resize ' . ((&columns * 116 + 117) / 235)
-tabedit sim\transcript.log
+exe '3resize ' . ((&lines * 23 + 24) / 49)
+exe 'vert 3resize ' . ((&columns * 116 + 117) / 235)
+tabedit f:\sat\github\sat_bin_verilog\sim\transcript.log
 set splitbelow splitright
 wincmd _ | wincmd |
 vsplit
@@ -720,15 +1685,15 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 1185 - ((24 * winheight(0) + 23) / 47)
+let s:l = 184 - ((0 * winheight(0) + 23) / 47)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-1185
-normal! 018|
+184
+normal! 06|
 wincmd w
 argglobal
-edit tb\test_se_case5.sv
+edit f:\sat\github\sat_bin_verilog\tb\test_se_case5.sv
 setlocal keymap=
 setlocal noarabic
 setlocal autoindent
@@ -838,9 +1803,10 @@ normal! zt
 1
 normal! 0
 wincmd w
+2wincmd w
 exe 'vert 1resize ' . ((&columns * 184 + 117) / 235)
 exe 'vert 2resize ' . ((&columns * 50 + 117) / 235)
-tabnext 1
+tabnext 2
 if exists('s:wipebuf')
   silent exe 'bwipe ' . s:wipebuf
 endif

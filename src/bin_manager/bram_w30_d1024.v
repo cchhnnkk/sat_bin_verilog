@@ -25,8 +25,8 @@
 *     (c) Copyright 1995-2014 Xilinx, Inc.                                     *
 *     All rights reserved.                                                     *
 *******************************************************************************/
-// You must compile the wrapper file bram_w40.v when simulating
-// the core, bram_w40. When compiling the wrapper file, be sure to
+// You must compile the wrapper file bram_w30_d1024.v when simulating
+// the core, bram_w30_d1024. When compiling the wrapper file, be sure to
 // reference the XilinxCoreLib Verilog simulation library. For detailed
 // instructions, please refer to the "CORE Generator Help".
 
@@ -36,23 +36,29 @@
 
 `timescale 1ns/1ps
 
-module bram_w40(
+module bram_w30_d1024(
   clka,
   wea,
   addra,
   dina,
+  douta,
   clkb,
+  web,
   addrb,
+  dinb,
   doutb
 );
 
 input clka;
 input [0 : 0] wea;
 input [9 : 0] addra;
-input [39 : 0] dina;
+input [29 : 0] dina;
+output [29 : 0] douta;
 input clkb;
+input [0 : 0] web;
 input [9 : 0] addrb;
-output [39 : 0] doutb;
+input [29 : 0] dinb;
+output [29 : 0] doutb;
 
 // synthesis translate_off
 
@@ -90,13 +96,13 @@ output [39 : 0] doutb;
     .C_INITB_VAL("0"),
     .C_INTERFACE_TYPE(0),
     .C_LOAD_INIT_FILE(0),
-    .C_MEM_TYPE(1),
+    .C_MEM_TYPE(2),
     .C_MUX_PIPELINE_STAGES(0),
     .C_PRIM_TYPE(1),
     .C_READ_DEPTH_A(1024),
     .C_READ_DEPTH_B(1024),
-    .C_READ_WIDTH_A(40),
-    .C_READ_WIDTH_B(40),
+    .C_READ_WIDTH_A(30),
+    .C_READ_WIDTH_B(30),
     .C_RST_PRIORITY_A("CE"),
     .C_RST_PRIORITY_B("CE"),
     .C_RST_TYPE("SYNC"),
@@ -115,8 +121,8 @@ output [39 : 0] doutb;
     .C_WRITE_DEPTH_B(1024),
     .C_WRITE_MODE_A("READ_FIRST"),
     .C_WRITE_MODE_B("READ_FIRST"),
-    .C_WRITE_WIDTH_A(40),
-    .C_WRITE_WIDTH_B(40),
+    .C_WRITE_WIDTH_A(30),
+    .C_WRITE_WIDTH_B(30),
     .C_XDEVICEFAMILY("virtex7")
   )
   inst (
@@ -124,18 +130,18 @@ output [39 : 0] doutb;
     .WEA(wea),
     .ADDRA(addra),
     .DINA(dina),
+    .DOUTA(douta),
     .CLKB(clkb),
+    .WEB(web),
     .ADDRB(addrb),
+    .DINB(dinb),
     .DOUTB(doutb),
     .RSTA(),
     .ENA(),
     .REGCEA(),
-    .DOUTA(),
     .RSTB(),
     .ENB(),
     .REGCEB(),
-    .WEB(),
-    .DINB(),
     .INJECTSBITERR(),
     .INJECTDBITERR(),
     .SBITERR(),

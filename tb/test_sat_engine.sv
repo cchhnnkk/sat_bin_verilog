@@ -351,23 +351,46 @@ module test_sat_engine(input clk, input rst);
         i_n = i;
     endtask
 
-    /*** 测试用例集 ***/
 
-    `include "../tb/test_se_case1.sv"
-    `include "../tb/test_se_case2.sv"
-    `include "../tb/test_se_case3.sv"
-    `include "../tb/test_se_case4.sv"
-    `include "../tb/test_se_case5.sv"
+    /*** 测试用例集 ***/
+    int bin[][]; 
+    //var state list:
+    int value[];
+    int implied[];
+    int level[];
+    //lvl state list:
+    int dcd_bin[];
+    int has_bkt[];
+    //ctrl
+    int cur_bin_num;
+    int load_lvl;
+    int base_lvl;
+    int process_len;
+    struct_process process_data[];
+
+    `include "../tb/se_test_case1.sv"
+    `include "../tb/se_test_case2.sv"
+    `include "../tb/se_test_case3.sv"
+    `include "../tb/se_test_case4.sv"
+    `include "../tb/se_test_case5.sv"
 
     task test_sat_engine_task();
         begin
             $display("test_sat_engine_task");
             reset_all_signal();
-            test_se_case1();
-            test_se_case2();
-            test_se_case3();
-            test_se_case4();
-            test_se_case5();
+            se_test_case1();
+            se_test_case2();
+            se_test_case3();
+            se_test_case4();
+            se_test_case5();
+        end
+    endtask
+
+    task run_test_case();
+        begin
+            load_core(bin, value, implied, level, dcd_bin, has_bkt, cur_bin_num, load_lvl, base_lvl);
+            test_core(process_data, process_len);
+            update_core();
         end
     endtask
 

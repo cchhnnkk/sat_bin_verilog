@@ -29,13 +29,22 @@ struct_process process_data3[] = '{
     '{"psat",   0, 0, 0}
 };
 
-task test_se_case3();
+task se_test_case3();
     begin
         $display("===============================================");
         $display("test case 3");
-        load_core(bin3, value3, implied3, level3, dcd_bin3, has_bkt3, cur_bin_num3, load_lvl3, base_lvl3);
-        test_core(process_data3, process_len3);
-        update_core();
+        bin          = bin3;
+        value        = value3;
+        implied      = implied3;
+        level        = level3;
+        dcd_bin      = dcd_bin3;
+        has_bkt      = has_bkt3;
+        cur_bin_num  = cur_bin_num3;
+        load_lvl     = load_lvl3;
+        base_lvl     = base_lvl3;
+        process_len  = process_len3;
+        process_data = process_data3;
+        run_test_case();
     end
 endtask
 

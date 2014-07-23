@@ -14,7 +14,7 @@ def gen_inst(filename):
         liststrip = l.strip(' |\t|,|\n').split()
         stmt = l.strip(' |\t|,|\n')
         # print liststrip
-        if len(liststrip) == 0 or '//' in liststrip[0]:
+        if len(liststrip) == 0:
             continue
 
         for i, l in enumerate(liststrip):
@@ -31,6 +31,10 @@ def gen_inst(filename):
                 str_inst += '#'
                 first = True
             str_inst += '('
+
+        # comment
+        elif '//' in liststrip[0]:
+            str_inst += '\n\t%s' % stmt
 
         # parameters
         elif exittag == 2:
@@ -64,7 +68,7 @@ def gen_inst(filename):
                 stmt = stmt.replace('output', 'wire')
                 str_stmt += stmt + ';\n'
 
-    return str_inst, str_stmt
+    return str_stmt, str_inst
 
 if __name__ == '__main__':
     if len(sys.argv) == 2:
@@ -72,6 +76,6 @@ if __name__ == '__main__':
     else:
         filename = 'var1.v'
 
-    str_inst, str_stmt = gen_inst(filename)
+    str_stmt, str_inst = gen_inst(filename)
     print str_stmt
     print str_inst

@@ -32,13 +32,22 @@ struct_process process_data2[] = '{
 };
 
 
-task test_se_case2();
+task se_test_case2();
     begin
         $display("===============================================");
         $display("test case 2");
-        load_core(bin2, value2, implied2, level2, dcd_bin2, has_bkt2, cur_bin_num2, load_lvl2, base_lvl2);
-        test_core(process_data2, process_len2);
-        update_core();
+        bin          = bin2;
+        value        = value2;
+        implied      = implied2;
+        level        = level2;
+        dcd_bin      = dcd_bin2;
+        has_bkt      = has_bkt2;
+        cur_bin_num  = cur_bin_num2;
+        load_lvl     = load_lvl2;
+        base_lvl     = base_lvl2;
+        process_len  = process_len2;
+        process_data = process_data2;
+        run_test_case();
     end
 endtask
 

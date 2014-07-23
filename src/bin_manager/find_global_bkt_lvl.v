@@ -13,7 +13,7 @@ module find_global_bkt_lvl #(
 
         //control
         input                                         start_find,
-        output reg                                    apply_load_o,
+        output reg                                    apply_find_o,
         output reg                                    done_find,
 
         input [WIDTH_LVL-1:0]                         bkt_lvl_i,
@@ -142,6 +142,16 @@ module find_global_bkt_lvl #(
             ram_we_l_state_o <= 0;
             ram_data_l_state_o <= 0;
         end
+    end
+
+    always @(posedge clk)
+    begin
+        if(~rst)
+            done_find <= 0;
+        else if(c_state==DONE)
+            done_find <= 1;
+        else
+            done_find <= 0;
     end
 
 endmodule

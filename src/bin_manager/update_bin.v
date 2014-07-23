@@ -29,14 +29,14 @@ module update_bin #(
         output reg                                    apply_update_o,
         output reg                                    done_update,
 
-        //update clause to sat engine
+        //update clause from sat engine
         output [NUM_CLAUSES_A_BIN-1:0]                  rd_carray_o,
         input [NUM_VARS_A_BIN*2-1 : 0]                  clause_i,
 
-        //update var state to sat engine
+        //update var state from sat engine
         input [WIDTH_VAR_STATES*NUM_VARS_A_BIN-1:0]     var_state_i,
 
-        //update lvl state to sat engine
+        //update lvl state from sat engine
         input [WIDTH_LVL_STATES*NUM_LVLS_A_BIN-1:0]     lvl_states_i,
 
         input [WIDTH_LVL-1:0]                         base_lvl_i,
@@ -51,9 +51,9 @@ module update_bin #(
         output reg [ADDR_WIDTH_VARS-1:0]              ram_addr_v_o,
 
         //vars states
-        output reg                                    ram_we_v_state_o,
-        output reg [WIDTH_VAR_STATES-1 : 0]           ram_data_v_state_o,
-        output reg [ADDR_WIDTH_VARS_STATES-1:0]       ram_addr_v_state_o,
+        output reg                                    ram_we_vs_o,
+        output reg [WIDTH_VAR_STATES-1 : 0]           ram_data_vs_o,
+        output reg [ADDR_WIDTH_VARS_STATES-1:0]       ram_addr_vs_o,
 
         //lvls states
         output reg                                    ram_we_l_state_o,
@@ -247,17 +247,17 @@ module update_bin #(
     always @(posedge clk)
     begin
         if(~rst) begin
-            ram_we_v_state_o <= 0;
-            ram_data_v_state_o <= 0;
-            ram_addr_v_state_o <= 0;
+            ram_we_vs_o <= 0;
+            ram_data_vs_o <= 0;
+            ram_addr_vs_o <= 0;
         end else if(rd_var_states!=0) begin
-            ram_we_v_state_o <= 1;
-            ram_data_v_state_o <= var_state_reduced;
-            ram_addr_v_state_o <= ram_data_v_i;
+            ram_we_vs_o <= 1;
+            ram_data_vs_o <= var_state_reduced;
+            ram_addr_vs_o <= ram_data_v_i;
         end else begin
-            ram_we_v_state_o <= 0;
-            ram_data_v_state_o <= 0;
-            ram_addr_v_state_o <= 0;
+            ram_we_vs_o <= 0;
+            ram_data_vs_o <= 0;
+            ram_addr_vs_o <= 0;
         end
     end
 

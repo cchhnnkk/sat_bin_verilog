@@ -30,13 +30,22 @@ struct_process process_data4[] = '{
     '{"punsat",   0, 0, 0}
 };
 
-task test_se_case4();
+task se_test_case4();
     begin
         $display("===============================================");
         $display("test case 4");
-        load_core(bin4, value4, implied4, level4, dcd_bin4, has_bkt4, cur_bin_num4, load_lvl4, base_lvl4);
-        test_core(process_data4, process_len4);
-        update_core();
+        bin          = bin4;
+        value        = value4;
+        implied      = implied4;
+        level        = level4;
+        dcd_bin      = dcd_bin4;
+        has_bkt      = has_bkt4;
+        cur_bin_num  = cur_bin_num4;
+        load_lvl     = load_lvl4;
+        base_lvl     = base_lvl4;
+        process_len  = process_len4;
+        process_data = process_data4;
+        run_test_case();
     end
 endtask
 

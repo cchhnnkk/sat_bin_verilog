@@ -3,7 +3,7 @@
 *       clauses[]
 *       vars[]
 *       根据vars加载var_states[]
-*       根据base_lvl加载lvl_states[]
+*       根据base_lvl加载lvlss[]
 */
 
 `include "../src/debug_define.v"
@@ -16,8 +16,8 @@ module load_bin #(
         parameter WIDTH_VARS             = 12,
         parameter WIDTH_LVL              = 16,
         parameter WIDTH_BIN_ID           = 10,
-        parameter WIDTH_VAR_STATES       = 30,
-        parameter WIDTH_LVL_STATES       = 30,
+        parameter WIDTH_VAR_STATES       = 19,
+        parameter WIDTH_LVL_STATES       = 11,
         parameter ADDR_WIDTH_CLAUSES     = 9,
         parameter ADDR_WIDTH_VARS        = 9,
         parameter ADDR_WIDTH_VARS_STATES = 9,
@@ -39,11 +39,11 @@ module load_bin #(
 
         //load var state to sat engine
         output reg [NUM_VARS_A_BIN-1 : 0]            wr_var_states_o,
-        output [WIDTH_VAR_STATES*NUM_VARS_A_BIN-1:0] var_state_o,
+        output [WIDTH_VAR_STATES*NUM_VARS_A_BIN-1:0] vars_states_o,
 
         //load lvl state to sat engine
-        output reg [NUM_LVLS_A_BIN-1:0]              wr_lvl_states_o,
-        output [WIDTH_LVL_STATES*NUM_LVLS_A_BIN-1:0] lvl_states_o,
+        output reg [NUM_LVLS_A_BIN-1:0]              wr_lvlss_o,
+        output [WIDTH_LVL_STATES*NUM_LVLS_A_BIN-1:0] lvlss_o,
 
         input [WIDTH_LVL-1:0]                        cur_lvl_i,
         output [WIDTH_LVL-1:0]                       base_lvl_o,
@@ -58,12 +58,12 @@ module load_bin #(
         output reg [ADDR_WIDTH_VARS-1:0]             ram_addr_v_o,
 
         //vars states
-        input [WIDTH_VAR_STATES-1 : 0]               ram_data_v_state_i,
-        output reg [ADDR_WIDTH_VARS_STATES-1:0]      ram_addr_v_state_o,
+        input [WIDTH_VAR_STATES-1 : 0]               ram_data_vs_i,
+        output reg [ADDR_WIDTH_VARS_STATES-1:0]      ram_addr_vs_o,
 
         //lvls states
-        input [WIDTH_LVL_STATES-1 : 0]               ram_data_l_state_i,
-        output reg [ADDR_WIDTH_LVLS_STATES-1:0]      ram_addr_l_state_o
+        input [WIDTH_LVL_STATES-1 : 0]               ram_data_ls_i,
+        output reg [ADDR_WIDTH_LVLS_STATES-1:0]      ram_addr_ls_o
     );
 
     //子句bin的基址，加载NUM_C个子句
@@ -88,7 +88,7 @@ module load_bin #(
                  DONE = 3;
 
     reg [1:0] c_state, n_state;
-    reg [5:0] vars_cnt, clauses_cnt, l_state_cnt;
+    reg [5:0] vars_cnt, clauses_cnt, ls_cnt;
 
     always @(posedge clk)
     begin
@@ -110,7 +110,7 @@ module load_bin #(
                     else
                         n_state = IDLE;
                 LOAD:
-                    if(vars_cnt==NUM_VARS_A_BIN && clauses_cnt==NUM_CLAUSES_A_BIN && l_state_cnt==NUM_LVLS_A_BIN)
+                    if(vars_cnt==NUM_VARS_A_BIN && clauses_cnt==NUM_CLAUSES_A_BIN && ls_cnt==NUM_LVLS_A_BIN)
                         n_state = DONE;
                     else
                         n_state = LOAD;
@@ -212,7 +212,7 @@ module load_bin #(
             ram_addr_v_o <= 0;
     end
 
-    assign ram_addr_v_state_o = ram_data_v_i;
+    assign ram_addr_vs_o = ram_data_v_i;
 
     //var state有效信号需要再延时一拍
     reg vs_valid_delay;
@@ -227,7 +227,7 @@ module load_bin #(
     end
 
     //输出到sat engine
-    assign var_state_o = ram_data_v_state_i;
+    assign vars_states_o = ram_data_vs_i;
 
     //var state的写入信号，需要移位
     always @(posedge clk)
@@ -253,13 +253,13 @@ module load_bin #(
     always @(posedge clk)
     begin
         if (~rst)
-            l_state_cnt <= 0;
-        else if (base_lvl_en && l_state_cnt<NUM_CLAUSES_A_BIN)
-            l_state_cnt <= l_state_cnt+1;
+            ls_cnt <= 0;
+        else if (base_lvl_en && ls_cnt<NUM_CLAUSES_A_BIN)
+            ls_cnt <= ls_cnt+1;
         else if (c_state==LOAD)
-            l_state_cnt <= l_state_cnt;
+            ls_cnt <= ls_cnt;
         else
-            l_state_cnt <= 0;
+            ls_cnt <= 0;
     end
 
     reg [WIDTH_LVL-1:0]        base_lvl_o;
@@ -268,7 +268,7 @@ module load_bin #(
     wire [WIDTH_BIN_ID-1:0]   dcd_bin;
     wire                   has_bkt;
 
-    assign {dcd_bin, has_bkt} = ram_data_l_state_i;
+    assign {dcd_bin, has_bkt} = ram_data_ls_i;
 
     always @(posedge clk)
     begin
@@ -277,7 +277,7 @@ module load_bin #(
             base_lvl_o <= 0;
         end else if(c_state==LOAD && request_bin_num_i==dcd_bin) begin
             base_lvl_en <= 0;
-            base_lvl_o <= ram_addr_l_state_o;
+            base_lvl_o <= ram_addr_ls_o;
         end else if(c_state==LOAD && request_bin_num_i!=dcd_bin) begin
             base_lvl_en <= 1;
             base_lvl_o <= base_lvl_o;
@@ -290,31 +290,31 @@ module load_bin #(
     always @(posedge clk)
     begin
         if (~rst)
-            ram_addr_l_state_o <= 0;
+            ram_addr_ls_o <= 0;
         else if (start_load)
-            ram_addr_l_state_o <= cur_lvl_i;
+            ram_addr_ls_o <= cur_lvl_i;
         else if(c_state==LOAD && request_bin_num_i==dcd_bin)
-            ram_addr_l_state_o <= ram_addr_l_state_o - 1;
+            ram_addr_ls_o <= ram_addr_ls_o - 1;
         else if(base_lvl_en)
-            ram_addr_l_state_o <= base_lvl_o + l_state_cnt;
+            ram_addr_ls_o <= base_lvl_o + ls_cnt;
         else
-            ram_addr_l_state_o <= 0;
+            ram_addr_ls_o <= 0;
     end
 
     //输出到sat engine的子句信号
-    assign lvl_states_o = ram_data_l_state_i;
+    assign lvlss_o = ram_data_ls_i;
 
     //lvl state的写入信号，需要移位
     always @(posedge clk)
     begin
         if(~rst)
-            wr_lvl_states_o <= 0;
-        else if(wr_lvl_states_o!=0) //移位
-            wr_lvl_states_o <= wr_lvl_states_o<<1;
+            wr_lvlss_o <= 0;
+        else if(wr_lvlss_o!=0) //移位
+            wr_lvlss_o <= wr_lvlss_o<<1;
         else if(c_state==LOAD && base_lvl_en)
-            wr_lvl_states_o <= 1;
+            wr_lvlss_o <= 1;
         else
-            wr_lvl_states_o <= 0;
+            wr_lvlss_o <= 0;
     end
 
     // done_load信号，由于var state，要比计数器的完成延时两个周期
@@ -361,15 +361,15 @@ module load_bin #(
                 cdata.display_lits();
             end
             if(wr_var_states!=0) begin
-                vs_list.set(lvl_states_i);
+                vs_list.set(lvlss_i);
                 $display("wr var state list");
                 $display("%b", wr_var_states);
                 vs_list.display_lits();
             end
-            if(wr_lvl_states!=0) begin
-                ls_list.set(lvl_states_i);
+            if(wr_lvlss!=0) begin
+                ls_list.set(lvlss_i);
                 $display("wr lvl state list");
-                $display("%b", wr_lvl_states);
+                $display("%b", wr_lvlss);
                 ls_list.display_lits();
             end
         end
