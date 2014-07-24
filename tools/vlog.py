@@ -4,7 +4,7 @@
 import os
 import sys
 import json
-# import re
+import re
 import subprocess
 import gen_num_verilog as gn
 
@@ -13,6 +13,8 @@ vlog_exe = "vlog.exe"
 vlog_db_mtime = 'vlog_mtime.db'
 vlog_db_ref = 'vlog_include_ref.db'
 editer = '"D:/Program Files/Sublime Text 3/sublime_text.exe" '
+usevim = 0
+usesubl = 0
 
 # 忽略的文件
 ignore_list = ["case", "class"]
@@ -59,23 +61,15 @@ def find_vlog_list(mtime_list, ref_list):
         if filename in mtime_list:
             if mtime_list[filename] == mtime:
                 continue
-        mtime_list[filename] = mtime
 
         if filename.endswith('.v') or filename.endswith('.sv') or \
                 filename.endswith('.gen'):
-            if not in_ignore(filename):
-                need_vlog_flist += [filename]
+            need_vlog_flist += [filename]
             if filename not in ref_list:
                 continue
             for f in ref_list[filename]:
-                if f not in need_vlog_flist and not in_ignore(f):
-                    print f
+                if f not in need_vlog_flist:
                     need_vlog_flist += [f]
-
-
-    file_db = open(vlog_db_mtime, 'w')
-    str1 = json.dumps(mtime_list, indent=2)
-    file_db.write(str1)
 
     print "need_vlog_flist"
     for f in need_vlog_flist:
@@ -85,33 +79,45 @@ def find_vlog_list(mtime_list, ref_list):
 
 # 编译
 def vlog_file(need_vlog_flist):
-    # pattern_error = re.compile(r'\((\d+)\)')
+    pattern_error = re.compile(r'\((\d+)\)')
     for filename in need_vlog_flist:
         if filename.endswith('.v') or filename.endswith('.sv'):
-            # subp = subprocess.Popen(["vlog", "-quiet", filename])
-            # subp = subprocess.Popen("vlog -sv %s" % filename)
-            subp = subprocess.Popen(vlog_exe + " -sv " + filename,
-                                    stdout=subprocess.PIPE)
-            # str_all = ""
-            # while subp.poll() is None:
-            #     vlog_info = subp.stdout.read()
-            #     print vlog_info
-            #     str_all += vlog_info
-            vlog_info = subp.stdout.read()
-            print vlog_info
-            if "Error" in vlog_info:
-                # subprocess.Popen("start gvim %s" % filename)
-                # match = pattern_error.search(vlog_info)
-                # print match.group(1)
-                # subprocess.Popen(["gvim", filename, "+%s" % match.group(1)])
-                subprocess.Popen(editer + filename)
-                break
-            subp.wait()
+            if not in_ignore(filename):
+                # subp = subprocess.Popen(["vlog", "-quiet", filename])
+                # subp = subprocess.Popen("vlog -sv %s" % filename)
+                subp = subprocess.Popen(vlog_exe + " -sv " + filename,
+                                        stdout=subprocess.PIPE)
+                # str_all = ""
+                # while subp.poll() is None:
+                #     vlog_info = subp.stdout.read()
+                #     print vlog_info
+                #     str_all += vlog_info
+                vlog_info = subp.stdout.read()
+                print vlog_info
+                if "Error" in vlog_info:
+                    if usevim == 1:
+                        # subprocess.Popen("start gvim %s" % filename)
+                        match = pattern_error.search(vlog_info)
+                        print match.group(1)
+                        subprocess.Popen(["gvim", filename, "+%s" % match.group(1)])
+                    elif usesubl == 1:
+                        subprocess.Popen(editer + filename)
+                    break
+                subp.wait()
         elif filename.endswith('.gen'):
             # subp = subprocess.Popen(["../tools/gen_num_verilog.py",
             #                         filename,
             #                         '8'])
             gn.gen_num_verilog(filename, 8)
+
+        statinfo = os.stat(filename)
+        mtime = statinfo.st_mtime
+        mtime = int(mtime)
+        mtime_list[filename] = mtime
+
+    file_db = open(vlog_db_mtime, 'w')
+    str1 = json.dumps(mtime_list, indent=2)
+    file_db.write(str1)
 
 if __name__ == '__main__':
     mtime_list, ref_list = init_vlog()

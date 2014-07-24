@@ -9,7 +9,7 @@ module bin_manager #(
         parameter WIDTH_BIN_ID           = 10,
         parameter WIDTH_CLAUSES          = NUM_VARS_A_BIN*2,
         parameter WIDTH_VARS             = 12,
-        parameter WIDTH_LVL              = 16
+        parameter WIDTH_LVL              = 16,
         parameter WIDTH_VAR_STATES       = 19,
         parameter WIDTH_LVL_STATES       = 11,
         parameter ADDR_WIDTH_CLAUSES     = 9,
@@ -54,10 +54,10 @@ module bin_manager #(
         //load update var states  to sat engine
         output [NUM_VARS_A_BIN-1:0]                  wr_var_states_o,
         output [WIDTH_VAR_STATES*NUM_VARS_A_BIN-1:0] vars_states_o,
-        input [WIDTH_VAR_STATES*NUM_VARS_A_BIN-1:0]  vars_states_i
+        input [WIDTH_VAR_STATES*NUM_VARS_A_BIN-1:0]  vars_states_i,
 
         //load update lvl states to sat engine
-        output [NUM_LVLS-1:0]                        wr_lvl_states_o,
+        output [NUM_LVLS_A_BIN-1:0]                  wr_lvl_states_o,
         output [WIDTH_LVL_STATES*NUM_LVLS_A_BIN-1:0] lvl_states_o,
         input [WIDTH_LVL_STATES*NUM_LVLS_A_BIN-1:0]  lvl_states_i,
         output                                       base_lvl_en,
@@ -98,6 +98,8 @@ module bin_manager #(
     wire                       start_update;
     wire                       done_update;
     wire [WIDTH_LVL-1:0]       bkt_lvl_find;
+    wire [WIDTH_VARS-1:0]      nv_all;
+    wire [WIDTH_CLAUSES-1:0]   nc_all;
 
     ctrl_bm #(
         .WIDTH_BIN_ID(WIDTH_BIN_ID),
@@ -142,8 +144,6 @@ module bin_manager #(
     );
 
     //rd_bin_info
-    wire [WIDTH_VARS-1:0]           nv_all;
-    wire [WIDTH_CLAUSES-1:0]        nc_all;
 
     rd_bin_info #(
         .WIDTH_CLAUSES(WIDTH_CLAUSES),
@@ -239,9 +239,7 @@ module bin_manager #(
 
 
     // bkt_across_bin
-    wire                                     start_bkt_across_bin;
     wire                                     apply_bkt_across_bin;
-    wire                                     done_bkt_across_bin;
     wire [ADDR_WIDTH_VARS_STATES-1:0]        ram_raddr_vs_from_bkt;
     wire [WIDTH_VAR_STATES-1 : 0]            ram_rdata_vs;
     wire                                     ram_we_vs_from_bkt;
@@ -253,7 +251,7 @@ module bin_manager #(
         .WIDTH_LVL             (WIDTH_LVL),
         .WIDTH_VAR_STATES      (WIDTH_VAR_STATES),
         .WIDTH_LVL_STATES      (WIDTH_LVL_STATES),
-        .ADDR_WIDTH_VARS_STATES(ADDR_WIDTH_VARS_STATES)
+        .ADDR_WIDTH_VARS_STATES(ADDR_WIDTH_VARS_STATES),
         .ADDR_WIDTH_LVLS_STATES(ADDR_WIDTH_LVLS_STATES)
     )
     bkt_across_bin(
@@ -274,7 +272,6 @@ module bin_manager #(
 
     // update_bin
     wire                                     apply_update;
-    wire                                     done_update;
     wire                                     ram_we_c_from_update;
     wire [WIDTH_CLAUSES-1:0]                 ram_data_c_from_update;
     wire [ADDR_WIDTH_CLAUSES-1:0]            ram_addr_c_from_update;
@@ -437,6 +434,7 @@ module bin_manager #(
     //bram端口复用
     reg [ADDR_WIDTH_VARS_STATES-1:0]    ram_addra_vs_r;
     reg                                 ram_web_vs_r;
+    reg [WIDTH_VAR_STATES-1:0]          ram_dinb_vs_r;
     reg [ADDR_WIDTH_VARS_STATES-1:0]    ram_addrb_vs_r;
 
     always @(posedge clk)
@@ -489,9 +487,10 @@ module bin_manager #(
 
     /*** bram 层级状态 **/
     //bram端口复用
-    reg [ADDR_WIDTH_VARS_STATES-1:0]    ram_addra_ls_r;
+    reg [ADDR_WIDTH_LVLS_STATES-1:0]    ram_addra_ls_r;
     reg                                 ram_web_ls_r;
-    reg [ADDR_WIDTH_VARS_STATES-1:0]    ram_addrb_ls_r;
+    reg [WIDTH_LVL_STATES-1:0]          ram_dinb_ls_r;
+    reg [ADDR_WIDTH_LVLS_STATES-1:0]    ram_addrb_ls_r;
 
     always @(posedge clk)
     begin

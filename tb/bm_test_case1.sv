@@ -1,9 +1,9 @@
 
-int nb = 3;
-int cmax = 8;
-int vmax = 8;
+int nb1 = 3;
+int cmax1 = 8;
+int vmax1 = 8;
 
-int cbin[24][8] = '{
+int cbin1[24][8] = '{
 	//bin 1
 	'{1, 0, 0, 0, 0, 0, 0, 0},
 	'{0, 0, 0, 0, 0, 0, 0, 0},
@@ -35,7 +35,7 @@ int cbin[24][8] = '{
 	'{0, 0, 0, 0, 0, 0, 0, 0}
 };
 
-int vbin[24] = '{
+int vbin1[24] = '{
 	//bin 1
 	1, 0, 0, 0, 0, 0, 0, 0,
 	//bin 2
@@ -44,4 +44,12 @@ int vbin[24] = '{
 	1, 2, 5, 6, 7, 0, 0, 0
 };
 
+task bm_test_case1();
+    nb = nb1;
+    cmax = cmax1;
+    vmax = vmax1;
+    cbin = cbin1;
+    vbin = vbin1;
+    run_test_case();
+endtask
 

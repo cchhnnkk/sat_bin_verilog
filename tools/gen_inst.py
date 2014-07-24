@@ -34,7 +34,7 @@ def gen_inst(filename):
 
         # comment
         elif '//' in liststrip[0]:
-            str_inst += '\n\t%s' % stmt
+            str_inst += ',\n\t%s' % stmt
 
         # parameters
         elif exittag == 2:
@@ -68,7 +68,19 @@ def gen_inst(filename):
                 stmt = stmt.replace('output', 'wire')
                 str_stmt += stmt + ';\n'
 
-    return str_stmt, str_inst
+    return str_stmt + str_inst
+
+
+def fix_comment(str_1):
+    str_2 = ''
+    lines = str_1.split('\n')
+    for l in lines:
+        if '//' in l:
+            l = l.strip(',')
+        str_2 += l + '\n'
+        
+    return str_2
+
 
 if __name__ == '__main__':
     if len(sys.argv) == 2:
@@ -76,6 +88,6 @@ if __name__ == '__main__':
     else:
         filename = 'var1.v'
 
-    str_stmt, str_inst = gen_inst(filename)
-    print str_stmt
-    print str_inst
+    str_1 = gen_inst(filename)
+    str_2 = fix_comment(str_1)
+    print str_2

@@ -1,5 +1,5 @@
 
-all: vlog sim
+all: vlog
 
 vlog: vlog_bm
 
@@ -59,8 +59,7 @@ wave_clause1: hielist
 	cd ../tools && ../tools/gen_wave.sh test_clause1_top 3
 
 init_ref_all:
-	cd ../tools && find_verilog_file .. > filelist.txt
-	echo "../debug_define.v" >> filelist.txt
+	../tools/find_verilog_file.py ../src ../tb > filelist.txt
 	cat filelist.txt | ../tools/gen_include_ref.py > vlog_include_ref.db
 	rm filelist.txt
 

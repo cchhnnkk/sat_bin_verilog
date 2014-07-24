@@ -26,4 +26,7 @@ if [[ ! -x "work" ]]; then
 	vmap work work
 fi
 
-myvlog $svfile $vfile "../src/debug_define.v"
+myvlog $svfile $vfile "../src/debug_define.v" > vlog_out.txt
+sed "s/^.*Error: //g" vlog_out.txt
+rm vlog_out.txt
+
