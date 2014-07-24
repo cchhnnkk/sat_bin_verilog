@@ -27,6 +27,8 @@ if [[ ! -x "work" ]]; then
 fi
 
 myvlog $svfile $vfile "../src/debug_define.v" > vlog_out.txt
-sed "s/^.*Error: //g" vlog_out.txt
+sed -i -e "s/^.*Error: \(.*):\)/\1 Error/g" vlog_out.txt
+sed -i -e "s/^.*Warning: \(.*):\)/\1 Warning/g" vlog_out.txt
+cat vlog_out.txt
 rm vlog_out.txt
 

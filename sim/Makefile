@@ -42,6 +42,9 @@ sim_c1:
 	sed -i "s/--//g" transcript.log
 	# sublime_text transcript.log
 
+wave_bm: hielist
+	cd ../tools && ../tools/gen_wave.sh test_bin_manager_top 3
+
 wave_se: hielist
 	cd ../tools && ../tools/gen_wave.sh test_sat_engine_top 3
 

@@ -1,8 +1,20 @@
 #!python
+# -*- coding: utf-8 -*-
 
 import sys
 import re
 import json
+
+
+# 忽略的文件
+ignore_list = ["BLK_MEM_GEN"]
+
+
+def in_ignore(str1):
+    for l in ignore_list:
+        if l in str1:
+            return True
+    return False
 
 data = sys.stdin.read()
 # print data
@@ -62,6 +74,11 @@ for module_scope in mscope_list:
     inst_list += inst2_s
     # for inst in inst2_s:
     #     print inst
+
+for l in module_list:
+    for i, inst in enumerate(module_list[l]):
+        if in_ignore(inst[0]):
+            del module_list[l][i]
 
 # print module_list
 if module_list is not None:

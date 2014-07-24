@@ -5,10 +5,15 @@
       "lit1"
     ]
   ], 
-  "bram_w30_d1024": [
+  "bram_w30_d1024": [], 
+  "sat_bin": [
     [
-      "BLK_MEM_GEN_V7_3", 
-      "inst"
+      "bin_manager", 
+      "bin_manager"
+    ], 
+    [
+      "sat_engine", 
+      "sat_engine"
     ]
   ], 
   "ctrl_bm": [], 
@@ -72,11 +77,11 @@
       "update_bin"
     ], 
     [
-      "bram_w12_d1024", 
+      "bram_w30_d1024", 
       "bram_vars_bins_inst"
     ], 
     [
-      "bram_w48_d1024", 
+      "bram_w30_d1024", 
       "bram_clauses_bins_inst"
     ], 
     [
@@ -131,12 +136,7 @@
       "c_len8"
     ]
   ], 
-  "bram_w36_d1204": [
-    [
-      "BLK_MEM_GEN_V7_3", 
-      "inst"
-    ]
-  ], 
+  "bram_w36_d1204": [], 
   "test_lit1_top": [], 
   "reduce_in_4_datas": [
     [
@@ -175,31 +175,17 @@
     ]
   ], 
   "bkt_across_bin": [], 
-  "bram_w18_1024": [
+  "bram_w18_1024": [], 
+  "bram_w40": [], 
+  "test_bin_manager_top": [
     [
-      "BLK_MEM_GEN_V7_3", 
-      "inst"
+      "test_bin_manager", 
+      "test_bin_manager"
     ]
   ], 
-  "bram_w40": [
-    [
-      "BLK_MEM_GEN_V7_3", 
-      "inst"
-    ]
-  ], 
-  "bram_w48_d1024": [
-    [
-      "BLK_MEM_GEN_V7_3", 
-      "inst"
-    ]
-  ], 
+  "bram_w48_d1024": [], 
   "terminal_cell": [], 
-  "blk_mem_gen_v7_3": [
-    [
-      "BLK_MEM_GEN_V7_3", 
-      "inst"
-    ]
-  ], 
+  "blk_mem_gen_v7_3": [], 
   "test_clause1": [
     [
       "clause1", 
@@ -361,12 +347,7 @@
     ]
   ], 
   "lit1": [], 
-  "bram_w18_d1024": [
-    [
-      "BLK_MEM_GEN_V7_3", 
-      "inst"
-    ]
-  ], 
+  "bram_w18_d1024": [], 
   "lit2": [
     [
       "lit1", 
@@ -375,6 +356,12 @@
     [
       "lit1", 
       "lit1_1"
+    ]
+  ], 
+  "test_bin_manager": [
+    [
+      "bin_manager", 
+      "bin_manager"
     ]
   ], 
   "max_in_8_datas": [
@@ -429,10 +416,5 @@
     ]
   ], 
   "c_len1": [], 
-  "bram_w12_d1024": [
-    [
-      "BLK_MEM_GEN_V7_3", 
-      "inst"
-    ]
-  ]
+  "bram_w12_d1024": []
 }

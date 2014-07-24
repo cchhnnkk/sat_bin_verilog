@@ -8,7 +8,8 @@
     "../src/sat_engine/state_list/state_list.v", 
     "../src/sat_engine/sat_engine.v", 
     "../tb/test_sat_engine.sv", 
-    "../src/bin_manager/load_bin.v"
+    "../src/bin_manager/load_bin.v", 
+    "../tb/test_bin_manager.sv"
   ], 
   "../src/bin_manager/update_bin.v": [], 
   "../src/sat_engine/state_list/lvl_states.v": [], 
@@ -19,11 +20,11 @@
   "../src/bin_manager/find_global_bkt_lvl.v": [], 
   "../tb/test_clause_array.sv": [], 
   "../src/sat_engine/state_list/decision.v": [], 
-  "../tb/bm_test_case1.sv": [
-    "../tb/test_bin_manager.sv"
-  ], 
   "../src/sat_engine/ctrl_core.v": [], 
   "../tb/test_sat_engine.sv": [], 
+  "../tb/bm_update_test_case1.sv": [
+    "../tb/test_bin_manager.sv"
+  ], 
   "../tb/se_test_case4.sv": [
     "../tb/test_sat_engine.sv"
   ], 
@@ -34,15 +35,15 @@
     "../src/bin_manager/load_bin.v", 
     "../src/sat_engine/clause_array/clause1.v", 
     "../src/sat_engine/clause_array/clause_array.v", 
-    "../tb/test_clause1.sv", 
-    "../tb/test_bin_manager.sv"
+    "../tb/test_clause1.sv"
   ], 
   "../tb/se_test_case2.sv": [
     "../tb/test_sat_engine.sv"
   ], 
   "../tb/class_clause_array.sv": [
     "../tb/test_clause_array.sv", 
-    "../tb/test_sat_engine.sv"
+    "../tb/test_sat_engine.sv", 
+    "../tb/test_bin_manager.sv"
   ], 
   "../tb/se_test_case1.sv": [
     "../tb/test_sat_engine.sv"
@@ -84,7 +85,8 @@
     "../src/sat_engine/state_list/state_list.v", 
     "../src/sat_engine/sat_engine.v", 
     "../tb/test_sat_engine.sv", 
-    "../src/bin_manager/load_bin.v"
+    "../src/bin_manager/load_bin.v", 
+    "../tb/test_bin_manager.sv"
   ], 
   "../src/sat_engine/clause_array/lit1.v": [], 
   "../src/sat_engine/clause_array/clauses.v": [], 
@@ -94,5 +96,8 @@
   "../src/bin_manager/bin_manager.v": [], 
   "../tb/se_test_case3.sv": [
     "../tb/test_sat_engine.sv"
+  ], 
+  "../tb/bm_load_test_case1.sv": [
+    "../tb/test_bin_manager.sv"
   ]
 }

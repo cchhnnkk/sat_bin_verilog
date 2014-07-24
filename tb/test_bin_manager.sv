@@ -29,42 +29,45 @@ module test_bin_manager(input clk, input rst);
     wire                                       global_sat_o;
     wire                                       global_unsat_o;
     reg                                        bin_info_en;
-    reg [WIDTH_VARS-1:0]                       nv_all_i;
-    reg [WIDTH_CLAUSES-1:0]                    nc_all_i;
+    reg  [WIDTH_VARS-1:0]                      nv_all_i;
+    reg  [WIDTH_CLAUSES-1:0]                   nc_all_i;
+    //sat engine core
     wire                                       start_core_o;
     reg                                        done_core_i;
     wire [WIDTH_BIN_ID-1:0]                    cur_bin_num_o;
     wire [WIDTH_LVL-1:0]                       cur_lvl_o;
     reg                                        local_sat_i;
     reg                                        local_unsat_i;
-    reg [WIDTH_LVL-1:0]                        cur_lvl_from_core_i;
-    reg [WIDTH_BIN_ID-1:0]                     bkt_bin_from_core_i;
-    reg [WIDTH_LVL-1:0]                        bkt_lvl_from_core_i;
+    reg  [WIDTH_LVL-1:0]                       cur_lvl_from_core_i;
+    reg  [WIDTH_BIN_ID-1:0]                    bkt_bin_from_core_i;
+    reg  [WIDTH_LVL-1:0]                       bkt_lvl_from_core_i;
+    //load update
     wire [NUM_CLAUSES_A_BIN-1:0]               wr_carray_o;
     wire [NUM_CLAUSES_A_BIN-1:0]               rd_carray_o;
     wire [NUM_VARS_A_BIN*2-1 : 0]              clause_o;
-    reg [NUM_VARS_A_BIN*2-1 : 0]               clause_i;
+    reg  [NUM_VARS_A_BIN*2-1 : 0]              clause_i;
     wire [NUM_VARS_A_BIN-1:0]                  wr_var_states_o;
     wire [WIDTH_VAR_STATES*NUM_VARS_A_BIN-1:0] vars_states_o;
-    reg [WIDTH_VAR_STATES*NUM_VARS_A_BIN-1:0]  vars_states_i;
+    reg  [WIDTH_VAR_STATES*NUM_VARS_A_BIN-1:0] vars_states_i;
     wire [NUM_LVLS_A_BIN-1:0]                  wr_lvl_states_o;
     wire [WIDTH_LVL_STATES*NUM_LVLS_A_BIN-1:0] lvl_states_o;
-    reg [WIDTH_LVL_STATES*NUM_LVLS_A_BIN-1:0]  lvl_states_i;
+    reg  [WIDTH_LVL_STATES*NUM_LVLS_A_BIN-1:0] lvl_states_i;
     wire                                       base_lvl_en;
     wire [WIDTH_LVL-1:0]                       base_lvl_o;
+    //export
     reg                                        apply_ex_i;
     reg                                        ram_we_v_ex_i;
-    reg [WIDTH_VARS-1 : 0]                     ram_din_v_ex_i;
-    reg [ADDR_WIDTH_VARS-1:0]                  ram_addr_v_ex_i;
+    reg  [WIDTH_VARS-1 : 0]                    ram_din_v_ex_i;
+    reg  [ADDR_WIDTH_VARS-1:0]                 ram_addr_v_ex_i;
     reg                                        ram_we_c_ex_i;
-    reg [WIDTH_CLAUSES-1 : 0]                  ram_din_c_ex_i;
-    reg [ADDR_WIDTH_CLAUSES-1:0]               ram_addr_c_ex_i;
+    reg  [WIDTH_CLAUSES-1 : 0]                 ram_din_c_ex_i;
+    reg  [ADDR_WIDTH_CLAUSES-1:0]              ram_addr_c_ex_i;
     reg                                        ram_we_vs_ex_i;
-    reg [WIDTH_VAR_STATES-1 : 0]               ram_din_vs_ex_i;
-    reg [ADDR_WIDTH_VARS_STATES-1:0]           ram_addr_vs_ex_i;
+    reg  [WIDTH_VAR_STATES-1 : 0]              ram_din_vs_ex_i;
+    reg  [ADDR_WIDTH_VARS_STATES-1:0]          ram_addr_vs_ex_i;
     reg                                        ram_we_ls_ex_i;
-    reg [WIDTH_LVL_STATES-1 : 0]               ram_din_ls_ex_i;
-    reg [ADDR_WIDTH_LVLS_STATES-1:0]           ram_addr_ls_ex_i;
+    reg  [WIDTH_LVL_STATES-1 : 0]              ram_din_ls_ex_i;
+    reg  [ADDR_WIDTH_LVLS_STATES-1:0]          ram_addr_ls_ex_i;
 
     bin_manager #(
             .NUM_CLAUSES_A_BIN     (NUM_CLAUSES_A_BIN),
@@ -103,16 +106,16 @@ module test_bin_manager(input clk, input rst);
             .cur_lvl_from_core_i(cur_lvl_from_core_i),
             .bkt_bin_from_core_i(bkt_bin_from_core_i),
             .bkt_lvl_from_core_i(bkt_lvl_from_core_i),
-            //load update clause to sat engine
+            //load update clause with sat engine
             .wr_carray_o        (wr_carray_o),
             .rd_carray_o        (rd_carray_o),
             .clause_o           (clause_o),
             .clause_i           (clause_i),
-            //load update var states  to sat engine
+            //load update var states with sat engine
             .wr_var_states_o    (wr_var_states_o),
             .vars_states_o      (vars_states_o),
             .vars_states_i      (vars_states_i),
-            //load update lvl states to sat engine
+            //load update lvl states with sat engine
             .wr_lvl_states_o    (wr_lvl_states_o),
             .lvl_states_o       (lvl_states_o),
             .lvl_states_i       (lvl_states_i),
@@ -138,18 +141,43 @@ module test_bin_manager(input clk, input rst);
             .ram_addr_ls_ex_i   (ram_addr_ls_ex_i)
     );
 
-    /*** 读写与加载 ***/
+    //load
+    int nb;
+    int cmax;
+    int vmax;
+    int cbin[][];
+    int vbin[];
 
-    `include "../tb/class_clause_data.sv";
+    //update
+    int bin_updated[][]; 
+    //var state list:
+    int value_updated[];
+    int implied_updated[];
+    int level_updated[];
+    //lvl state list:
+    int dcd_bin_updated[];
+    int has_bkt_updated[];
+    //ctrl
+    int cur_bin_num_updated;
+    int cur_lvl_updated;
+    int base_lvl_updated;
+
+    /*** load ***/
+    `include "../tb/class_clause_array.sv";
+    `include "../tb/class_vs_list.sv";
+    `include "../tb/class_ls_list.sv";
+    `include "../tb/bm_load_test_case1.sv"
+    `include "../tb/bm_update_test_case1.sv"
+
     class_clause_data #(8) cdata = new();
 
-    task wr_clauses(input int cbin[][], nb, cmax);
+    task wr_clauses();
         begin
             for (int i = 0; i < nb*cmax; ++i)
             begin
                 @ (posedge clk);
                     cdata.set_lits(cbin[i]);
-                    cdata.display_lits();
+                    //cdata.display_lits();
                     ram_we_c_ex_i = 1;
                     cdata.get_clause(ram_din_c_ex_i);
                     ram_addr_c_ex_i = i;
@@ -160,7 +188,7 @@ module test_bin_manager(input clk, input rst);
         end
     endtask
 
-    task wr_vars(input int vbin[], nb, cmax);
+    task wr_vars();
         begin
             for (int i = 0; i < nb*cmax; ++i)
             begin
@@ -173,6 +201,39 @@ module test_bin_manager(input clk, input rst);
                 ram_we_v_ex_i = 0;
             @ (posedge clk);
         end
+    endtask
+
+    /*** update ***/
+    class_clause_array #(8, 8) carray_data = new();
+
+    initial begin
+        automatic int cindex = 0;
+        forever @(posedge clk) begin
+            if(rd_carray_o==1) begin
+                cdata.set_lits(bin_updated[cindex]);
+                cdata.get_clause(clause_i);
+                cindex++;
+                cindex = cindex%8;
+            end
+        end
+    end
+    
+    class_vs_list #(8, WIDTH_LVL) vs_list = new();
+    
+    class_ls_list #(8, WIDTH_BIN_ID) ls_list = new();
+
+    task update_bin();
+        local_sat_i = 1;
+        cur_lvl_from_core_i = cur_lvl_updated;
+        bkt_bin_from_core_i = cur_bin_num_updated;
+        bkt_lvl_from_core_i = cur_lvl_updated;
+        //var state
+        vs_list.set_separate(value_updated, implied_updated, level_updated);
+        vs_list.get(vars_states_i);
+        //lvl state
+        ls_list.set_separate(dcd_bin_updated, has_bkt_updated);
+        ls_list.get(lvl_states_i);
+
     endtask
 
     task reset_all_signal();
@@ -207,36 +268,29 @@ module test_bin_manager(input clk, input rst);
     endtask
 
     /*** 测试用例集 ***/
-    int nb;
-    int cmax;
-    int vmax;
-    int cbin[][];
-    int vbin[];
-
-    `include "../tb/bm_test_case1.sv"
 
     task test_bin_manager_task();
-        begin
-            $display("test_sat_engine_task");
-            reset_all_signal();
-            bm_test_case1();
-        end
+        $display("test_sat_engine_task");
+        reset_all_signal();
+        bm_load_test_case1();
     endtask
 
-    task run_test_case();
-        begin
-            wr_clauses(cbin, nb, cmax);
-            wr_vars(vbin, nb, cmax);
-            start_bm_i = 1;
-            @(posedge clk);
-            start_bm_i = 0;
-        end
+    task run_bm_load();
+        wr_clauses();
+        wr_vars();
+        start_bm_i = 1;
+        @(posedge clk);
+        start_bm_i = 0;
+    endtask
+
+    task run_bm_update();
+        update_bin();
     endtask
 
 endmodule
 
 
-module test_sat_engine_top;
+module test_bin_manager_top;
     reg  clk;
     reg  rst;
 
@@ -263,7 +317,7 @@ module test_sat_engine_top;
         end
     endtask
 
-    test_sat_engine test_sat_engine(
+    test_bin_manager test_bin_manager(
         .clk(clk),
         .rst(rst)
     );
@@ -271,7 +325,7 @@ module test_sat_engine_top;
     initial begin
         reset();
         $display("start sim");
-        test_sat_engine.run();
+        test_bin_manager.run();
         $display("done sim");
         $finish();
     end

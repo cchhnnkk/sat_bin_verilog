@@ -51,9 +51,11 @@
   "../src/sat_engine/clause_array/lit1.v": 1405757201, 
   "../src/sat_engine/clause_array/clauses.v": 1405874435, 
   "../src/sat_engine/clause_array/lits.gen": 1405612606, 
+  "../tb/bm_update_test_case1.sv": 1406214473, 
   "../src/sat_engine/clause_array/terminal_cell.v": 1405757257, 
-  "../tb/test_bin_manager.sv": 1406171138, 
-  "../src/bin_manager/bin_manager.v": 1406168237, 
+  "../tb/test_bin_manager.sv": 1406215439, 
+  "../src/bin_manager/bin_manager.v": 1406193546, 
   "../tb/se_test_case3.sv": 1406106217, 
+  "../tb/bm_load_test_case1.sv": 1406214407, 
   "../tb/se_test_case4.sv": 1406106209
 }

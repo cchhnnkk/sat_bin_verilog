@@ -21,6 +21,8 @@ toplist += [topm] * 2
 
 def find_sub(mname, mlist):
     sublist = []
+    if mname not in mlist_json:
+        return
     for l in mlist_json[mname]:
         sublist1 = l[:]
         find_sub(l[0], sublist1)

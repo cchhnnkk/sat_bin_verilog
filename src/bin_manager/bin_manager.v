@@ -45,18 +45,18 @@ module bin_manager #(
         input [WIDTH_BIN_ID-1:0]                  bkt_bin_from_core_i,
         input [WIDTH_LVL-1:0]                     bkt_lvl_from_core_i,
 
-        //load update clause to sat engine
+        //load update clause with sat engine
         output [NUM_CLAUSES_A_BIN-1:0]               wr_carray_o,
         output [NUM_CLAUSES_A_BIN-1:0]               rd_carray_o,
         output [NUM_VARS_A_BIN*2-1 : 0]              clause_o,
         input [NUM_VARS_A_BIN*2-1 : 0]               clause_i,
 
-        //load update var states  to sat engine
+        //load update var states with sat engine
         output [NUM_VARS_A_BIN-1:0]                  wr_var_states_o,
         output [WIDTH_VAR_STATES*NUM_VARS_A_BIN-1:0] vars_states_o,
         input [WIDTH_VAR_STATES*NUM_VARS_A_BIN-1:0]  vars_states_i,
 
-        //load update lvl states to sat engine
+        //load update lvl states with sat engine
         output [NUM_LVLS_A_BIN-1:0]                  wr_lvl_states_o,
         output [WIDTH_LVL_STATES*NUM_LVLS_A_BIN-1:0] lvl_states_o,
         input [WIDTH_LVL_STATES*NUM_LVLS_A_BIN-1:0]  lvl_states_i,
