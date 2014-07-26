@@ -9,13 +9,13 @@ module update_bin #(
         parameter NUM_VARS_A_BIN         = 8,
         parameter NUM_LVLS_A_BIN         = 8,
         parameter WIDTH_CLAUSES          = NUM_VARS_A_BIN*2,
-        parameter WIDTH_VARS             = 12,
+        parameter WIDTH_VAR              = 12,
         parameter WIDTH_LVL              = 16,
         parameter WIDTH_BIN_ID           = 10,
         parameter WIDTH_VAR_STATES       = 30,
         parameter WIDTH_LVL_STATES       = 30,
         parameter ADDR_WIDTH_CLAUSES     = 9,
-        parameter ADDR_WIDTH_VARS        = 9,
+        parameter ADDR_WIDTH_VAR         = 9,
         parameter ADDR_WIDTH_VARS_STATES = 9,
         parameter ADDR_WIDTH_LVLS_STATES = 9
     )
@@ -30,7 +30,7 @@ module update_bin #(
         output reg                                    done_update,
 
         //update clause from sat engine
-        output [NUM_CLAUSES_A_BIN-1:0]                  rd_carray_o,
+        output reg [NUM_CLAUSES_A_BIN-1:0]              rd_carray_o,
         input [NUM_VARS_A_BIN*2-1 : 0]                  clause_i,
 
         //update var state from sat engine
@@ -47,8 +47,8 @@ module update_bin #(
         output reg [ADDR_WIDTH_CLAUSES-1:0]           ram_addr_c_o,
 
         //vars bins
-        input [WIDTH_VARS-1 : 0]                      ram_data_v_i,
-        output reg [ADDR_WIDTH_VARS-1:0]              ram_addr_v_o,
+        input [WIDTH_VAR-1 : 0]                      ram_data_v_i,
+        output reg [ADDR_WIDTH_VAR-1:0]              ram_addr_v_o,
 
         //vars states
         output reg                                    ram_we_vs_o,
@@ -56,19 +56,19 @@ module update_bin #(
         output reg [ADDR_WIDTH_VARS_STATES-1:0]       ram_addr_vs_o,
 
         //lvls states
-        output reg                                    ram_we_l_state_o,
-        output reg [WIDTH_LVL_STATES-1 : 0]           ram_data_l_state_o,
-        output reg [ADDR_WIDTH_LVLS_STATES-1:0]       ram_addr_l_state_o
-    )
+        output reg                                    ram_we_ls_o,
+        output reg [WIDTH_LVL_STATES-1 : 0]           ram_data_ls_o,
+        output reg [ADDR_WIDTH_LVLS_STATES-1:0]       ram_addr_ls_o
+    );
 
     reg [NUM_VARS_A_BIN-1 : 0]              rd_var_states;
     reg [NUM_LVLS_A_BIN-1:0]                rd_lvl_states;
 
     //子句bin的基址，加载NUM_C个子句
     reg [ADDR_WIDTH_CLAUSES-1 : 0]        clause_bin_i_base_addr;
-    wire [ADDR_WIDTH_VARS-1 : 0]          var_bin_i_base_addr;
+    wire [ADDR_WIDTH_VAR-1 : 0]           var_bin_i_base_addr;
 
-    wire [ADDR_WIDTH_CLAUSES-1 : 0]       clauses_bin_baseaddr = request_bin_num_i*NUM_CLAUSES_A_BIN;//i*8
+    wire [ADDR_WIDTH_CLAUSES-1 : 0]       clauses_bin_baseaddr = cur_bin_num_i*NUM_CLAUSES_A_BIN;//i*8
 
     always @(posedge clk)
     begin
@@ -196,6 +196,18 @@ module update_bin #(
         end
     end
 
+    reg c_valid_delay;
+    always @(posedge clk)
+    begin
+        if(~rst)
+            c_valid_delay <= 0;
+        else if(c_state==UPDATE)
+            c_valid_delay <= 1;
+        else
+            c_valid_delay <= 0;
+    end
+
+
     /**
      *  更新var state
      */
@@ -235,6 +247,9 @@ module update_bin #(
             rd_var_states <= 0;
     end
 
+
+    wire [WIDTH_VAR_STATES-1:0] var_state_reduced;
+
     reduce_in_8_datas #(
         .WIDTH(WIDTH_VAR_STATES)
     )
@@ -267,11 +282,11 @@ module update_bin #(
     always @(posedge clk)
     begin
         if (~rst)
-            ram_addr_l_state_o <= 0;
+            ram_addr_ls_o <= 0;
         else if (c_state==UPDATE)
-            ram_addr_l_state_o <= base_lvl_i + vars_cnt;
+            ram_addr_ls_o <= base_lvl_i + vars_cnt;
         else
-            ram_addr_l_state_o <= 0;
+            ram_addr_ls_o <= 0;
     end
 
     //有效信号延时一拍
@@ -291,11 +306,13 @@ module update_bin #(
             rd_lvl_states <= 0;
     end
 
+    wire [WIDTH_LVL_STATES-1:0] lvl_state_reduced;
+
     reduce_in_8_datas #(
         .WIDTH(WIDTH_VAR_STATES)
     )
-    reduce_in_8_datas_vs_inst (
-        .data_i(lvl_state_i),
+    reduce_in_8_datas_ls_inst (
+        .data_i(lvl_states_i),
         .data_o(lvl_state_reduced),
         .rd_i(rd_lvl_states)
     );
@@ -303,21 +320,21 @@ module update_bin #(
     always @(posedge clk)
     begin
         if(~rst) begin
-            ram_we_l_state_o <= 0;
-            ram_data_l_state_o <= 0;
-            ram_addr_l_state_o <= 0;
+            ram_we_ls_o <= 0;
+            ram_data_ls_o <= 0;
+            ram_addr_ls_o <= 0;
         end else if(start_update) begin
-            ram_we_l_state_o <= 0;
-            ram_data_l_state_o <= 0;
-            ram_addr_l_state_o <= base_lvl_i;
-        end else if(rd_lar_states!=0) begin
-            ram_we_l_state_o <= 1;
-            ram_data_l_state_o <= lvl_state_reduced;
-            ram_addr_l_state_o <= ram_addr_l_state_o + 1;
+            ram_we_ls_o <= 0;
+            ram_data_ls_o <= 0;
+            ram_addr_ls_o <= base_lvl_i;
+        end else if(rd_lvl_states!=0) begin
+            ram_we_ls_o <= 1;
+            ram_data_ls_o <= lvl_state_reduced;
+            ram_addr_ls_o <= ram_addr_ls_o + 1;
         end else begin
-            ram_we_l_state_o <= 0;
-            ram_data_l_state_o <= 0;
-            ram_addr_l_state_o <= 0;
+            ram_we_ls_o <= 0;
+            ram_data_ls_o <= 0;
+            ram_addr_ls_o <= 0;
         end
     end
 

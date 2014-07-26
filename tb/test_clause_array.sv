@@ -49,7 +49,7 @@ module test_clause_array(input clk, input rst);
         .var_lvl_i   (var_lvl_i),
         .var_lvl_o   (var_lvl_o),
 
-		.apply_impl_i(apply_impl_i),
+		.apply_imply_i(apply_imply_i),
 		.apply_bkt_i (apply_bkt_i)
 	);
 

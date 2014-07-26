@@ -17,7 +17,7 @@ module ctrl_bm #(
      output reg 				done_bm_o,
 
      //当前状态
-     output [WIDTH_LVL-1:0] 	cur_bin_num_o,
+     output [WIDTH_BIN_ID-1:0] 	cur_bin_num_o,
      output reg [WIDTH_LVL-1:0] cur_lvl_o,
 	 output reg 				global_sat_o,
 	 output reg 				global_unsat_o,
@@ -181,7 +181,7 @@ module ctrl_bm #(
     end
 
     // 保证start信号是一个周期的脉冲信号
-    reg impulse_cnt[1:0];
+    reg [1:0] impulse_cnt;
     always @(posedge clk)
     begin
         if(~rst)

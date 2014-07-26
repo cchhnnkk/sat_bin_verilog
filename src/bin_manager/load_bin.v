@@ -13,13 +13,13 @@ module load_bin #(
         parameter NUM_VARS_A_BIN         = 8,
         parameter NUM_LVLS_A_BIN         = 8,
         parameter WIDTH_CLAUSES          = NUM_VARS_A_BIN*2,
-        parameter WIDTH_VARS             = 12,
+        parameter WIDTH_VAR              = 12,
         parameter WIDTH_LVL              = 16,
         parameter WIDTH_BIN_ID           = 10,
         parameter WIDTH_VAR_STATES       = 19,
         parameter WIDTH_LVL_STATES       = 11,
         parameter ADDR_WIDTH_CLAUSES     = 9,
-        parameter ADDR_WIDTH_VARS        = 9,
+        parameter ADDR_WIDTH_VAR         = 9,
         parameter ADDR_WIDTH_VARS_STATES = 9,
         parameter ADDR_WIDTH_LVLS_STATES = 9
     )
@@ -34,7 +34,7 @@ module load_bin #(
         output reg                                   done_load,
 
         //load clause to sat engine
-        output [NUM_CLAUSES_A_BIN-1:0]               wr_carray_o,
+        output reg [NUM_CLAUSES_A_BIN-1:0]           wr_carray_o,
         output reg [NUM_VARS_A_BIN*2-1 : 0]          clause_o,
 
         //load var state to sat engine
@@ -42,11 +42,11 @@ module load_bin #(
         output [WIDTH_VAR_STATES*NUM_VARS_A_BIN-1:0] vars_states_o,
 
         //load lvl state to sat engine
-        output reg [NUM_LVLS_A_BIN-1:0]              wr_lvlss_o,
-        output [WIDTH_LVL_STATES*NUM_LVLS_A_BIN-1:0] lvlss_o,
+        output reg [NUM_LVLS_A_BIN-1:0]              wr_lvl_states_o,
+        output [WIDTH_LVL_STATES*NUM_LVLS_A_BIN-1:0] lvl_states_o,
 
         input [WIDTH_LVL-1:0]                        cur_lvl_i,
-        output [WIDTH_LVL-1:0]                       base_lvl_o,
+        output reg [WIDTH_LVL-1:0]                   base_lvl_o,
         output reg                                   base_lvl_en,
 
         //clauses bins
@@ -54,8 +54,8 @@ module load_bin #(
         output reg [ADDR_WIDTH_CLAUSES-1:0]          ram_addr_c_o,
 
         //vars bins
-        input [WIDTH_VARS-1 : 0]                     ram_data_v_i,
-        output reg [ADDR_WIDTH_VARS-1:0]             ram_addr_v_o,
+        input [WIDTH_VAR-1 : 0]                      ram_data_v_i,
+        output reg [ADDR_WIDTH_VAR-1:0]              ram_addr_v_o,
 
         //vars states
         input [WIDTH_VAR_STATES-1 : 0]               ram_data_vs_i,
@@ -68,7 +68,7 @@ module load_bin #(
 
     //子句bin的基址，加载NUM_C个子句
     reg [ADDR_WIDTH_CLAUSES-1 : 0]        clause_bin_i_base_addr;
-    wire [ADDR_WIDTH_VARS-1 : 0]          var_bin_i_base_addr;
+    wire [ADDR_WIDTH_VAR-1 : 0]           var_bin_i_base_addr;
 
     wire [ADDR_WIDTH_CLAUSES-1 : 0]       clauses_bin_baseaddr = request_bin_num_i*NUM_CLAUSES_A_BIN;//i*8
 
@@ -212,6 +212,7 @@ module load_bin #(
             ram_addr_v_o <= 0;
     end
 
+    //根据变量id查找var state
     assign ram_addr_vs_o = ram_data_v_i;
 
     //var state有效信号需要再延时一拍
@@ -227,7 +228,14 @@ module load_bin #(
     end
 
     //输出到sat engine
-    assign vars_states_o = ram_data_vs_i;
+    scatter_to_8_datas #(
+        .WIDTH(WIDTH_VAR_STATES)
+    )
+    scatter_to_8_datas_vs_inst (
+        .wr_i(wr_var_states_o),
+        .data_i(ram_data_vs_i),
+        .data_o(vars_states_o)
+    );
 
     //var state的写入信号，需要移位
     always @(posedge clk)
@@ -242,14 +250,11 @@ module load_bin #(
             wr_var_states_o <= 0;
     end
 
-
-
     /**
      *  加载lvl state
      *  先沿着lvl state list向前找到当前bin最小的lvl
      *  再加载N_L个lvl state
      */
-
     always @(posedge clk)
     begin
         if (~rst)
@@ -261,9 +266,6 @@ module load_bin #(
         else
             ls_cnt <= 0;
     end
-
-    reg [WIDTH_LVL-1:0]        base_lvl_o;
-    reg                        base_lvl_en;
 
     wire [WIDTH_BIN_ID-1:0]   dcd_bin;
     wire                   has_bkt;
@@ -302,19 +304,26 @@ module load_bin #(
     end
 
     //输出到sat engine的子句信号
-    assign lvlss_o = ram_data_ls_i;
+    scatter_to_8_datas #(
+        .WIDTH(WIDTH_VAR_STATES)
+    )
+    scatter_to_8_datas_ls_inst (
+        .wr_i(wr_lvl_states_o),
+        .data_i(ram_data_ls_i),
+        .data_o(lvl_states_o)
+    );
 
     //lvl state的写入信号，需要移位
     always @(posedge clk)
     begin
         if(~rst)
-            wr_lvlss_o <= 0;
-        else if(wr_lvlss_o!=0) //移位
-            wr_lvlss_o <= wr_lvlss_o<<1;
+            wr_lvl_states_o <= 0;
+        else if(wr_lvl_states_o!=0) //移位
+            wr_lvl_states_o <= wr_lvl_states_o<<1;
         else if(c_state==LOAD && base_lvl_en)
-            wr_lvlss_o <= 1;
+            wr_lvl_states_o <= 1;
         else
-            wr_lvlss_o <= 0;
+            wr_lvl_states_o <= 0;
     end
 
     // done_load信号，由于var state，要比计数器的完成延时两个周期

@@ -18,7 +18,6 @@
     "../tb/test_sat_engine.sv"
   ], 
   "../src/bin_manager/find_global_bkt_lvl.v": [], 
-  "../tb/test_clause_array.sv": [], 
   "../src/sat_engine/state_list/decision.v": [], 
   "../src/sat_engine/ctrl_core.v": [], 
   "../tb/test_sat_engine.sv": [], 
@@ -41,8 +40,8 @@
     "../tb/test_sat_engine.sv"
   ], 
   "../tb/class_clause_array.sv": [
-    "../tb/test_clause_array.sv", 
     "../tb/test_sat_engine.sv", 
+    "../tb/test_clause_array.sv", 
     "../tb/test_bin_manager.sv"
   ], 
   "../tb/se_test_case1.sv": [
@@ -57,7 +56,7 @@
   "../src/bin_manager/rd_bin_info.v": [], 
   "../src/sat_engine/clause_array/clause_array.v": [], 
   "../src/sat_bin.v": [], 
-  "../src/bin_manager/buffer_state.v": [], 
+  "../tb/test_clause_array.sv": [], 
   "../tb/class_lvl_data.sv": [
     "../tb/test_clause_array.sv", 
     "../tb/test_clause1.sv"

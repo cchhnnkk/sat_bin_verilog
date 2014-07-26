@@ -4,7 +4,7 @@
 module find_global_bkt_lvl #(
         parameter WIDTH_LVL              = 16,
         parameter WIDTH_BIN_ID           = 10,
-        parameter WIDTH_LVL_STATES       = 30,
+        parameter WIDTH_LVL_STATES       = 11,
         parameter ADDR_WIDTH_LVLS_STATES = 9
     )
     (
@@ -21,11 +21,14 @@ module find_global_bkt_lvl #(
         output [WIDTH_BIN_ID-1 : 0]                   bkt_bin_o,
 
         //lvls states bram
-        output reg                                    ram_we_l_state_o,
-        input [WIDTH_LVL_STATES-1 : 0]                ram_data_l_state_i,
-        output reg [WIDTH_LVL_STATES-1 : 0]           ram_data_l_state_o,
-        output reg [ADDR_WIDTH_LVLS_STATES-1:0]       ram_addr_l_state_o
-    )
+        //rd
+        output reg [ADDR_WIDTH_LVLS_STATES-1:0]       ram_raddr_ls_o,
+        input [WIDTH_LVL_STATES-1 : 0]                ram_rdata_ls_i,
+        //wr
+        output reg                                    ram_we_ls_o,
+        output reg [WIDTH_LVL_STATES-1 : 0]           ram_wdata_ls_o,
+        output reg [ADDR_WIDTH_LVLS_STATES-1:0]       ram_waddr_ls_o
+    );
 
     wire [WIDTH_BIN_ID-1:0]   dcd_bin;
     wire                   has_bkt;
@@ -53,7 +56,7 @@ module find_global_bkt_lvl #(
         else
             case(c_state)
                 IDLE:
-                    if(start_update)
+                    if(start_find)
                         n_state = FIND_BKT_LVL;
                     else
                         n_state = IDLE;
@@ -89,31 +92,29 @@ module find_global_bkt_lvl #(
     always @(posedge clk)
     begin
         if (~rst)
-            ram_addr_l_state_o <= 0;
+            ram_raddr_ls_o <= 0;
         else if (c_state==FIND_BKT_LVL)
-            ram_addr_l_state_o <= lvl_cnt;
-        else if (c_state==SET_HAS_BKT)
-            ram_addr_l_state_o <= bkt_lvl_o;
+            ram_raddr_ls_o <= lvl_cnt;
         else
-            ram_addr_l_state_o <= 0;
+            ram_raddr_ls_o <= 0;
     end
 
-    assign {dcd_bin, has_bkt} = ram_data_l_state_i;
+    assign {dcd_bin, has_bkt} = ram_rdata_ls_i;
 
     //记录结果
-    reg [WIDTH_VAR_STATES-1 : 0] ram_data_l_state_r;
+    reg [WIDTH_LVL_STATES-1 : 0] ram_rdata_ls_r;
 
     always @(posedge clk)
     begin
         if (~rst)
-            ram_addr_v_state_o <= 0;
+            ram_rdata_ls_r <= 0;
         else if (has_bkt==0)
-            ram_addr_v_state_o <= ram_data_l_state_i;
+            ram_rdata_ls_r <= ram_rdata_ls_i;
         else
-            ram_addr_v_state_o <= 0;
+            ram_rdata_ls_r <= 0;
     end
 
-    assign {bkt_bin_o, bkt_lvl_o} = ram_addr_v_state_o;
+    assign {bkt_bin_o, bkt_lvl_o} = ram_rdata_ls_r;
 
 
     //持续信号，用于bram的mux
@@ -133,14 +134,19 @@ module find_global_bkt_lvl #(
     always @(posedge clk)
     begin
         if(~rst) begin
-            ram_we_l_state_o <= 0;
-            ram_data_l_state_o <= 0;
-        end else if(c_state == SET_HAS_BKT) begin
-            ram_we_l_state_o <= 1;
-            ram_data_l_state_o <= {bkt_bin_o, 1'b1};
-        end else begin
-            ram_we_l_state_o <= 0;
-            ram_data_l_state_o <= 0;
+            ram_we_ls_o <= 0;
+            ram_waddr_ls_o <= 0;
+            ram_wdata_ls_o <= 0;
+        end
+        else if(c_state == SET_HAS_BKT) begin
+            ram_we_ls_o <= 1;
+            ram_waddr_ls_o <= bkt_lvl_o;
+            ram_wdata_ls_o <= {bkt_bin_o, 1'b1};
+        end
+        else begin
+            ram_we_ls_o <= 0;
+            ram_waddr_ls_o <= 0;
+            ram_wdata_ls_o <= 0;
         end
     end
 

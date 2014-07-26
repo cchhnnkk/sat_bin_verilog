@@ -2,8 +2,8 @@
 *   bin间回退
 */
 module bkt_across_bin #(
-        parameter WIDTH_VARS             = 12,
-        parameter WIDTH_LVL              = 16
+        parameter WIDTH_VAR              = 12,
+        parameter WIDTH_LVL              = 16,
         parameter WIDTH_VAR_STATES       = 30,
         parameter WIDTH_LVL_STATES       = 30,
         parameter ADDR_WIDTH_VARS_STATES = 9,
@@ -18,23 +18,23 @@ module bkt_across_bin #(
         output reg                                    apply_bkt_o,
         output reg                                    done_bkt,
 
-        input [WIDTH_VARS-1:0]                        nv_all,
+        input [WIDTH_VAR-1:0]                         nv_all,
         input [WIDTH_LVL-1:0]                         bkt_lvl_i,
 
         //vars states
         //rd
-        output reg [ADDR_WIDTH_VARS_STATES-1:0]       ram_raddr_v_state_o,
-        input [WIDTH_VAR_STATES-1 : 0]                ram_rdata_v_state_i,
+        output reg [ADDR_WIDTH_VARS_STATES-1:0]       ram_raddr_vs_o,
+        input [WIDTH_VAR_STATES-1 : 0]                ram_rdata_vs_i,
         //wr
-        output reg                                    ram_we_v_state_o,
-        output reg [WIDTH_VAR_STATES-1 : 0]           ram_wdata_v_state_o,
-        output reg [ADDR_WIDTH_VARS_STATES-1:0]       ram_waddr_v_state_o,
+        output reg                                    ram_we_vs_o,
+        output reg [WIDTH_VAR_STATES-1 : 0]           ram_wdata_vs_o,
+        output reg [ADDR_WIDTH_VARS_STATES-1:0]       ram_waddr_vs_o,
 
         //wr lvls states
-        output reg                                    ram_we_l_state_o,
-        output reg [WIDTH_LVL_STATES-1 : 0]           ram_data_l_state_o,
-        output reg [ADDR_WIDTH_LVLS_STATES-1:0]       ram_addr_l_state_o
-    )
+        output reg                                    ram_we_ls_o,
+        output reg [WIDTH_LVL_STATES-1 : 0]           ram_data_ls_o,
+        output reg [ADDR_WIDTH_LVLS_STATES-1:0]       ram_addr_ls_o
+    );
 
     wire [2:0]     var_value;
     wire [15:0]    var_lvl;
@@ -44,7 +44,7 @@ module bkt_across_bin #(
                 DONE = 2;
 
     reg [1:0]               c_state, n_state;
-    reg [WIDTH_VARS-1:0]    var_cnt;
+    reg [WIDTH_VAR-1:0]    var_cnt;
 
     always @(posedge clk)
     begin
@@ -61,7 +61,7 @@ module bkt_across_bin #(
         else
             case(c_state)
                 IDLE:
-                    if(start_update)
+                    if(start_bkt)
                         n_state = BKT;
                     else
                         n_state = IDLE;
@@ -93,34 +93,34 @@ module bkt_across_bin #(
     always @(posedge clk)
     begin
         if (~rst)
-            ram_raddr_v_state_o <= 0;
+            ram_raddr_vs_o <= 0;
         else if (c_state==BKT)
-            ram_raddr_v_state_o <= var_cnt;
+            ram_raddr_vs_o <= var_cnt;
         else
-            ram_raddr_v_state_o <= 0;
+            ram_raddr_vs_o <= 0;
     end
 
-    assign {var_value, var_lvl} = ram_data_v_state_i;
+    assign {var_value, var_lvl} = ram_rdata_vs_i;
 
     //wr
     always @(posedge clk)
     begin
         if(~rst) begin
-            ram_we_v_state_o <= 0;
-            ram_wdata_v_state_o <= 0;
-            ram_waddr_v_state_o <= 0;
+            ram_we_vs_o <= 0;
+            ram_wdata_vs_o <= 0;
+            ram_waddr_vs_o <= 0;
         end else if(var_lvl==bkt_lvl_i && var_value[0]==0) begin
-            ram_we_v_state_o <= 1;
-            ram_wdata_v_state_o <= {~var_value[2:1], var_value[0]};
-            ram_waddr_v_state_o <= ram_raddr_v_state_o;
+            ram_we_vs_o <= 1;
+            ram_wdata_vs_o <= {~var_value[2:1], var_value[0]};
+            ram_waddr_vs_o <= ram_raddr_vs_o;
         end else if(var_lvl>=bkt_lvl_i) begin
-            ram_we_v_state_o <= 1;
-            ram_wdata_v_state_o <= 0;
-            ram_waddr_v_state_o <= ram_raddr_v_state_o;
+            ram_we_vs_o <= 1;
+            ram_wdata_vs_o <= 0;
+            ram_waddr_vs_o <= ram_raddr_vs_o;
         end else begin
-            ram_we_v_state_o <= 0;
-            ram_wdata_v_state_o <= 0;
-            ram_waddr_v_state_o <= 0;
+            ram_we_vs_o <= 0;
+            ram_wdata_vs_o <= 0;
+            ram_waddr_vs_o <= 0;
         end
     end
 

@@ -2,7 +2,7 @@ quit -sim
 vlib work
 vmap work work
 
-vsim -L D:/Xilinx/13.2_verilog_simulator/xilinxcorelib_ver -quiet -novopt work.test_bin_manager_top
+vsim -L D:/Xilinx/14.5_modelsim_10.1/xilinxcorelib_ver -quiet -novopt test_bin_manager_top
 
 do ../tools/wave_test_bin_manager_top.do
 # do wave.do

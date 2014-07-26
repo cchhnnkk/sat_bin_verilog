@@ -35,9 +35,6 @@ def in_exlist(ex_str):
 def gen_sub(mlist, str_inst, str_group, depth):
     sublist = []
     # print mlist[0], mlist[1]
-    print mlist[0]
-    print mlist[1]
-    print mlist[2]
     inst = mlist[1]
     sublist = mlist[2]
 

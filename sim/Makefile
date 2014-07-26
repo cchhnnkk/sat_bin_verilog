@@ -17,7 +17,12 @@ vlog_se:
 	vlog_test_sat_engine.sh
 
 sim_bm:
-	vsim -c -do test_bm_console.do
+	sed "s/test_sat_engine_top/test_bin_manager_top/g" test_se_console.do > test_bm_console.do
+	vsim -c -do test_bm_console.do | \
+		sed -e "s/^.*Error: (vsim-[0-9]*) \(.*):\)/\1 Error/g" \
+		-e "s/^.*Warning: (vsim-[0-9]*) \(.*):\)/\1 Warning/g"
+	
+	rm test_bm_console.do
 	python transcript_info.py
 	# sublime_text transcript.log
 
@@ -71,5 +76,6 @@ hielist:
 
 clean:
 	rm -rf work
-	rm vlog_db.txt
+	rm vlog_mtime.db
+	rm wlf*
 	#\rm -rf $(CLEAN_THESE)  

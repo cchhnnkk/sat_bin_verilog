@@ -15,12 +15,12 @@ module test_bin_manager(input clk, input rst);
     parameter NUM_LVLS_A_BIN         = 8;
     parameter WIDTH_BIN_ID           = 10;
     parameter WIDTH_CLAUSES          = NUM_VARS_A_BIN*2;
-    parameter WIDTH_VARS             = 12;
+    parameter WIDTH_VAR             = 12;
     parameter WIDTH_LVL              = 16;
     parameter WIDTH_VAR_STATES       = 19;
     parameter WIDTH_LVL_STATES       = 11;
     parameter ADDR_WIDTH_CLAUSES     = 9;
-    parameter ADDR_WIDTH_VARS        = 9;
+    parameter ADDR_WIDTH_VAR        = 9;
     parameter ADDR_WIDTH_VARS_STATES = 9;
     parameter ADDR_WIDTH_LVLS_STATES = 9;
 
@@ -29,7 +29,7 @@ module test_bin_manager(input clk, input rst);
     wire                                       global_sat_o;
     wire                                       global_unsat_o;
     reg                                        bin_info_en;
-    reg  [WIDTH_VARS-1:0]                      nv_all_i;
+    reg  [WIDTH_VAR-1:0]                      nv_all_i;
     reg  [WIDTH_CLAUSES-1:0]                   nc_all_i;
     //sat engine core
     wire                                       start_core_o;
@@ -57,8 +57,8 @@ module test_bin_manager(input clk, input rst);
     //export
     reg                                        apply_ex_i;
     reg                                        ram_we_v_ex_i;
-    reg  [WIDTH_VARS-1 : 0]                    ram_din_v_ex_i;
-    reg  [ADDR_WIDTH_VARS-1:0]                 ram_addr_v_ex_i;
+    reg  [WIDTH_VAR-1 : 0]                     ram_din_v_ex_i;
+    reg  [ADDR_WIDTH_VAR-1:0]                  ram_addr_v_ex_i;
     reg                                        ram_we_c_ex_i;
     reg  [WIDTH_CLAUSES-1 : 0]                 ram_din_c_ex_i;
     reg  [ADDR_WIDTH_CLAUSES-1:0]              ram_addr_c_ex_i;
@@ -75,12 +75,12 @@ module test_bin_manager(input clk, input rst);
             .NUM_LVLS_A_BIN        (NUM_LVLS_A_BIN),
             .WIDTH_BIN_ID          (WIDTH_BIN_ID),
             .WIDTH_CLAUSES         (WIDTH_CLAUSES),
-            .WIDTH_VARS            (WIDTH_VARS),
+            .WIDTH_VAR            (WIDTH_VAR),
             .WIDTH_LVL             (WIDTH_LVL),
             .WIDTH_VAR_STATES      (WIDTH_VAR_STATES),
             .WIDTH_LVL_STATES      (WIDTH_LVL_STATES),
             .ADDR_WIDTH_CLAUSES    (ADDR_WIDTH_CLAUSES),
-            .ADDR_WIDTH_VARS       (ADDR_WIDTH_VARS),
+            .ADDR_WIDTH_VAR       (ADDR_WIDTH_VAR),
             .ADDR_WIDTH_VARS_STATES(ADDR_WIDTH_VARS_STATES),
             .ADDR_WIDTH_LVLS_STATES(ADDR_WIDTH_LVLS_STATES)
     )
@@ -204,16 +204,21 @@ module test_bin_manager(input clk, input rst);
     endtask
 
     /*** update ***/
-    class_clause_array #(8, 8) carray_data = new();
+    class_clause_data #(8) cdata_update = new();
 
+    reg [NUM_CLAUSES_A_BIN-1:0]               rd_carray;
     initial begin
-        automatic int cindex = 0;
+        automatic int cindex;
         forever @(posedge clk) begin
-            if(rd_carray_o==1) begin
-                cdata.set_lits(bin_updated[cindex]);
-                cdata.get_clause(clause_i);
-                cindex++;
-                cindex = cindex%8;
+            if(rd_carray_o!=0) begin
+                cindex = 0;
+                rd_carray = rd_carray_o;
+                while(rd_carray[0]==0) begin
+                    rd_carray = rd_carray>>1;
+                    cindex++;
+                end
+                cdata_update.set_lits(bin_updated[cindex]);
+                cdata_update.get_clause(clause_i);
             end
         end
     end
