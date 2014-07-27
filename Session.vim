@@ -87,7 +87,7 @@ set history=50
 set hlsearch
 set incsearch
 set omnifunc=verilogcomplete#Complete
-set path=.,ipcore,sim,sim/backup,src,src/bin_manager,src/sat_engine,src/sat_engine/clause_array,src/sat_engine/state_list,tb,tools
+set path=.,ipcore,sim,sim/backup,src,src/bin_manager,src/sat_engine,src/sat_engine/clause_array,src/sat_engine/state_list,tb,tools,../sat_bin_python
 set shiftwidth=4
 set showmatch
 set smartindent

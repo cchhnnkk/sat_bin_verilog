@@ -5,17 +5,14 @@ vlog: vlog_bm
 
 sim: sim_bm
 
-view:
-	start vsim -view vsim.wlf
-
 # bin_manager
 vlog_bm:
 	vlog_test_bin_manager.sh
-
 # sat engine
 vlog_se:
 	vlog_test_sat_engine.sh
 
+# 模拟
 sim_bm:
 	sed "s/test_sat_engine_top/test_bin_manager_top/g" test_se_console.do > test_bm_console.do
 	vsim -c -do test_bm_console.do | \
@@ -24,55 +21,51 @@ sim_bm:
 	
 	rm test_bm_console.do
 	python transcript_info.py
-	# sublime_text transcript.log
-
 sim_se:
 	vsim -c -do test_se_console.do
 	python transcript_info.py
-	# sublime_text transcript.log
-
 sim_ca:
 	sed "s/test_sat_engine_top/test_clause_array_top/g" test_se_console.do > test_ca_console.do
 	vsim -c -do test_ca_console.do
 	rm test_ca_console.do
 	python transcript_info.py
 	sed -i "s/--//g" transcript.log
-	# sublime_text transcript.log
-
 sim_c1:
 	sed "s/test_sat_engine_top/test_clause1_top/g" test_se_console.do > test_c1_console.do
 	vsim -c -do test_c1_console.do
 	rm test_c1_console.do
 	python transcript_info.py
 	sed -i "s/--//g" transcript.log
-	# sublime_text transcript.log
 
+# 波形文件
 wave_bm: hielist
 	cd ../tools && ../tools/gen_wave.sh test_bin_manager_top 3
-
 wave_se: hielist
 	cd ../tools && ../tools/gen_wave.sh test_sat_engine_top 3
-
 wave_exlist_se:
 	cd ../tools && ../tools/gen_wave.sh test_sat_engine_top 3 wave_exlist_sat_engine.txt
+wave_clause1: hielist
+	cd ../tools && ../tools/gen_wave.sh test_clause1_top 3
 
+
+#文件中的include引用，当增加include时，在vlog前使用
 init_ref_se:
 	../tools/find_verilog_file.py ../src/sat_engine ../tb > filelist.txt
 	echo "../src/debug_define.v" >> filelist.txt
 	cat filelist.txt | ../tools/gen_include_ref.py > vlog_include_ref.db
 	rm filelist.txt
-
-# clause1
-wave_clause1: hielist
-	cd ../tools && ../tools/gen_wave.sh test_clause1_top 3
-
 init_ref_all:
 	../tools/find_verilog_file.py ../src ../tb > filelist.txt
 	cat filelist.txt | ../tools/gen_include_ref.py > vlog_include_ref.db
 	rm filelist.txt
 
+# 生成module的层级关系hielist.json
 hielist:
 	cd ../tools && gen_all_hielist.sh
+
+
+view:
+	start vsim -view vsim.wlf
 
 clean:
 	rm -rf work

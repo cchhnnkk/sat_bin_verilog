@@ -21,8 +21,8 @@ module test_bin_manager(input clk, input rst);
     parameter WIDTH_LVL_STATES       = 11;
     parameter ADDR_WIDTH_CLAUSES     = 9;
     parameter ADDR_WIDTH_VAR        = 9;
-    parameter ADDR_WIDTH_VARS_STATES = 9;
-    parameter ADDR_WIDTH_LVLS_STATES = 9;
+    parameter ADDR_WIDTH_VAR_STATES = 9;
+    parameter ADDR_WIDTH_LVL_STATES = 9;
 
     reg                                        start_bm_i;
     wire                                       done_bm_o;
@@ -64,10 +64,10 @@ module test_bin_manager(input clk, input rst);
     reg  [ADDR_WIDTH_CLAUSES-1:0]              ram_addr_c_ex_i;
     reg                                        ram_we_vs_ex_i;
     reg  [WIDTH_VAR_STATES-1 : 0]              ram_din_vs_ex_i;
-    reg  [ADDR_WIDTH_VARS_STATES-1:0]          ram_addr_vs_ex_i;
+    reg  [ADDR_WIDTH_VAR_STATES-1:0]          ram_addr_vs_ex_i;
     reg                                        ram_we_ls_ex_i;
     reg  [WIDTH_LVL_STATES-1 : 0]              ram_din_ls_ex_i;
-    reg  [ADDR_WIDTH_LVLS_STATES-1:0]          ram_addr_ls_ex_i;
+    reg  [ADDR_WIDTH_LVL_STATES-1:0]          ram_addr_ls_ex_i;
 
     bin_manager #(
             .NUM_CLAUSES_A_BIN     (NUM_CLAUSES_A_BIN),
@@ -81,8 +81,8 @@ module test_bin_manager(input clk, input rst);
             .WIDTH_LVL_STATES      (WIDTH_LVL_STATES),
             .ADDR_WIDTH_CLAUSES    (ADDR_WIDTH_CLAUSES),
             .ADDR_WIDTH_VAR       (ADDR_WIDTH_VAR),
-            .ADDR_WIDTH_VARS_STATES(ADDR_WIDTH_VARS_STATES),
-            .ADDR_WIDTH_LVLS_STATES(ADDR_WIDTH_LVLS_STATES)
+            .ADDR_WIDTH_VAR_STATES(ADDR_WIDTH_VAR_STATES),
+            .ADDR_WIDTH_LVL_STATES(ADDR_WIDTH_LVL_STATES)
     )
     bin_manager(
             .clk                (clk),
@@ -149,7 +149,7 @@ module test_bin_manager(input clk, input rst);
     int vbin[];
 
     //update
-    int bin_updated[][]; 
+    int bin_updated[][];
     //var state list:
     int value_updated[];
     int implied_updated[];
@@ -206,15 +206,18 @@ module test_bin_manager(input clk, input rst);
     /*** update ***/
     class_clause_data #(8) cdata_update = new();
 
-    reg [NUM_CLAUSES_A_BIN-1:0]               rd_carray;
+    reg [NUM_CLAUSES_A_BIN-1:0]               rd_carray_r;
+    int cindex;
+
     initial begin
-        automatic int cindex;
+        rd_carray_r = 0;
+        cindex = 0;
         forever @(posedge clk) begin
             if(rd_carray_o!=0) begin
                 cindex = 0;
-                rd_carray = rd_carray_o;
-                while(rd_carray[0]==0) begin
-                    rd_carray = rd_carray>>1;
+                rd_carray_r = rd_carray_o;
+                while(rd_carray_r[0]==0) begin
+                    rd_carray_r = rd_carray_r>>1;
                     cindex++;
                 end
                 cdata_update.set_lits(bin_updated[cindex]);
@@ -222,9 +225,9 @@ module test_bin_manager(input clk, input rst);
             end
         end
     end
-    
+
     class_vs_list #(8, WIDTH_LVL) vs_list = new();
-    
+
     class_ls_list #(8, WIDTH_BIN_ID) ls_list = new();
 
     task update_bin();

@@ -243,11 +243,11 @@
   "load_bin": [
     [
       "scatter_to_8_datas", 
-      "scatter_to_8_datas_vs_inst"
+      "scatter_to_vs_inst"
     ], 
     [
       "scatter_to_8_datas", 
-      "scatter_to_8_datas_ls_inst"
+      "scatter_to_ls_inst"
     ]
   ], 
   "dcd_in_var1": [], 

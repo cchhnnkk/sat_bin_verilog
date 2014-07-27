@@ -20,8 +20,8 @@ module load_bin #(
         parameter WIDTH_LVL_STATES       = 11,
         parameter ADDR_WIDTH_CLAUSES     = 9,
         parameter ADDR_WIDTH_VAR         = 9,
-        parameter ADDR_WIDTH_VARS_STATES = 9,
-        parameter ADDR_WIDTH_LVLS_STATES = 9
+        parameter ADDR_WIDTH_VAR_STATES = 9,
+        parameter ADDR_WIDTH_LVL_STATES = 9
     )
     (
         input                                        clk,
@@ -59,11 +59,11 @@ module load_bin #(
 
         //vars states
         input [WIDTH_VAR_STATES-1 : 0]               ram_data_vs_i,
-        output reg [ADDR_WIDTH_VARS_STATES-1:0]      ram_addr_vs_o,
+        output reg [ADDR_WIDTH_VAR_STATES-1:0]      ram_addr_vs_o,
 
         //lvls states
         input [WIDTH_LVL_STATES-1 : 0]               ram_data_ls_i,
-        output reg [ADDR_WIDTH_LVLS_STATES-1:0]      ram_addr_ls_o
+        output reg [ADDR_WIDTH_LVL_STATES-1:0]      ram_addr_ls_o
     );
 
     //子句bin的基址，加载NUM_C个子句
@@ -231,7 +231,7 @@ module load_bin #(
     scatter_to_8_datas #(
         .WIDTH(WIDTH_VAR_STATES)
     )
-    scatter_to_8_datas_vs_inst (
+    scatter_to_vs_inst (
         .wr_i(wr_var_states_o),
         .data_i(ram_data_vs_i),
         .data_o(vars_states_o)
@@ -307,7 +307,7 @@ module load_bin #(
     scatter_to_8_datas #(
         .WIDTH(WIDTH_VAR_STATES)
     )
-    scatter_to_8_datas_ls_inst (
+    scatter_to_ls_inst (
         .wr_i(wr_lvl_states_o),
         .data_i(ram_data_ls_i),
         .data_o(lvl_states_o)

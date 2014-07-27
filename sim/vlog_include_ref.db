@@ -89,6 +89,7 @@
   ], 
   "../src/sat_engine/clause_array/lit1.v": [], 
   "../src/sat_engine/clause_array/clauses.v": [], 
+  "../src/bin_manager/scatter_to_datas.v": [], 
   "../src/sat_engine/clause_array/terminal_cell.v": [], 
   "../tb/test_lit_cell.v": [], 
   "../tb/test_bin_manager.sv": [], 

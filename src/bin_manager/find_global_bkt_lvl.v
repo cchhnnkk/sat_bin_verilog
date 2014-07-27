@@ -5,7 +5,7 @@ module find_global_bkt_lvl #(
         parameter WIDTH_LVL              = 16,
         parameter WIDTH_BIN_ID           = 10,
         parameter WIDTH_LVL_STATES       = 11,
-        parameter ADDR_WIDTH_LVLS_STATES = 9
+        parameter ADDR_WIDTH_LVL_STATES = 9
     )
     (
         input                                         clk,
@@ -22,12 +22,12 @@ module find_global_bkt_lvl #(
 
         //lvls states bram
         //rd
-        output reg [ADDR_WIDTH_LVLS_STATES-1:0]       ram_raddr_ls_o,
+        output reg [ADDR_WIDTH_LVL_STATES-1:0]       ram_raddr_ls_o,
         input [WIDTH_LVL_STATES-1 : 0]                ram_rdata_ls_i,
         //wr
         output reg                                    ram_we_ls_o,
         output reg [WIDTH_LVL_STATES-1 : 0]           ram_wdata_ls_o,
-        output reg [ADDR_WIDTH_LVLS_STATES-1:0]       ram_waddr_ls_o
+        output reg [ADDR_WIDTH_LVL_STATES-1:0]       ram_waddr_ls_o
     );
 
     wire [WIDTH_BIN_ID-1:0]   dcd_bin;

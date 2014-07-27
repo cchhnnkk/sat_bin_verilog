@@ -14,8 +14,8 @@ module sat_bin #(
         parameter WIDTH_LVL_STATES       = 19,
         parameter ADDR_WIDTH_CLAUSES     = 9,
         parameter ADDR_WIDTH_VARS        = 9,
-        parameter ADDR_WIDTH_VARS_STATES = 9,
-        parameter ADDR_WIDTH_LVLS_STATES = 9
+        parameter ADDR_WIDTH_VAR_STATES = 9,
+        parameter ADDR_WIDTH_LVL_STATES = 9
     )
     (
         input                                     clk,
@@ -73,8 +73,8 @@ module sat_bin #(
 			.WIDTH_LVL_STATES(WIDTH_LVL_STATES),
 			.ADDR_WIDTH_CLAUSES(ADDR_WIDTH_CLAUSES),
 			.ADDR_WIDTH_VARS(ADDR_WIDTH_VARS),
-			.ADDR_WIDTH_VARS_STATES(ADDR_WIDTH_VARS_STATES),
-			.ADDR_WIDTH_LVLS_STATES(ADDR_WIDTH_LVLS_STATES)
+			.ADDR_WIDTH_VAR_STATES(ADDR_WIDTH_VAR_STATES),
+			.ADDR_WIDTH_LVL_STATES(ADDR_WIDTH_LVL_STATES)
 	)
 	bin_manager(
 			.clk(clk),

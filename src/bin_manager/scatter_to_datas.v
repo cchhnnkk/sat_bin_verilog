@@ -77,12 +77,13 @@ module scatter_to_2_datas #(
     )
 	(
         input [NUM-1 : 0]        wr_i,
-        input [NUM*WIDTH-1 : 0]  data_i,
-        output [WIDTH-1 : 0]     data_o
+        input [WIDTH-1 : 0]      data_i,
+        output [NUM*WIDTH-1 : 0] data_o
 	);
     parameter NUM_SUB = NUM/2;
     wire [NUM_SUB*WIDTH-1 : 0] data_o_0, data_o_1;
     wire                       wr_i_0, wr_i_1;
+    assign {wr_i_1, wr_i_0} = wr_i;
     assign data_o_0 = wr_i_0 ? data_i:0;
     assign data_o_1 = wr_i_1 ? data_i:0;
     assign data_o = {data_o_1, data_o_0};

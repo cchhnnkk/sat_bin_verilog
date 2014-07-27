@@ -16,8 +16,8 @@ module update_bin #(
         parameter WIDTH_LVL_STATES       = 30,
         parameter ADDR_WIDTH_CLAUSES     = 9,
         parameter ADDR_WIDTH_VAR         = 9,
-        parameter ADDR_WIDTH_VARS_STATES = 9,
-        parameter ADDR_WIDTH_LVLS_STATES = 9
+        parameter ADDR_WIDTH_VAR_STATES = 9,
+        parameter ADDR_WIDTH_LVL_STATES = 9
     )
     (
         input                                         clk,
@@ -53,12 +53,12 @@ module update_bin #(
         //vars states
         output reg                                    ram_we_vs_o,
         output reg [WIDTH_VAR_STATES-1 : 0]           ram_data_vs_o,
-        output reg [ADDR_WIDTH_VARS_STATES-1:0]       ram_addr_vs_o,
+        output reg [ADDR_WIDTH_VAR_STATES-1:0]       ram_addr_vs_o,
 
         //lvls states
         output reg                                    ram_we_ls_o,
         output reg [WIDTH_LVL_STATES-1 : 0]           ram_data_ls_o,
-        output reg [ADDR_WIDTH_LVLS_STATES-1:0]       ram_addr_ls_o
+        output reg [ADDR_WIDTH_LVL_STATES-1:0]       ram_addr_ls_o
     );
 
     reg [NUM_VARS_A_BIN-1 : 0]              rd_var_states;
