@@ -44,8 +44,8 @@ module var_state1 #(
 
         //load update var states
         input                           wr_states,
-        input [WIDTH_VAR_STATES-1  : 0] vars_states_i,
-        output [WIDTH_VAR_STATES-1 : 0] vars_states_o,
+        input [WIDTH_VAR_STATES-1  : 0] var_states_i,
+        output [WIDTH_VAR_STATES-1 : 0] var_states_o,
 
         //用于调试的信号
         input  [31 : 0]                 debug_vid_next_i,
@@ -67,10 +67,10 @@ module var_state1 #(
     assign update_clause_o = var_value_i[2:1];
 
     //wr_states
-    assign vars_states_o = {var_value_r, var_lvl_r};
+    assign var_states_o = {var_value_r, var_lvl_r};
     wire [2:0] load_value_i;
     wire [WIDTH_LVL-1:0] load_lvl_i;
-    assign {load_value_i, load_lvl_i} = vars_states_i;
+    assign {load_value_i, load_lvl_i} = var_states_i;
 
     always @(posedge clk) begin
         if(~rst)

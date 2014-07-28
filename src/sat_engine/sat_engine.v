@@ -39,8 +39,8 @@ module sat_engine #(
 
         //load update var states
         input [NUM_VARS-1:0]                      wr_var_states,
-        input [WIDTH_VAR_STATES*NUM_VARS-1 : 0]   vars_states_i,
-        output [WIDTH_VAR_STATES*NUM_VARS-1 : 0]  vars_states_o,
+        input [WIDTH_VAR_STATES*NUM_VARS-1 : 0]   var_states_i,
+        output [WIDTH_VAR_STATES*NUM_VARS-1 : 0]  var_states_o,
 
         //load update lvl states
         input [NUM_LVLS-1:0]                      wr_lvl_states,
@@ -138,8 +138,8 @@ module sat_engine #(
         .done_bkt_cur_bin_o (done_bkt_cur_bin),
         //load update var states
         .wr_var_states      (wr_var_states),
-        .vars_states_i      (vars_states_i),
-        .vars_states_o      (vars_states_o),
+        .var_states_i      (var_states_i),
+        .var_states_o      (var_states_o),
         .wr_lvl_states      (wr_lvl_states),
         .lvl_states_i       (lvl_states_i),
         .lvl_states_o       (lvl_states_o),
@@ -208,7 +208,7 @@ module sat_engine #(
                 $display("\tclause_len = %1d", clause_len);
             end
             if(wr_var_states!=0) begin
-                vs_list.set(vars_states_i);
+                vs_list.set(var_states_i);
                 //$display("sim time %4tns", $time/1000);
                 $display("%1tns wr var state list", $time/1000);
                 $display("\twr_var_states = %b", wr_var_states);

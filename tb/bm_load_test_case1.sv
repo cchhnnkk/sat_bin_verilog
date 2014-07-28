@@ -1,6 +1,7 @@
 
 task bm_load_test_case1();
     nb = 3;
+    nv = 7;
     cmax = 8;
     vmax = 8;
 

@@ -92,7 +92,7 @@ module clause1 #(
     );
 
     reg [WIDTH_C_LEN-1 : 0] clause_len_r;
-    assign clause_o = rd_i? clause_lits : 0;
+    assign clause_o = rd_i ? clause_lits : 0;
 
     terminal_cell #(
         .WIDTH_LVL  (WIDTH_LVL),

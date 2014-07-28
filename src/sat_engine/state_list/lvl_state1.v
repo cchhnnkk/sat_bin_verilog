@@ -156,7 +156,7 @@ module lvl_state1 #(
             $sformat(str, "        bkt_lvl_o\n");   str_all = {str_all, str};
 
             $sformat(str,"\t%16d", lvl_r          );     str_all = {str_all, str};
-            $sformat(str,"\t%16d", dcd_bin_r      );     str_all = {str_all, str};
+            $sformat(str, " %16d", dcd_bin_r      );     str_all = {str_all, str};
             $sformat(str, " %16d", has_bkt_r      );     str_all = {str_all, str};
             $sformat(str, " %16d", findflag_left_i);     str_all = {str_all, str};
             $sformat(str, " %16d", findflag_left_o);     str_all = {str_all, str};

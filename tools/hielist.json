@@ -77,19 +77,19 @@
       "update_bin"
     ], 
     [
-      "bram_w30_d1024", 
+      "bram_param", 
       "bram_vars_bins_inst"
     ], 
     [
-      "bram_w30_d1024", 
+      "bram_param", 
       "bram_clauses_bins_inst"
     ], 
     [
-      "bram_w30_d1024", 
+      "bram_param", 
       "bram_global_var_state_inst"
     ], 
     [
-      "bram_w30_d1024", 
+      "bram_param", 
       "bram_global_lvl_state_inst"
     ]
   ], 
@@ -207,11 +207,11 @@
   "update_bin": [
     [
       "reduce_in_8_datas", 
-      "reduce_in_8_datas_vs_inst"
+      "reduce_vs_inst"
     ], 
     [
       "reduce_in_8_datas", 
-      "reduce_in_8_datas_ls_inst"
+      "reduce_ls_inst"
     ]
   ], 
   "dcd_in_var4": [
@@ -423,6 +423,7 @@
       "max_in_4_datas_inst0"
     ]
   ], 
+  "bram_param": [], 
   "c_len4": [
     [
       "c_len2", 

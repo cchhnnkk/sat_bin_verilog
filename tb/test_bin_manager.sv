@@ -10,16 +10,16 @@ module test_bin_manager(input clk, input rst);
         end
     endtask
 
-    parameter NUM_CLAUSES_A_BIN      = 8;
-    parameter NUM_VARS_A_BIN         = 8;
-    parameter NUM_LVLS_A_BIN         = 8;
-    parameter WIDTH_BIN_ID           = 10;
-    parameter WIDTH_CLAUSES          = NUM_VARS_A_BIN*2;
+    parameter NUM_CLAUSES_A_BIN     = 8;
+    parameter NUM_VARS_A_BIN        = 8;
+    parameter NUM_LVLS_A_BIN        = 8;
+    parameter WIDTH_BIN_ID          = 10;
+    parameter WIDTH_CLAUSES         = NUM_VARS_A_BIN*2;
     parameter WIDTH_VAR             = 12;
-    parameter WIDTH_LVL              = 16;
-    parameter WIDTH_VAR_STATES       = 19;
-    parameter WIDTH_LVL_STATES       = 11;
-    parameter ADDR_WIDTH_CLAUSES     = 9;
+    parameter WIDTH_LVL             = 16;
+    parameter WIDTH_VAR_STATES      = 19;
+    parameter WIDTH_LVL_STATES      = 11;
+    parameter ADDR_WIDTH_CLAUSES    = 9;
     parameter ADDR_WIDTH_VAR        = 9;
     parameter ADDR_WIDTH_VAR_STATES = 9;
     parameter ADDR_WIDTH_LVL_STATES = 9;
@@ -29,8 +29,8 @@ module test_bin_manager(input clk, input rst);
     wire                                       global_sat_o;
     wire                                       global_unsat_o;
     reg                                        bin_info_en;
-    reg  [WIDTH_VAR-1:0]                      nv_all_i;
-    reg  [WIDTH_CLAUSES-1:0]                   nc_all_i;
+    reg  [WIDTH_VAR-1:0]                       nv_all_i;
+    reg  [WIDTH_CLAUSES-1:0]                   nb_all_i;
     //sat engine core
     wire                                       start_core_o;
     reg                                        done_core_i;
@@ -47,8 +47,8 @@ module test_bin_manager(input clk, input rst);
     wire [NUM_VARS_A_BIN*2-1 : 0]              clause_o;
     reg  [NUM_VARS_A_BIN*2-1 : 0]              clause_i;
     wire [NUM_VARS_A_BIN-1:0]                  wr_var_states_o;
-    wire [WIDTH_VAR_STATES*NUM_VARS_A_BIN-1:0] vars_states_o;
-    reg  [WIDTH_VAR_STATES*NUM_VARS_A_BIN-1:0] vars_states_i;
+    wire [WIDTH_VAR_STATES*NUM_VARS_A_BIN-1:0] var_states_o;
+    reg  [WIDTH_VAR_STATES*NUM_VARS_A_BIN-1:0] var_states_i;
     wire [NUM_LVLS_A_BIN-1:0]                  wr_lvl_states_o;
     wire [WIDTH_LVL_STATES*NUM_LVLS_A_BIN-1:0] lvl_states_o;
     reg  [WIDTH_LVL_STATES*NUM_LVLS_A_BIN-1:0] lvl_states_i;
@@ -95,7 +95,7 @@ module test_bin_manager(input clk, input rst);
             //rd bin info
             .bin_info_en        (bin_info_en),
             .nv_all_i           (nv_all_i),
-            .nc_all_i           (nc_all_i),
+            .nb_all_i           (nb_all_i),
             //sat engine core
             .start_core_o       (start_core_o),
             .done_core_i        (done_core_i),
@@ -113,8 +113,8 @@ module test_bin_manager(input clk, input rst);
             .clause_i           (clause_i),
             //load update var states with sat engine
             .wr_var_states_o    (wr_var_states_o),
-            .vars_states_o      (vars_states_o),
-            .vars_states_i      (vars_states_i),
+            .var_states_o      (var_states_o),
+            .var_states_i      (var_states_i),
             //load update lvl states with sat engine
             .wr_lvl_states_o    (wr_lvl_states_o),
             .lvl_states_o       (lvl_states_o),
@@ -143,6 +143,7 @@ module test_bin_manager(input clk, input rst);
 
     //load
     int nb;
+    int nv;
     int cmax;
     int vmax;
     int cbin[][];
@@ -232,12 +233,13 @@ module test_bin_manager(input clk, input rst);
 
     task update_bin();
         local_sat_i = 1;
+        done_core_i = 1;
         cur_lvl_from_core_i = cur_lvl_updated;
         bkt_bin_from_core_i = cur_bin_num_updated;
         bkt_lvl_from_core_i = cur_lvl_updated;
         //var state
         vs_list.set_separate(value_updated, implied_updated, level_updated);
-        vs_list.get(vars_states_i);
+        vs_list.get(var_states_i);
         //lvl state
         ls_list.set_separate(dcd_bin_updated, has_bkt_updated);
         ls_list.get(lvl_states_i);
@@ -256,7 +258,7 @@ module test_bin_manager(input clk, input rst);
             local_sat_i         = 0;
             local_unsat_i       = 0;
             lvl_states_i        = 0;
-            nc_all_i            = 0;
+            nb_all_i            = 0;
             nv_all_i            = 0;
             ram_addr_c_ex_i     = 0;
             ram_addr_ls_ex_i    = 0;
@@ -271,7 +273,7 @@ module test_bin_manager(input clk, input rst);
             ram_we_v_ex_i       = 0;
             ram_we_vs_ex_i      = 0;
             start_bm_i          = 0;
-            vars_states_i       = 0;
+            var_states_i       = 0;
         end
     endtask
 
@@ -281,12 +283,20 @@ module test_bin_manager(input clk, input rst);
         $display("test_sat_engine_task");
         reset_all_signal();
         bm_load_test_case1();
+        bm_update_test_case1();
+
+        while(done_bm_o!=1)
+            @ (posedge clk);
+
+        repeat (10) @(posedge clk);
     endtask
 
     task run_bm_load();
         wr_clauses();
         wr_vars();
         start_bm_i = 1;
+        nb_all_i = nb;
+        nv_all_i = nv;
         @(posedge clk);
         start_bm_i = 0;
     endtask

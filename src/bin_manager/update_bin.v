@@ -4,6 +4,9 @@
 *       var_states[]
 *       lvl_states[]
 */
+
+`include "../src/debug_define.v"
+
 module update_bin #(
         parameter NUM_CLAUSES_A_BIN      = 8,
         parameter NUM_VARS_A_BIN         = 8,
@@ -20,45 +23,44 @@ module update_bin #(
         parameter ADDR_WIDTH_LVL_STATES = 9
     )
     (
-        input                                         clk,
-        input                                         rst,
+        input                                       clk,
+        input                                       rst,
 
         //update control
-        input                                         start_update,
-        input [WIDTH_BIN_ID-1 : 0]                    cur_bin_num_i,
-        output reg                                    apply_update_o,
-        output reg                                    done_update,
+        input                                       start_update,
+        input [WIDTH_BIN_ID-1 : 0]                  cur_bin_num_i,
+        output reg                                  apply_update_o,
+        output reg                                  done_update,
 
         //update clause from sat engine
-        output reg [NUM_CLAUSES_A_BIN-1:0]              rd_carray_o,
-        input [NUM_VARS_A_BIN*2-1 : 0]                  clause_i,
+        output reg [NUM_CLAUSES_A_BIN-1:0]          rd_carray_o,
+        input [NUM_VARS_A_BIN*2-1 : 0]              clause_i,
 
         //update var state from sat engine
-        input [WIDTH_VAR_STATES*NUM_VARS_A_BIN-1:0]     var_state_i,
+        input [WIDTH_VAR_STATES*NUM_VARS_A_BIN-1:0] var_state_i,
 
         //update lvl state from sat engine
-        input [WIDTH_LVL_STATES*NUM_LVLS_A_BIN-1:0]     lvl_states_i,
-
-        input [WIDTH_LVL-1:0]                         base_lvl_i,
+        input [WIDTH_LVL_STATES*NUM_LVLS_A_BIN-1:0] lvl_states_i,
+        input [WIDTH_LVL-1:0]                       base_lvl_i,
 
         //clauses bins
-        output reg                                    ram_we_c_o,
-        output reg [WIDTH_CLAUSES-1:0]                ram_data_c_o,
-        output reg [ADDR_WIDTH_CLAUSES-1:0]           ram_addr_c_o,
+        output reg                                  ram_we_c_o,
+        output reg [WIDTH_CLAUSES-1:0]              ram_data_c_o,
+        output reg [ADDR_WIDTH_CLAUSES-1:0]         ram_addr_c_o,
 
         //vars bins
-        input [WIDTH_VAR-1 : 0]                      ram_data_v_i,
-        output reg [ADDR_WIDTH_VAR-1:0]              ram_addr_v_o,
+        input [WIDTH_VAR-1 : 0]                     ram_data_v_i,
+        output reg [ADDR_WIDTH_VAR-1:0]             ram_addr_v_o,
 
         //vars states
-        output reg                                    ram_we_vs_o,
-        output reg [WIDTH_VAR_STATES-1 : 0]           ram_data_vs_o,
-        output reg [ADDR_WIDTH_VAR_STATES-1:0]       ram_addr_vs_o,
+        output reg                                  ram_we_vs_o,
+        output reg [WIDTH_VAR_STATES-1 : 0]         ram_data_vs_o,
+        output reg [ADDR_WIDTH_VAR_STATES-1:0]      ram_addr_vs_o,
 
         //lvls states
-        output reg                                    ram_we_ls_o,
-        output reg [WIDTH_LVL_STATES-1 : 0]           ram_data_ls_o,
-        output reg [ADDR_WIDTH_LVL_STATES-1:0]       ram_addr_ls_o
+        output reg                                  ram_we_ls_o,
+        output reg [WIDTH_LVL_STATES-1 : 0]         ram_data_ls_o,
+        output reg [ADDR_WIDTH_LVL_STATES-1:0]      ram_addr_ls_o
     );
 
     reg [NUM_VARS_A_BIN-1 : 0]              rd_var_states;
@@ -253,7 +255,7 @@ module update_bin #(
     reduce_in_8_datas #(
         .WIDTH(WIDTH_VAR_STATES)
     )
-    reduce_in_8_datas_vs_inst (
+    reduce_vs_inst (
         .data_i(var_state_i),
         .data_o(var_state_reduced),
         .rd_i(rd_var_states)
@@ -309,9 +311,9 @@ module update_bin #(
     wire [WIDTH_LVL_STATES-1:0] lvl_state_reduced;
 
     reduce_in_8_datas #(
-        .WIDTH(WIDTH_VAR_STATES)
+        .WIDTH(WIDTH_LVL_STATES)
     )
-    reduce_in_8_datas_ls_inst (
+    reduce_ls_inst (
         .data_i(lvl_states_i),
         .data_o(lvl_state_reduced),
         .rd_i(rd_lvl_states)
@@ -362,4 +364,35 @@ module update_bin #(
         else
             apply_update_o <= 0;
     end
+
+    /**
+    *  输出update的信息
+    */
+    `ifdef DEBUG_update_bin
+        `include "../tb/class_clause_data.sv";
+        `include "../tb/class_vs_list.sv";
+        `include "../tb/class_ls_list.sv";
+        class_clause_data #(8) cdata = new;
+        class_vs_list #(8, WIDTH_LVL) vs_list = new();
+        class_ls_list #(8, WIDTH_LVL) ls_list = new();
+
+        always @(posedge clk) begin
+            if(rd_carray_o!=0) begin
+                cdata.set(clause_i);
+                $display("rd clause array");
+                $display("\t%1tns rd_carray_o = %b", $time/1000, rd_carray_o);
+                cdata.display_lits();
+            end
+            if(start_update!=0) begin
+                //vs
+                vs_list.set(var_state_i);
+                $display("%1tns rd var state list", $time/1000);
+                vs_list.display();
+                //ls
+                ls_list.set(lvl_states_i);
+                $display("%1tns rd lvl state list", $time/1000);
+                ls_list.display();
+            end
+        end
+    `endif
 endmodule

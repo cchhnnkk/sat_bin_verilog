@@ -9739,11 +9739,11 @@ def
 
 75 
 	`g’_wœe_¡©
-('\twire [WIDTH_VAR_STATES-1:0] ', 'vars_states_i_')
+('\twire [WIDTH_VAR_STATES-1:0] ', 'var_states_i_')
 
 76 
 	`g’_wœe_¡©
-('\twire [WIDTH_VAR_STATES-1:0] ', 'vars_states_o_')
+('\twire [WIDTH_VAR_STATES-1:0] ', 'var_states_o_')
 
 77 
 	`g’_wœe_¡©

@@ -45,8 +45,8 @@ module var_state8 #(
 
         //load update var states
         input [NUM_VARS-1:0]                     wr_states,
-        input [WIDTH_VAR_STATES*NUM_VARS-1 : 0]  vars_states_i,
-        output [WIDTH_VAR_STATES*NUM_VARS-1 : 0] vars_states_o,
+        input [WIDTH_VAR_STATES*NUM_VARS-1 : 0]  var_states_i,
+        output [WIDTH_VAR_STATES*NUM_VARS-1 : 0] var_states_o,
 
         //用于调试的信号
         input  [31 : 0]                          debug_vid_next_i,
@@ -77,12 +77,12 @@ module var_state8 #(
     assign max_lvl_o = max_lvl_o_1 > max_lvl_o_0 ? max_lvl_o_1 : max_lvl_o_0;
 
     wire [NUM_VARS/2-1:0]                    wr_states_0, wr_states_1;
-    wire [WIDTH_VAR_STATES*NUM_VARS/2-1 : 0] vars_states_i_0, vars_states_i_1;
-    wire [WIDTH_VAR_STATES*NUM_VARS/2-1 : 0] vars_states_o_0, vars_states_o_1;
+    wire [WIDTH_VAR_STATES*NUM_VARS/2-1 : 0] var_states_i_0, var_states_i_1;
+    wire [WIDTH_VAR_STATES*NUM_VARS/2-1 : 0] var_states_o_0, var_states_o_1;
 
     assign {wr_states_1, wr_states_0} = wr_states;
-    assign {vars_states_i_1, vars_states_i_0} = vars_states_i;
-    assign vars_states_o = {vars_states_o_1, vars_states_o_0};
+    assign {var_states_i_1, var_states_i_0} = var_states_i;
+    assign var_states_o = {var_states_o_1, var_states_o_0};
 
     var_state4 #(
         .WIDTH_VAR_STATES(WIDTH_VAR_STATES),
@@ -107,8 +107,8 @@ module var_state8 #(
         .apply_bkt_i          (apply_bkt_i),
         .bkt_lvl_i            (bkt_lvl_i),
         .wr_states            (wr_states_0),
-        .vars_states_i        (vars_states_i_0),
-        .vars_states_o        (vars_states_o_0),
+        .var_states_i        (var_states_i_0),
+        .var_states_o        (var_states_o_0),
 
         .debug_vid_next_i     (debug_vid_next_i),
         .debug_vid_next_o     (debug_vid_temp)
@@ -137,8 +137,8 @@ module var_state8 #(
         .apply_bkt_i          (apply_bkt_i),
         .bkt_lvl_i            (bkt_lvl_i),
         .wr_states            (wr_states_1),
-        .vars_states_i        (vars_states_i_1),
-        .vars_states_o        (vars_states_o_1),
+        .var_states_i        (var_states_i_1),
+        .var_states_o        (var_states_o_1),
 
         .debug_vid_next_i     (debug_vid_temp),
         .debug_vid_next_o     (debug_vid_next_o)
@@ -188,8 +188,8 @@ module var_state4 #(
 
         //load update var states
         input [NUM_VARS-1:0]                     wr_states,
-        input [WIDTH_VAR_STATES*NUM_VARS-1 : 0]  vars_states_i,
-        output [WIDTH_VAR_STATES*NUM_VARS-1 : 0] vars_states_o,
+        input [WIDTH_VAR_STATES*NUM_VARS-1 : 0]  var_states_i,
+        output [WIDTH_VAR_STATES*NUM_VARS-1 : 0] var_states_o,
 
         //用于调试的信号
         input  [31 : 0]                          debug_vid_next_i,
@@ -220,12 +220,12 @@ module var_state4 #(
     assign max_lvl_o = max_lvl_o_1 > max_lvl_o_0 ? max_lvl_o_1 : max_lvl_o_0;
 
     wire [NUM_VARS/2-1:0]                    wr_states_0, wr_states_1;
-    wire [WIDTH_VAR_STATES*NUM_VARS/2-1 : 0] vars_states_i_0, vars_states_i_1;
-    wire [WIDTH_VAR_STATES*NUM_VARS/2-1 : 0] vars_states_o_0, vars_states_o_1;
+    wire [WIDTH_VAR_STATES*NUM_VARS/2-1 : 0] var_states_i_0, var_states_i_1;
+    wire [WIDTH_VAR_STATES*NUM_VARS/2-1 : 0] var_states_o_0, var_states_o_1;
 
     assign {wr_states_1, wr_states_0} = wr_states;
-    assign {vars_states_i_1, vars_states_i_0} = vars_states_i;
-    assign vars_states_o = {vars_states_o_1, vars_states_o_0};
+    assign {var_states_i_1, var_states_i_0} = var_states_i;
+    assign var_states_o = {var_states_o_1, var_states_o_0};
 
     var_state2 #(
         .WIDTH_VAR_STATES(WIDTH_VAR_STATES),
@@ -250,8 +250,8 @@ module var_state4 #(
         .apply_bkt_i          (apply_bkt_i),
         .bkt_lvl_i            (bkt_lvl_i),
         .wr_states            (wr_states_0),
-        .vars_states_i        (vars_states_i_0),
-        .vars_states_o        (vars_states_o_0),
+        .var_states_i        (var_states_i_0),
+        .var_states_o        (var_states_o_0),
 
         .debug_vid_next_i     (debug_vid_next_i),
         .debug_vid_next_o     (debug_vid_temp)
@@ -280,8 +280,8 @@ module var_state4 #(
         .apply_bkt_i          (apply_bkt_i),
         .bkt_lvl_i            (bkt_lvl_i),
         .wr_states            (wr_states_1),
-        .vars_states_i        (vars_states_i_1),
-        .vars_states_o        (vars_states_o_1),
+        .var_states_i        (var_states_i_1),
+        .var_states_o        (var_states_o_1),
 
         .debug_vid_next_i     (debug_vid_temp),
         .debug_vid_next_o     (debug_vid_next_o)
@@ -331,8 +331,8 @@ module var_state2 #(
 
         //load update var states
         input [NUM_VARS-1:0]                     wr_states,
-        input [WIDTH_VAR_STATES*NUM_VARS-1 : 0]  vars_states_i,
-        output [WIDTH_VAR_STATES*NUM_VARS-1 : 0] vars_states_o,
+        input [WIDTH_VAR_STATES*NUM_VARS-1 : 0]  var_states_i,
+        output [WIDTH_VAR_STATES*NUM_VARS-1 : 0] var_states_o,
 
         //用于调试的信号
         input  [31 : 0]                          debug_vid_next_i,
@@ -363,12 +363,12 @@ module var_state2 #(
     assign max_lvl_o = max_lvl_o_1 > max_lvl_o_0 ? max_lvl_o_1 : max_lvl_o_0;
 
     wire [NUM_VARS/2-1:0]                    wr_states_0, wr_states_1;
-    wire [WIDTH_VAR_STATES*NUM_VARS/2-1 : 0] vars_states_i_0, vars_states_i_1;
-    wire [WIDTH_VAR_STATES*NUM_VARS/2-1 : 0] vars_states_o_0, vars_states_o_1;
+    wire [WIDTH_VAR_STATES*NUM_VARS/2-1 : 0] var_states_i_0, var_states_i_1;
+    wire [WIDTH_VAR_STATES*NUM_VARS/2-1 : 0] var_states_o_0, var_states_o_1;
 
     assign {wr_states_1, wr_states_0} = wr_states;
-    assign {vars_states_i_1, vars_states_i_0} = vars_states_i;
-    assign vars_states_o = {vars_states_o_1, vars_states_o_0};
+    assign {var_states_i_1, var_states_i_0} = var_states_i;
+    assign var_states_o = {var_states_o_1, var_states_o_0};
 
     var_state1 #(
         .WIDTH_VAR_STATES(WIDTH_VAR_STATES),
@@ -393,8 +393,8 @@ module var_state2 #(
         .apply_bkt_i          (apply_bkt_i),
         .bkt_lvl_i            (bkt_lvl_i),
         .wr_states            (wr_states_0),
-        .vars_states_i        (vars_states_i_0),
-        .vars_states_o        (vars_states_o_0),
+        .var_states_i        (var_states_i_0),
+        .var_states_o        (var_states_o_0),
 
         .debug_vid_next_i     (debug_vid_next_i),
         .debug_vid_next_o     (debug_vid_temp)
@@ -423,8 +423,8 @@ module var_state2 #(
         .apply_bkt_i          (apply_bkt_i),
         .bkt_lvl_i            (bkt_lvl_i),
         .wr_states            (wr_states_1),
-        .vars_states_i        (vars_states_i_1),
-        .vars_states_o        (vars_states_o_1),
+        .var_states_i        (var_states_i_1),
+        .var_states_o        (var_states_o_1),
 
         .debug_vid_next_i     (debug_vid_temp),
         .debug_vid_next_o     (debug_vid_next_o)

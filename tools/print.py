@@ -72,8 +72,8 @@ def gen_base():
     gen_wire_stat('\twire [NUM_VARS_A_BIN-1:0] ', 'var_level_o_')
     gen_wire_stat('\twire ', 'is_independent_bin_')
     gen_wire_stat('\twire ', 'wr_states_')
-    gen_wire_stat('\twire [WIDTH_VAR_STATES-1:0] ', 'vars_states_i_')
-    gen_wire_stat('\twire [WIDTH_VAR_STATES-1:0] ', 'vars_states_o_')
+    gen_wire_stat('\twire [WIDTH_VAR_STATES-1:0] ', 'var_states_i_')
+    gen_wire_stat('\twire [WIDTH_VAR_STATES-1:0] ', 'var_states_o_')
     gen_wire_stat('\twire [9:0] ', 'bkt_bin_num_o_')
 
     for i in xrange(24):
@@ -102,8 +102,8 @@ def gen_base():
         .apply_update_i(apply_update_i),
         .update_clause_o(update_clause_o_%d),
         .wr_states(wr_states_%d),
-        .vars_states_i(vars_states_i_%d),
-        .vars_states_o(vars_states_o_%d),
+        .var_states_i(var_states_i_%d),
+        .var_states_o(var_states_o_%d),
         .var_level_o(var_level_o_%d)
     )""" % (i, i, i, i, i, i, i, i, i, i, i, i, i, i, i)
 

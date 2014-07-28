@@ -50,8 +50,8 @@ module sat_bin #(
 	wire [NUM_VARS_A_BIN*2-1 : 0]                 clause_o;
 	wire [NUM_VARS_A_BIN*2-1 : 0]                  clause_i;
 	wire [NUM_VARS_A_BIN-1:0]                     wr_var_states_o;
-	wire [WIDTH_VAR_STATES*NUM_VARS_A_BIN-1:0]    vars_states_o;
-	wire [WIDTH_VAR_STATES*NUM_VARS_A_BIN-1:0]     vars_states_i;
+	wire [WIDTH_VAR_STATES*NUM_VARS_A_BIN-1:0]    var_states_o;
+	wire [WIDTH_VAR_STATES*NUM_VARS_A_BIN-1:0]     var_states_i;
 	wire [NUM_LVLS-1:0]                           wr_lvl_states_o;
 	wire [WIDTH_LVL_STATES*NUM_LVLS_A_BIN-1:0]    lvl_states_o;
 	wire [WIDTH_LVL_STATES*NUM_LVLS_A_BIN-1:0]     lvl_states_i;
@@ -100,8 +100,8 @@ module sat_bin #(
 			.clause_o(clause_o),
 			.clause_i(clause_i),
 			.wr_var_states_o(wr_var_states_o),
-			.vars_states_o(vars_states_o),
-			.vars_states_i(vars_states_i),
+			.var_states_o(var_states_o),
+			.var_states_i(var_states_i),
 			.wr_lvl_states_o(wr_lvl_states_o),
 			.lvl_states_o(lvl_states_o),
 			.lvl_states_i(lvl_states_i),
@@ -123,8 +123,8 @@ module sat_bin #(
 	wire [NUM_CLAUSES-1:0]                   wr_carray_i;
 	wire [NUM_VARS*2-1 : 0]                  clause_i;
 	wire [NUM_VARS-1:0]                      wr_var_states;
-	wire [WIDTH_VAR_STATES*NUM_VARS-1 : 0]   vars_states_i;
-	wire [WIDTH_VAR_STATES*NUM_VARS-1 : 0]  vars_states_o;
+	wire [WIDTH_VAR_STATES*NUM_VARS-1 : 0]   var_states_i;
+	wire [WIDTH_VAR_STATES*NUM_VARS-1 : 0]  var_states_o;
 	wire [NUM_LVLS-1:0]                      wr_lvl_states;
 	wire [WIDTH_LVL_STATES*NUM_LVLS -1 : 0]  lvl_states_i;
 	wire [WIDTH_LVL_STATES*NUM_LVLS -1 : 0] lvl_states_o;
@@ -158,8 +158,8 @@ module sat_bin #(
 			.wr_carray_i(wr_carray_i),
 			.clause_i(clause_i),
 			.wr_var_states(wr_var_states),
-			.vars_states_i(vars_states_i),
-			.vars_states_o(vars_states_o),
+			.var_states_i(var_states_i),
+			.var_states_o(var_states_o),
 			.wr_lvl_states(wr_lvl_states),
 			.lvl_states_i(lvl_states_i),
 			.lvl_states_o(lvl_states_o),

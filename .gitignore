@@ -4,7 +4,6 @@ ipcore/*
 *.swp
 *.mti
 *.mpf
-*.todo
 *.log
 *.ini
 temp

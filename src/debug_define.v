@@ -4,6 +4,10 @@
 `define DEBUG_clause_array
 `define DEBUG_var_state
 `define DEBUG_lvl_state
+`define DEBUG_load_bin
+`define DEBUG_update_bin
+`define DEBUG_bkt_across_bin
+`define DEBUG_bin_manager
 //`define T_START 250 	//ns
 //`define T_END   310 	//ns
 //`define T_START 730 	//ns

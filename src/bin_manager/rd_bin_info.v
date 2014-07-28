@@ -15,10 +15,10 @@ module rd_bin_info #(
 
         input                             data_en,
         input [WIDTH_VARS-1:0]            nv_all_i,
-        input [WIDTH_CLAUSES-1:0]         nc_all_i,
+        input [WIDTH_CLAUSES-1:0]         nb_all_i,
 
         output reg [WIDTH_VARS-1:0]       nv_all_o,
-        output reg [WIDTH_CLAUSES-1:0]    nc_all_o
+        output reg [WIDTH_CLAUSES-1:0]    n_cbin_o
     );
 
     //保存在寄存器中
@@ -29,17 +29,17 @@ module rd_bin_info #(
         else if(data_en)
             nv_all_o <= nv_all_i;
         else
-            nv_all_o <= 0;
+            nv_all_o <= nv_all_o;
     end
 
     always @(posedge clk)
     begin
         if(~rst)
-            nc_all_o <= 0;
+            n_cbin_o <= 0;
         else if(data_en)
-            nc_all_o <= nc_all_i;
+            n_cbin_o <= nb_all_i;
         else
-            nc_all_o <= 0;
+            n_cbin_o <= n_cbin_o;
     end
 
     always @(posedge clk)

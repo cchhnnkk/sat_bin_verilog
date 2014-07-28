@@ -25,7 +25,7 @@ module ctrl_bm #(
      //读取基本信息
      output reg 				start_rdinfo_o,
      input 						done_rdinfo_i,
-     input [WIDTH_CLAUSES-1:0] 	nc_all_i,
+     input [WIDTH_CLAUSES-1:0] 	nb_all_i,
 
      //load bin
      output reg 				start_load_o,
@@ -67,8 +67,6 @@ module ctrl_bm #(
                     GLOBAL_UNSAT    =   8;
 
     reg [3:0]                      c_state, n_state;
-    reg [31:0]                     wait_cnt, w_cnt, r_cnt;
-    reg [31:0]                     w_clk_cnt, r_clk_cnt;
 
     always @(posedge clk)
     begin
@@ -100,7 +98,7 @@ module ctrl_bm #(
                         n_state = LOAD_BIN;
                 RUN_CORE:
                     if(done_core_i) begin
-						if(local_sat_i && cur_bin_num_r==nc_all_i)
+						if(local_sat_i && cur_bin_num_r==nb_all_i)
                         	n_state = GLOBAL_SAT;
 						else if(local_sat_i)
 							n_state = UPDATE_BIN;

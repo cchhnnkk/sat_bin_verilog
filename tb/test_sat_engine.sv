@@ -32,8 +32,8 @@ module test_sat_engine(input clk, input rst);
     reg [NUM_CLAUSES-1:0]                   wr_carray_i;
     reg [NUM_VARS*2-1 : 0]                  clause_i;
     reg [NUM_VARS-1:0]                      wr_var_states;
-    reg [WIDTH_VAR_STATES*NUM_VARS-1 : 0]   vars_states_i;
-    wire [WIDTH_VAR_STATES*NUM_VARS-1 : 0]  vars_states_o;
+    reg [WIDTH_VAR_STATES*NUM_VARS-1 : 0]   var_states_i;
+    wire [WIDTH_VAR_STATES*NUM_VARS-1 : 0]  var_states_o;
     reg [NUM_LVLS-1:0]                      wr_lvl_states;
     reg [WIDTH_LVL_STATES*NUM_LVLS -1 : 0]  lvl_states_i;
     wire [WIDTH_LVL_STATES*NUM_LVLS -1 : 0] lvl_states_o;
@@ -88,7 +88,7 @@ module test_sat_engine(input clk, input rst);
             vs_list.reset();
             vs_list.set_separate(value, implied, level);
             wr_var_states = 8'hff;
-            vs_list.get(vars_states_i);
+            vs_list.get(var_states_i);
             @ (posedge clk);
                 wr_var_states = 8'h0;
             @ (posedge clk);
@@ -120,7 +120,7 @@ module test_sat_engine(input clk, input rst);
             wr_carray_i   = 0;
             clause_i      = 0;
             wr_var_states = 0;
-            vars_states_i = 0;
+            var_states_i = 0;
             wr_lvl_states = 0;
             lvl_states_i  = 0;
             base_lvl_en   = 0;
@@ -305,7 +305,7 @@ module test_sat_engine(input clk, input rst);
     task test_bkt_curb(struct_process process_data[], input int i_c, output int i_n, error_tag);
         int i;
         i = i_c;
-        if(sat_engine.ctrl_core.done_analyze_i && 
+        if(sat_engine.ctrl_core.done_analyze_i &&
             sat_engine.ctrl_core.bkt_bin_num_i==sat_engine.ctrl_core.cur_bin_num_i)
         begin
             dis_process(process_data, i);
@@ -353,7 +353,7 @@ module test_sat_engine(input clk, input rst);
 
 
     /*** 测试用例集 ***/
-    int bin[][]; 
+    int bin[][];
     //var state list:
     int value[];
     int implied[];
@@ -419,8 +419,8 @@ module test_sat_engine(input clk, input rst);
         .wr_carray_i  (wr_carray_i),
         .clause_i     (clause_i),
         .wr_var_states(wr_var_states),
-        .vars_states_i(vars_states_i),
-        .vars_states_o(vars_states_o),
+        .var_states_i(var_states_i),
+        .var_states_o(var_states_o),
         .wr_lvl_states(wr_lvl_states),
         .lvl_states_i (lvl_states_i),
         .lvl_states_o (lvl_states_o),

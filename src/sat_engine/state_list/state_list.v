@@ -57,8 +57,8 @@ module state_list #(
 
         //load update var states
         input [NUM_VARS-1:0]                      wr_var_states,
-        input [WIDTH_VAR_STATES*NUM_VARS-1 : 0]   vars_states_i,
-        output [WIDTH_VAR_STATES*NUM_VARS-1 : 0]  vars_states_o,
+        input [WIDTH_VAR_STATES*NUM_VARS-1 : 0]   var_states_i,
+        output [WIDTH_VAR_STATES*NUM_VARS-1 : 0]  var_states_o,
 
         //load update lvl states
         input [NUM_LVLS-1:0]                      wr_lvl_states,
@@ -101,8 +101,8 @@ module state_list #(
         .apply_bkt_i          (apply_bkt_cur_bin_i),
         .bkt_lvl_i            (bkt_lvl_o),
         .wr_states            (wr_var_states),
-        .vars_states_i        (vars_states_i),
-        .vars_states_o        (vars_states_o),
+        .var_states_i        (var_states_i),
+        .var_states_o        (var_states_o),
 
         .debug_vid_next_i     (0),
         .debug_vid_next_o     ()
@@ -174,7 +174,7 @@ module state_list #(
         always @(posedge clk) begin
             if(start_decision_i) begin
                 $display("%1tns start_decision", $time/1000);
-                vs_list.set(vars_states_o);
+                vs_list.set(var_states_o);
                 vs_list.display();
             end
             if(done_decision_o) begin
@@ -184,7 +184,7 @@ module state_list #(
                 $display("\tcur_lvl_o       = %4d", cur_lvl_o);
                 @(posedge clk)
                 $display("\t%1tns var states", $time/1000);
-                vs_list.set(vars_states_o);
+                vs_list.set(var_states_o);
                 vs_list.display();
             end
         end
@@ -216,10 +216,10 @@ module state_list #(
                 //$display("sim time %4tns", $time/1000);
                 $display("%1tns bcp", $time/1000);
                 $display("\tfind_imply_cur=%08b", find_imply_cur);
-                vs_list.set(vars_states_o);
+                vs_list.set(var_states_o);
                 vs_list.display_index(find_imply_cur^find_imply_pre);
                 $display("\t%1tns var states", $time/1000);
-                vs_list.set(vars_states_o);
+                vs_list.set(var_states_o);
                 vs_list.display();
 
             end
@@ -231,7 +231,7 @@ module state_list #(
         wire [WIDTH_VAR_STATES*NUM_VARS-1:0] debug_var_state_o;
         assign debug_imply_valid = apply_imply_i && (find_imply_cur!=find_imply_pre);
         assign debug_imply_index = find_imply_cur^find_imply_pre;
-        assign debug_var_state_o = vars_states_o;
+        assign debug_var_state_o = var_states_o;
 
     `endif
 

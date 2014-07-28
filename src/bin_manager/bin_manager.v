@@ -2,6 +2,8 @@
 *  Bin_Manager的顶层模块
 */
 
+`include "../src/debug_define.v"
+
 module bin_manager #(
         parameter NUM_CLAUSES_A_BIN      = 8,
         parameter NUM_VARS_A_BIN         = 8,
@@ -31,7 +33,7 @@ module bin_manager #(
         //rd bin info
         input                     bin_info_en,
         input [WIDTH_VAR-1:0]     nv_all_i,
-        input [WIDTH_CLAUSES-1:0] nc_all_i,
+        input [WIDTH_CLAUSES-1:0] nb_all_i,
 
         //sat engine core
         output                                       start_core_o,
@@ -53,8 +55,8 @@ module bin_manager #(
 
         //load update var states with sat engine
         output [NUM_VARS_A_BIN-1:0]                  wr_var_states_o,
-        output [WIDTH_VAR_STATES*NUM_VARS_A_BIN-1:0] vars_states_o,
-        input [WIDTH_VAR_STATES*NUM_VARS_A_BIN-1:0]  vars_states_i,
+        output [WIDTH_VAR_STATES*NUM_VARS_A_BIN-1:0] var_states_o,
+        input [WIDTH_VAR_STATES*NUM_VARS_A_BIN-1:0]  var_states_i,
 
         //load update lvl states with sat engine
         output [NUM_LVLS_A_BIN-1:0]                  wr_lvl_states_o,
@@ -98,8 +100,8 @@ module bin_manager #(
     wire                       start_update;
     wire                       done_update;
     wire [WIDTH_LVL-1:0]       bkt_lvl_find;
-    wire [WIDTH_VAR-1:0]      nv_all;
-    wire [WIDTH_CLAUSES-1:0]   nc_all;
+    wire [WIDTH_VAR-1:0]       nv_all;
+    wire [WIDTH_CLAUSES-1:0]   n_cbin;
 
     ctrl_bm #(
         .WIDTH_BIN_ID(WIDTH_BIN_ID),
@@ -118,7 +120,7 @@ module bin_manager #(
         .global_unsat_o        (global_unsat_o),
          //读取基本信息
         .done_rdinfo_i         (done_rdinfo),
-        .nc_all_i              (nc_all),
+        .nb_all_i              (n_cbin),
         .start_rdinfo_o        (start_rdinfo),
          //load bin
         .done_load_i           (done_load),
@@ -156,10 +158,10 @@ module bin_manager #(
         .done_rdinfo_o (done_rdinfo),
         .data_en       (bin_info_en),
         .nv_all_i      (nv_all_i),
-        .nc_all_i      (nc_all_i),
+        .nb_all_i      (nb_all_i),
         .nv_all_o      (nv_all),
-        .nc_all_o      (nc_all)
-        );
+        .n_cbin_o      (n_cbin)
+    );
  
 
     //load_bin
@@ -197,7 +199,7 @@ module bin_manager #(
         .wr_carray_o      (wr_carray_o),
         .clause_o         (clause_o),
         .wr_var_states_o  (wr_var_states_o),
-        .vars_states_o    (vars_states_o),
+        .var_states_o    (var_states_o),
         .wr_lvl_states_o  (wr_lvl_states_o),
         .lvl_states_o     (lvl_states_o),
         .cur_lvl_i        (cur_lvl_o),
@@ -251,15 +253,15 @@ module bin_manager #(
 
 
     // bkt_across_bin
-    wire                                     apply_bkt_across_bin;
-    wire [ADDR_WIDTH_VAR_STATES-1:0]        ram_raddr_vs_from_bkt;
-    wire                                     ram_we_vs_from_bkt;
-    wire [WIDTH_VAR_STATES-1 : 0]            ram_wdata_vs_from_bkt;
-    wire [ADDR_WIDTH_VAR_STATES-1:0]        ram_waddr_vs_from_bkt;
-    wire                                     ram_we_ls_from_bkt;
-    wire [WIDTH_LVL_STATES-1 : 0]            ram_data_ls_from_bkt;
-    wire [ADDR_WIDTH_LVL_STATES-1:0]        ram_addr_ls_from_bkt;
-    wire [WIDTH_LVL_STATES-1 : 0]            ram_doutb_ls;
+    wire                             apply_bkt_across_bin;
+    wire [ADDR_WIDTH_VAR_STATES-1:0] ram_raddr_vs_from_bkt;
+    wire                             ram_we_vs_from_bkt;
+    wire [WIDTH_VAR_STATES-1 : 0]    ram_wdata_vs_from_bkt;
+    wire [ADDR_WIDTH_VAR_STATES-1:0] ram_waddr_vs_from_bkt;
+    wire                             ram_we_ls_from_bkt;
+    wire [WIDTH_LVL_STATES-1 : 0]    ram_data_ls_from_bkt;
+    wire [ADDR_WIDTH_LVL_STATES-1:0] ram_addr_ls_from_bkt;
+    wire [WIDTH_LVL_STATES-1 : 0]    ram_doutb_ls;
 
     bkt_across_bin #(
         .WIDTH_VAR             (WIDTH_VAR),
@@ -276,7 +278,7 @@ module bin_manager #(
         .start_bkt_i   (start_bkt_across_bin),
         .apply_bkt_o   (apply_bkt_across_bin),
         .done_bkt_o    (done_bkt_across_bin),
-        .nv_all        (nv_all),
+        .nv_all_i     (nv_all),
         .bkt_lvl_i     (bkt_lvl_find),
         .bkt_bin_i     (bkt_bin_find),
         //vars states
@@ -333,7 +335,7 @@ module bin_manager #(
         //update from sat engine
         .rd_carray_o   (rd_carray_o),
         .clause_i      (clause_i),
-        .var_state_i   (vars_states_i),
+        .var_state_i   (var_states_i),
         .lvl_states_i  (lvl_states_i),
         .base_lvl_i    (base_lvl_o),
         //clauses bins
@@ -597,5 +599,58 @@ module bin_manager #(
         .dinb(ram_dinb_ls_r),
         .doutb(ram_doutb_ls)
     );
+
+    /**
+    *  输出update的信息
+    */
+    `ifdef DEBUG_bin_manager
+        reg [1023:0] sum_bkt, sum_bkt_next;
+        reg [31:0] i;
+
+        always @(posedge clk) begin
+            if(~rst)
+                sum_bkt = 0;
+            else if(done_bkt_across_bin) begin
+                sum_bkt_next = 1;
+                for(i=0; i<nv_all; i++) begin
+                    if(i<bkt_lvl_find)
+                        sum_bkt_next = sum_bkt_next<<1 + bram_global_lvl_state_inst.data[i][0];
+                    else
+                        sum_bkt_next = sum_bkt_next<<1;
+                end
+                assert(sum_bkt_next > sum_bkt)
+                else begin
+                    $display("%1tns error assert(sum_bkt_next > sum_bkt)", $time/1000);
+                    $finish();
+                end
+                sum_bkt = sum_bkt_next;
+                display_sum_bkt();
+            end
+        end
+
+        string str, str_dcd, str_bkt;
+
+        reg [WIDTH_BIN_ID-1:0] dcd_bin;
+        reg                    has_bkt;
+
+        task display_sum_bkt();
+            str = "";
+            str_dcd = "";
+            str_bkt = "";
+            $display("%1tns sum_bkt %1d", $time/1000, sum_bkt);
+            str_dcd = "\tdcd_bin";
+            str_bkt = "\thas_bkt";
+            for(i=0; i<nv_all; i++) begin
+                if(i<bkt_lvl_find) begin
+                    {dcd_bin, has_bkt} = lvl_states_i;
+                    $sformat(str,"\t%4d", dcd_bin);     str_dcd = {str_dcd, str};
+                    $sformat(str,"\t%4d", has_bkt);     str_bkt = {str_bkt, str};
+                end
+            end
+            $display(str_dcd);
+            $display(str_bkt);
+        endtask
+
+    `endif
 
 endmodule

@@ -39,7 +39,7 @@ module load_bin #(
 
         //load var state to sat engine
         output reg [NUM_VARS_A_BIN-1 : 0]            wr_var_states_o,
-        output [WIDTH_VAR_STATES*NUM_VARS_A_BIN-1:0] vars_states_o,
+        output [WIDTH_VAR_STATES*NUM_VARS_A_BIN-1:0] var_states_o,
 
         //load lvl state to sat engine
         output reg [NUM_LVLS_A_BIN-1:0]              wr_lvl_states_o,
@@ -234,7 +234,7 @@ module load_bin #(
     scatter_to_vs_inst (
         .wr_i(wr_var_states_o),
         .data_i(ram_data_vs_i),
-        .data_o(vars_states_o)
+        .data_o(var_states_o)
     );
 
     //var state的写入信号，需要移位
@@ -362,24 +362,27 @@ module load_bin #(
         class_vs_list #(8, WIDTH_LVL) vs_list = new();
         class_ls_list #(8, WIDTH_LVL) ls_list = new();
 
-        always @(posedge clk) begin: display_load_info 
-            if(wr_carray_i!=0) begin
-                cdata.set(clause_i);
+        always @(posedge clk) begin
+            if(wr_carray_o!=0) begin
+                cdata.set(clause_o);
                 $display("wr clause array");
-                $display("%b", wr_carray_i);
+                $display("\t%1tns wr_carray_o = %b", $time/1000, wr_carray_o);
                 cdata.display_lits();
             end
-            if(wr_var_states!=0) begin
-                vs_list.set(lvlss_i);
-                $display("wr var state list");
-                $display("%b", wr_var_states);
-                vs_list.display_lits();
+            if(wr_var_states_o!=0) begin
+                vs_list.set(var_states_o);
+                $display("%1tns wr var state list", $time/1000);
+                $display("%b", wr_var_states_o);
+                vs_list.display();
             end
-            if(wr_lvlss!=0) begin
-                ls_list.set(lvlss_i);
-                $display("wr lvl state list");
-                $display("%b", wr_lvlss);
-                ls_list.display_lits();
+            if(wr_lvl_states_o!=0) begin
+                ls_list.set(lvl_states_o);
+                $display("%1tns wr lvl state list", $time/1000);
+                $display("%b", wr_lvl_states_o);
+                ls_list.display();
+            end
+            if(base_lvl_en==1) begin
+                $display("\tbase_lvl_i = %1d", base_lvl_o);
             end
         end
     `endif

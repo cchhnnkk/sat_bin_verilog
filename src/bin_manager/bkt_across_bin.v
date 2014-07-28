@@ -1,6 +1,9 @@
 /**
 *   bin间回退
 */
+
+`include "../src/debug_define.v"
+
 module bkt_across_bin #(
         parameter WIDTH_VAR              = 12,
         parameter WIDTH_LVL              = 16,
@@ -19,7 +22,7 @@ module bkt_across_bin #(
         output reg                             apply_bkt_o,
         output reg                             done_bkt_o,
 
-        input [WIDTH_VAR-1:0]                  nv_all,
+        input [WIDTH_VAR-1:0]                  nv_all_i,
         input [WIDTH_LVL-1:0]                  bkt_lvl_i,
         input [WIDTH_BIN_ID-1:0]               bkt_bin_i,
 
@@ -68,7 +71,7 @@ module bkt_across_bin #(
                     else
                         n_state = IDLE;
                 BKT:
-                    if(var_cnt==nv_all)
+                    if(var_cnt==nv_all_i)
                         n_state = DONE;
                     else
                         n_state = BKT;
@@ -164,5 +167,19 @@ module bkt_across_bin #(
         else
             done_bkt_o <= 0;
     end
+
+    /**
+    *  输出调试的信息
+    */
+    `ifdef DEBUG_bkt_across_bin
+        always @(posedge clk) begin
+            if(var_lvl==bkt_lvl_i && var_value[0]==0) begin //翻转
+                $display("%1tns bkt convert var %d", $time/1000, ram_raddr_vs_o);
+            end
+            else if(var_lvl>=bkt_lvl_i) begin
+                $display("%1tns bkt clear var %d", $time/1000, ram_raddr_vs_o);
+            end
+        end
+    `endif
 
 endmodule
