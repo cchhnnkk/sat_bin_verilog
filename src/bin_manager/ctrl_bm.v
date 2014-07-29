@@ -192,7 +192,6 @@ module ctrl_bm #(
                 impulse_cnt <= 1;
             else
                 impulse_cnt <= 2;
-
         end
         else
             impulse_cnt <= 0;

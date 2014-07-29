@@ -32,11 +32,12 @@ nmap ,mO O:MultieditAddMark i
 nmap ,mo o:MultieditAddMark i
 nmap ,mi :MultieditAddMark i
 nmap ,ma :MultieditAddMark a
+nmap ,caL <Plug>CalendarH
+nmap ,cal <Plug>CalendarV
 map ,e :e =expand("%:p:h") . "/"  
 map [m :MultieditHop -1
 map ]m :MultieditHop 1
 nmap gx <Plug>NetrwBrowseX
-nmap wm :WMToggle
 nnoremap <silent> <Plug>NetrwBrowseX :call netrw#NetrwBrowseX(expand("<cWORD>"),0)
 nmap <Nul><Nul>d :vert scs find d =expand("<cword>")
 nmap <Nul><Nul>i :vert scs find i ^=expand("<cfile>")$	
@@ -54,20 +55,14 @@ nmap <Nul>t :scs find t =expand("<cword>")
 nmap <Nul>c :scs find c =expand("<cword>")	
 nmap <Nul>g :scs find g =expand("<cword>")	
 nmap <Nul>s :scs find s =expand("<cword>")	
+nnoremap <silent> <Plug>CalendarH :cal calendar#show(1)
+nnoremap <silent> <Plug>CalendarV :cal calendar#show(0)
 nmap <silent> <F9> :TlistToggle    "´ò¿ªtag´°¿Ú
-map <C-F5> :call Debug()
-map <F5> :call CompileRun() 
 vmap <C-Del> "*d
 vmap <S-Del> "*d
 vmap <C-Insert> "*y
 vmap <S-Insert> "-d"*P
 nmap <S-Insert> "*P
-imap xperl &PerlBeg;foreach $i (0..2) {  vprint qq {};<BS><BS>}&PerlEnd;
-imap xtask task;input [] ;beginendendtask
-imap xfun function [] ;input [] ;beginendendfunction
-imap xaq &Always posedge;<BS><BS><BS>&End;
-imap xae &Always;<BS><BS><BS>&End;
-imap xmodule &Module;<BS><BS><BS>&EndModule;
 let &cpo=s:cpo_save
 unlet s:cpo_save
 set autoindent
@@ -79,12 +74,15 @@ set cscopetag
 set cscopeverbose
 set expandtab
 set fileencodings=utf-8,chinese
-set guifont=consolas:h11
+set guifont=Bitstream_Vera_Sans_Mono:h11
+set guifontwide=Yahei_Mono:h11
+set guioptions-=m
+set guioptions-=T
 set helplang=cn
 set history=50
 set hlsearch
 set incsearch
-set path=.,ipcore,sim,sim/backup,src,src/bin_manager,src/sat_engine,src/sat_engine/clause_array,src/sat_engine/state_list,tb,tools
+set path=.,../ipcore,../sim,../sim/backup,../src,../src/bin_manager,../src/sat_engine,../src/sat_engine/clause_array,../src/sat_engine/state_list,../tb,../tools,../../sat_bin_python
 set shiftwidth=4
 set showmatch
 set smartindent
@@ -94,7 +92,7 @@ set window=49
 let s:so_save = &so | let s:siso_save = &siso | set so=0 siso=0
 let v:this_session=expand("<sfile>:p")
 silent only
-cd f:\sat\github\sat_bin_verilog
+cd f:\sat\github\sat_bin_verilog\sim
 if expand('%') == '' && !&modified && line('$') <= 1 && getline(1) == ''
   let s:wipebuf = bufnr('%')
 endif

@@ -11,14 +11,14 @@ module rd_bin_info #(
 
         //control
         input                             start_rdinfo_i,
-        output reg                        done_rdinfo_o,
+        output                            done_rdinfo_o,
 
         input                             data_en,
         input [WIDTH_VARS-1:0]            nv_all_i,
         input [WIDTH_CLAUSES-1:0]         nb_all_i,
 
         output reg [WIDTH_VARS-1:0]       nv_all_o,
-        output reg [WIDTH_CLAUSES-1:0]    n_cbin_o
+        output reg [WIDTH_CLAUSES-1:0]    nb_all_o
     );
 
     //保存在寄存器中
@@ -35,21 +35,13 @@ module rd_bin_info #(
     always @(posedge clk)
     begin
         if(~rst)
-            n_cbin_o <= 0;
+            nb_all_o <= 0;
         else if(data_en)
-            n_cbin_o <= nb_all_i;
+            nb_all_o <= nb_all_i;
         else
-            n_cbin_o <= n_cbin_o;
+            nb_all_o <= nb_all_o;
     end
 
-    always @(posedge clk)
-    begin
-        if(~rst)
-            done_rdinfo_o <= 0;
-        else if(start_rdinfo_i)
-            done_rdinfo_o <= 1;
-        else
-            done_rdinfo_o <= 0;
-    end
+    assign done_rdinfo_o = start_rdinfo_i;
 
 endmodule

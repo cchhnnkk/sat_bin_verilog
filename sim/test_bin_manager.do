@@ -4,8 +4,8 @@ vmap work work
 
 vsim -L D:/Xilinx/14.5_modelsim_10.1/xilinxcorelib_ver -quiet -novopt test_bin_manager_top
 
-do ../tools/wave_test_bin_manager_top.do
-# do wave.do
+# do ../tools/wave_test_bin_manager_top.do
+do wave.do
 
 TreeUpdate [SetDefaultTree]
 WaveRestoreCursors {{Cursor 1} {0 ns} 0}
@@ -26,6 +26,7 @@ update
 WaveRestoreZoom {0 ns} {200 ns}
 
 # run -all
-run 4us
+# run 4us
+run 1000ns
 
 # quit -f

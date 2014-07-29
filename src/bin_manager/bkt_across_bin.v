@@ -173,11 +173,13 @@ module bkt_across_bin #(
     */
     `ifdef DEBUG_bkt_across_bin
         always @(posedge clk) begin
-            if(var_lvl==bkt_lvl_i && var_value[0]==0) begin //翻转
-                $display("%1tns bkt convert var %d", $time/1000, ram_raddr_vs_o);
-            end
-            else if(var_lvl>=bkt_lvl_i) begin
-                $display("%1tns bkt clear var %d", $time/1000, ram_raddr_vs_o);
+            if(apply_bkt_o) begin
+                if(var_lvl==bkt_lvl_i && var_value[0]==0) begin //翻转
+                    $display("%1tns bkt convert var %d", $time/1000, ram_raddr_vs_o);
+                end
+                else if(var_lvl>=bkt_lvl_i) begin
+                    $display("%1tns bkt clear var %d", $time/1000, ram_raddr_vs_o);
+                end
             end
         end
     `endif

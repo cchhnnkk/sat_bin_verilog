@@ -101,7 +101,7 @@ module bin_manager #(
     wire                       done_update;
     wire [WIDTH_LVL-1:0]       bkt_lvl_find;
     wire [WIDTH_VAR-1:0]       nv_all;
-    wire [WIDTH_CLAUSES-1:0]   n_cbin;
+    wire [WIDTH_CLAUSES-1:0]   nb_all;
 
     ctrl_bm #(
         .WIDTH_BIN_ID(WIDTH_BIN_ID),
@@ -120,7 +120,7 @@ module bin_manager #(
         .global_unsat_o        (global_unsat_o),
          //读取基本信息
         .done_rdinfo_i         (done_rdinfo),
-        .nb_all_i              (n_cbin),
+        .nb_all_i              (nb_all),
         .start_rdinfo_o        (start_rdinfo),
          //load bin
         .done_load_i           (done_load),
@@ -160,7 +160,7 @@ module bin_manager #(
         .nv_all_i      (nv_all_i),
         .nb_all_i      (nb_all_i),
         .nv_all_o      (nv_all),
-        .n_cbin_o      (n_cbin)
+        .nb_all_o      (nb_all)
     );
  
 
@@ -358,36 +358,36 @@ module bin_manager #(
 
     /*** bram 变量 **/
     //bram端口复用
-    reg [ADDR_WIDTH_VAR-1:0]           ram_addra_v_r;
-    reg                                 ram_web_v_r;
-    reg [ADDR_WIDTH_CLAUSES-1:0]        ram_addrb_v_r;
-    reg [WIDTH_CLAUSES-1:0]             ram_dinb_v_r;
+    reg [ADDR_WIDTH_VAR-1:0]            ram_addra_v_w;
+    reg                                 ram_web_v_w;
+    reg [ADDR_WIDTH_CLAUSES-1:0]        ram_addrb_v_w;
+    reg [WIDTH_CLAUSES-1:0]             ram_dinb_v_w;
     always @(posedge clk)
     begin
         if(~rst)
-            ram_addra_v_r <= 0;
+            ram_addra_v_w <= 0;
         else if(apply_load)     //加载
-            ram_addra_v_r <= ram_addr_v_from_load;
+            ram_addra_v_w <= ram_addr_v_from_load;
         else
-            ram_addra_v_r <= 0;
+            ram_addra_v_w <= 0;
     end
 
     always @(posedge clk)
     begin
         if(~rst) begin
-            ram_web_v_r <= 0;
-            ram_dinb_v_r <= 0;
-            ram_addrb_v_r <= 0;
+            ram_web_v_w <= 0;
+            ram_dinb_v_w <= 0;
+            ram_addrb_v_w <= 0;
         end
         else if(apply_ex_i) begin   //外部输入
-            ram_web_v_r <= ram_we_v_ex_i;
-            ram_dinb_v_r <= ram_din_v_ex_i;
-            ram_addrb_v_r <= ram_addr_v_ex_i;
+            ram_web_v_w <= ram_we_v_ex_i;
+            ram_dinb_v_w <= ram_din_v_ex_i;
+            ram_addrb_v_w <= ram_addr_v_ex_i;
         end
         else begin
-            ram_web_v_r <= 0;
-            ram_dinb_v_r <= 0;
-            ram_addrb_v_r <= 0;
+            ram_web_v_w <= 0;
+            ram_dinb_v_w <= 0;
+            ram_addrb_v_w <= 0;
         end
     end
 
@@ -398,54 +398,54 @@ module bin_manager #(
     bram_vars_bins_inst(
         .clka(clk),
         .wea(),
-        .addra(ram_addra_v_r),
+        .addra(ram_addra_v_w),
         .dina(),
         .douta(ram_douta_v),
         .clkb(clk),
-        .web(),
-        .addrb(),
-        .dinb(),
+        .web(ram_web_v_w),
+        .addrb(ram_addrb_v_w),
+        .dinb(ram_dinb_v_w),
         .doutb()
     );
 
     /*** bram 子句 **/
     //bram端口复用
-    reg [ADDR_WIDTH_CLAUSES-1:0]        ram_addra_c_r;
-    reg                                 ram_web_c_r;
-    reg [ADDR_WIDTH_CLAUSES-1:0]        ram_addrb_c_r;
-    reg [WIDTH_CLAUSES-1:0]             ram_dinb_c_r;
+    reg [ADDR_WIDTH_CLAUSES-1:0]        ram_addra_c_w;
+    reg                                 ram_web_c_w;
+    reg [ADDR_WIDTH_CLAUSES-1:0]        ram_addrb_c_w;
+    reg [WIDTH_CLAUSES-1:0]             ram_dinb_c_w;
 
-    always @(posedge clk)
+    always @(*)
     begin
         if(~rst)
-            ram_addra_c_r <= 0;
+            ram_addra_c_w = 0;
         else if(apply_load)     //加载
-            ram_addra_c_r <= ram_addr_c_from_load;
+            ram_addra_c_w = ram_addr_c_from_load;
         else
-            ram_addra_c_r <= 0;
+            ram_addra_c_w = 0;
     end
 
-    always @(posedge clk)
+    always @(*)
     begin
         if(~rst) begin
-            ram_web_c_r <= 0;
-            ram_dinb_c_r <= 0;
-            ram_addrb_c_r <= 0;
+            ram_web_c_w = 0;
+            ram_dinb_c_w = 0;
+            ram_addrb_c_w = 0;
         end
         else if(apply_update) begin     //更新
-            ram_web_c_r <= 1;
-            ram_dinb_c_r <= ram_data_c_from_update;
-            ram_addrb_c_r <= ram_addr_c_from_update;
+            ram_web_c_w = 1;
+            ram_dinb_c_w = ram_data_c_from_update;
+            ram_addrb_c_w = ram_addr_c_from_update;
         end
         else if(apply_ex_i) begin   //外部输入
-            ram_web_c_r <= ram_we_c_ex_i;
-            ram_dinb_c_r <= ram_din_c_ex_i;
-            ram_addrb_c_r <= ram_addr_c_ex_i;
+            ram_web_c_w = ram_we_c_ex_i;
+            ram_dinb_c_w = ram_din_c_ex_i;
+            ram_addrb_c_w = ram_addr_c_ex_i;
         end
         else begin
-            ram_web_c_r <= 0;
-            ram_dinb_c_r <= 0;
-            ram_addrb_c_r <= 0;
+            ram_web_c_w = 0;
+            ram_dinb_c_w = 0;
+            ram_addrb_c_w = 0;
         end
     end
 
@@ -456,59 +456,59 @@ module bin_manager #(
     bram_clauses_bins_inst(
         .clka(clk),
         .wea(),
-        .addra(ram_addra_c_r),
+        .addra(ram_addra_c_w),
         .dina(),
         .douta(ram_douta_c),
         .clkb(clk),
-        .web(ram_web_c_r),
-        .addrb(ram_addrb_c_r),
-        .dinb(ram_dinb_c_r),
+        .web(ram_web_c_w),
+        .addrb(ram_addrb_c_w),
+        .dinb(ram_dinb_c_w),
         .doutb()
     );
 
     /*** bram 变量状态 **/
     //bram端口复用
-    reg [ADDR_WIDTH_VAR_STATES-1:0]    ram_addra_vs_r;
-    reg                                 ram_web_vs_r;
-    reg [WIDTH_VAR_STATES-1:0]          ram_dinb_vs_r;
-    reg [ADDR_WIDTH_VAR_STATES-1:0]    ram_addrb_vs_r;
+    reg [ADDR_WIDTH_VAR_STATES-1:0]    ram_addra_vs_w;
+    reg                                 ram_web_vs_w;
+    reg [WIDTH_VAR_STATES-1:0]          ram_dinb_vs_w;
+    reg [ADDR_WIDTH_VAR_STATES-1:0]    ram_addrb_vs_w;
 
-    always @(posedge clk)
+    always @(*)
     begin
         if(~rst)
-            ram_addra_vs_r <= 0;
+            ram_addra_vs_w = 0;
         else if(apply_load)     //加载
-            ram_addra_vs_r <= ram_addr_vs_from_load;
+            ram_addra_vs_w = ram_addr_vs_from_load;
         else
-            ram_addra_vs_r <= 0;
+            ram_addra_vs_w = 0;
     end
 
-    always @(posedge clk)
+    always @(*)
     begin
         if(~rst) begin
-            ram_web_vs_r <= 0;
-            ram_dinb_vs_r <= 0;
-            ram_addrb_vs_r <= 0;
+            ram_web_vs_w = 0;
+            ram_dinb_vs_w = 0;
+            ram_addrb_vs_w = 0;
         end
         else if(apply_update) begin     //更新
-            ram_web_vs_r <= 1;
-            ram_dinb_vs_r <= ram_data_vs_from_update;
-            ram_addrb_vs_r <= ram_addr_vs_from_update;
+            ram_web_vs_w = 1;
+            ram_dinb_vs_w = ram_data_vs_from_update;
+            ram_addrb_vs_w = ram_addr_vs_from_update;
         end
         else if(apply_bkt_across_bin) begin
-            ram_web_vs_r <= 1;
-            ram_dinb_vs_r <= ram_wdata_vs_from_bkt;
-            ram_addrb_vs_r <= ram_waddr_vs_from_bkt;
+            ram_web_vs_w = 1;
+            ram_dinb_vs_w = ram_wdata_vs_from_bkt;
+            ram_addrb_vs_w = ram_waddr_vs_from_bkt;
         end
         else if(apply_ex_i) begin   //外部输入
-            ram_web_vs_r <= ram_we_vs_ex_i;
-            ram_dinb_vs_r <= ram_din_vs_ex_i;
-            ram_addrb_vs_r <= ram_addr_vs_ex_i;
+            ram_web_vs_w = ram_we_vs_ex_i;
+            ram_dinb_vs_w = ram_din_vs_ex_i;
+            ram_addrb_vs_w = ram_addr_vs_ex_i;
         end
         else begin
-            ram_web_vs_r <= 0;
-            ram_dinb_vs_r <= 0;
-            ram_addrb_vs_r <= 0;
+            ram_web_vs_w = 0;
+            ram_dinb_vs_w = 0;
+            ram_addrb_vs_w = 0;
         end
     end
 
@@ -519,67 +519,67 @@ module bin_manager #(
     bram_global_var_state_inst(
         .clka(clk),
         .wea(),
-        .addra(ram_addra_vs_r),
+        .addra(ram_addra_vs_w),
         .dina(),
         .douta(ram_douta_vs),
         .clkb(clk),
-        .web(ram_web_vs_r),
-        .addrb(ram_addrb_vs_r),
-        .dinb(ram_dinb_vs_r),
+        .web(ram_web_vs_w),
+        .addrb(ram_addrb_vs_w),
+        .dinb(ram_dinb_vs_w),
         .doutb()
     );
 
 
     /*** bram 层级状态 **/
     //bram端口复用
-    reg [ADDR_WIDTH_LVL_STATES-1:0]    ram_addra_ls_r;
-    reg                                 ram_web_ls_r;
-    reg [WIDTH_LVL_STATES-1:0]          ram_dinb_ls_r;
-    reg [ADDR_WIDTH_LVL_STATES-1:0]    ram_addrb_ls_r;
+    reg [ADDR_WIDTH_LVL_STATES-1:0]    ram_addra_ls_w;
+    reg                                 ram_web_ls_w;
+    reg [WIDTH_LVL_STATES-1:0]          ram_dinb_ls_w;
+    reg [ADDR_WIDTH_LVL_STATES-1:0]    ram_addrb_ls_w;
 
-    always @(posedge clk)
+    always @(*)
     begin
         if(~rst)
-            ram_addra_ls_r <= 0;
+            ram_addra_ls_w = 0;
         else if(apply_load)     //加载
-            ram_addra_ls_r <= ram_addr_ls_from_load;
+            ram_addra_ls_w = ram_addr_ls_from_load;
         else if(apply_find)
-            ram_addra_ls_r <= ram_raddr_ls_from_find;
+            ram_addra_ls_w = ram_waddr_ls_from_find;
         else
-            ram_addra_ls_r <= 0;
+            ram_addra_ls_w = 0;
     end
 
-    always @(posedge clk)
+    always @(*)
     begin
         if(~rst) begin
-            ram_web_ls_r <= 0;
-            ram_dinb_ls_r <= 0;
-            ram_addrb_ls_r <= 0;
+            ram_web_ls_w = 0;
+            ram_dinb_ls_w = 0;
+            ram_addrb_ls_w = 0;
         end
         else if(apply_update) begin     //更新
-            ram_web_ls_r <= 1;
-            ram_dinb_ls_r <= ram_data_ls_from_update;
-            ram_addrb_ls_r <= ram_addr_ls_from_update;
+            ram_web_ls_w = 1;
+            ram_dinb_ls_w = ram_data_ls_from_update;
+            ram_addrb_ls_w = ram_addr_ls_from_update;
         end
         else if(apply_find) begin
-            ram_web_ls_r <= 1;
-            ram_dinb_ls_r <= ram_wdata_ls_from_find;
-            ram_addrb_ls_r <= ram_waddr_ls_from_find;
+            ram_web_ls_w = 1;
+            ram_dinb_ls_w = ram_wdata_ls_from_find;
+            ram_addrb_ls_w = ram_waddr_ls_from_find;
         end
         else if(apply_bkt_across_bin) begin
-            ram_web_ls_r <= 1;
-            ram_dinb_ls_r <= ram_data_ls_from_bkt;
-            ram_addrb_ls_r <= ram_addr_ls_from_bkt;
+            ram_web_ls_w = 1;
+            ram_dinb_ls_w = ram_data_ls_from_bkt;
+            ram_addrb_ls_w = ram_addr_ls_from_bkt;
         end
         else if(apply_ex_i) begin   //外部输入
-            ram_web_ls_r <= ram_we_ls_ex_i;
-            ram_dinb_ls_r <= ram_din_ls_ex_i;
-            ram_addrb_ls_r <= ram_addr_ls_ex_i;
+            ram_web_ls_w = ram_we_ls_ex_i;
+            ram_dinb_ls_w = ram_din_ls_ex_i;
+            ram_addrb_ls_w = ram_addr_ls_ex_i;
         end
         else begin
-            ram_web_ls_r <= 0;
-            ram_dinb_ls_r <= 0;
-            ram_addrb_ls_r <= 0;
+            ram_web_ls_w = 0;
+            ram_dinb_ls_w = 0;
+            ram_addrb_ls_w = 0;
         end
     end
 
@@ -590,26 +590,28 @@ module bin_manager #(
     bram_global_lvl_state_inst(
         .clka(clk),
         .wea(),
-        .addra(ram_addra_ls_r),
+        .addra(ram_addra_ls_w),
         .dina(),
         .douta(ram_douta_ls),
         .clkb(clk),
-        .web(ram_web_ls_r),
-        .addrb(ram_addrb_ls_r),
-        .dinb(ram_dinb_ls_r),
+        .web(ram_web_ls_w),
+        .addrb(ram_addrb_ls_w),
+        .dinb(ram_dinb_ls_w),
         .doutb(ram_doutb_ls)
     );
 
     /**
-    *  输出update的信息
+    *  输出调试的信息
     */
     `ifdef DEBUG_bin_manager
         reg [1023:0] sum_bkt, sum_bkt_next;
-        reg [31:0] i;
+        int i=0;
 
         always @(posedge clk) begin
-            if(~rst)
+            if(~rst) begin
                 sum_bkt = 0;
+                sum_bkt_next = 0;
+            end
             else if(done_bkt_across_bin) begin
                 sum_bkt_next = 1;
                 for(i=0; i<nv_all; i++) begin
@@ -650,6 +652,12 @@ module bin_manager #(
             $display(str_dcd);
             $display(str_bkt);
         endtask
+
+        always @(posedge clk) begin
+            if(done_rdinfo) begin
+                $display("%1tns nv_all=%1d nb_all=%1d", $time/1000, nv_all, nb_all);
+            end
+        end
 
     `endif
 

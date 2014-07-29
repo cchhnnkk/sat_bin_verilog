@@ -52,7 +52,7 @@ for line in info_data:
             line = l[0] + repeat_space(n + 1) + line[index + 1:]
 
         if len(l[0]) >= 3 and l[0][-2:]=='ns':
-            next_time = int(l[0][:-3])
+            next_time = int(l[0][:-2])
             if cur_time < next_time:
                 cur_time = next_time
                 # f.write(repeat_space(tab_len) + 

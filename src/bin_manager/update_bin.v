@@ -378,7 +378,7 @@ module update_bin #(
 
         always @(posedge clk) begin
             if(rd_carray_o!=0) begin
-                cdata.set(clause_i);
+                cdata.set_clause(clause_i);
                 $display("rd clause array");
                 $display("\t%1tns rd_carray_o = %b", $time/1000, rd_carray_o);
                 cdata.display_lits();

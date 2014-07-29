@@ -113,8 +113,8 @@ module test_bin_manager(input clk, input rst);
             .clause_i           (clause_i),
             //load update var states with sat engine
             .wr_var_states_o    (wr_var_states_o),
-            .var_states_o      (var_states_o),
-            .var_states_i      (var_states_i),
+            .var_states_o       (var_states_o),
+            .var_states_i       (var_states_i),
             //load update lvl states with sat engine
             .wr_lvl_states_o    (wr_lvl_states_o),
             .lvl_states_o       (lvl_states_o),
@@ -178,7 +178,8 @@ module test_bin_manager(input clk, input rst);
             begin
                 @ (posedge clk);
                     cdata.set_lits(cbin[i]);
-                    //cdata.display_lits();
+                    $display("%1tns wr bram clause addr = %1d", $time/1000.0, i);
+                    cdata.display_lits();
                     ram_we_c_ex_i = 1;
                     cdata.get_clause(ram_din_c_ex_i);
                     ram_addr_c_ex_i = i;
@@ -186,6 +187,8 @@ module test_bin_manager(input clk, input rst);
             @ (posedge clk);
                 ram_we_c_ex_i = 0;
             @ (posedge clk);
+                $display("%1tns bram clause", $time/1000.0);
+                bin_manager.bram_clauses_bins_inst.display(0, nb*cmax);
         end
     endtask
 
@@ -201,6 +204,8 @@ module test_bin_manager(input clk, input rst);
             @ (posedge clk);
                 ram_we_v_ex_i = 0;
             @ (posedge clk);
+                $display("%1tns bram var", $time/1000.0);
+                bin_manager.bram_vars_bins_inst.display(0, nb*cmax);
         end
     endtask
 
@@ -244,6 +249,9 @@ module test_bin_manager(input clk, input rst);
         ls_list.set_separate(dcd_bin_updated, has_bkt_updated);
         ls_list.get(lvl_states_i);
 
+        @ (posedge clk);
+        done_core_i = 0;
+
     endtask
 
     task reset_all_signal();
@@ -283,6 +291,10 @@ module test_bin_manager(input clk, input rst);
         $display("test_sat_engine_task");
         reset_all_signal();
         bm_load_test_case1();
+
+        while(start_core_o!=1)
+            @ (posedge clk);
+
         bm_update_test_case1();
 
         while(done_bm_o!=1)
@@ -292,13 +304,19 @@ module test_bin_manager(input clk, input rst);
     endtask
 
     task run_bm_load();
-        wr_clauses();
-        wr_vars();
-        start_bm_i = 1;
-        nb_all_i = nb;
-        nv_all_i = nv;
         @(posedge clk);
-        start_bm_i = 0;
+            apply_ex_i = 1;
+            wr_clauses();
+            wr_vars();
+            apply_ex_i = 0;
+        @(posedge clk);
+            start_bm_i  = 1;
+            bin_info_en = 1;
+            nb_all_i    = nb;
+            nv_all_i    = nv;
+        @(posedge clk);
+            start_bm_i  = 0;
+            bin_info_en = 0;
     endtask
 
     task run_bm_update();

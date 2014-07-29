@@ -42,14 +42,21 @@ always @(posedge clka) begin
 end
 
 always @(posedge clka) begin
-    if(wea)
-        data[addra] <= dina;
-    else if(web)
-        data[addrb] <= dinb;
+    if(wea==1)
+        data[addra] = dina;
+    if(web==1)
+        data[addrb] = dinb;
 end
 
 always @(posedge clkb) begin
     doutb <= data[addrb];
 end
+
+int j;
+task display(int istart, int iend);
+    for(j=istart; j<iend; j++) begin
+        $display("\t%6d:%b", j, data[j]);
+    end
+endtask
 
 endmodule
