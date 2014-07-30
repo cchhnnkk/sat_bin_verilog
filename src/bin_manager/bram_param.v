@@ -54,6 +54,7 @@ end
 
 int j;
 task display(int istart, int iend);
+    $display("\taddr:%1d-%1d", istart, iend-1);
     for(j=istart; j<iend; j++) begin
         $display("\t%6d:%b", j, data[j]);
     end

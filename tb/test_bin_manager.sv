@@ -182,13 +182,13 @@ module test_bin_manager(input clk, input rst);
                     cdata.display_lits();
                     ram_we_c_ex_i = 1;
                     cdata.get_clause(ram_din_c_ex_i);
-                    ram_addr_c_ex_i = i;
+                    ram_addr_c_ex_i = i+1;
             end
             @ (posedge clk);
                 ram_we_c_ex_i = 0;
             @ (posedge clk);
                 $display("%1tns bram clause", $time/1000.0);
-                bin_manager.bram_clauses_bins_inst.display(0, nb*cmax);
+                bin_manager.bram_clauses_bins_inst.display(1, nb*cmax+1);
         end
     endtask
 
@@ -199,13 +199,13 @@ module test_bin_manager(input clk, input rst);
                 @ (posedge clk);
                     ram_we_v_ex_i = 1;
                     ram_din_v_ex_i = vbin[i];
-                    ram_addr_v_ex_i = i;
+                    ram_addr_v_ex_i = i+1;
             end
             @ (posedge clk);
                 ram_we_v_ex_i = 0;
             @ (posedge clk);
                 $display("%1tns bram var", $time/1000.0);
-                bin_manager.bram_vars_bins_inst.display(0, nb*cmax);
+                bin_manager.bram_vars_bins_inst.display(1, nb*cmax+1);
         end
     endtask
 
@@ -218,7 +218,7 @@ module test_bin_manager(input clk, input rst);
     initial begin
         rd_carray_r = 0;
         cindex = 0;
-        forever @(posedge clk) begin
+        forever @(negedge clk) begin
             if(rd_carray_o!=0) begin
                 cindex = 0;
                 rd_carray_r = rd_carray_o;
@@ -228,6 +228,11 @@ module test_bin_manager(input clk, input rst);
                 end
                 cdata_update.set_lits(bin_updated[cindex]);
                 cdata_update.get_clause(clause_i);
+                //$display("%1tns rd_carray_o = %b cindex = %1d; clause_i = %b", 
+                //    $time/1000.0,
+                //    rd_carray_o,
+                //    cindex,
+                //    clause_i);
             end
         end
     end
@@ -292,16 +297,39 @@ module test_bin_manager(input clk, input rst);
         reset_all_signal();
         bm_load_test_case1();
 
+        //update
         while(start_core_o!=1)
             @ (posedge clk);
-
         bm_update_test_case1();
+        while(bin_manager.done_update!=1)
+            @ (posedge clk);
+        display_bram();
+
+        //update
+        while(start_core_o!=1)
+            @ (posedge clk);
+        bm_update_test_case1();
+        while(bin_manager.done_update!=1)
+            @ (posedge clk);
+        display_bram();
 
         while(done_bm_o!=1)
             @ (posedge clk);
 
         repeat (10) @(posedge clk);
     endtask
+
+    task display_bram();
+        $display("%1tns bram clause", $time/1000.0);
+        bin_manager.bram_clauses_bins_inst.display(1, nb*cmax+1);
+        $display("%1tns bram var", $time/1000.0);
+        bin_manager.bram_vars_bins_inst.display(1, nb*cmax+1);
+        $display("%1tns bram vs", $time/1000.0);
+        bin_manager.bram_global_var_state_inst.display(1, nv+1);
+        $display("%1tns bram ls", $time/1000.0);
+        bin_manager.bram_global_lvl_state_inst.display(1, nv+1);
+    endtask
+
 
     task run_bm_load();
         @(posedge clk);

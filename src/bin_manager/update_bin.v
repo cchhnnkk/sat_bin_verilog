@@ -67,21 +67,22 @@ module update_bin #(
     reg [NUM_LVLS_A_BIN-1:0]                rd_lvl_states;
 
     //子句bin的基址，加载NUM_C个子句
-    reg [ADDR_WIDTH_CLAUSES-1 : 0]        clause_bin_i_base_addr;
+    reg [ADDR_WIDTH_CLAUSES-1 : 0]        learntc_base_addr;
     wire [ADDR_WIDTH_VAR-1 : 0]           var_bin_i_base_addr;
 
-    wire [ADDR_WIDTH_CLAUSES-1 : 0]       clauses_bin_baseaddr = cur_bin_num_i*NUM_CLAUSES_A_BIN;//i*8
+    //从地址1开始
+    wire [ADDR_WIDTH_CLAUSES-1 : 0]       clauses_bin_baseaddr = (cur_bin_num_i-1)*NUM_CLAUSES_A_BIN+1;//i*8
 
     always @(posedge clk)
     begin
         if(~rst)
-            clause_bin_i_base_addr <= 0;
+            learntc_base_addr <= 0;
         else if(start_update)
-            clause_bin_i_base_addr <= clauses_bin_baseaddr + NUM_CLAUSES_A_BIN/2; //i*8+4
+            learntc_base_addr <= clauses_bin_baseaddr + NUM_CLAUSES_A_BIN/2; //i*8+4
         else
-            clause_bin_i_base_addr <= clause_bin_i_base_addr;
+            learntc_base_addr <= learntc_base_addr;
     end
-    assign var_bin_i_base_addr = clause_bin_i_base_addr; //i*8
+    assign var_bin_i_base_addr = clauses_bin_baseaddr; //i*8
 
     parameter   IDLE = 0,
                 UPDATE = 1,
@@ -183,9 +184,9 @@ module update_bin #(
             ram_we_c_o <= 0;
             ram_data_c_o <= 0;
             ram_addr_c_o <= 0;
-        end else if(start_update) begin
-            ram_we_c_o <= 0;
-            ram_data_c_o <= 0;
+        end else if(rd_carray_o==1) begin
+            ram_we_c_o <= 1;
+            ram_data_c_o <= clause_i;
             ram_addr_c_o <= clauses_bin_baseaddr;
         end else if(rd_carray_o!=0) begin
             ram_we_c_o <= 1;
@@ -379,20 +380,40 @@ module update_bin #(
         always @(posedge clk) begin
             if(rd_carray_o!=0) begin
                 cdata.set_clause(clause_i);
-                $display("rd clause array");
-                $display("\t%1tns rd_carray_o = %b", $time/1000, rd_carray_o);
+                $display("%1tns rd_carray_o = %b", $time/1000, rd_carray_o);
                 cdata.display_lits();
             end
             if(start_update!=0) begin
                 //vs
                 vs_list.set(var_state_i);
-                $display("%1tns rd var state list", $time/1000);
+                $display("%1tns rd_var_state_list", $time/1000);
                 vs_list.display();
                 //ls
                 ls_list.set(lvl_states_i);
-                $display("%1tns rd lvl state list", $time/1000);
+                $display("%1tns rd_lvl_state_list", $time/1000);
                 ls_list.display();
             end
+            if(ram_we_c_o!=0) begin
+                $display("%1tns ram_we_c_o", $time/1000);
+                $display("\t%4d:%b", ram_addr_c_o, ram_data_c_o);
+            end
+            if(ram_we_vs_o!=0) begin
+                $display("%1tns ram_we_vs_o", $time/1000);
+                $display("\t%4d:%b", ram_addr_vs_o, ram_data_vs_o);
+            end
+            if(ram_we_ls_o!=0) begin
+                $display("%1tns ram_we_ls_o", $time/1000);
+                $display("\t%4d:%b", ram_addr_ls_o, ram_data_ls_o);
+            end
         end
+
+        always @(*) begin
+            $display("%1tns ram_addr_v_o=%1d; vars_cnt=%1d", $time/1000, ram_addr_v_o, vars_cnt);
+        end
+        always @(ram_addr_v_o) begin
+            @(posedge clk);
+            $display("%1tns ram_data_v_i=%1d", $time/1000, ram_data_v_i);
+        end
+
     `endif
 endmodule

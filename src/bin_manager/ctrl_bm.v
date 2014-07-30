@@ -102,16 +102,16 @@ module ctrl_bm #(
                         	n_state = GLOBAL_SAT;
 						else if(local_sat_i)
 							n_state = UPDATE_BIN;
-						else if(bkt_bin_from_core_i==0) //local_unsat_i
-							n_state = GLOBAL_UNSAT;
 						else
 							n_state = FIND_BKT_LVL;
 					end
                     else
                         n_state = RUN_CORE;
                 FIND_BKT_LVL:
-                    if(done_find_i)
+                    if(done_find_i && bkt_bin_from_core_i!=0)
                         n_state = BKT_ACROSS_BIN;
+                    else if(done_find_i && bkt_bin_from_core_i==0) //local_unsat_i
+                        n_state = GLOBAL_UNSAT;
                     else
                         n_state = FIND_BKT_LVL;
                 BKT_ACROSS_BIN:
@@ -137,8 +137,8 @@ module ctrl_bm #(
     always @(posedge clk)
     begin
         if(~rst)
-            cur_bin_num_r <= 0;
-        else if(c_state==LOAD_BIN && start_load_o)
+            cur_bin_num_r <= 1;
+        else if(c_state==LOAD_BIN && done_update_i)
             cur_bin_num_r <= cur_bin_num_r+1;
         else if(c_state==BKT_ACROSS_BIN)
             cur_bin_num_r <= bkt_bin_from_find_i;
@@ -295,8 +295,12 @@ module ctrl_bm #(
         if(c_state!=n_state && n_state!=IDLE)
         begin
             @(posedge clk)
-            $display("ctrl_core c_state = %s", s[c_state]);
+            $display("%1tns ctrl_core c_state = %s", $time/1000, s[c_state]);
         end
+    end
+
+    always @(*) begin
+        $display("%1tns cur_bin_num_o=%1d; cur_lvl_o=%1d", $time/1000, cur_bin_num_o, cur_lvl_o);
     end
 `endif
 

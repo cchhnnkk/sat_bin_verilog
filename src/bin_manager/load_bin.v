@@ -70,7 +70,8 @@ module load_bin #(
     reg [ADDR_WIDTH_CLAUSES-1 : 0]        clause_bin_i_base_addr;
     wire [ADDR_WIDTH_VAR-1 : 0]           var_bin_i_base_addr;
 
-    wire [ADDR_WIDTH_CLAUSES-1 : 0]       clauses_bin_baseaddr = request_bin_num_i*NUM_CLAUSES_A_BIN;//i*8
+    //从地址1开始
+    wire [ADDR_WIDTH_CLAUSES-1 : 0]       clauses_bin_baseaddr = (request_bin_num_i-1)*NUM_CLAUSES_A_BIN+1;//i*8
 
     always @(posedge clk)
     begin
@@ -162,13 +163,13 @@ module load_bin #(
             ram_addr_c_o <= 0;
     end
 
-    //有效信号延时一拍
+    //有效信号延时两拍
     reg c_valid_delay;
     always @(posedge clk)
     begin
         if(~rst)
             c_valid_delay <= 0;
-        else if(apply_load_o)
+        else if(c_state==LOAD && clauses_cnt==1)
             c_valid_delay <= 1;
         else
             c_valid_delay <= 0;
@@ -366,24 +367,21 @@ module load_bin #(
         always @(posedge clk) begin
             if(wr_carray_o!=0) begin
                 cdata.set_clause(clause_o);
-                $display("%1tns wr clause array", $time/1000);
-                $display("\t%1tns wr_carray_o = %b", $time/1000, wr_carray_o);
+                $display("%1tns wr_carray_o = %b", $time/1000, wr_carray_o);
                 cdata.display_lits();
             end
             if(wr_var_states_o!=0) begin
                 vs_list.set(var_states_o);
-                $display("%1tns wr var state list", $time/1000);
-                $display("\twr_var_states_o = %b", wr_var_states_o);
+                $display("%1tns wr_var_states_o = %b", $time/1000, wr_var_states_o);
                 vs_list.display();
             end
             if(wr_lvl_states_o!=0) begin
                 ls_list.set(lvl_states_o);
-                $display("%1tns wr lvl state list", $time/1000);
-                $display("\twr_lvl_states_o = %b", wr_lvl_states_o);
+                $display("%1tns wr_lvl_states_o = %b", $time/1000, wr_lvl_states_o);
                 ls_list.display();
             end
             if(done_load) begin
-                $display("\tbase_lvl_i = %1d", base_lvl_o);
+                $display("%1tns base_lvl_i = %1d", $time/1000, base_lvl_o);
             end
         end
     `endif

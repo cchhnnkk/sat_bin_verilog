@@ -15,10 +15,9 @@ vlog_se:
 # 模拟
 sim_bm:
 	sed "s/test_sat_engine_top/test_bin_manager_top/g" test_se_console.do > test_bm_console.do
-	vsim -c -do test_bm_console.do| \
+	vsim -c -do test_bm_console.do | \
 		sed -e "s/^.*Error: (vsim-[0-9]*) \(.*):\)/\1 Error/g" \
-		-e "s/^.*Warning: (vsim-[0-9]*) \(.*):\)/\1 Warning/g"
-	
+			-e "s/^.*Warning: (vsim-[0-9]*) \(.*):\)/\1 Warning/g"
 	rm test_bm_console.do
 	python transcript_info.py
 	sed -i "s/\n/\r/g" transcript.log

@@ -368,6 +368,8 @@ module bin_manager #(
             ram_addra_v_w <= 0;
         else if(apply_load)     //加载
             ram_addra_v_w <= ram_addr_v_from_load;
+        else if(apply_update)
+            ram_addra_v_w <= ram_addr_v_from_update;
         else
             ram_addra_v_w <= 0;
     end
