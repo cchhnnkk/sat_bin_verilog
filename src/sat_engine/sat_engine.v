@@ -22,7 +22,7 @@ module sat_engine #(
         input                                     start_core_i,
         output                                    done_core_o,
 
-        input [WIDTH_LVL-1:0]                     cur_bin_num_i,
+        input [WIDTH_BIN_ID-1:0]                  cur_bin_num_i,
         output                                    sat_o,
         output [WIDTH_LVL-1:0]                    cur_lvl_o,
         output                                    unsat_o,
@@ -163,6 +163,7 @@ module sat_engine #(
         .var_value_o     (var_value_from_carray),
         .var_lvl_i       (var_lvl_from_stlist),
         .var_lvl_o       (var_lvl_from_carray),
+        .participate_o   (),
 
         .wr_i            (wr_carray_i),
         .rd_i            (rd_carray_i),
@@ -197,7 +198,7 @@ module sat_engine #(
         class_vs_list #(8, WIDTH_LVL) vs_list = new();
         class_ls_list #(8, WIDTH_BIN_ID) ls_list = new();
 
-        always @(posedge clk) begin: display_load_info
+        always @(posedge clk) begin
             if(wr_carray_i!=0) begin
                 cdata.set_clause(clause_i);
                 //$display("sim time %4tns", $time/1000);
@@ -210,17 +211,15 @@ module sat_engine #(
             if(wr_var_states!=0) begin
                 vs_list.set(var_states_i);
                 //$display("sim time %4tns", $time/1000);
-                $display("%1tns wr var state list", $time/1000);
-                $display("\twr_var_states = %b", wr_var_states);
+                $display("%1tns wr_var_states = %b", $time/1000, wr_var_states);
                 vs_list.display();
             end
             if(wr_lvl_states!=0) begin
                 ls_list.set(lvl_states_i);
-                $display("%1tns wr lvl state list", $time/1000);
-                $display("\twr_lvl_states = %b", wr_lvl_states);
+                $display("%1tns wr_lvl_states = %b", $time/1000, wr_lvl_states);
                 ls_list.display();
             end
-            if(base_lvl_en==1) begin
+            if(start_core_i==1) begin
                 $display("\tbase_lvl_i = %1d", base_lvl_i);
             end
         end
@@ -249,11 +248,11 @@ module sat_engine #(
                 $display("%1tns done_core_i", $time/1000);
 
                 vs_list.set(lvl_states_o);
-                $display("%1tns var state list", $time/1000);
+                $display("%1tns var_state_list", $time/1000);
                 vs_list.display();
 
                 ls_list.set(lvl_states_o);
-                $display("%1tns lvl state list", $time/1000);
+                $display("%1tns lvl_state_list", $time/1000);
                 ls_list.display();
             end
         end
@@ -262,8 +261,7 @@ module sat_engine #(
             if(rd_carray_i!=0) begin
                 cdata.set_clause(clause_o);
                 //$display("sim time %4tns", $time/1000);
-                $display("%1tns rd clause array", $time/1000);
-                $display("\trd_carray_i = %b", rd_carray_i);
+                $display("%1tns rd_carray_i = %b", $time/1000, rd_carray_i);
                 //$display("\tclause_i = %b", clause_i);
                 cdata.display_lits();
             end

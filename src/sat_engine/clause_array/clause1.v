@@ -70,7 +70,7 @@ module clause1 #(
         .lit_i           (clause_i),
         .lit_o           (clause_lits),
         
-        .freelitcnt_pre  (0),
+        .freelitcnt_pre  (2'd0),
         .freelitcnt_next (freelitcnt),
         
         .imp_drv_i       (imp_drv),

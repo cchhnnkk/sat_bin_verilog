@@ -60,7 +60,7 @@ module lit8 #(
     wire [NUM_LITS*WIDTH_LVL/2-1 : 0] var_lvl_i_0,         var_lvl_i_1;
     wire [NUM_LITS*WIDTH_LVL/2-1 : 0] var_lvl_down_i_0,    var_lvl_down_i_1;
     wire [NUM_LITS*WIDTH_LVL/2-1 : 0] var_lvl_down_o_0,    var_lvl_down_o_1;
-    wire [WIDTH_LVL/2-1 : 0]          cmax_lvl_o_0,        cmax_lvl_o_1;
+    wire [WIDTH_LVL-1 : 0]            cmax_lvl_o_0,        cmax_lvl_o_1;
     wire [NUM_LITS/2*2-1:0]           lit_i_0,             lit_i_1;
     wire [NUM_LITS/2*2-1:0]           lit_o_0,             lit_o_1;
     wire [1:0]                        freelitcnt_0;
@@ -237,7 +237,7 @@ module lit4 #(
     wire [NUM_LITS*WIDTH_LVL/2-1 : 0] var_lvl_i_0,         var_lvl_i_1;
     wire [NUM_LITS*WIDTH_LVL/2-1 : 0] var_lvl_down_i_0,    var_lvl_down_i_1;
     wire [NUM_LITS*WIDTH_LVL/2-1 : 0] var_lvl_down_o_0,    var_lvl_down_o_1;
-    wire [WIDTH_LVL/2-1 : 0]          cmax_lvl_o_0,        cmax_lvl_o_1;
+    wire [WIDTH_LVL-1 : 0]            cmax_lvl_o_0,        cmax_lvl_o_1;
     wire [NUM_LITS/2*2-1:0]           lit_i_0,             lit_i_1;
     wire [NUM_LITS/2*2-1:0]           lit_o_0,             lit_o_1;
     wire [1:0]                        freelitcnt_0;
@@ -414,7 +414,7 @@ module lit2 #(
     wire [NUM_LITS*WIDTH_LVL/2-1 : 0] var_lvl_i_0,         var_lvl_i_1;
     wire [NUM_LITS*WIDTH_LVL/2-1 : 0] var_lvl_down_i_0,    var_lvl_down_i_1;
     wire [NUM_LITS*WIDTH_LVL/2-1 : 0] var_lvl_down_o_0,    var_lvl_down_o_1;
-    wire [WIDTH_LVL/2-1 : 0]          cmax_lvl_o_0,        cmax_lvl_o_1;
+    wire [WIDTH_LVL-1 : 0]            cmax_lvl_o_0,        cmax_lvl_o_1;
     wire [NUM_LITS/2*2-1:0]           lit_i_0,             lit_i_1;
     wire [NUM_LITS/2*2-1:0]           lit_o_0,             lit_o_1;
     wire [1:0]                        freelitcnt_0;

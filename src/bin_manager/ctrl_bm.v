@@ -295,7 +295,7 @@ module ctrl_bm #(
         if(c_state!=n_state && n_state!=IDLE)
         begin
             @(posedge clk)
-            $display("%1tns ctrl_core c_state = %s", $time/1000, s[c_state]);
+            $display("%1tns ctrl_bm c_state = %s", $time/1000, s[c_state]);
         end
     end
 

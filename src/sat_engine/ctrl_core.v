@@ -36,7 +36,7 @@ module ctrl_core #(
      input                    done_bkt_cur_bin_i,
 
      //其他信号
-     wire [WIDTH_LVL-1:0]     cur_bin_num_i,
+     wire [WIDTH_BIN_ID-1:0]  cur_bin_num_i,
      output reg               sat_o,
      output reg			      unsat_o
     );

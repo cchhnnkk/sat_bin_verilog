@@ -407,6 +407,7 @@ module update_bin #(
             end
         end
 
+        /*
         always @(*) begin
             $display("%1tns ram_addr_v_o=%1d; vars_cnt=%1d", $time/1000, ram_addr_v_o, vars_cnt);
         end
@@ -414,6 +415,7 @@ module update_bin #(
             @(posedge clk);
             $display("%1tns ram_data_v_i=%1d", $time/1000, ram_data_v_i);
         end
+        */
 
     `endif
 endmodule

@@ -16,8 +16,8 @@ module bin_manager #(
         parameter WIDTH_LVL_STATES       = 11,
         parameter ADDR_WIDTH_CLAUSES     = 10,
         parameter ADDR_WIDTH_VAR         = 10,
-        parameter ADDR_WIDTH_VAR_STATES = 10,
-        parameter ADDR_WIDTH_LVL_STATES = 10
+        parameter ADDR_WIDTH_VAR_STATES  = 10,
+        parameter ADDR_WIDTH_LVL_STATES  = 10
     )
     (
         input                     clk,
@@ -361,7 +361,7 @@ module bin_manager #(
     reg [ADDR_WIDTH_VAR-1:0]            ram_addra_v_w;
     reg                                 ram_web_v_w;
     reg [ADDR_WIDTH_CLAUSES-1:0]        ram_addrb_v_w;
-    reg [WIDTH_CLAUSES-1:0]             ram_dinb_v_w;
+    reg [WIDTH_VAR-1:0]                 ram_dinb_v_w;
     always @(posedge clk)
     begin
         if(~rst)
@@ -658,6 +658,29 @@ module bin_manager #(
         always @(posedge clk) begin
             if(done_rdinfo) begin
                 $display("%1tns nv_all=%1d nb_all=%1d", $time/1000, nv_all, nb_all);
+            end
+        end
+
+        `include "../tb/class_clause_array.sv";
+        `include "../tb/class_vs_list.sv";
+        `include "../tb/class_ls_list.sv";
+        class_clause_data #(8) cdata = new();
+        class_vs_list #(8, WIDTH_LVL) vs_list = new();
+        class_ls_list #(8, WIDTH_BIN_ID) ls_list = new();
+
+        always @(posedge clk) begin
+            if(done_load) begin
+                $display("%1tns done_load_cbin = %1d", $time/1000, cur_bin_num_o);
+                for(i=0; i<8; i++) begin
+                    cdata.set_clause(bram_clauses_bins_inst.data[i+1+(cur_bin_num_o-1)*8]);
+                    cdata.display_lits();
+                end
+                $display("%1tns done_load_vs = %1d", $time/1000, cur_bin_num_o);
+                vs_list.set(var_states_i);
+                vs_list.display();
+                $display("%1tns done_load_ls = %1d", $time/1000, cur_bin_num_o);
+                ls_list.set(lvl_states_i);
+                ls_list.display();
             end
         end
 

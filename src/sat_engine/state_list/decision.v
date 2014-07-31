@@ -46,7 +46,7 @@ module decision #(
 
     dcd_in_var8 dcd_in_var8(
         .value_i   (vars_value_i),
-        .lock_cnt_i(0),
+        .lock_cnt_i(2'd0),
         .lock_cnt_o(),
         .index_o   (index_w)
     );

@@ -1,10 +1,13 @@
 
 all: vlog sim
 
-vlog: vlog_bm
+vlog: vlog_sb
 
-sim: sim_bm
+sim: sim_sb
 
+# sat_bin
+vlog_sb:
+	vlog_test_sat_bin.sh
 # bin_manager
 vlog_bm:
 	vlog_test_bin_manager.sh
@@ -13,28 +16,35 @@ vlog_se:
 	vlog_test_sat_engine.sh
 
 # 模拟
-sim_bm:
-	sed "s/test_sat_engine_top/test_bin_manager_top/g" test_se_console.do > test_bm_console.do
-	vsim -c -do test_bm_console.do | \
+sim_sb:
+	sed "s/test_sat_engine_top/test_sat_bin_top/g" test_se_console.do > test_console.do
+	vsim -c -do test_console.do | \
 		sed -e "s/^.*Error: (vsim-[0-9]*) \(.*):\)/\1 Error/g" \
 			-e "s/^.*Warning: (vsim-[0-9]*) \(.*):\)/\1 Warning/g"
-	rm test_bm_console.do
+	rm test_console.do
 	python transcript_info.py
 	sed -i "s/\n/\r/g" transcript.log
-	# rm console.wlf
+sim_bm:
+	sed "s/test_sat_engine_top/test_bin_manager_top/g" test_se_console.do > test_console.do
+	vsim -c -do test_console.do | \
+		sed -e "s/^.*Error: (vsim-[0-9]*) \(.*):\)/\1 Error/g" \
+			-e "s/^.*Warning: (vsim-[0-9]*) \(.*):\)/\1 Warning/g"
+	rm test_console.do
+	python transcript_info.py
+	sed -i "s/\n/\r/g" transcript.log
 sim_se:
 	vsim -c -do test_se_console.do
 	python transcript_info.py
 sim_ca:
-	sed "s/test_sat_engine_top/test_clause_array_top/g" test_se_console.do > test_ca_console.do
-	vsim -c -do test_ca_console.do
-	rm test_ca_console.do
+	sed "s/test_sat_engine_top/test_clause_array_top/g" test_se_console.do > test_console.do
+	vsim -c -do test_console.do
+	rm test_console.do
 	python transcript_info.py
 	sed -i "s/--//g" transcript.log
 sim_c1:
-	sed "s/test_sat_engine_top/test_clause1_top/g" test_se_console.do > test_c1_console.do
-	vsim -c -do test_c1_console.do
-	rm test_c1_console.do
+	sed "s/test_sat_engine_top/test_clause1_top/g" test_se_console.do > test_console.do
+	vsim -c -do test_console.do
+	rm test_console.do
 	python transcript_info.py
 	sed -i "s/--//g" transcript.log
 
