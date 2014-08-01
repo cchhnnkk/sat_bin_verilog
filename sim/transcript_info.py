@@ -25,14 +25,14 @@ for i in xrange(start_tag, len(data)):
     if "# " in data[i]:
         line = data[i][2:]
         # print line
-        if 'ns' in line:
+        if 'ns ' in line:
             l = line.strip().split()
             if tab_len < len(l[0]):
                 tab_len = len(l[0])
                 # print l[0], tab_len
         info_data += [line]
 
-# print tab_len
+print "    tab_len=" + str(tab_len)
 cur_time = 0
 for line in info_data:
     if line[0] == '=':

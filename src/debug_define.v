@@ -8,10 +8,14 @@
 //`define DEBUG_update_bin
 `define DEBUG_bkt_across_bin
 `define DEBUG_bin_manager
-//`define T_START 250 	//ns
-//`define T_END   310 	//ns
-//`define T_START 730 	//ns
-//`define T_END   780 	//ns
-`define T_START 2150 	//ns
-`define T_END   2200 	//ns
+`define DEBUG_ctrl_bm
+
+`define T_START 750 	//ns
+`define T_END   1100 	//ns
+//`define DEBUG_state_list_time
+//`define DEBUG_clause_array_time
+//`define DEBUG_var_state_time
+//`define DEBUG_lvl_state_time
+//`define DEBUG_ctrl_bm_time
+//`define DEBUG_update_bin_time
 

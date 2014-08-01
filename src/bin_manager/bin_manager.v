@@ -684,6 +684,22 @@ module bin_manager #(
             end
         end
 
+        always @(posedge clk) begin
+            if(done_update) begin
+                $display("%1tns done_update_cbin = %1d", $time/1000, cur_bin_num_o);
+                for(i=0; i<8; i++) begin
+                    cdata.set_clause(bram_clauses_bins_inst.data[i+1+(cur_bin_num_o-1)*8]);
+                    cdata.display_lits();
+                end
+                $display("%1tns done_update_vs = %1d", $time/1000, cur_bin_num_o);
+                vs_list.set(var_states_i);
+                vs_list.display();
+                $display("%1tns done_update_ls = %1d", $time/1000, cur_bin_num_o);
+                ls_list.set(lvl_states_i);
+                ls_list.display();
+            end
+        end
+
     `endif
 
 endmodule

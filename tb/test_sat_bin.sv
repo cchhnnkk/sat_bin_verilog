@@ -117,7 +117,7 @@ module test_sat_bin(input clk, input rst);
     `include "../tb/class_clause_array.sv";
     `include "../tb/class_vs_list.sv";
     `include "../tb/class_ls_list.sv";
-    `include "../tb/bm_load_test_case1.sv"
+    `include "../tb/sb_test_case1.sv"
 
     class_clause_data #(8) cdata = new();
 
@@ -185,7 +185,7 @@ module test_sat_bin(input clk, input rst);
     task test_sat_bin_task();
         $display("test_sat_bin_task");
         reset_all_signal();
-        bm_load_test_case1();
+        sb_test_case1();
 
         while(done_o!=1)
             @ (posedge clk);
@@ -193,7 +193,7 @@ module test_sat_bin(input clk, input rst);
         repeat (10) @(posedge clk);
     endtask
 
-    task run_bm_load();
+    task run_sb_load();
         @(posedge clk);
             apply_ex_i = 1;
             wr_clauses();

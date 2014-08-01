@@ -410,7 +410,7 @@ module state_list #(
     `endif
 
 
-    `ifdef DEBUG_state_list
+    `ifdef DEBUG_state_list_time
         always @(posedge clk) begin
             if($time/1000 >= `T_START && $time/1000 <= `T_END) begin
                 display_state();

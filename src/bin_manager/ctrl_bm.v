@@ -2,7 +2,7 @@
     控制Bin_Manager的执行
   */
 
-`define DEBUG_ctrl_bm
+`include "../src/debug_define.v"
 
 module ctrl_bm #(
         parameter WIDTH_BIN_ID  = 10,
@@ -138,7 +138,7 @@ module ctrl_bm #(
     begin
         if(~rst)
             cur_bin_num_r <= 1;
-        else if(c_state==LOAD_BIN && done_update_i)
+        else if(c_state==UPDATE_BIN && done_update_i)
             cur_bin_num_r <= cur_bin_num_r+1;
         else if(c_state==BKT_ACROSS_BIN)
             cur_bin_num_r <= bkt_bin_from_find_i;
@@ -290,18 +290,72 @@ module ctrl_bm #(
         "UPDATE_BIN",
         "GLOBAL_SAT",
         "GLOBAL_UNSAT"};
+
+    int cnt[] = '{0, 0, 0, 0, 0, 0, 0, 0, 0};
+    string scnt[] = '{
+        "idle",
+        "rd_bin_info",
+        "load_bin",
+        "run_core",
+        "find_bkt_lvl",
+        "bkt_across_bin",
+        "update_bin",
+        "global_sat",
+        "global_unsat"};
         
     always @(posedge clk) begin
         if(c_state!=n_state && n_state!=IDLE)
         begin
             @(posedge clk)
-            $display("%1tns ctrl_bm c_state = %s", $time/1000, s[c_state]);
+            if(c_state==LOAD_BIN)
+                $display("%1tns ===============================================", $time/1000);
+            cnt[c_state]++;
+            $display("%1tns ctrl_bm c_state = %s ", $time/1000, s[c_state]);
+            $display("\tcnt_%1s = %1d", scnt[c_state], cnt[c_state]);
         end
     end
 
-    always @(*) begin
+    always @(rst, cur_bin_num_o, cur_lvl_o) begin
         $display("%1tns cur_bin_num_o=%1d; cur_lvl_o=%1d", $time/1000, cur_bin_num_o, cur_lvl_o);
     end
+`endif
+
+
+`ifdef DEBUG_ctrl_bm_time
+    always @(posedge clk) begin
+        if($time/1000 >= `T_START && $time/1000 <= `T_END) begin
+            display_state();
+        end
+    end
+
+    string str = "";
+    string str_name = "";
+    string str_value = "";
+
+    task display_state();
+        str = "";
+        str_name = "\t";
+        str_value = "\t";
+        $display("%1tns ctrl_bm", $time/1000);
+        //                    01234567890123456789
+        $sformat(str,"%16s", "impulse_cnt");                 str_name = {str_name, str};
+        $sformat(str,"%16s", "start_load_o");                str_name = {str_name, str};
+        $sformat(str,"%16s", "start_core_o");                str_name = {str_name, str};
+        $sformat(str,"%16s", "start_find_o");                str_name = {str_name, str};
+        $sformat(str,"%16s", "start_bkt");                   str_name = {str_name, str};
+        $sformat(str,"%16s", "start_update_o");              str_name = {str_name, str};
+
+
+        $sformat(str,"%16d", impulse_cnt);       str_value = {str_value, str};
+        $sformat(str,"%16d", start_load_o);      str_value = {str_value, str};
+        $sformat(str,"%16d", start_core_o);      str_value = {str_value, str};
+        $sformat(str,"%16d", start_find_o);      str_value = {str_value, str};
+        $sformat(str,"%16d", start_bkt_across_bin_o);      str_value = {str_value, str};
+        $sformat(str,"%16d", start_update_o);              str_value = {str_value, str};
+
+        $display(str_name);
+        $display(str_value);
+    endtask
 `endif
 
 endmodule

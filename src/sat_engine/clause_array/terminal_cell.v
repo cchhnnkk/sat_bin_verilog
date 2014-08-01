@@ -45,7 +45,7 @@ module terminal_cell #(
             cmax_lvl_w <= cmax_lvl_i;
     end
 
-    `ifdef DEBUG_clause_array
+    `ifdef DEBUG_clause_array_time
         //显示所有子句terminal cell
         int disp_all_c = 1;
         //显示特定子句的terminal cell

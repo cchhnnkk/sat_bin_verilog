@@ -240,6 +240,7 @@ module sat_engine #(
                 //$display("sim time %4tns", $time/1000);
                 $display("%1tns start_core_i", $time/1000);
                 $display("\tcur_bin_num_i = %1d", cur_bin_num_i);
+                $display("\tload_lvl_i    = %1d", load_lvl_i);
 
                 while(done_core_o!=1)
                     @(posedge clk);

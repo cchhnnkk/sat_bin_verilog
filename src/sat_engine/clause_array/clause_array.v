@@ -96,7 +96,7 @@ module clause_array #(
     assign wr_clause = add_learntc_en_i? learntc_insert_index : wr_i;
 
 
-    `ifdef DEBUG_clause_array
+    `ifdef DEBUG_clause_array_time
         `include "../tb/class_clause_data.sv";
         class_clause_data #(8) cdata = new;
 

@@ -118,7 +118,7 @@ module lvl_state1 #(
         (max_lvl_i >= lvl_r && has_bkt_r == 0) ? 1:0;
 
 
-    `ifdef DEBUG_lvl_state
+    `ifdef DEBUG_lvl_state_time
         //显示所有
         int disp_all_ls = 1;
         //显示特定

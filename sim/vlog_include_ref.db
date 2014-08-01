@@ -6,10 +6,13 @@
   "../src/bin_manager/ctrl_bm.v": [], 
   "../tb/class_vs_list.sv": [
     "../src/sat_engine/state_list/state_list.v", 
+    "../src/bin_manager/update_bin.v", 
     "../src/sat_engine/sat_engine.v", 
     "../tb/test_sat_engine.sv", 
+    "../tb/test_sat_bin.sv", 
     "../src/bin_manager/load_bin.v", 
-    "../tb/test_bin_manager.sv"
+    "../tb/test_bin_manager.sv", 
+    "../src/bin_manager/bin_manager.v"
   ], 
   "../src/bin_manager/update_bin.v": [], 
   "../src/sat_engine/state_list/lvl_states.v": [], 
@@ -18,6 +21,7 @@
     "../tb/test_sat_engine.sv"
   ], 
   "../src/bin_manager/find_global_bkt_lvl.v": [], 
+  "../tb/test_clause_array.sv": [], 
   "../src/sat_engine/state_list/decision.v": [], 
   "../src/sat_engine/ctrl_core.v": [], 
   "../tb/test_sat_engine.sv": [], 
@@ -29,6 +33,7 @@
   ], 
   "../tb/class_clause_data.sv": [
     "../src/sat_engine/state_list/state_list.v", 
+    "../src/bin_manager/update_bin.v", 
     "../src/sat_engine/sat_engine.v", 
     "../tb/class_clause_array.sv", 
     "../src/bin_manager/load_bin.v", 
@@ -40,15 +45,17 @@
     "../tb/test_sat_engine.sv"
   ], 
   "../tb/class_clause_array.sv": [
-    "../tb/test_sat_engine.sv", 
     "../tb/test_clause_array.sv", 
-    "../tb/test_bin_manager.sv"
+    "../tb/test_sat_engine.sv", 
+    "../tb/test_sat_bin.sv", 
+    "../tb/test_bin_manager.sv", 
+    "../src/bin_manager/bin_manager.v"
   ], 
+  "../tb/test_sat_bin.sv": [], 
   "../tb/se_test_case1.sv": [
     "../tb/test_sat_engine.sv"
   ], 
   "../tb/test_lit_cell.sv": [], 
-  "../src/bin_manager/bram_w30_d1024.v": [], 
   "../src/sat_engine/state_list/c_len1.v": [], 
   "../src/bin_manager/load_bin.v": [], 
   "../src/sat_engine/clause_array/clause1.v": [], 
@@ -56,7 +63,9 @@
   "../src/bin_manager/rd_bin_info.v": [], 
   "../src/sat_engine/clause_array/clause_array.v": [], 
   "../src/sat_bin.v": [], 
-  "../tb/test_clause_array.sv": [], 
+  "../tb/sb_load_test_case1.sv": [
+    "../tb/test_sat_bin.sv"
+  ], 
   "../tb/class_lvl_data.sv": [
     "../tb/test_clause_array.sv", 
     "../tb/test_clause1.sv"
@@ -69,27 +78,35 @@
     "../src/sat_engine/state_list/state_list.v", 
     "../src/sat_engine/state_list/var_state1.v", 
     "../src/sat_engine/state_list/lvl_state1.v", 
+    "../src/bin_manager/ctrl_bm.v", 
+    "../src/bin_manager/update_bin.v", 
     "../src/sat_engine/sat_engine.v", 
     "../src/sat_engine/ctrl_core.v", 
     "../src/bin_manager/load_bin.v", 
     "../src/sat_engine/clause_array/clause1.v", 
     "../src/sat_engine/clause_array/clause_array.v", 
+    "../src/bin_manager/bkt_across_bin.v", 
     "../src/sat_engine/clause_array/lit1.v", 
-    "../src/sat_engine/clause_array/terminal_cell.v"
+    "../src/sat_engine/clause_array/terminal_cell.v", 
+    "../src/bin_manager/bin_manager.v"
   ], 
   "../tb/test_clause1.sv": [], 
   "../src/sat_engine/state_list/c_lens.v": [], 
   "../src/sat_engine/clause_array/max_in_datas.v": [], 
   "../tb/class_ls_list.sv": [
     "../src/sat_engine/state_list/state_list.v", 
+    "../src/bin_manager/update_bin.v", 
     "../src/sat_engine/sat_engine.v", 
     "../tb/test_sat_engine.sv", 
+    "../tb/test_sat_bin.sv", 
     "../src/bin_manager/load_bin.v", 
-    "../tb/test_bin_manager.sv"
+    "../tb/test_bin_manager.sv", 
+    "../src/bin_manager/bin_manager.v"
   ], 
   "../src/sat_engine/clause_array/lit1.v": [], 
   "../src/sat_engine/clause_array/clauses.v": [], 
   "../src/bin_manager/scatter_to_datas.v": [], 
+  "../src/bin_manager/bram_param.v": [], 
   "../src/sat_engine/clause_array/terminal_cell.v": [], 
   "../tb/test_lit_cell.v": [], 
   "../tb/test_bin_manager.sv": [], 

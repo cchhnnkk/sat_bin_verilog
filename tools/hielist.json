@@ -5,6 +5,12 @@
       "lit1"
     ]
   ], 
+  "test_sat_bin_top": [
+    [
+      "test_sat_bin", 
+      "test_sat_bin"
+    ]
+  ], 
   "bram_w30_d1024": [], 
   "sat_bin": [
     [
@@ -184,6 +190,12 @@
     ]
   ], 
   "bram_w48_d1024": [], 
+  "test_sat_bin": [
+    [
+      "sat_bin", 
+      "sat_bin"
+    ]
+  ], 
   "terminal_cell": [], 
   "lvl_state1": [], 
   "blk_mem_gen_v7_3": [], 

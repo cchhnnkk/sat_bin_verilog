@@ -138,7 +138,7 @@ module ctrl_core #(
         else if(start_core_i)
             done_core_o <= 0;
         else
-            done_core_o <= done_core_o;
+            done_core_o <= 0;
     end
 
     // 保证start_decision_o信号是一个周期的脉冲信号
@@ -219,12 +219,24 @@ module ctrl_core #(
         "PARTIAL_SAT",
         "PARTIAL_UNSAT"};
         
+    int cnt[] = '{0, 0, 0, 0, 0, 0};
+    string scnt[] = '{
+        "idle",
+        "bcp",
+        "decision",
+        "analysis",
+        "bkt_cur_bin",
+        "partial_sat",
+        "partial_unsat"};
+
     always @(posedge clk) begin
         if(c_state!=n_state && n_state!=IDLE)
         begin
             @(posedge clk)
             //$display("sim time %4tns", $time/1000);
-            $display("%1tns ctrl_core c_state = %s", $time/1000, s[c_state]);
+            cnt[c_state]++;
+            $display("%1tns ctrl_core c_state = %s ", $time/1000, s[c_state]);
+            $display("\tcnt_%1s = %1d", scnt[c_state], cnt[c_state]);
         end
     end
 `endif

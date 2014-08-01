@@ -31,7 +31,7 @@ module decision #(
         if(~rst)
             next_lvl_r <= -1;
         else if(load_lvl_en)                      //load
-            next_lvl_r <= load_lvl_i;
+            next_lvl_r <= load_lvl_i+1; //load的是cur_lvl，所以要+1
         else if(decision_pulse)                   //决策
             next_lvl_r <= next_lvl_r+1;
         else if(apply_bkt_i)                      //回退

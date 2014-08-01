@@ -152,7 +152,7 @@ module lit1 #(
     assign cmax_lvl_o     = participate && ~isfree             ? var_lvl_i    : 0;
 
 
-    `ifdef DEBUG_clause_array
+    `ifdef DEBUG_clause_array_time
         assign debug_vid_next_o = debug_vid_next_i + 1;
         //显示所有文字
         int disp_all_lit = 0;

@@ -147,7 +147,7 @@ module var_state1 #(
     assign max_lvl_o = (learnt_lit_r!=0) ? var_lvl_r : 0;
 
 
-    `ifdef DEBUG_var_state
+    `ifdef DEBUG_var_state_time
         assign debug_vid_next_o = debug_vid_next_i + 1;
         //显示所有文字
         int disp_all_vs = 1;
@@ -201,20 +201,6 @@ module var_state1 #(
 
             $display(str_all);
         endtask
-
-        //task display_state();
-        //    $display("%1tns var state %1d", $time/1000, debug_vid_next_i);
-        //    $display("\tvar_value_i      = %03b", var_value_i);
-        //    $display("\tvar_value_o      = %03b", var_value_o);
-        //    $display("\tvar_value_r      = %1d", var_value_r);
-        //    $display("\tvar_lvl_i        = %1d", var_lvl_i);
-        //    $display("\tvar_lvl_o        = %1d", var_lvl_o);
-        //    $display("\tvar_lvl_r        = %1d", var_lvl_r);
-        //    $display("\tapply_imply_i    = %1d", apply_imply_i);
-        //    $display("\tlearnt_lit_r     = %1d", learnt_lit_r);
-        //    $display("\tfind_imply_o     = %1d", find_imply_o);
-        //    $display("\tfind_conflict_o  = %1b", find_conflict_o);
-        //endtask
     `endif
 
 endmodule

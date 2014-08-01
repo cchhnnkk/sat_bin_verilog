@@ -49,6 +49,8 @@ sim_c1:
 	sed -i "s/--//g" transcript.log
 
 # 波形文件
+wave_sb: hielist
+	cd ../tools && ../tools/gen_wave.sh test_sat_bin_top 3
 wave_bm: hielist
 	cd ../tools && ../tools/gen_wave.sh test_bin_manager_top 3
 wave_se: hielist

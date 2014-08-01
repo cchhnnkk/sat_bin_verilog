@@ -154,7 +154,7 @@ module clause1 #(
     assign all_c_sat_o = csat_from_lits || clause_lits==0;
 
 
-    `ifdef DEBUG_clause_array
+    `ifdef DEBUG_clause_array_time
         assign debug_cid_down_o = debug_cid_down_i + 1;
         `include "../tb/class_clause_data.sv";
         class_clause_data #(8) cdata = new;
