@@ -183,7 +183,7 @@ module test_sat_bin(input clk, input rst);
     /*** 测试用例集 ***/
 
     task test_sat_bin_task();
-        $display("test_sat_bin_task");
+        $display("%1tns test_sat_bin_task", $time/1000.0);
         reset_all_signal();
         sb_test_case1();
 

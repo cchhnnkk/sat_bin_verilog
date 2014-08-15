@@ -48,8 +48,8 @@ module state_list #(
         output reg                                add_learntc_en_o,
         output reg                                done_analyze_o,
         //find bkt lvl
-        output [WIDTH_BIN_ID-1:0]                 bkt_bin_o,
-        output [WIDTH_LVL-1:0]                    bkt_lvl_o,
+        output reg [WIDTH_BIN_ID-1:0]             bkt_bin_o,
+        output reg [WIDTH_LVL-1:0]                bkt_lvl_o,
 
         //backtrack cur bin
         input                                     apply_bkt_cur_bin_i,
@@ -77,6 +77,8 @@ module state_list #(
     wire [NUM_VARS-1:0]       find_imply_cur, find_conflict_cur;
     reg [NUM_VARS-1:0]        find_imply_pre, find_conflict_pre;
     wire [NUM_VARS-1:0]       valid_from_decision;
+    wire [WIDTH_BIN_ID-1:0]   bkt_bin_w;
+    wire [WIDTH_LVL-1:0]      bkt_lvl_w;
 
     var_state8 #(
         .WIDTH_VAR_STATES(WIDTH_VAR_STATES),
@@ -99,7 +101,7 @@ module state_list #(
         .apply_analyze_i      (apply_analyze_i),
         .max_lvl_o            (max_lvl),
         .apply_bkt_i          (apply_bkt_cur_bin_i),
-        .bkt_lvl_i            (bkt_lvl_o),
+        .bkt_lvl_i            (bkt_lvl_w),
         .wr_states            (wr_var_states),
         .var_states_i        (var_states_i),
         .var_states_o        (var_states_o),
@@ -133,7 +135,7 @@ module state_list #(
         .findflag_left_i      (findflag_left_i),
         .findflag_left_o      (),
         .max_lvl_i            (max_lvl),
-        .bkt_bin_o            (bkt_bin_o),
+        .bkt_bin_o            (bkt_bin_w),
         .bkt_lvl_o            (bkt_lvl_from_ls),
         .apply_bkt_i          (apply_bkt_cur_bin_i),
         .wr_states            (wr_lvl_states),
@@ -141,8 +143,22 @@ module state_list #(
         .lvl_states_o         (lvl_states_o)
     );
 
+    assign bkt_lvl_w = max_lvl<base_lvl_r? max_lvl:bkt_lvl_from_ls;
     //为判断真时bin间回退
-    assign bkt_lvl_o = max_lvl<base_lvl_r? max_lvl:bkt_lvl_from_ls;
+    always@(posedge clk) begin
+        if(~rst) begin
+            bkt_bin_o <= 0;
+            bkt_lvl_o <= 0;
+        end
+        else if(done_analyze_o) begin
+            bkt_bin_o <= bkt_bin_w;
+            bkt_lvl_o <= bkt_lvl_w;
+        end
+        else begin
+            bkt_bin_o <= bkt_bin_o;
+            bkt_lvl_o <= bkt_lvl_o;
+        end
+    end
 
     /*** 决策 ***/
     wire [WIDTH_LVL-1:0]  cur_local_lvl;

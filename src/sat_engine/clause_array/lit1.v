@@ -157,9 +157,9 @@ module lit1 #(
         //显示所有文字
         int disp_all_lit = 0;
         //显示特定文字
-        int len = 3;
-        int c[] = '{0, 0, 0};
-        int v[] = '{1, 3, 4};
+        int len = 4;
+        int c[] = '{0, 0, 2, 2};
+        int v[] = '{0, 2, 2, 4};
         always @(posedge clk) begin
             if($time/1000 >= `T_START && $time/1000 <= `T_END) begin
                 if(disp_all_lit) begin
@@ -182,7 +182,7 @@ module lit1 #(
         task display_state();
             str = "";
             str_all = "";
-            $display("%1tns c%1d v%1d", $time/1000, debug_cid_i, debug_vid_next_i);
+            $display("%1tns c%1d_v%1d", $time/1000, debug_cid_i, debug_vid_next_i);
             //              01234567890123456789
             $sformat(str,"\t     var_value_i");      str_all = {str_all, str};
             $sformat(str, " var_value_down_i");      str_all = {str_all, str};

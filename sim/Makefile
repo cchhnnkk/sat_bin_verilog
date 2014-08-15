@@ -84,4 +84,6 @@ clean:
 	rm -rf work
 	rm vlog_mtime.db
 	rm wlf*
+	vlib work
+	vmap work work
 	#\rm -rf $(CLEAN_THESE)  

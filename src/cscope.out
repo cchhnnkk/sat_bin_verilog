@@ -3352,7 +3352,7 @@ moduÀ
 12 
 ∑ømëî
  
-	gADDR_WIDTH_VAR_STATES
+	gADDR_WIDTH_VARS_STATES
  = 9
 
 15 
@@ -3424,7 +3424,7 @@ bøm_addr_v¨s_o
 30 
 	gouçut
  [
-ADDR_WIDTH_VAR_STATES
+ADDR_WIDTH_VARS_STATES
 -1:0] 
 bøm_addr_v¨s_°©es_o
 ,
@@ -3546,7 +3546,7 @@ WIDTH_VAR_STATES
 55 
 	gouçut
  [
-ADDR_WIDTH_VAR_STATES
+ADDR_WIDTH_VARS_STATES
 -1:0] 
 addr_upd©e_v¨s_°©es_o
 ,
@@ -3894,7 +3894,7 @@ bøm_addr_˛au£s_r
 141 
 ªg
  [
-ADDR_WIDTH_VAR_STATES
+ADDR_WIDTH_VARS_STATES
 -1:0] 
 bøm_addr_v¨s_°©es_r
 ;
@@ -7010,7 +7010,7 @@ moduÀ
 12 
 ∑ømëî
  
-	gADDR_WIDTH_VAR_STATES
+	gADDR_WIDTH_VARS_STATES
  = 9
 
 15 
@@ -7188,7 +7188,7 @@ bøm_addr_v¨s_r
 50 
 	gwúe
  [
-ADDR_WIDTH_VAR_STATES
+ADDR_WIDTH_VARS_STATES
 -1:0] 
 bøm_addr_v¨_°©e
 ;
@@ -7226,7 +7226,7 @@ d©a_upd©e_v¨_°©e_r
 57 
 	gªg
  [
-ADDR_WIDTH_VAR_STATES
+ADDR_WIDTH_VARS_STATES
 -1:0] 
 addr_upd©e_v¨_°©e_r
 ;
@@ -7252,7 +7252,7 @@ addr_upd©e_v¨_°©e_r
 63 
 	gªg
  [
-ADDR_WIDTH_VAR_STATES
+ADDR_WIDTH_VARS_STATES
 -1:0] 
 bøm_øddr_v¨_°©e_bp‹t
 ;
@@ -7268,7 +7268,7 @@ bøm_dout_v¨_°©e_bp‹t
 66 
 	gªg
  [
-ADDR_WIDTH_VAR_STATES
+ADDR_WIDTH_VARS_STATES
 -1:0] 
 bøm_waddr_v¨_°©e_bp‹t
 ;
@@ -9739,11 +9739,11 @@ def
 
 75 
 	`gí_wúe_°©
-('\twire [WIDTH_VAR_STATES-1:0] ', 'var_states_i_')
+('\twire [WIDTH_VAR_STATES-1:0] ', 'vars_states_i_')
 
 76 
 	`gí_wúe_°©
-('\twire [WIDTH_VAR_STATES-1:0] ', 'var_states_o_')
+('\twire [WIDTH_VAR_STATES-1:0] ', 'vars_states_o_')
 
 77 
 	`gí_wúe_°©

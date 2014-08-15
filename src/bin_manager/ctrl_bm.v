@@ -108,9 +108,9 @@ module ctrl_bm #(
                     else
                         n_state = RUN_CORE;
                 FIND_BKT_LVL:
-                    if(done_find_i && bkt_bin_from_core_i!=0)
+                    if(done_find_i && bkt_bin_from_find_i!=0)
                         n_state = BKT_ACROSS_BIN;
-                    else if(done_find_i && bkt_bin_from_core_i==0) //local_unsat_i
+                    else if(done_find_i && bkt_bin_from_find_i==0)
                         n_state = GLOBAL_UNSAT;
                     else
                         n_state = FIND_BKT_LVL;
@@ -138,7 +138,7 @@ module ctrl_bm #(
     begin
         if(~rst)
             cur_bin_num_r <= 1;
-        else if(c_state==UPDATE_BIN && done_update_i)
+        else if(c_state==UPDATE_BIN && done_update_i && local_sat_i)
             cur_bin_num_r <= cur_bin_num_r+1;
         else if(c_state==BKT_ACROSS_BIN)
             cur_bin_num_r <= bkt_bin_from_find_i;
@@ -318,6 +318,10 @@ module ctrl_bm #(
     always @(rst, cur_bin_num_o, cur_lvl_o) begin
         $display("%1tns cur_bin_num_o=%1d; cur_lvl_o=%1d", $time/1000, cur_bin_num_o, cur_lvl_o);
     end
+
+    always @(*) begin
+        $display("%1tns local_sat_i=%1d", $time/1000, local_sat_i);
+    end
 `endif
 
 
@@ -356,6 +360,7 @@ module ctrl_bm #(
         $display(str_name);
         $display(str_value);
     endtask
+
 `endif
 
 endmodule

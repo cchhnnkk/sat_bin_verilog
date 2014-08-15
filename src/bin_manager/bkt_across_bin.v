@@ -8,7 +8,6 @@ module bkt_across_bin #(
         parameter WIDTH_VAR              = 12,
         parameter WIDTH_LVL              = 16,
         parameter WIDTH_VAR_STATES       = 30,
-        parameter WIDTH_LVL_STATES       = 30,
         parameter WIDTH_BIN_ID           = 10,
         parameter ADDR_WIDTH_VAR_STATES = 9,
         parameter ADDR_WIDTH_LVL_STATES = 9
@@ -33,23 +32,20 @@ module bkt_across_bin #(
         //wr
         output reg                             ram_we_vs_o,
         output reg [WIDTH_VAR_STATES-1 : 0]    ram_wdata_vs_o,
-        output reg [ADDR_WIDTH_VAR_STATES-1:0] ram_waddr_vs_o,
-
-        //wr lvls states
-        output reg                             ram_we_ls_o,
-        output reg [WIDTH_LVL_STATES-1 : 0]    ram_data_ls_o,
-        output reg [ADDR_WIDTH_LVL_STATES-1:0] ram_addr_ls_o
+        output reg [ADDR_WIDTH_VAR_STATES-1:0] ram_waddr_vs_o
     );
 
     wire [2:0]     var_value;
     wire [15:0]    var_lvl;
+    reg [ADDR_WIDTH_VAR_STATES-1:0] ram_raddr_vs_delay;
 
     parameter   IDLE = 0,
                 BKT = 1,
-                DONE = 2;
+                WAIT = 2,
+                DONE = 3;
 
-    reg [1:0]               c_state, n_state;
-    reg [WIDTH_VAR-1:0]    var_cnt;
+    reg [2:0]               c_state, n_state;
+    reg [WIDTH_VAR-1:0]     var_cnt;
 
     always @(posedge clk)
     begin
@@ -72,9 +68,14 @@ module bkt_across_bin #(
                         n_state = IDLE;
                 BKT:
                     if(var_cnt==nv_all_i)
-                        n_state = DONE;
+                        n_state = WAIT;
                     else
                         n_state = BKT;
+                WAIT:
+                    if(ram_raddr_vs_delay==nv_all_i-1)
+                        n_state = DONE;
+                    else
+                        n_state = WAIT;
                 DONE:
                     n_state = IDLE;
                 default:
@@ -99,13 +100,18 @@ module bkt_across_bin #(
     begin
         if (~rst)
             ram_raddr_vs_o <= 0;
-        else if (c_state==BKT)
+        else if(c_state==BKT)
             ram_raddr_vs_o <= var_cnt;
         else
             ram_raddr_vs_o <= 0;
     end
 
     assign {var_value, var_lvl} = ram_rdata_vs_i;
+
+    always @(posedge clk)
+    begin
+        ram_raddr_vs_delay <= ram_raddr_vs_o;
+    end
 
     //wr
     always @(posedge clk)
@@ -116,34 +122,16 @@ module bkt_across_bin #(
             ram_waddr_vs_o <= 0;
         end else if(var_lvl==bkt_lvl_i && var_value[0]==0) begin //翻转
             ram_we_vs_o <= 1;
-            ram_wdata_vs_o <= {~var_value[2:1], var_value[0]};
-            ram_waddr_vs_o <= ram_raddr_vs_o;
+            ram_wdata_vs_o <= {~var_value[2:1], var_value[0], var_lvl};
+            ram_waddr_vs_o <= ram_raddr_vs_delay;
         end else if(var_lvl>=bkt_lvl_i) begin
             ram_we_vs_o <= 1;
             ram_wdata_vs_o <= 0;
-            ram_waddr_vs_o <= ram_raddr_vs_o;
+            ram_waddr_vs_o <= ram_raddr_vs_delay;
         end else begin
             ram_we_vs_o <= 0;
             ram_wdata_vs_o <= 0;
             ram_waddr_vs_o <= 0;
-        end
-    end
-
-    //翻转has_bkted=true
-    always @(posedge clk)
-    begin
-        if(~rst) begin
-            ram_we_ls_o <= 0;
-            ram_data_ls_o <= 0;
-            ram_addr_ls_o <= 0;
-        end else if(var_lvl==bkt_lvl_i && var_value[0]==0) begin //翻转
-            ram_we_ls_o <= 1;
-            ram_data_ls_o <= {bkt_bin_i, 1'b1};
-            ram_addr_ls_o <= bkt_lvl_i;
-        end else begin
-            ram_we_ls_o <= 0;
-            ram_data_ls_o <= 0;
-            ram_addr_ls_o <= bkt_lvl_i;
         end
     end
 
@@ -152,7 +140,7 @@ module bkt_across_bin #(
     begin
         if(~rst)
             apply_bkt_o <= 0;
-        else if(c_state==BKT)
+        else if(c_state!=IDLE)
             apply_bkt_o <= 1;
         else
             apply_bkt_o <= 0;
@@ -162,26 +150,39 @@ module bkt_across_bin #(
     begin
         if(~rst)
             done_bkt_o <= 0;
-        else if(start_bkt_i)
+        else if(c_state==DONE)
             done_bkt_o <= 1;
         else
             done_bkt_o <= 0;
     end
 
-    /**
-    *  输出调试的信息
-    */
-    `ifdef DEBUG_bkt_across_bin
-        always @(posedge clk) begin
-            if(apply_bkt_o) begin
-                if(var_lvl==bkt_lvl_i && var_value[0]==0) begin //翻转
-                    $display("%1tns bkt convert var %d", $time/1000, ram_raddr_vs_o);
-                end
-                else if(var_lvl>=bkt_lvl_i) begin
-                    $display("%1tns bkt clear var %d", $time/1000, ram_raddr_vs_o);
-                end
+/**
+*  输出调试的信息
+*/
+`ifdef DEBUG_bkt_across_bin
+    always @(posedge clk) begin
+        if(apply_bkt_o) begin
+            if(var_lvl==bkt_lvl_i && var_value[0]==0) begin //翻转
+                $display("%1tns bkt convert var %d", $time/1000, ram_raddr_vs_delay);
+            end
+            else if(var_lvl>=bkt_lvl_i) begin
+                $display("%1tns bkt clear var %d", $time/1000, ram_raddr_vs_delay);
             end
         end
-    `endif
+    end
+
+    always @(posedge clk) begin
+        if(apply_bkt_o) begin
+            $display("%1tns bkt_across_bin c_state = %1d", $time/1000, c_state);
+            $display("\t var_cnt = %1d", var_cnt);
+            $display("\t ram_raddr_vs_o = %1d", ram_raddr_vs_o);
+            $display("\t ram_rdata_vs_i = %1b", ram_rdata_vs_i);
+            $display("\t    var_value=%b, var_lvl=%1d", var_value, var_lvl);
+            $display("\t ram_we_vs_o = %1d", ram_we_vs_o);
+            $display("\t    ram_wdata_vs_o = %1b", ram_wdata_vs_o);
+            $display("\t    ram_waddr_vs_o = %1d", ram_waddr_vs_o);
+        end
+    end
+`endif
 
 endmodule

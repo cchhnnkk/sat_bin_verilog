@@ -71,14 +71,15 @@ module terminal_cell #(
         task display_state();
             str = "";
             str_all = "";
-            $display("%1tns c%1d terminal_cell", $time/1000, debug_cid_i);
+            $display("%1tns c%1d_terminal_cell", $time/1000, debug_cid_i);
             //               01234567890123456789
             $sformat(str,"\t all_lit_false_i");      str_all = {str_all, str};
             $sformat(str, "     conflict_c_i");      str_all = {str_all, str};
             $sformat(str, " conflict_c_drv_o");      str_all = {str_all, str};
             $sformat(str, "       csat_drv_o");      str_all = {str_all, str};
             $sformat(str, "     clause_len_i");      str_all = {str_all, str};
-            $sformat(str, "       cmax_lvl_o\n");    str_all = {str_all, str};
+            $sformat(str, "       cmax_lvl_o");    str_all = {str_all, str};
+            $sformat(str, "        imp_drv_o\n");    str_all = {str_all, str};
 
             $sformat(str,"\t%16b", all_lit_false_i );      str_all = {str_all, str};
             $sformat(str, " %16b", conflict_c_i    );      str_all = {str_all, str};
@@ -86,6 +87,7 @@ module terminal_cell #(
             $sformat(str, " %16d", csat_drv_o      );      str_all = {str_all, str};
             $sformat(str, " %16d", clause_len_i    );      str_all = {str_all, str};
             $sformat(str, " %16d", cmax_lvl_o      );      str_all = {str_all, str};
+            $sformat(str, " %16d", imp_drv_o       );      str_all = {str_all, str};
 
             $display(str_all);
         endtask

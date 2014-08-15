@@ -115,6 +115,8 @@ module ctrl_core #(
             sat_o <= 0;
         else if(c_state==PARTIAL_SAT)
             sat_o <= 1;
+        else if(c_state==PARTIAL_UNSAT)
+            sat_o <= 0;
         else
             sat_o <= sat_o;
     end
@@ -122,6 +124,8 @@ module ctrl_core #(
     always @(posedge clk)
     begin
         if(~rst)
+            unsat_o <= 0;
+        else if(c_state==PARTIAL_SAT)
             unsat_o <= 0;
         else if(c_state==PARTIAL_UNSAT)
             unsat_o <= 1;
@@ -210,6 +214,7 @@ module ctrl_core #(
     end
 
 `ifdef DEBUG_ctrl_core
+
     string s[] = '{
         "IDLE",
         "BCP",
@@ -229,8 +234,19 @@ module ctrl_core #(
         "partial_sat",
         "partial_unsat"};
 
+    reg delay_disp;
+
     always @(posedge clk) begin
-        if(c_state!=n_state && n_state!=IDLE)
+        if(~rst)
+            delay_disp <= 0;
+        else if(c_state!=n_state && n_state!=IDLE)
+            delay_disp <= 1;
+        else
+            delay_disp <= 0;
+    end
+
+    always @(posedge clk) begin
+        if(delay_disp)
         begin
             @(posedge clk)
             //$display("sim time %4tns", $time/1000);
@@ -239,6 +255,13 @@ module ctrl_core #(
             $display("\tcnt_%1s = %1d", scnt[c_state], cnt[c_state]);
         end
     end
+
+    /*
+    always @(*) begin
+        $display("%1tns sat_o=%1d, unsat_o=%1d", $time/1000, sat_o, unsat_o);
+    end
+    */
+
 `endif
 
 endmodule

@@ -29,6 +29,7 @@ module update_bin #(
         //update control
         input                                       start_update,
         input [WIDTH_BIN_ID-1 : 0]                  cur_bin_num_i,
+        input                                       local_sat_i,
         output reg                                  apply_update_o,
         output reg                                  done_update,
 
@@ -268,7 +269,7 @@ module update_bin #(
             ram_we_vs_o <= 0;
             ram_data_vs_o <= 0;
             ram_addr_vs_o <= 0;
-        end else if(rd_var_states!=0) begin
+        end else if(rd_var_states!=0 && local_sat_i) begin
             ram_we_vs_o <= 1;
             ram_data_vs_o <= var_state_reduced;
             ram_addr_vs_o <= ram_data_v_i;
@@ -330,7 +331,7 @@ module update_bin #(
             ram_we_ls_o <= 0;
             ram_data_ls_o <= 0;
             ram_addr_ls_o <= base_lvl_i;
-        end else if(rd_lvl_states!=0) begin
+        end else if(rd_lvl_states!=0 && local_sat_i) begin
             ram_we_ls_o <= 1;
             ram_data_ls_o <= lvl_state_reduced;
             ram_addr_ls_o <= ram_addr_ls_o + 1;

@@ -219,11 +219,11 @@ module bin_manager #(
     // find_global_bkt_lvl
     wire                                    apply_find;
     //rd
-    wire [ADDR_WIDTH_LVL_STATES-1:0]       ram_raddr_ls_from_find;
+    wire [ADDR_WIDTH_LVL_STATES-1:0]        ram_raddr_ls_from_find;
     //wr
     wire                                    ram_we_ls_from_find;
     wire [WIDTH_LVL_STATES-1 : 0]           ram_wdata_ls_from_find;
-    wire [ADDR_WIDTH_LVL_STATES-1:0]       ram_waddr_ls_from_find;
+    wire [ADDR_WIDTH_LVL_STATES-1:0]        ram_waddr_ls_from_find;
 
     find_global_bkt_lvl #(
         .WIDTH_LVL             (WIDTH_LVL),
@@ -258,16 +258,11 @@ module bin_manager #(
     wire                             ram_we_vs_from_bkt;
     wire [WIDTH_VAR_STATES-1 : 0]    ram_wdata_vs_from_bkt;
     wire [ADDR_WIDTH_VAR_STATES-1:0] ram_waddr_vs_from_bkt;
-    wire                             ram_we_ls_from_bkt;
-    wire [WIDTH_LVL_STATES-1 : 0]    ram_data_ls_from_bkt;
-    wire [ADDR_WIDTH_LVL_STATES-1:0] ram_addr_ls_from_bkt;
-    wire [WIDTH_LVL_STATES-1 : 0]    ram_doutb_ls;
 
     bkt_across_bin #(
         .WIDTH_VAR             (WIDTH_VAR),
         .WIDTH_LVL             (WIDTH_LVL),
         .WIDTH_VAR_STATES      (WIDTH_VAR_STATES),
-        .WIDTH_LVL_STATES      (WIDTH_LVL_STATES),
         .ADDR_WIDTH_VAR_STATES(ADDR_WIDTH_VAR_STATES),
         .ADDR_WIDTH_LVL_STATES(ADDR_WIDTH_LVL_STATES)
     )
@@ -278,7 +273,7 @@ module bin_manager #(
         .start_bkt_i   (start_bkt_across_bin),
         .apply_bkt_o   (apply_bkt_across_bin),
         .done_bkt_o    (done_bkt_across_bin),
-        .nv_all_i     (nv_all),
+        .nv_all_i      (nv_all),
         .bkt_lvl_i     (bkt_lvl_find),
         .bkt_bin_i     (bkt_bin_find),
         //vars states
@@ -288,11 +283,7 @@ module bin_manager #(
         //wr
         .ram_we_vs_o   (ram_we_vs_from_bkt),
         .ram_wdata_vs_o(ram_wdata_vs_from_bkt),
-        .ram_waddr_vs_o(ram_waddr_vs_from_bkt),
-        //wr lvls states
-        .ram_we_ls_o   (ram_we_ls_from_bkt),
-        .ram_data_ls_o (ram_data_ls_from_bkt),
-        .ram_addr_ls_o (ram_addr_ls_from_bkt)
+        .ram_waddr_vs_o(ram_waddr_vs_from_bkt)
     );
 
 
@@ -330,6 +321,7 @@ module bin_manager #(
         //update control
         .start_update  (start_update),
         .cur_bin_num_i (cur_bin_num_o),
+        .local_sat_i   (local_sat_i),
         .apply_update_o(apply_update),
         .done_update   (done_update),
         //update from sat engine
@@ -473,7 +465,7 @@ module bin_manager #(
     reg [ADDR_WIDTH_VAR_STATES-1:0]    ram_addra_vs_w;
     reg                                 ram_web_vs_w;
     reg [WIDTH_VAR_STATES-1:0]          ram_dinb_vs_w;
-    reg [ADDR_WIDTH_VAR_STATES-1:0]    ram_addrb_vs_w;
+    reg [ADDR_WIDTH_VAR_STATES-1:0]     ram_addrb_vs_w;
 
     always @(*)
     begin
@@ -481,6 +473,8 @@ module bin_manager #(
             ram_addra_vs_w = 0;
         else if(apply_load)     //加载
             ram_addra_vs_w = ram_addr_vs_from_load;
+        else if(apply_bkt_across_bin)
+            ram_addra_vs_w = ram_raddr_vs_from_bkt;
         else
             ram_addra_vs_w = 0;
     end
@@ -534,10 +528,10 @@ module bin_manager #(
 
     /*** bram 层级状态 **/
     //bram端口复用
-    reg [ADDR_WIDTH_LVL_STATES-1:0]    ram_addra_ls_w;
+    reg [ADDR_WIDTH_LVL_STATES-1:0]     ram_addra_ls_w;
     reg                                 ram_web_ls_w;
     reg [WIDTH_LVL_STATES-1:0]          ram_dinb_ls_w;
-    reg [ADDR_WIDTH_LVL_STATES-1:0]    ram_addrb_ls_w;
+    reg [ADDR_WIDTH_LVL_STATES-1:0]     ram_addrb_ls_w;
 
     always @(*)
     begin
@@ -546,7 +540,7 @@ module bin_manager #(
         else if(apply_load)     //加载
             ram_addra_ls_w = ram_addr_ls_from_load;
         else if(apply_find)
-            ram_addra_ls_w = ram_waddr_ls_from_find;
+            ram_addra_ls_w = ram_raddr_ls_from_find;
         else
             ram_addra_ls_w = 0;
     end
@@ -559,19 +553,14 @@ module bin_manager #(
             ram_addrb_ls_w = 0;
         end
         else if(apply_update) begin     //更新
-            ram_web_ls_w = 1;
+            ram_web_ls_w = ram_we_ls_from_update;
             ram_dinb_ls_w = ram_data_ls_from_update;
             ram_addrb_ls_w = ram_addr_ls_from_update;
         end
         else if(apply_find) begin
-            ram_web_ls_w = 1;
+            ram_web_ls_w = ram_we_ls_from_find;
             ram_dinb_ls_w = ram_wdata_ls_from_find;
             ram_addrb_ls_w = ram_waddr_ls_from_find;
-        end
-        else if(apply_bkt_across_bin) begin
-            ram_web_ls_w = 1;
-            ram_dinb_ls_w = ram_data_ls_from_bkt;
-            ram_addrb_ls_w = ram_addr_ls_from_bkt;
         end
         else if(apply_ex_i) begin   //外部输入
             ram_web_ls_w = ram_we_ls_ex_i;
@@ -599,98 +588,99 @@ module bin_manager #(
         .web(ram_web_ls_w),
         .addrb(ram_addrb_ls_w),
         .dinb(ram_dinb_ls_w),
-        .doutb(ram_doutb_ls)
+        .doutb()
     );
 
-    /**
-    *  输出调试的信息
-    */
-    `ifdef DEBUG_bin_manager
-        reg [1023:0] sum_bkt, sum_bkt_next;
-        int i=0;
+/**
+*  输出调试的信息
+*/
+`ifdef DEBUG_bin_manager
+    reg [1023:0] sum_bkt, sum_bkt_next;
+    int i=0;
 
-        always @(posedge clk) begin
-            if(~rst) begin
-                sum_bkt = 0;
-                sum_bkt_next = 0;
-            end
-            else if(done_bkt_across_bin) begin
-                sum_bkt_next = 1;
-                for(i=0; i<nv_all; i++) begin
-                    if(i<bkt_lvl_find)
-                        sum_bkt_next = sum_bkt_next<<1 + bram_global_lvl_state_inst.data[i][0];
-                    else
-                        sum_bkt_next = sum_bkt_next<<1;
-                end
-                assert(sum_bkt_next > sum_bkt)
-                else begin
-                    $display("%1tns error assert(sum_bkt_next > sum_bkt)", $time/1000);
-                    $finish();
-                end
-                sum_bkt = sum_bkt_next;
-                display_sum_bkt();
-            end
+    always @(posedge clk) begin
+        if(~rst) begin
+            sum_bkt = 0;
+            sum_bkt_next = 0;
         end
-
-        string str, str_dcd, str_bkt;
-
-        reg [WIDTH_BIN_ID-1:0] dcd_bin;
-        reg                    has_bkt;
-
-        task display_sum_bkt();
-            str = "";
-            str_dcd = "";
-            str_bkt = "";
-            $display("%1tns sum_bkt %1d", $time/1000, sum_bkt);
-            str_dcd = "\tdcd_bin";
-            str_bkt = "\thas_bkt";
+        else if(done_bkt_across_bin) begin
+            sum_bkt_next = 1;
             for(i=0; i<nv_all; i++) begin
-                if(i<bkt_lvl_find) begin
-                    {dcd_bin, has_bkt} = lvl_states_i;
-                    $sformat(str,"\t%4d", dcd_bin);     str_dcd = {str_dcd, str};
-                    $sformat(str,"\t%4d", has_bkt);     str_bkt = {str_bkt, str};
-                end
+                if(i<bkt_lvl_find)
+                    sum_bkt_next = sum_bkt_next<<1 + bram_global_lvl_state_inst.data[i][0];
+                else
+                    sum_bkt_next = sum_bkt_next<<1;
             end
-            $display(str_dcd);
-            $display(str_bkt);
-        endtask
+            assert(sum_bkt_next > sum_bkt)
+            else begin
+                $display("%1tns error assert(sum_bkt_next > sum_bkt)", $time/1000);
+                $finish();
+            end
+            sum_bkt = sum_bkt_next;
+            display_sum_bkt();
+        end
+    end
 
-        always @(posedge clk) begin
-            if(done_rdinfo) begin
-                $display("%1tns nv_all=%1d nb_all=%1d", $time/1000, nv_all, nb_all);
+    string str, str_dcd, str_bkt;
+
+    reg [WIDTH_BIN_ID-1:0] dcd_bin;
+    reg                    has_bkt;
+
+    task display_sum_bkt();
+        str = "";
+        str_dcd = "";
+        str_bkt = "";
+        $display("%1tns sum_bkt %1d", $time/1000, sum_bkt);
+        str_dcd = "\tdcd_bin";
+        str_bkt = "\thas_bkt";
+        for(i=0; i<nv_all; i++) begin
+            if(i<bkt_lvl_find) begin
+                {dcd_bin, has_bkt} = bram_global_lvl_state_inst.data[i+1];
+                $sformat(str," %4d", dcd_bin);     str_dcd = {str_dcd, str};
+                $sformat(str," %4d", has_bkt);     str_bkt = {str_bkt, str};
             end
         end
+        $display(str_dcd);
+        $display(str_bkt);
+    endtask
 
-        `include "../tb/class_clause_array.sv";
-        `include "../tb/class_vs_list.sv";
-        `include "../tb/class_ls_list.sv";
-        class_clause_data #(8) cdata = new();
-        class_vs_list #(8, WIDTH_LVL) vs_list = new();
-        class_ls_list #(8, WIDTH_BIN_ID) ls_list = new();
-
-        always @(posedge clk) begin
-            if(done_load) begin
-                $display("%1tns done_load_cbin = %1d", $time/1000, cur_bin_num_o);
-                for(i=0; i<8; i++) begin
-                    cdata.set_clause(bram_clauses_bins_inst.data[i+1+(cur_bin_num_o-1)*8]);
-                    cdata.display_lits();
-                end
-                $display("%1tns done_load_vs = %1d", $time/1000, cur_bin_num_o);
-                vs_list.set(var_states_i);
-                vs_list.display();
-                $display("%1tns done_load_ls = %1d", $time/1000, cur_bin_num_o);
-                ls_list.set(lvl_states_i);
-                ls_list.display();
-            end
+    always @(posedge clk) begin
+        if(done_rdinfo) begin
+            $display("%1tns nv_all=%1d nb_all=%1d", $time/1000, nv_all, nb_all);
         end
+    end
 
-        always @(posedge clk) begin
-            if(done_update) begin
-                $display("%1tns done_update_cbin = %1d", $time/1000, cur_bin_num_o);
-                for(i=0; i<8; i++) begin
-                    cdata.set_clause(bram_clauses_bins_inst.data[i+1+(cur_bin_num_o-1)*8]);
-                    cdata.display_lits();
-                end
+    `include "../tb/class_clause_array.sv";
+    `include "../tb/class_vs_list.sv";
+    `include "../tb/class_ls_list.sv";
+    class_clause_data #(8) cdata = new();
+    class_vs_list #(8, WIDTH_LVL) vs_list = new();
+    class_ls_list #(8, WIDTH_BIN_ID) ls_list = new();
+
+    always @(posedge clk) begin
+        if(done_load) begin
+            $display("%1tns done_load_cbin = %1d", $time/1000, cur_bin_num_o);
+            for(i=0; i<8; i++) begin
+                cdata.set_clause(bram_clauses_bins_inst.data[i+1+(cur_bin_num_o-1)*8]);
+                cdata.display_lits();
+            end
+            $display("%1tns done_load_vs = %1d", $time/1000, cur_bin_num_o);
+            vs_list.set(var_states_i);
+            vs_list.display();
+            $display("%1tns done_load_ls = %1d", $time/1000, cur_bin_num_o);
+            ls_list.set(lvl_states_i);
+            ls_list.display();
+        end
+    end
+
+    always @(posedge clk) begin
+        if(done_update) begin
+            $display("%1tns done_update_cbin = %1d", $time/1000, cur_bin_num_o);
+            for(i=0; i<8; i++) begin
+                cdata.set_clause(bram_clauses_bins_inst.data[i+1+(cur_bin_num_o-1)*8]);
+                cdata.display_lits();
+            end
+            if(local_sat_i) begin
                 $display("%1tns done_update_vs = %1d", $time/1000, cur_bin_num_o);
                 vs_list.set(var_states_i);
                 vs_list.display();
@@ -698,8 +688,66 @@ module bin_manager #(
                 ls_list.set(lvl_states_i);
                 ls_list.display();
             end
+            display_bram();
         end
+    end
 
-    `endif
+    task display_bram();
+        $display("%1tns bram_clause", $time/1000.0);
+        bram_clauses_bins_inst.display(1, nb_all*8+1);
+        $display("%1tns bram_var", $time/1000.0);
+        bram_vars_bins_inst.display(1, nb_all*8+1);
+        $display("%1tns bram_vs", $time/1000.0);
+        bram_global_var_state_inst.display(1, nv_all+1);
+        $display("%1tns bram_ls", $time/1000.0);
+        bram_global_lvl_state_inst.display(1, nv_all+1);
+    endtask
+
+    /*
+    always @(*) begin
+        $display("%1tns bin_manager", $time/1000);
+        $display("\t apply_find = %1d", apply_find);
+        $display("\t ram_addra_ls_w = %1d", ram_addra_ls_w);
+        $display("\t ram_douta_ls = %b", ram_douta_ls);
+        $display("\t ram_raddr_ls_from_find = %1d", ram_raddr_ls_from_find);
+    end
+    */
+
+    always @(posedge clk) begin
+        if(done_find) begin
+            $display("%1tns done_find", $time/1000);
+            $display("\t bkt_bin_find = %1d, bkt_lvl_find = %1d", bkt_bin_find, bkt_lvl_find);
+            //$display("%1tns bram_ls", $time/1000.0);
+            //bram_global_lvl_state_inst.display(1, nv_all+1);
+        end
+    end
+
+`endif
+
+
+`ifdef DEBUG_bkt_across_bin
+    reg [2:0] vs_value;
+    reg [WIDTH_LVL-1:0] vs_lvl;
+
+    always @(posedge clk) begin
+        if(done_bkt_across_bin) begin
+            $display("%1tns done_bkt_across_bin", $time/1000);
+            disp_bkt();
+        end
+        if(start_bkt_across_bin) begin
+            $display("%1tns start_bkt_across_bin", $time/1000);
+            disp_bkt();
+        end
+    end
+
+    task disp_bkt();
+        $display("%1tns bram_vs", $time/1000.0);
+        $display("\t%8s : %8s %8s", "addr", "vs_value", "vs_lvl");
+        for(i=0; i<nv_all; i++) begin
+            {vs_value, vs_lvl} = bram_global_var_state_inst.data[i+1];
+            $display("\t%8d : %8b %8d", i+1, vs_value, vs_lvl);
+        end
+    endtask
+`endif
 
 endmodule

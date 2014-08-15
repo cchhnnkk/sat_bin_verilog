@@ -251,6 +251,7 @@ module load_bin #(
             wr_var_states_o <= 0;
     end
 
+    reg base_lvl_en_delay1, base_lvl_en_delay2;
     /**
      *  加载lvl state
      *  先沿着lvl state list向前找到当前bin最小的lvl
@@ -260,7 +261,7 @@ module load_bin #(
     begin
         if (~rst)
             ls_cnt <= 0;
-        else if (base_lvl_en && ls_cnt<NUM_CLAUSES_A_BIN)
+        else if (c_state==LOAD && base_lvl_en && ls_cnt<NUM_CLAUSES_A_BIN)
             ls_cnt <= ls_cnt+1;
         else if (c_state==LOAD)
             ls_cnt <= ls_cnt;
@@ -274,15 +275,19 @@ module load_bin #(
     assign {dcd_bin, has_bkt} = ram_data_ls_i;
 
     //找到非当前bin的lvl作为base_lvl
+    reg ram_data_ls_valid;
     always @(posedge clk)
     begin
         if(~rst) begin
             base_lvl_en <= 0;
             base_lvl_o <= 0;
-        end else if(c_state==LOAD && request_bin_num_i==dcd_bin) begin
+        end else if (start_load) begin
+            base_lvl_en <= 0;
+            base_lvl_o <= cur_lvl_i;
+        end else if(c_state==LOAD && base_lvl_en==0 && ram_data_ls_valid && request_bin_num_i==dcd_bin) begin
             base_lvl_en <= 0;
             base_lvl_o <= ram_addr_ls_o;
-        end else if(c_state==LOAD && request_bin_num_i!=dcd_bin) begin
+        end else if(c_state==LOAD && ram_data_ls_valid && request_bin_num_i!=dcd_bin) begin
             base_lvl_en <= 1;
             base_lvl_o <= base_lvl_o;
         end else begin
@@ -293,16 +298,48 @@ module load_bin #(
 
     always @(posedge clk)
     begin
+        if(c_state==LOAD) begin
+            base_lvl_en_delay1 <= base_lvl_en;
+            base_lvl_en_delay2 <= base_lvl_en_delay1;
+        end else begin
+            base_lvl_en_delay1 <= 0;
+            base_lvl_en_delay2 <= 0;
+        end
+    end
+
+    always @(posedge clk)
+    begin
         if (~rst)
             ram_addr_ls_o <= 0;
-        else if (start_load)
+        else if (start_load)        //找到非当前bin的lvl作为base_lvl
             ram_addr_ls_o <= cur_lvl_i;
-        else if(c_state==LOAD && request_bin_num_i==dcd_bin)
+        else if(base_lvl_en) //load lvl state
+            ram_addr_ls_o <= base_lvl_o + 1 + ls_cnt; 
+        else if(c_state==LOAD && ram_data_ls_valid && request_bin_num_i==dcd_bin)
+            //找到非当前bin的lvl作为base_lvl
             ram_addr_ls_o <= ram_addr_ls_o - 1;
-        else if(base_lvl_en)
-            ram_addr_ls_o <= base_lvl_o + ls_cnt;
         else
-            ram_addr_ls_o <= 0;
+            ram_addr_ls_o <= ram_addr_ls_o;
+    end
+
+    reg ram_data_ls_delay;
+
+    always @(posedge clk)
+    begin
+        if (~rst)
+            ram_data_ls_delay <= 0;
+        else if (c_state==LOAD)
+            ram_data_ls_delay <= 1;
+        else
+            ram_data_ls_delay <= 0;
+    end
+
+    always @(posedge clk)
+    begin
+        if (~rst)
+            ram_data_ls_valid <= 0;
+        else
+            ram_data_ls_valid <= ram_data_ls_delay;
     end
 
     //输出到sat engine的子句信号
@@ -322,7 +359,7 @@ module load_bin #(
             wr_lvl_states_o <= 0;
         else if(wr_lvl_states_o!=0) //移位
             wr_lvl_states_o <= wr_lvl_states_o<<1;
-        else if(c_state==LOAD && base_lvl_en)
+        else if(c_state==LOAD && base_lvl_en_delay1 && ls_cnt<NUM_CLAUSES_A_BIN)
             wr_lvl_states_o <= 1;
         else
             wr_lvl_states_o <= 0;
@@ -376,12 +413,27 @@ module load_bin #(
                 vs_list.display();
             end
             if(wr_lvl_states_o!=0) begin
-                ls_list.set(lvl_states_o);
+                ls_list.set(ram_data_ls_i);
                 $display("%1tns wr_lvl_states_o = %b", $time/1000, wr_lvl_states_o);
                 ls_list.display();
             end
             if(done_load) begin
-                $display("%1tns base_lvl_i = %1d", $time/1000, base_lvl_o);
+                $display("%1tns base_lvl_o = %1d", $time/1000, base_lvl_o);
+            end
+        end
+
+        always @(posedge clk) begin
+            if(start_load || apply_load_o) begin
+                $display("%1tns load_bin_info c_state = %1d request_bin_num_i = %1d", $time/1000, c_state, request_bin_num_i);
+                $display("\t ram_addr_ls_o = %1d", ram_addr_ls_o);
+                $display("\t ram_data_ls_i = %1b", ram_data_ls_i);
+                $display("\t dcd_bin = %1d, has_bkt = %1d", dcd_bin, has_bkt);
+                $display("\t base_lvl_en = %1d", base_lvl_en);
+                $display("\t base_lvl_en_delay1 = %1d", base_lvl_en_delay1);
+                $display("\t base_lvl_o = %1d", base_lvl_o);
+                $display("\t cur_lvl_i = %1d", cur_lvl_i);
+                $display("\t ls_cnt = %1d", ls_cnt);
+                $display("\t ram_data_ls_valid = %1d", ram_data_ls_valid);
             end
         end
     `endif

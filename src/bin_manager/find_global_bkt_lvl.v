@@ -1,6 +1,9 @@
 /**
 *   遍历lvl state，查找全局的回退层级
 */
+
+`include "../src/debug_define.v"
+
 module find_global_bkt_lvl #(
         parameter WIDTH_LVL              = 16,
         parameter WIDTH_BIN_ID           = 10,
@@ -17,28 +20,30 @@ module find_global_bkt_lvl #(
         output reg                                    done_find,
 
         input [WIDTH_LVL-1:0]                         bkt_lvl_i,
-        output [WIDTH_LVL-1:0]                        bkt_lvl_o,
-        output [WIDTH_BIN_ID-1 : 0]                   bkt_bin_o,
+        output reg [WIDTH_LVL-1:0]                    bkt_lvl_o,
+        output reg [WIDTH_BIN_ID-1 : 0]               bkt_bin_o,
 
         //lvls states bram
         //rd
-        output reg [ADDR_WIDTH_LVL_STATES-1:0]       ram_raddr_ls_o,
+        output reg [ADDR_WIDTH_LVL_STATES-1:0]        ram_raddr_ls_o,
         input [WIDTH_LVL_STATES-1 : 0]                ram_rdata_ls_i,
         //wr
         output reg                                    ram_we_ls_o,
         output reg [WIDTH_LVL_STATES-1 : 0]           ram_wdata_ls_o,
-        output reg [ADDR_WIDTH_LVL_STATES-1:0]       ram_waddr_ls_o
+        output reg [ADDR_WIDTH_LVL_STATES-1:0]        ram_waddr_ls_o
     );
 
     wire [WIDTH_BIN_ID-1:0]   dcd_bin;
-    wire                   has_bkt;
+    wire                      has_bkt;
+    reg                       ram_rdata_ls_valid;
 
     parameter   IDLE = 0,
                 FIND_BKT_LVL = 1,
-                SET_HAS_BKT = 2,
-                DONE = 3;
+                WAIT = 2,
+                SET_HAS_BKT = 3,
+                DONE = 4;
 
-    reg [1:0]               c_state, n_state;
+    reg [3:0]               c_state, n_state;
     reg [WIDTH_LVL-1:0]     lvl_cnt;
 
     always @(posedge clk)
@@ -62,9 +67,14 @@ module find_global_bkt_lvl #(
                         n_state = IDLE;
                 FIND_BKT_LVL:
                     if(lvl_cnt==0 || has_bkt==0)
-                        n_state = SET_HAS_BKT;
+                        n_state = WAIT;
                     else
                         n_state = FIND_BKT_LVL;
+                WAIT:
+                    if(ram_rdata_ls_valid && has_bkt==0)
+                        n_state = SET_HAS_BKT;
+                    else
+                        n_state = WAIT;
                 SET_HAS_BKT:
                     n_state = DONE;
                 DONE:
@@ -83,7 +93,7 @@ module find_global_bkt_lvl #(
             lvl_cnt <= 0;
         else if (start_find)
             lvl_cnt <= bkt_lvl_i;
-        else if (c_state==FIND_BKT_LVL && has_bkt!=0)
+        else if(c_state==FIND_BKT_LVL && has_bkt!=0)
             lvl_cnt <= lvl_cnt-1;
         else
             lvl_cnt <= 0;
@@ -91,38 +101,62 @@ module find_global_bkt_lvl #(
 
     always @(posedge clk)
     begin
-        if (~rst)
+        if (~rst) begin
             ram_raddr_ls_o <= 0;
-        else if (c_state==FIND_BKT_LVL)
-            ram_raddr_ls_o <= lvl_cnt;
-        else
+        end
+        else if(c_state==FIND_BKT_LVL) begin
+            ram_raddr_ls_o <= lvl_cnt; //bram的地址从1开始
+        end
+        else begin
             ram_raddr_ls_o <= 0;
+        end
+    end
+
+    reg ram_rdata_ls_delay;
+
+    always @(posedge clk)
+    begin
+        if (~rst) begin
+            ram_rdata_ls_delay <= 0;
+        end
+        else if(c_state==FIND_BKT_LVL) begin
+            ram_rdata_ls_delay <= 1;
+        end
+        else begin
+            ram_rdata_ls_delay <= 0;
+        end
+    end
+
+    always @(posedge clk)
+    begin
+        ram_rdata_ls_valid <= ram_rdata_ls_delay;
     end
 
     assign {dcd_bin, has_bkt} = ram_rdata_ls_i;
 
     //记录结果
-    reg [WIDTH_LVL_STATES-1 : 0] ram_rdata_ls_r;
-
     always @(posedge clk)
     begin
-        if (~rst)
-            ram_rdata_ls_r <= 0;
-        else if (has_bkt==0)
-            ram_rdata_ls_r <= ram_rdata_ls_i;
-        else
-            ram_rdata_ls_r <= 0;
+        if (~rst) begin
+            bkt_bin_o <= 0;
+            bkt_lvl_o <= 0;
+        end
+        else if(ram_rdata_ls_valid && has_bkt==0) begin
+            bkt_bin_o <= dcd_bin;
+            bkt_lvl_o <= ram_raddr_ls_o + 1;
+        end
+        else begin
+            bkt_bin_o <= bkt_bin_o;
+            bkt_lvl_o <= bkt_lvl_o;
+        end
     end
-
-    assign {bkt_bin_o, bkt_lvl_o} = ram_rdata_ls_r;
-
 
     //持续信号，用于bram的mux
     always @(posedge clk)
     begin
         if(~rst)
             apply_find_o <= 0;
-        else if(c_state==FIND_BKT_LVL || c_state == SET_HAS_BKT)
+        else if(c_state!=IDLE || start_find)
             apply_find_o <= 1;
         else
             apply_find_o <= 0;
@@ -159,5 +193,30 @@ module find_global_bkt_lvl #(
         else
             done_find <= 0;
     end
+
+    /**
+    *  输出调试的信息
+    */
+`ifdef DEBUG_find_gbkt_lvl
+
+    //always @(posedge clk) begin
+        //if(c_state!=n_state && n_state!=IDLE)
+        //    $display("%1tns find_global_bkt_lvl n_state = %1d", $time/1000, n_state);
+    //end
+
+    always @(*) begin
+        if(apply_find_o) begin
+            $display("%1tns find_global_bkt_lvl c_state = %1d", $time/1000, c_state);
+            //$display("\t bkt_lvl_i = %1d", bkt_lvl_i);
+            $display("\t lvl_cnt = %1d", lvl_cnt);
+            $display("\t ram_raddr_ls_o = %1d", ram_raddr_ls_o);
+            $display("\t ram_rdata_ls_i = %1d", ram_rdata_ls_i);
+            $display("\t ram_rdata_ls_valid = %1d", ram_rdata_ls_valid);
+            $display("\t dcd_bin = %1d, has_bkt = %1d", dcd_bin, has_bkt);
+            $display("\t bkt_bin_o = %1d, bkt_lvl_o = %1d", bkt_bin_o, bkt_lvl_o);
+        end
+    end
+
+`endif
 
 endmodule
