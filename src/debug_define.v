@@ -4,7 +4,7 @@
 `define DEBUG_clause_array
 //`define DEBUG_var_state
 //`define DEBUG_lvl_state
-`define DEBUG_load_bin
+//`define DEBUG_load_bin
 //`define DEBUG_update_bin
 //`define DEBUG_bkt_across_bin
 `define DEBUG_bin_manager

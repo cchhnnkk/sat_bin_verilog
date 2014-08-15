@@ -102,6 +102,7 @@ module bin_manager #(
     wire [WIDTH_LVL-1:0]       bkt_lvl_find;
     wire [WIDTH_VAR-1:0]       nv_all;
     wire [WIDTH_CLAUSES-1:0]   nb_all;
+    wire [WIDTH_BIN_ID-1:0]    update_bin_num;
 
     ctrl_bm #(
         .WIDTH_BIN_ID(WIDTH_BIN_ID),
@@ -142,6 +143,7 @@ module bin_manager #(
         .done_bkt_across_bin_i (done_bkt_across_bin),
          //update bin
         .start_update_o        (start_update),
+        .update_bin_num_o      (update_bin_num),
         .done_update_i         (done_update)
     );
 
@@ -320,7 +322,7 @@ module bin_manager #(
         .rst           (rst),
         //update control
         .start_update  (start_update),
-        .cur_bin_num_i (cur_bin_num_o),
+        .update_bin_num_i (update_bin_num),
         .local_sat_i   (local_sat_i),
         .apply_update_o(apply_update),
         .done_update   (done_update),
@@ -670,21 +672,22 @@ module bin_manager #(
             $display("%1tns done_load_ls = %1d", $time/1000, cur_bin_num_o);
             ls_list.set(lvl_states_i);
             ls_list.display();
+            $display("%1tns base_lvl_o = %1d", $time/1000, base_lvl_o);
         end
     end
 
     always @(posedge clk) begin
         if(done_update) begin
-            $display("%1tns done_update_cbin = %1d", $time/1000, cur_bin_num_o);
+            $display("%1tns done_update_cbin = %1d", $time/1000, update_bin_num);
             for(i=0; i<8; i++) begin
-                cdata.set_clause(bram_clauses_bins_inst.data[i+1+(cur_bin_num_o-1)*8]);
+                cdata.set_clause(bram_clauses_bins_inst.data[i+1+(update_bin_num-1)*8]);
                 cdata.display_lits();
             end
             if(local_sat_i) begin
-                $display("%1tns done_update_vs = %1d", $time/1000, cur_bin_num_o);
+                $display("%1tns done_update_vs = %1d", $time/1000, update_bin_num);
                 vs_list.set(var_states_i);
                 vs_list.display();
-                $display("%1tns done_update_ls = %1d", $time/1000, cur_bin_num_o);
+                $display("%1tns done_update_ls = %1d", $time/1000, update_bin_num);
                 ls_list.set(lvl_states_i);
                 ls_list.display();
             end

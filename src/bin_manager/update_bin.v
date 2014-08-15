@@ -28,7 +28,7 @@ module update_bin #(
 
         //update control
         input                                       start_update,
-        input [WIDTH_BIN_ID-1 : 0]                  cur_bin_num_i,
+        input [WIDTH_BIN_ID-1 : 0]                  update_bin_num_i,
         input                                       local_sat_i,
         output reg                                  apply_update_o,
         output reg                                  done_update,
@@ -72,7 +72,7 @@ module update_bin #(
     wire [ADDR_WIDTH_VAR-1 : 0]           var_bin_i_base_addr;
 
     //从地址1开始
-    wire [ADDR_WIDTH_CLAUSES-1 : 0]       clauses_bin_baseaddr = (cur_bin_num_i-1)*NUM_CLAUSES_A_BIN+1;//i*8
+    wire [ADDR_WIDTH_CLAUSES-1 : 0]       clauses_bin_baseaddr = (update_bin_num_i-1)*NUM_CLAUSES_A_BIN+1;//i*8
 
     always @(posedge clk)
     begin

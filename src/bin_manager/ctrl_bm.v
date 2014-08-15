@@ -50,8 +50,9 @@ module ctrl_bm #(
      input 						done_bkt_across_bin_i,
 
      //update bin
-     output reg 				start_update_o,
-     input 						done_update_i
+     output reg 				   start_update_o,
+     output reg [WIDTH_BIN_ID-1:0] update_bin_num_o,
+     input 						   done_update_i
     );
 
     reg [WIDTH_LVL-1:0]    cur_bin_num_r;
@@ -98,9 +99,7 @@ module ctrl_bm #(
                         n_state = LOAD_BIN;
                 RUN_CORE:
                     if(done_core_i) begin
-						if(local_sat_i && cur_bin_num_r==nb_all_i)
-                        	n_state = GLOBAL_SAT;
-						else if(local_sat_i)
+						if(local_sat_i)
 							n_state = UPDATE_BIN;
 						else
 							n_state = FIND_BKT_LVL;
@@ -120,7 +119,9 @@ module ctrl_bm #(
                     else
                         n_state = BKT_ACROSS_BIN;
                 UPDATE_BIN:
-                    if(done_update_i)
+                    if(done_update_i && cur_bin_num_r==nb_all_i)
+                        n_state = GLOBAL_SAT;
+                    else if(done_update_i)
                         n_state = LOAD_BIN;
                     else
                         n_state = UPDATE_BIN;
@@ -222,6 +223,16 @@ module ctrl_bm #(
 
     assign request_bin_num_o = cur_bin_num_r;
 
+
+    always @(posedge clk)
+    begin
+        if(~rst)
+            update_bin_num_o <= 0;
+        else if(c_state==LOAD_BIN)
+            update_bin_num_o <= request_bin_num_o;
+        else
+            update_bin_num_o <= update_bin_num_o;
+    end
 
      //sat_engine core
     always @(posedge clk)
