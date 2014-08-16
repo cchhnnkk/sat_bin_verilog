@@ -17,7 +17,10 @@ vlog_se:
 
 # 模拟
 sim_sb:
-	sed "s/test_sat_engine_top/test_sat_bin_top/g" test_se_console.do > test_console.do
+	cp test_se_console.do test_console.do
+	sed -i "s/test_sat_engine_top/test_sat_bin_top/g" test_console.do
+	sed -i "s/4us/16us/g" test_console.do
+	cat test_console.do
 	vsim -c -do test_console.do | \
 		sed -e "s/^.*Error: (vsim-[0-9]*) \(.*):\)/\1 Error/g" \
 			-e "s/^.*Warning: (vsim-[0-9]*) \(.*):\)/\1 Warning/g"

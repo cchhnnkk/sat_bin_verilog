@@ -26,6 +26,6 @@ WaveRestoreZoom {0 ns} {200 ns}
 
 # run -all
 # run 4us
-run 3us
+run 16us
 
 # quit -f

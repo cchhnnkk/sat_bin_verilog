@@ -2,6 +2,9 @@
   "../src/sat_engine/state_list/state_list.v": [], 
   "../src/sat_engine/state_list/var_state1.v": [], 
   "../src/sat_engine/state_list/dcd_in_var1.v": [], 
+  "../tb/sb_test_case2.sv": [
+    "../tb/test_sat_bin.sv"
+  ], 
   "../src/sat_engine/state_list/lvl_state1.v": [], 
   "../src/bin_manager/ctrl_bm.v": [], 
   "../tb/class_vs_list.sv": [

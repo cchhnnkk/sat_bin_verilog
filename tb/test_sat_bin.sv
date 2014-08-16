@@ -24,6 +24,7 @@ module test_sat_bin(input clk, input rst);
     parameter ADDR_WIDTH_VAR_STATES = 9;
     parameter ADDR_WIDTH_LVL_STATES = 9;
 
+    reg           sb_rst;
     reg           start_i;
     wire          done_o;
     wire          global_sat_o;
@@ -62,7 +63,7 @@ module test_sat_bin(input clk, input rst);
     )
     sat_bin(
         .clk             (clk),
-        .rst             (rst),
+        .rst             (rst & sb_rst),
         .start_i         (start_i),
         .done_o          (done_o),
         //结果
@@ -118,6 +119,7 @@ module test_sat_bin(input clk, input rst);
     `include "../tb/class_vs_list.sv";
     `include "../tb/class_ls_list.sv";
     `include "../tb/sb_test_case1.sv"
+    `include "../tb/sb_test_case2.sv"
 
     class_clause_data #(8) cdata = new();
 
@@ -184,12 +186,27 @@ module test_sat_bin(input clk, input rst);
 
     task test_sat_bin_task();
         $display("%1tns test_sat_bin_task", $time/1000.0);
+
+        //test_case1
+        sb_rst = 0;
+        @(posedge clk);
+        sb_rst = 1;
+        $display("%1tns test_case 1", $time/1000.0);
         reset_all_signal();
         sb_test_case1();
-
         while(done_o!=1)
             @ (posedge clk);
+        repeat (10) @(posedge clk);
 
+        //test_case2
+        sb_rst = 0;
+        @(posedge clk);
+        sb_rst = 1;
+        $display("%1tns test_case 2", $time/1000.0);
+        reset_all_signal();
+        sb_test_case2();
+        while(done_o!=1)
+            @ (posedge clk);
         repeat (10) @(posedge clk);
     endtask
 

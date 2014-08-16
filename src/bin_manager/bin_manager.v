@@ -692,7 +692,7 @@ module bin_manager #(
                 ls_list.display();
                 $display("%1tns base_lvl_o = %1d", $time/1000, base_lvl_o);
             end
-            display_bram();
+            //display_bram();
         end
     end
 
