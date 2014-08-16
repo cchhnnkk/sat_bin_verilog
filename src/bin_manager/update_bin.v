@@ -28,7 +28,7 @@ module update_bin #(
 
         //update control
         input                                       start_update,
-        input [WIDTH_BIN_ID-1 : 0]                  cur_bin_num_i,
+        input [WIDTH_BIN_ID-1 : 0]                  update_bin_num_i,
         input                                       local_sat_i,
         output reg                                  apply_update_o,
         output reg                                  done_update,
@@ -72,7 +72,7 @@ module update_bin #(
     wire [ADDR_WIDTH_VAR-1 : 0]           var_bin_i_base_addr;
 
     //从地址1开始
-    wire [ADDR_WIDTH_CLAUSES-1 : 0]       clauses_bin_baseaddr = (cur_bin_num_i-1)*NUM_CLAUSES_A_BIN+1;//i*8
+    wire [ADDR_WIDTH_CLAUSES-1 : 0]       clauses_bin_baseaddr = (update_bin_num_i-1)*NUM_CLAUSES_A_BIN+1;//i*8
 
     always @(posedge clk)
     begin
@@ -283,16 +283,6 @@ module update_bin #(
     /**
      *  更新lvl state
      */
-    always @(posedge clk)
-    begin
-        if (~rst)
-            ram_addr_ls_o <= 0;
-        else if (c_state==UPDATE)
-            ram_addr_ls_o <= base_lvl_i + vars_cnt;
-        else
-            ram_addr_ls_o <= 0;
-    end
-
     //有效信号延时一拍
     wire ls_valid_delay;
     assign ls_valid_delay = c_valid_delay;
@@ -337,8 +327,8 @@ module update_bin #(
             ram_addr_ls_o <= ram_addr_ls_o + 1;
         end else begin
             ram_we_ls_o <= 0;
-            ram_data_ls_o <= 0;
-            ram_addr_ls_o <= 0;
+            ram_data_ls_o <= ram_data_ls_o;
+            ram_addr_ls_o <= ram_addr_ls_o;
         end
     end
 
@@ -437,15 +427,23 @@ module update_bin #(
         str_value = "\t";
         $display("%1tns update_bin", $time/1000);
         //                    01234567890123456789
-        $sformat(str,"%16s", "start_update");  str_name = {str_name, str};
-        $sformat(str,"%16s", "done_update");   str_name = {str_name, str};
-        $sformat(str,"%16s", "done_update_r"); str_name = {str_name, str};
-        $sformat(str,"%16s", "c_state");       str_name = {str_name, str};
+        $sformat(str,"%16s", "start_update");   str_name = {str_name, str};
+        $sformat(str,"%16s", "done_update");    str_name = {str_name, str};
+        $sformat(str,"%16s", "done_update_r");  str_name = {str_name, str};
+        $sformat(str,"%16s", "c_state");        str_name = {str_name, str};
+        $sformat(str,"%16s", "base_lvl_i");     str_name = {str_name, str};
+        //$sformat(str,"%16s", "ram_we_ls_o");    str_name = {str_name, str};
+        //$sformat(str,"%16s", "ram_data_ls_o");  str_name = {str_name, str};
+        $sformat(str,"%16s", "ram_addr_ls_o");  str_name = {str_name, str};
 
-        $sformat(str,"%16d", start_update);      str_value = {str_value, str};
+        $sformat(str,"%16d", start_update);     str_value = {str_value, str};
         $sformat(str,"%16d", done_update);      str_value = {str_value, str};
         $sformat(str,"%16d", done_update_r);    str_value = {str_value, str};
         $sformat(str,"%16d", c_state);          str_value = {str_value, str};
+        $sformat(str,"%16d", base_lvl_i);       str_value = {str_value, str};
+        //$sformat(str,"%16d", ram_we_ls_o);      str_value = {str_value, str};
+        //$sformat(str,"%16d", ram_data_ls_o);    str_value = {str_value, str};
+        $sformat(str,"%16d", ram_addr_ls_o);    str_value = {str_value, str};
 
         $display(str_name);
         $display(str_value);
