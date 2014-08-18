@@ -188,11 +188,13 @@ module state_list #(
         class_vs_list #(8, WIDTH_LVL) vs_list = new();
 
         always @(posedge clk) begin
+            /*
             if(start_decision_i) begin
                 $display("%1tns start_decision", $time/1000);
                 vs_list.set(var_states_o);
                 vs_list.display();
             end
+            */
             if(done_decision_o) begin
                 $display("%1tns done_decision", $time/1000);
                 $display("\tindex_decided_o = %b", valid_from_decision);

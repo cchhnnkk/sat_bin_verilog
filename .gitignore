@@ -6,9 +6,12 @@ ipcore/*
 *.mpf
 *.log
 *.ini
-temp
+*.db
+temp*
 transcript
 wlf*
 *.pyc
 *.db
+sed*
+nohup.out
 

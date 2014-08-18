@@ -315,7 +315,9 @@ module ctrl_bm #(
         "global_unsat"};
         
     always @(posedge clk) begin
-        if(c_state!=n_state && n_state!=IDLE)
+        if(~rst)
+            cnt = '{0, 0, 0, 0, 0, 0, 0, 0, 0};
+        else if(c_state!=n_state && n_state!=IDLE)
         begin
             @(posedge clk)
             if(c_state==LOAD_BIN)
@@ -327,11 +329,13 @@ module ctrl_bm #(
     end
 
     always @(rst, cur_bin_num_o, cur_lvl_o) begin
-        $display("%1tns cur_bin_num_o=%1d; cur_lvl_o=%1d", $time/1000, cur_bin_num_o, cur_lvl_o);
+        if(c_state!=IDLE && c_state!=GLOBAL_SAT && c_state!=GLOBAL_UNSAT)
+            $display("%1tns cur_bin_num_o=%1d; cur_lvl_o=%1d", $time/1000, cur_bin_num_o, cur_lvl_o);
     end
 
-    always @(*) begin
-        $display("%1tns local_sat_i=%1d", $time/1000, local_sat_i);
+    always @(local_sat_i) begin
+        if(c_state!=IDLE && c_state!=GLOBAL_SAT && c_state!=GLOBAL_UNSAT)
+            $display("%1tns local_sat_i=%1d", $time/1000, local_sat_i);
     end
 `endif
 

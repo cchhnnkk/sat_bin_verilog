@@ -123,40 +123,43 @@ module test_sat_bin(input clk, input rst);
 
     class_clause_data #(8) cdata = new();
 
-    task wr_clauses();
+    task wr_bram_bin();
         begin
-            for (int i = 0; i < nb*cmax; ++i)
+            for (int i = 0; i < nb*cmax || i < nb*vmax; ++i)
             begin
                 @ (posedge clk);
+                if(i < nb*cmax) begin
+                    //wr_clauses
                     cdata.set_lits(cbin[i]);
                     //$display("%1tns wr bram clause addr = %1d", $time/1000.0, i);
                     //cdata.display_lits();
                     ram_we_c_ex_i = 1;
                     cdata.get_clause(ram_din_c_ex_i);
                     ram_addr_c_ex_i = i+1;
-            end
-            @ (posedge clk);
-                ram_we_c_ex_i = 0;
-            @ (posedge clk);
-                //$display("%1tns bram clause", $time/1000.0);
-                //sat_bin.bin_manager.bram_clauses_bins_inst.display(1, nb*cmax+1);
-        end
-    endtask
-
-    task wr_vars();
-        begin
-            for (int i = 0; i < nb*cmax; ++i)
-            begin
-                @ (posedge clk);
+                end
+                if(i < nb*vmax) begin
+                    //vars
                     ram_we_v_ex_i = 1;
                     ram_din_v_ex_i = vbin[i];
                     ram_addr_v_ex_i = i+1;
+                    //var_state
+                    ram_we_vs_ex_i = 1;
+                    ram_din_vs_ex_i = 0;
+                    ram_addr_vs_ex_i = i+1;
+                    //lvl_state
+                    ram_we_ls_ex_i = 1;
+                    ram_din_ls_ex_i = 0;
+                    ram_addr_ls_ex_i = i+1;
+                end
             end
             @ (posedge clk);
+                ram_we_c_ex_i = 0;
                 ram_we_v_ex_i = 0;
+                ram_we_vs_ex_i = 0;
+                ram_we_ls_ex_i = 0;
             @ (posedge clk);
-                //$display("%1tns bram var", $time/1000.0);
-                //sat_bin.bin_manager.bram_vars_bins_inst.display(1, nb*cmax+1);
+                //$display("%1tns bram clause", $time/1000.0);
+                //sat_bin.bin_manager.bram_clauses_bins_inst.display(1, nb*cmax+1);
         end
     endtask
 
@@ -191,6 +194,8 @@ module test_sat_bin(input clk, input rst);
         sb_rst = 0;
         @(posedge clk);
         sb_rst = 1;
+
+        $display("%1tns ###############################################", $time/1000.0);
         $display("%1tns test_case 1", $time/1000.0);
         reset_all_signal();
         sb_test_case1();
@@ -202,6 +207,7 @@ module test_sat_bin(input clk, input rst);
         sb_rst = 0;
         @(posedge clk);
         sb_rst = 1;
+        $display("%1tns ###############################################", $time/1000.0);
         $display("%1tns test_case 2", $time/1000.0);
         reset_all_signal();
         sb_test_case2();
@@ -213,8 +219,7 @@ module test_sat_bin(input clk, input rst);
     task run_sb_load();
         @(posedge clk);
             apply_ex_i = 1;
-            wr_clauses();
-            wr_vars();
+            wr_bram_bin();
             apply_ex_i = 0;
         @(posedge clk);
             start_i     = 1;

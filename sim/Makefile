@@ -79,6 +79,8 @@ init_ref_all:
 hielist:
 	cd ../tools && gen_all_hielist.sh
 
+cmp_log:
+	../tools/cmp_log.py transcript.log ../../sat_bin_python/debug.info.log 2
 
 view:
 	start vsim -view vsim.wlf
