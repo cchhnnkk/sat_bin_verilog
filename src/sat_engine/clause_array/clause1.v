@@ -111,6 +111,7 @@ module clause1 #(
         .conflict_c_drv_o(conflict_c_drv),
         .cmax_lvl_i      (cmax_lvl_from_lits),
         .cmax_lvl_o      (cmax_lvl_from_term),
+        .apply_analyze_i (apply_analyze_i),
         .debug_cid_i     (debug_cid_down_i)
     );
 
@@ -154,20 +155,20 @@ module clause1 #(
     assign all_c_sat_o = csat_from_lits || clause_lits==0;
 
 
-    `ifdef DEBUG_clause_array_time
-        assign debug_cid_down_o = debug_cid_down_i + 1;
-        `include "../tb/class_clause_data.sv";
-        class_clause_data #(8) cdata = new;
+`ifdef DEBUG_clause_array_time
+    assign debug_cid_down_o = debug_cid_down_i + 1;
+    `include "../tb/class_clause_data.sv";
+    class_clause_data #(8) cdata = new;
 
-        always @(posedge clk) begin
-            //if($time/1000 >= 1640 && $time/1000 <= 1670) begin
-            if($time/1000 >= `T_START && $time/1000 <= `T_END) begin
-                $display("%1tns c%1d", $time/1000, debug_cid_down_i);
-                $display("\tvar_value_down_o");
-                cdata.set(var_value_down_o);
-                cdata.display();
-            end
+    always @(posedge clk) begin
+        //if($time/1000 >= 1640 && $time/1000 <= 1670) begin
+        if($time/1000 >= `T_START && $time/1000 <= `T_END) begin
+            $display("%1tns info c%1d", $time/1000, debug_cid_down_i);
+            $display("\tvar_value_down_o");
+            cdata.set(var_value_down_o);
+            cdata.display();
         end
-    `endif
+    end
+`endif
 
 endmodule

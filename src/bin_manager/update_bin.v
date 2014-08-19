@@ -351,69 +351,17 @@ module update_bin #(
     begin
         if(~rst)
             apply_update_o <= 0;
-        else if(c_state==UPDATE)
+        else if(c_state!=IDLE)
             apply_update_o <= 1;
         else
             apply_update_o <= 0;
     end
 
-/**
-*  输出update的信息
-*/
-`ifdef DEBUG_update_bin
-    `include "../tb/class_clause_data.sv";
-    `include "../tb/class_vs_list.sv";
-    `include "../tb/class_ls_list.sv";
-    class_clause_data #(8) cdata = new;
-    class_vs_list #(8, WIDTH_LVL) vs_list = new();
-    class_ls_list #(8, WIDTH_LVL) ls_list = new();
-
-    always @(posedge clk) begin
-        if(rd_carray_o!=0) begin
-            cdata.set_clause(clause_i);
-            $display("%1tns rd_carray_o = %b", $time/1000, rd_carray_o);
-            cdata.display_lits();
-        end
-        if(start_update!=0) begin
-            //vs
-            vs_list.set(var_state_i);
-            $display("%1tns rd_var_state_list", $time/1000);
-            vs_list.display();
-            //ls
-            ls_list.set(lvl_states_i);
-            $display("%1tns rd_lvl_state_list", $time/1000);
-            ls_list.display();
-        end
-        if(ram_we_c_o!=0) begin
-            $display("%1tns ram_we_c_o", $time/1000);
-            $display("\t%4d:%b", ram_addr_c_o, ram_data_c_o);
-        end
-        if(ram_we_vs_o!=0) begin
-            $display("%1tns ram_we_vs_o", $time/1000);
-            $display("\t%4d:%b", ram_addr_vs_o, ram_data_vs_o);
-        end
-        if(ram_we_ls_o!=0) begin
-            $display("%1tns ram_we_ls_o", $time/1000);
-            $display("\t%4d:%b", ram_addr_ls_o, ram_data_ls_o);
-        end
-    end
-
-    /*
-    always @(*) begin
-        $display("%1tns ram_addr_v_o=%1d; vars_cnt=%1d", $time/1000, ram_addr_v_o, vars_cnt);
-    end
-    always @(ram_addr_v_o) begin
-        @(posedge clk);
-        $display("%1tns ram_data_v_i=%1d", $time/1000, ram_data_v_i);
-    end
-    */
-
-`endif
-
 `ifdef DEBUG_update_bin_time
     always @(posedge clk) begin
         if($time/1000 >= `T_START && $time/1000 <= `T_END) begin
             display_state();
+            display_write_info();
         end
     end
 
@@ -448,5 +396,54 @@ module update_bin #(
         $display(str_name);
         $display(str_value);
     endtask
+
+    `include "../tb/class_clause_data.sv";
+    `include "../tb/class_vs_list.sv";
+    `include "../tb/class_ls_list.sv";
+    class_clause_data #(8) cdata = new;
+    class_vs_list #(8, WIDTH_LVL) vs_list = new();
+    class_ls_list #(8, WIDTH_LVL) ls_list = new();
+
+    task display_write_info();
+        if(rd_carray_o!=0) begin
+            cdata.set_clause(clause_i);
+            $display("%1tns rd_carray_o = %b", $time/1000, rd_carray_o);
+            cdata.display_lits();
+        end
+        if(start_update!=0) begin
+            //vs
+            vs_list.set(var_state_i);
+            $display("%1tns rd_var_state_list", $time/1000);
+            vs_list.display();
+            //ls
+            ls_list.set(lvl_states_i);
+            $display("%1tns rd_lvl_state_list", $time/1000);
+            ls_list.display();
+        end
+        if(ram_we_c_o!=0) begin
+            $display("%1tns ram_we_c_o", $time/1000);
+            $display("\t%4d:%b", ram_addr_c_o, ram_data_c_o);
+        end
+        if(ram_we_vs_o!=0) begin
+            $display("%1tns ram_we_vs_o", $time/1000);
+            $display("\t%4d:%b", ram_addr_vs_o, ram_data_vs_o);
+        end
+        if(ram_we_ls_o!=0) begin
+            $display("%1tns ram_we_ls_o", $time/1000);
+            $display("\t%4d:%b", ram_addr_ls_o, ram_data_ls_o);
+        end
+    endtask
+
+    /*
+    always @(*) begin
+        $display("%1tns ram_addr_v_o=%1d; vars_cnt=%1d", $time/1000, ram_addr_v_o, vars_cnt);
+    end
+    always @(ram_addr_v_o) begin
+        @(posedge clk);
+        $display("%1tns ram_data_v_i=%1d", $time/1000, ram_data_v_i);
+    end
+    */
+
 `endif
+
 endmodule

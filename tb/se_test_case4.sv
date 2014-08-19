@@ -1,52 +1,41 @@
 
-/*** ²âÊÔÊı¾İ4£¬Ö±½Ó³åÍ» ***/
-
-int bin4[8][8] = '{
-    '{0, 2, 0, 2, 2, 0, 0, 0},
-    '{1, 0, 1, 0, 2, 0, 0, 0},
-    '{0, 0, 0, 0, 0, 0, 0, 0},
-    '{0, 0, 0, 0, 0, 0, 0, 0},
-    '{0, 0, 0, 0, 0, 0, 0, 0},
-    '{0, 0, 0, 0, 0, 0, 0, 0},
-    '{0, 0, 0, 0, 0, 0, 0, 0},
-    '{0, 0, 0, 0, 0, 0, 0, 0}
-};
-//var state list:
-int value4[]   = '{1, 1, 1, 1, 1, 0, 0, 0};
-int implied4[] = '{0, 0, 0, 0, 1, 0, 0, 0};
-int level4[]   = '{2, 4, 11, 9, 6, 0, 0, 0};
-//lvl state list:
-int dcd_bin4[] = '{11, 0, 0, 0, 0, 0, 0, 0};
-int has_bkt4[] = '{0, 0, 0, 0, 0, 0, 0, 0};
-//ctrl
-int cur_bin_num4 = 19;
-int load_lvl4 = 17;
-int base_lvl4 = 16;
-
-//ÔËËã¹ı³ÌÊı¾İ
-int process_len4 = 1;
-struct_process process_data4[] = '{
-    '{"conflict", 0, 0, 0},
-    '{"punsat",   0, 0, 0}
-};
+/*** æµ‹è¯•æ•°æ®4ï¼Œç›´æ¥å†²çª ***/
 
 task se_test_case4();
-    begin
-        $display("===============================================");
-        $display("test case 4");
-        bin          = bin4;
-        value        = value4;
-        implied      = implied4;
-        level        = level4;
-        dcd_bin      = dcd_bin4;
-        has_bkt      = has_bkt4;
-        cur_bin_num  = cur_bin_num4;
-        load_lvl     = load_lvl4;
-        base_lvl     = base_lvl4;
-        process_len  = process_len4;
-        process_data = process_data4;
-        run_test_case();
-    end
+
+    $display("===============================================");
+    $display("test_case 4");
+
+    bin = '{
+        '{0, 2, 0, 2, 2, 0, 0, 0},
+        '{1, 0, 1, 0, 2, 0, 0, 0},
+        '{0, 0, 0, 0, 0, 0, 0, 0},
+        '{0, 0, 0, 0, 0, 0, 0, 0},
+        '{0, 0, 0, 0, 0, 0, 0, 0},
+        '{0, 0, 0, 0, 0, 0, 0, 0},
+        '{0, 0, 0, 0, 0, 0, 0, 0},
+        '{0, 0, 0, 0, 0, 0, 0, 0}
+    };
+    //var state list:
+    value   = '{1, 1, 1, 1, 1, 0, 0, 0};
+    implied = '{0, 0, 0, 0, 1, 0, 0, 0};
+    level   = '{2, 4, 11, 9, 6, 0, 0, 0};
+    //lvl state list:
+    dcd_bin = '{11, 0, 0, 0, 0, 0, 0, 0};
+    has_bkt = '{0, 0, 0, 0, 0, 0, 0, 0};
+    //ctrl
+    cur_bin_num = 19;
+    load_lvl = 16;
+    base_lvl = 15;
+
+    //è¿ç®—è¿‡ç¨‹æ•°æ®
+    process_len = 1;
+    process_data = '{
+        '{"conflict", 0, 0, 0},
+        '{"punsat",   0, 0, 0}
+    };
+
+    run_test_case();
 endtask
 
 /*

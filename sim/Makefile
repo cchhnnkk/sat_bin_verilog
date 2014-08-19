@@ -1,5 +1,5 @@
 
-all: vlog sim
+all: vlog sim cmp_log
 
 vlog: vlog_sb
 
@@ -38,6 +38,7 @@ sim_bm:
 sim_se:
 	vsim -c -do test_se_console.do
 	python transcript_info.py
+	sed -i "s/\n/\r/g" transcript.log
 sim_ca:
 	sed "s/test_sat_engine_top/test_clause_array_top/g" test_se_console.do > test_console.do
 	vsim -c -do test_console.do

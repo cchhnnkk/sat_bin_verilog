@@ -103,8 +103,8 @@ module state_list #(
         .apply_bkt_i          (apply_bkt_cur_bin_i),
         .bkt_lvl_i            (bkt_lvl_w),
         .wr_states            (wr_var_states),
-        .var_states_i        (var_states_i),
-        .var_states_o        (var_states_o),
+        .var_states_i         (var_states_i),
+        .var_states_o         (var_states_o),
 
         .debug_vid_next_i     (0),
         .debug_vid_next_o     ()
@@ -130,7 +130,7 @@ module state_list #(
         .valid_from_decision_i(valid_from_decision!=0),
         .cur_bin_num_i        (cur_bin_num_i),
         .cur_lvl_i            (cur_lvl_o),
-        .lvl_next_i           (base_lvl_r),
+        .lvl_next_i           (base_lvl_r + 1),
         .lvl_next_o           (),
         .findflag_left_i      (findflag_left_i),
         .findflag_left_o      (),
@@ -144,21 +144,6 @@ module state_list #(
     );
 
     assign bkt_lvl_w = max_lvl<base_lvl_r? max_lvl:bkt_lvl_from_ls;
-    //为判断真时bin间回退
-    always@(posedge clk) begin
-        if(~rst) begin
-            bkt_bin_o <= 0;
-            bkt_lvl_o <= 0;
-        end
-        else if(done_analyze_o) begin
-            bkt_bin_o <= bkt_bin_w;
-            bkt_lvl_o <= bkt_lvl_w;
-        end
-        else begin
-            bkt_bin_o <= bkt_bin_o;
-            bkt_lvl_o <= bkt_lvl_o;
-        end
-    end
 
     /*** 决策 ***/
     wire [WIDTH_LVL-1:0]  cur_local_lvl;
@@ -327,6 +312,22 @@ module state_list #(
             done_analyze_o <= 0;
     end
 
+    //为判断真时bin间回退
+    always@(posedge clk) begin
+        if(~rst) begin
+            bkt_bin_o <= 0;
+            bkt_lvl_o <= 0;
+        end
+        else if(c_analyze_state==ANALYZE_DONE) begin
+            bkt_bin_o <= bkt_bin_w;
+            bkt_lvl_o <= bkt_lvl_w;
+        end
+        else begin
+            bkt_bin_o <= bkt_bin_o;
+            bkt_lvl_o <= bkt_lvl_o;
+        end
+    end
+
     wire [2:0] data_from_encode;
 
 
@@ -441,7 +442,7 @@ module state_list #(
         task display_state();
             str = "";
             str_all = "";
-            $display("%1tns state_list", $time/1000);
+            $display("%1tns info state_list", $time/1000);
             //               01234567890123456789
             $sformat(str,"\t         max_lvl");     str_all = {str_all, str};
             $sformat(str, "        bkt_bin_o");     str_all = {str_all, str};

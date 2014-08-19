@@ -174,7 +174,7 @@ module var_state1 #(
         task display_state();
             str = "";
             str_all = "";
-            $display("%1tns var_state_%1d", $time/1000, debug_vid_next_i);
+            $display("%1tns info vs_%1d", $time/1000, debug_vid_next_i);
             //               01234567890123456789
             $sformat(str,"\t     var_value_i");     str_all = {str_all, str};
             $sformat(str, "      var_value_o");     str_all = {str_all, str};

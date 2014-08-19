@@ -10,16 +10,15 @@ cmax = 8
 
 
 def find_vlog_update_bin(starti, vlines):
+    strc = ''
+    strvs = ''
+    strls = ''
     while starti < len(vlines):
         line = vlines[starti].strip()
         index = line.find('cnt_update_bin', 0)
         starti += 1
         if index == -1:
             continue
-
-        strc = ''
-        strvs = ''
-        strls = ''
 
         index += len('cnt_update_bin = ')
         cnt_up = int(line[index:])
@@ -115,21 +114,19 @@ def complement(strp):
 
 
 def find_plog_update_bin(starti, plines):
+    strc = ''
+    strvs = ''
+    strls = ''
     while starti < len(plines):
         line = plines[starti].strip()
         starti += 1
         index = line.find('update_bin', 0)
-        print line
         if index == -1:
             continue
 
-        strc = ''
-        strvs = ''
-        strls = ''
-
-        partial_sat = True
-        if 'partial sat' in plines[starti - 1]:
-            partial_sat = False
+        partial_sat = False
+        if 'partial sat' in plines[starti - 2]:
+            partial_sat = True
 
         # cnt_update
         strc += line + '\n'
@@ -221,7 +218,6 @@ if __name__ == '__main__':
                 print str1
                 print 'error'
                 break
-
 
         if strv != strp:
             error = True

@@ -82,7 +82,7 @@ module lit8 #(
     
     assign {lit_i_1, lit_i_0} = lit_i;
     assign lit_o = {lit_o_1, lit_o_0};
-    
+
     assign csat_o = csat_o_1 | csat_o_0;
     assign conflict_c_o = conflict_c_1 | conflict_c_0;
     assign all_lit_false_o = all_lit_false_1 & all_lit_false_0;
@@ -259,7 +259,7 @@ module lit4 #(
     
     assign {lit_i_1, lit_i_0} = lit_i;
     assign lit_o = {lit_o_1, lit_o_0};
-    
+
     assign csat_o = csat_o_1 | csat_o_0;
     assign conflict_c_o = conflict_c_1 | conflict_c_0;
     assign all_lit_false_o = all_lit_false_1 & all_lit_false_0;
@@ -436,7 +436,7 @@ module lit2 #(
     
     assign {lit_i_1, lit_i_0} = lit_i;
     assign lit_o = {lit_o_1, lit_o_0};
-    
+
     assign csat_o = csat_o_1 | csat_o_0;
     assign conflict_c_o = conflict_c_1 | conflict_c_0;
     assign all_lit_false_o = all_lit_false_1 & all_lit_false_0;

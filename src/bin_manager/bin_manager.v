@@ -692,19 +692,19 @@ module bin_manager #(
                 ls_list.display();
                 $display("%1tns base_lvl_o = %1d", $time/1000, base_lvl_o);
             end
-            //display_bram();
+            display_bram();
         end
     end
 
     task display_bram();
-        $display("%1tns bram_clause", $time/1000.0);
-        bram_clauses_bins_inst.display(1, nb_all*8+1);
-        $display("%1tns bram_var", $time/1000.0);
-        bram_vars_bins_inst.display(1, nb_all*8+1);
+        //$display("%1tns bram_clause", $time/1000.0);
+        //bram_clauses_bins_inst.display(1, nb_all*8+1);
+        //$display("%1tns bram_var", $time/1000.0);
+        //bram_vars_bins_inst.display(1, nb_all*8+1);
         $display("%1tns bram_vs", $time/1000.0);
-        bram_global_var_state_inst.display(1, nv_all+1);
+        bram_global_var_state_inst.display_vs(1, nv_all+1);
         $display("%1tns bram_ls", $time/1000.0);
-        bram_global_lvl_state_inst.display(1, nv_all+1);
+        bram_global_lvl_state_inst.display_ls(1, nv_all+1);
     endtask
 
     /*

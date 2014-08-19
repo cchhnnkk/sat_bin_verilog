@@ -57,6 +57,9 @@
   "../tb/se_test_case1.sv": [
     "../tb/test_sat_engine.sv"
   ], 
+  "../tb/se_test_case6.sv": [
+    "../tb/test_sat_engine.sv"
+  ], 
   "../tb/test_lit_cell.sv": [], 
   "../src/bin_manager/bram_w30_d1024.v": [], 
   "../src/sat_engine/state_list/c_len1.v": [], 

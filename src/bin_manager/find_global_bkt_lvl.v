@@ -66,15 +66,14 @@ module find_global_bkt_lvl #(
                     else
                         n_state = IDLE;
                 FIND_BKT_LVL:
-                    if(lvl_cnt==0 || has_bkt==0)
+                    if(lvl_cnt==0)
                         n_state = WAIT;
+                    else if(ram_rdata_ls_valid && has_bkt==0)
+                        n_state = SET_HAS_BKT;
                     else
                         n_state = FIND_BKT_LVL;
                 WAIT:
-                    if(ram_rdata_ls_valid && has_bkt==0)
-                        n_state = SET_HAS_BKT;
-                    else
-                        n_state = WAIT;
+                    n_state = DONE;
                 SET_HAS_BKT:
                     n_state = DONE;
                 DONE:
@@ -93,7 +92,7 @@ module find_global_bkt_lvl #(
             lvl_cnt <= 0;
         else if (start_find)
             lvl_cnt <= bkt_lvl_i;
-        else if(c_state==FIND_BKT_LVL && has_bkt!=0)
+        else if(c_state==FIND_BKT_LVL && lvl_cnt!=0)
             lvl_cnt <= lvl_cnt-1;
         else
             lvl_cnt <= 0;
@@ -132,6 +131,12 @@ module find_global_bkt_lvl #(
         ram_rdata_ls_valid <= ram_rdata_ls_delay;
     end
 
+    reg [ADDR_WIDTH_LVL_STATES-1:0] ram_raddr_ls_delay;
+    always @(posedge clk)
+    begin
+        ram_raddr_ls_delay <= ram_raddr_ls_o;
+    end
+
     assign {dcd_bin, has_bkt} = ram_rdata_ls_i;
 
     //记录结果
@@ -141,9 +146,9 @@ module find_global_bkt_lvl #(
             bkt_bin_o <= 0;
             bkt_lvl_o <= 0;
         end
-        else if(ram_rdata_ls_valid && has_bkt==0) begin
+        else if(ram_rdata_ls_valid && has_bkt==0 && (c_state==FIND_BKT_LVL || c_state==WAIT)) begin
             bkt_bin_o <= dcd_bin;
-            bkt_lvl_o <= ram_raddr_ls_o + 1;
+            bkt_lvl_o <= ram_raddr_ls_delay;
         end
         else begin
             bkt_bin_o <= bkt_bin_o;
@@ -212,6 +217,7 @@ module find_global_bkt_lvl #(
             $display("\t ram_raddr_ls_o = %1d", ram_raddr_ls_o);
             $display("\t ram_rdata_ls_i = %1d", ram_rdata_ls_i);
             $display("\t ram_rdata_ls_valid = %1d", ram_rdata_ls_valid);
+            $display("\t ram_raddr_ls_delay = %1d", ram_raddr_ls_delay);
             $display("\t dcd_bin = %1d, has_bkt = %1d", dcd_bin, has_bkt);
             $display("\t bkt_bin_o = %1d, bkt_lvl_o = %1d", bkt_bin_o, bkt_lvl_o);
         end

@@ -180,6 +180,21 @@ module test_sat_engine(input clk, input rst);
 
     /*** 解析处理步骤 ***/
 
+    reg done_core;
+
+    always @(posedge clk)
+    begin
+        if(~rst)
+            done_core <= 0;
+        else if(start_core_i)
+            done_core <= 0;
+        else if(done_core_o)
+            done_core <= 1;
+        else
+            done_core <= done_core;
+    end
+
+
     task test_core(input struct_process process_data[], input int process_len);
         begin
             int i;
@@ -215,7 +230,7 @@ module test_sat_engine(input clk, input rst);
                 end
             end
 
-            while(done_core_o!=1)
+            while(done_core!=1)
                 @ (posedge clk);
 
             repeat (10) @(posedge clk);
@@ -373,6 +388,7 @@ module test_sat_engine(input clk, input rst);
     `include "../tb/se_test_case3.sv"
     `include "../tb/se_test_case4.sv"
     `include "../tb/se_test_case5.sv"
+    `include "../tb/se_test_case6.sv"
 
     task test_sat_engine_task();
         begin
@@ -383,6 +399,7 @@ module test_sat_engine(input clk, input rst);
             se_test_case3();
             se_test_case4();
             se_test_case5();
+            se_test_case6();
         end
     endtask
 

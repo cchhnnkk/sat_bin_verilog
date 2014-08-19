@@ -24,6 +24,8 @@ module terminal_cell #(
         input  [WIDTH_LVL-1:0]   cmax_lvl_i,
         output [WIDTH_LVL-1:0]   cmax_lvl_o,
 
+        input                    apply_analyze_i,
+
         //用于调试的信号
         input  [31:0]            debug_cid_i
      );
@@ -32,7 +34,17 @@ module terminal_cell #(
 
     assign imp_drv_o = freelitcnt_i==2'b01;
 
-    assign conflict_c_drv_o = conflict_c_i | (all_lit_false_i && clause_len_i!=0);
+    reg conflict_c_drv_w;
+    assign conflict_c_drv_o = conflict_c_drv_w;
+    always @(*) begin
+        if(~rst)
+            conflict_c_drv_w <= 0;
+        else if(apply_analyze_i)
+            //conflict_c_drv_w = conflict_c_i;
+            conflict_c_drv_w = conflict_c_i | (all_lit_false_i && clause_len_i!=0);
+        else
+            conflict_c_drv_w = conflict_c_i | (all_lit_false_i && clause_len_i!=0);
+    end
 
     //先用组合逻辑，后优化
     reg [WIDTH_LVL-1:0] cmax_lvl_w;
@@ -71,9 +83,10 @@ module terminal_cell #(
         task display_state();
             str = "";
             str_all = "";
-            $display("%1tns c%1d_terminal_cell", $time/1000, debug_cid_i);
+            $display("%1tns info c%1d_term", $time/1000, debug_cid_i);
             //               01234567890123456789
             $sformat(str,"\t all_lit_false_i");      str_all = {str_all, str};
+            $sformat(str, "  apply_analyze_i");   str_all = {str_all, str};
             $sformat(str, "     conflict_c_i");      str_all = {str_all, str};
             $sformat(str, " conflict_c_drv_o");      str_all = {str_all, str};
             $sformat(str, "       csat_drv_o");      str_all = {str_all, str};
@@ -82,6 +95,7 @@ module terminal_cell #(
             $sformat(str, "        imp_drv_o\n");    str_all = {str_all, str};
 
             $sformat(str,"\t%16b", all_lit_false_i );      str_all = {str_all, str};
+            $sformat(str, " %16b", apply_analyze_i );      str_all = {str_all, str};
             $sformat(str, " %16b", conflict_c_i    );      str_all = {str_all, str};
             $sformat(str, " %16b", conflict_c_drv_o);      str_all = {str_all, str};
             $sformat(str, " %16d", csat_drv_o      );      str_all = {str_all, str};

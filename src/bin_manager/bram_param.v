@@ -60,4 +60,26 @@ task display(int istart, int iend);
     end
 endtask
 
+reg [2:0]     var_value;
+reg [15:0]    var_lvl;
+task display_vs(int istart, int iend);
+    $display("\taddr:%1d-%1d", istart, iend-1);
+    $display("\t%8s : %8s %8s", "addr", "value", "level");
+    for(j=istart; j<iend; j++) begin
+        {var_value, var_lvl} = data[j+1];
+        $display("\t%8d : %8b %8d", j+1, var_value, var_lvl);
+    end
+endtask
+
+reg [9:0] dcd_bin;
+reg       has_bkt;
+task display_ls(int istart, int iend);
+    $display("\taddr:%1d-%1d", istart, iend-1);
+    $display("\t%8s : %8s %8s", "addr", "dcd_bin", "has_bkt");
+    for(j=istart; j<iend; j++) begin
+        {dcd_bin, has_bkt} = data[j+1];
+        $display("\t%8d : %8d %8d", j+1, dcd_bin, has_bkt);
+    end
+endtask
+
 endmodule

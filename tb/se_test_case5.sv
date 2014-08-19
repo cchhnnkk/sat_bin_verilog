@@ -1,59 +1,48 @@
-/*** 测试数据5，bin内回退 ***/
-
-int bin5[8][8] = '{
-    '{1, 0, 0, 1, 0, 2, 0, 0},
-    '{0, 1, 2, 0, 2, 0, 0, 0},
-    '{0, 0, 0, 0, 0, 0, 0, 0},
-    '{0, 0, 0, 0, 0, 0, 0, 0},
-    '{0, 0, 0, 0, 0, 0, 0, 0},
-    '{0, 0, 0, 0, 0, 0, 0, 0},
-    '{0, 0, 0, 0, 0, 0, 0, 0},
-    '{0, 0, 0, 0, 0, 0, 0, 0}
-};
-//var state list:
-int value5[]   = '{1, 2, 1, 2, 1, 2, 0, 0};
-int implied5[] = '{0, 0, 0, 1, 1, 1, 0, 0};
-int level5[]   = '{11, 12, 3, 10, 10, 10, 0, 0};
-//lvl state list:
-int dcd_bin5[] = '{3, 5, 5, 5, 16, 5, 0, 0};
-int has_bkt5[] = '{1, 0, 1, 0, 0, 0, 0, 0};
-//ctrl
-int cur_bin_num5 = 5;
-int load_lvl5 = 13;
-int base_lvl5 = 10;
-
-//运算过程数据
-int process_len5 = 3;
-struct_process process_data5[] = '{
-    '{"conflict", 0, 0, 0},
-    '{"bkt_curb", 0, 0, 0},
-    '{"bcp",      1, 1, 10},
-    '{"psat",     0, 0, 0}
-};
+/*** 娴嬭瘯鏁版嵁5锛宐in鍐呭洖閫� ***/
 
 task se_test_case5();
-    begin
-        $display("===============================================");
-        $display("test case 5");
-        bin          = bin5;
-        value        = value5;
-        implied      = implied5;
-        level        = level5;
-        dcd_bin      = dcd_bin5;
-        has_bkt      = has_bkt5;
-        cur_bin_num  = cur_bin_num5;
-        load_lvl     = load_lvl5;
-        base_lvl     = base_lvl5;
-        process_len  = process_len5;
-        process_data = process_data5;
-        run_test_case();
-    end
+
+    $display("===============================================");
+    $display("test_case 5");
+
+    bin = '{
+        '{1, 0, 0, 1, 0, 2, 0, 0},
+        '{0, 1, 2, 0, 2, 0, 0, 0},
+        '{0, 0, 0, 0, 0, 0, 0, 0},
+        '{0, 0, 0, 0, 0, 0, 0, 0},
+        '{0, 0, 0, 0, 0, 0, 0, 0},
+        '{0, 0, 0, 0, 0, 0, 0, 0},
+        '{0, 0, 0, 0, 0, 0, 0, 0},
+        '{0, 0, 0, 0, 0, 0, 0, 0}
+    };
+    //var state list:
+    value   = '{1, 2, 1, 2, 1, 2, 0, 0};
+    implied = '{0, 0, 0, 1, 1, 1, 0, 0};
+    level   = '{11, 12, 3, 10, 10, 10, 0, 0};
+    //lvl state list:
+    dcd_bin = '{3, 5, 5, 5, 16, 5, 0, 0};
+    has_bkt = '{1, 0, 1, 0, 0, 0, 0, 0};
+    //ctrl
+    cur_bin_num = 5;
+    load_lvl = 12;
+    base_lvl = 9;
+
+    //杩愮畻杩囩▼鏁版嵁
+    process_len = 3;
+    process_data = '{
+        '{"conflict", 0, 0, 0},
+        '{"bkt_curb", 0, 0, 0},
+        '{"bcp",      1, 1, 10},
+        '{"psat",     0, 0, 0}
+    };
+
+    run_test_case();
 endtask
 
 /*
 load_bin 5
-	c1  -1 -4 6 
-	c2  -2 3 5 
+	c1  -1 -4 6
+	c2  -2 3 5
 	global vars [4, 5, 7, 10, 12, 19]
 	local vars  [1, 2, 3, 4, 5, 6]
 	value       [1, 2, 1, 2, 1, 2]
@@ -88,8 +77,8 @@ sat engine run_core: cur_bin == 5
 --	decision
 ----		partial sat
 update_bin 5
-	c1  -1 -4 6 
-	c2  -2 3 5 
+	c1  -1 -4 6
+	c2  -2 3 5
 	global vars [4, 5, 7, 10, 12, 19]
 	local vars  [1, 2, 3, 4, 5, 6]
 	value       [2, 1, 1, 2, 1, 2]

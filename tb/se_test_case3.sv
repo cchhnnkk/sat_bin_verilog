@@ -1,52 +1,42 @@
 
-/*** Â²Ã¢ÃŠÃ”ÃŠÃ½Â¾Ã3Â£Â¬Ã–Â±Â½Ã“partial sat ***/
-
-int bin3[8][8] = '{
-    '{1, 0, 2, 0, 2, 0, 0, 0},
-    '{0, 2, 0, 1, 1, 0, 0, 0},
-    '{0, 2, 0, 0, 2, 0, 0, 0},
-    '{0, 2, 0, 1, 0, 0, 0, 0},
-    '{0, 0, 0, 0, 0, 0, 0, 0},
-    '{0, 0, 0, 0, 0, 0, 0, 0},
-    '{0, 0, 0, 0, 0, 0, 0, 0},
-    '{0, 0, 0, 0, 0, 0, 0, 0}
-};
-//var state list:
-int value3[]   = '{1, 2, 1, 2, 0, 0, 0, 0};
-int implied3[] = '{1, 0, 1, 1, 0, 0, 0, 0};
-int level3[]   = '{0, 1, 2, 3, 0, 0, 0, 0};
-//lvl state list:
-int dcd_bin3[] = '{2, 0, 0, 0, 0, 0, 0, 0};
-int has_bkt3[] = '{0, 0, 0, 0, 0, 0, 0, 0};
-//ctrl
-int cur_bin_num3 = 2;
-int load_lvl3 = 4;
-int base_lvl3 = 3;
-
-//Ã”Ã‹Ã‹Ã£Â¹Ã½Â³ÃŒÃŠÃ½Â¾Ã
-int process_len3 = 1;
-struct_process process_data3[] = '{
-    '{"psat",   0, 0, 0}
-};
+/*** ²âÊÔÊı¾İ3 ***/
 
 task se_test_case3();
-    begin
-        $display("===============================================");
-        $display("test case 3");
-        bin          = bin3;
-        value        = value3;
-        implied      = implied3;
-        level        = level3;
-        dcd_bin      = dcd_bin3;
-        has_bkt      = has_bkt3;
-        cur_bin_num  = cur_bin_num3;
-        load_lvl     = load_lvl3;
-        base_lvl     = base_lvl3;
-        process_len  = process_len3;
-        process_data = process_data3;
-        run_test_case();
-    end
+
+    $display("===============================================");
+    $display("test_case 3");
+
+    bin = '{
+        '{1, 0, 2, 0, 2, 0, 0, 0},
+        '{0, 2, 0, 1, 1, 0, 0, 0},
+        '{0, 2, 0, 0, 2, 0, 0, 0},
+        '{0, 2, 0, 1, 0, 0, 0, 0},
+        '{0, 0, 0, 0, 0, 0, 0, 0},
+        '{0, 0, 0, 0, 0, 0, 0, 0},
+        '{0, 0, 0, 0, 0, 0, 0, 0},
+        '{0, 0, 0, 0, 0, 0, 0, 0}
+    };
+    //var state list:
+    value   = '{1, 2, 1, 2, 0, 0, 0, 0};
+    implied = '{1, 0, 1, 1, 0, 0, 0, 0};
+    level   = '{0, 1, 2, 3, 0, 0, 0, 0};
+    //lvl state list:
+    dcd_bin = '{2, 0, 0, 0, 0, 0, 0, 0};
+    has_bkt = '{0, 0, 0, 0, 0, 0, 0, 0};
+    //ctrl
+    cur_bin_num = 2;
+    load_lvl = 3;
+    base_lvl = 2;
+
+    //ÔËËã¹ı³ÌÊı¾İ
+    process_len = 1;
+    process_data = '{
+        '{"psat",   0, 0, 0}
+    };
+
+    run_test_case();
 endtask
+
 
 // todooo
 /*

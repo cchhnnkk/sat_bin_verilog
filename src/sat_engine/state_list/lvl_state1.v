@@ -66,7 +66,7 @@ module lvl_state1 #(
 
     wire can_wr_ls;
 
-    assign can_wr_ls = valid_from_decision_i!=0 && lvl_r+1==cur_lvl_i;
+    assign can_wr_ls = valid_from_decision_i!=0 && lvl_r==cur_lvl_i;
 
     always @(posedge clk) begin
         if(~rst)
@@ -144,7 +144,7 @@ module lvl_state1 #(
         task display_state();
             str = "";
             str_all = "";
-            $display("%1tns lvl_state_%1d", $time/1000, lvl_next_i);
+            $display("%1tns info ls_%1d", $time/1000, lvl_next_i);
             //               01234567890123456789
             $sformat(str,"\t           lvl_r");     str_all = {str_all, str};
             $sformat(str,"\t       dcd_bin_r");     str_all = {str_all, str};

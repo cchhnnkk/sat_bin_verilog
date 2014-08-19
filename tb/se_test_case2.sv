@@ -1,54 +1,42 @@
 
 /*** 测试数据2，冲突分析 ***/
 
-int bin2[8][8] = '{
-    '{1, 0, 2, 0, 2, 0, 0, 0},
-    '{0, 2, 0, 1, 1, 0, 0, 0},
-    '{0, 2, 0, 0, 2, 0, 0, 0},
-    '{0, 0, 0, 0, 0, 0, 0, 0},
-    '{0, 0, 0, 0, 0, 0, 0, 0},
-    '{0, 0, 0, 0, 0, 0, 0, 0},
-    '{0, 0, 0, 0, 0, 0, 0, 0},
-    '{0, 0, 0, 0, 0, 0, 0, 0}
-};
-//var state list:
-int value2[]   = '{1, 1, 1, 2, 0, 0, 0, 0};
-int implied2[] = '{1, 0, 1, 1, 0, 0, 0, 0};
-int level2[]   = '{0, 1, 2, 1, 0, 0, 0, 0};
-//lvl state list:
-int dcd_bin2[] = '{2, 0, 0, 0, 0, 0, 0, 0};
-int has_bkt2[] = '{0, 0, 0, 0, 0, 0, 0, 0};
-//ctrl
-int cur_bin_num2 = 2;
-int load_lvl2 = 3;
-int base_lvl2 = 2;
-
-//运算过程数据
-int process_len2 = 3;
-struct_process process_data2[] = '{
-    '{"bcp",      4, 3, 1},
-    '{"conflict", 0, 0, 0},
-    '{"punsat",   0, 0, 0}
-};
-
-
 task se_test_case2();
-    begin
-        $display("===============================================");
-        $display("test case 2");
-        bin          = bin2;
-        value        = value2;
-        implied      = implied2;
-        level        = level2;
-        dcd_bin      = dcd_bin2;
-        has_bkt      = has_bkt2;
-        cur_bin_num  = cur_bin_num2;
-        load_lvl     = load_lvl2;
-        base_lvl     = base_lvl2;
-        process_len  = process_len2;
-        process_data = process_data2;
-        run_test_case();
-    end
+
+    $display("===============================================");
+    $display("test_case 2");
+
+    bin = '{
+        '{1, 0, 2, 0, 2, 0, 0, 0},
+        '{0, 2, 0, 1, 1, 0, 0, 0},
+        '{0, 2, 0, 0, 2, 0, 0, 0},
+        '{0, 0, 0, 0, 0, 0, 0, 0},
+        '{0, 0, 0, 0, 0, 0, 0, 0},
+        '{0, 0, 0, 0, 0, 0, 0, 0},
+        '{0, 0, 0, 0, 0, 0, 0, 0},
+        '{0, 0, 0, 0, 0, 0, 0, 0}
+    };
+    //var state list:
+    value   = '{1, 1, 1, 2, 0, 0, 0, 0};
+    implied = '{1, 0, 1, 1, 0, 0, 0, 0};
+    level   = '{0, 1, 2, 1, 0, 0, 0, 0};
+    //lvl state list:
+    dcd_bin = '{2, 0, 0, 0, 0, 0, 0, 0};
+    has_bkt = '{0, 0, 0, 0, 0, 0, 0, 0};
+    //ctrl
+    cur_bin_num = 2;
+    load_lvl = 2;
+    base_lvl = 1;
+
+    //运算过程数据
+    process_len = 3;
+    process_data = '{
+        '{"bcp",      4, 3, 1},
+        '{"conflict", 0, 0, 0},
+        '{"punsat",   0, 0, 0}
+    };
+
+    run_test_case();
 endtask
 
 /*
